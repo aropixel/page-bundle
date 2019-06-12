@@ -9,8 +9,7 @@
 <p>
   Aropixel Page Bundle is a complementray bundle of <a href="https://github.com/aropixel/admin-bundle">Aropixel Admin Bundle</a>. It gives possibility to manage standard pages for your website.   
 </p>
-<br>
-<span align="center">
+
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/aropixel/page-bundle.svg)
 [![GitHub issues](https://img.shields.io/github/issues/aropixel/page-bundle.svg)](https://github.com/stisla/stisla/issues)

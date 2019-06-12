@@ -30,10 +30,5 @@
     "post-update-cmd": [
       "@auto-scripts"
     ]
-  },
-  "extra" : {
-    "branch-alias" : {
-      "dev-master" : "master"
-    }
   }
 }
