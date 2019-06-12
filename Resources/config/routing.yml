@@ -1,0 +1,3 @@
+aropixel_page:
+    resource: "@AropixelPageBundle/Controller/PageController.php"
+    type:     annotation

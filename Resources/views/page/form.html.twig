@@ -1,0 +1,126 @@
+{% extends '@AropixelAdmin/Form/base.html.twig' %}
+
+
+{% block header_title %}Pages{% endblock %}
+{% block header_breadcrumb %}
+    <ul class="breadcrumb breadcrumb-caret position-right">
+        <li class="breadcrumb-item"><a href="{{ url('_admin') }}">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{{ url('page_index') }}">Pages</a></li>
+        {% if page.id %}
+            <li class="breadcrumb-item">Modifier</li>
+        {% else %}
+            <li class="breadcrumb-item active">Création</li>
+        {% endif %}
+    </ul>
+{% endblock %}
+
+
+
+{% block mainPanel %}
+
+    <div class="tabbable">
+        <ul class="nav nav-tabs nav-tabs-highlight">
+            <li class="nav-item"><a href="#panel-tab1" data-toggle="tab" class="nav-link active"><i class="fa fa-paper-plane position-left"></i> Actualité</a></li>
+            <li class="nav-item"><a href="#panel-tab2" data-toggle="tab" class="nav-link"><i class="fab fa-google position-left"></i> Référencement</a></li>
+            {% if form.gallery is defined %}
+                <li class="nav-item"><a href="#panel-tab3" data-toggle="tab" class="nav-link"><i class="far fa-images position-left"></i> Galerie photo</a></li>
+            {% endif %}
+            {% if is_granted('ROLE_HYPER_ADMIN') %}
+                <li class="nav-item"><a href="#panel-tab4" data-toggle="tab" class="nav-link"><i class="fas fa-cog position-left"></i> Configuration</a></li>
+            {% endif %}
+        </ul>
+    </div>
+
+
+
+
+    <div class="card">
+
+        <div class="card-body">
+
+            <div class="panel-tab-content tab-content">
+
+                <div class="tab-pane active" id="panel-tab1">
+
+
+                    {% if is_granted('ROLE_HYPER_ADMIN') %}
+
+                        {{ form_row(form.code) }}
+
+                        {{ form_row(form.name) }}
+
+                    {% endif %}
+
+                    {{ form_row(form.title) }}
+
+
+                    {% if form.excerpt is defined %}
+
+                        {{ form_row(form.excerpt) }}
+
+                    {% endif %}
+
+                    {% if form.description is defined %}
+
+                        {{ form_row(form.description) }}
+
+                    {% endif %}
+
+                </div>
+
+
+
+                <div class="tab-pane" id="panel-tab2">
+
+                    {{ form_row(form.metaTitle) }}
+
+                    {{ form_row(form.metaDescription) }}
+
+                    {{ form_row(form.metaKeywords) }}
+
+                </div>
+
+            {% if form.gallery is defined %}
+                <div class="tab-pane" id="panel-tab3">
+
+                    {{ form_row(form.gallery) }}
+
+                </div>
+            {% endif %}
+
+
+            {% if is_granted('ROLE_HYPER_ADMIN') %}
+
+                <div class="tab-pane" id="panel-tab4">
+
+
+                    <fieldset class="content-group">
+
+                        <legend class="text-bold">Gestion de la page</legend>
+
+                        {{ form_widget(form.isPageTitleEnabled) }}
+
+                        {{ form_widget(form.isPageExcerptEnabled) }}
+
+                        {{ form_widget(form.isPageDescriptionEnabled) }}
+
+                        {{ form_widget(form.isPageImageEnabled) }}
+
+                        {{ form_widget(form.isPageGalleryEnabled) }}
+
+                    </fieldset>
+
+                </div>
+
+            {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+{% endblock %}
+

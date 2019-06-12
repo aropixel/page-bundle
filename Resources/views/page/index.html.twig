@@ -1,0 +1,51 @@
+{% extends '@AropixelAdmin/List/datatable.html.twig' %}
+
+
+{% block header_title %}Pages{% endblock %}
+{% block header_breadcrumb %}
+    <ul class="breadcrumb breadcrumb-caret position-right">
+        <li class="breadcrumb-item"><a href="{{ url('_admin') }}">Accueil</a></li>
+        <li class="breadcrumb-item active">Pages</li>
+    </ul>
+{% endblock %}
+
+
+{% block paneltitle %}Liste des pages{% endblock %}
+
+
+{% block paneldatatable %}
+
+    <table class="table card-table table-vcenter text-nowrap datatable">
+        <thead>
+        <tr>
+            <th>Titre</th>
+            <th style="width:200px">Date</th>
+            <th class="no-sort" style="width:150px">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for page in pages %}
+            <tr>
+                <td>{{ page.name ? page.name : page.title }}</td>
+                <td>{{ page.createdAt|date('d/m/Y') }}</td>
+                <td>
+                    <div class="btn-group">
+
+                        <a href="{{ path('page_edit', {'id': page.id}) }}" class="btn {{ page.status == 'online' or page.code ? 'btn-primary' : 'btn-default' }} btn-labeled"><b><i class="fas fa-edit"></i></b> Modifier</a>
+                        <button type="button" class="btn {{ page.status == 'online' or page.code ? 'btn-primary' : 'btn-default' }} dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li class="dropdown-item"><a href="{{ path('page_edit', {'id': page.id}) }}"><i class="fas fa-edit"></i> Modifier</a></li>
+                            <li class="dropdown-item"><a class="status" data-confirm="Êtes-vous certain de vouloir mettre cette page %s ?" data-path="{{ path('page_status', {'id': page.id}) }}"><i class="fas fa-toggle-on"></i>{{ page.status == 'online' ? 'Mettre hors ligne' : 'Mettre en ligne' }}</a></li>
+                            <li class="dropdown-divider"></li>
+                            <li class="dropdown-item"><a class="delete" data-confirm="Supprimer la page|Êtes-vous certain de vouloir supprimer cette page ?"><i class="fas fa-trash"></i> Supprimer</a></li>
+                        </ul>
+                        {{ form(delete_forms[page.id]) }}
+
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

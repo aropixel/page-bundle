@@ -1,0 +1,23 @@
+services:
+  _defaults:
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+    public: false       # Allows optimizing the container by removing unused services; this also means
+      # fetching services directly from the container via $container->get() won't work.
+    # The best practice is to be explicit about your dependencies anyway.
+
+
+  # controllers are imported separately to make sure services can be injected
+  # as action arguments even if you don't extend any base controller class
+  Aropixel\PageBundle\Controller\:
+    resource: '../../Controller'
+    tags: ['controller.service_arguments']
+
+  Aropixel\PageBundle\Form\PageType:
+    arguments: ['@security.authorization_checker']
+    tags: [form.type]
+
+  Aropixel\PageBundle\Repository\PageRepository:
+    public: true
+    autowire: true
+    tags: ['doctrine.repository_service']
