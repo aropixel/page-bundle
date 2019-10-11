@@ -17,7 +17,7 @@ services:
     arguments: ['@security.authorization_checker']
     tags: [form.type]
 
-  Aropixel\PageBundle\Repository\PageRepository:
-    public: true
+  Aropixel\PageBundle\Repository\:
+    resource: '../../Repository'
     autowire: true
     tags: ['doctrine.repository_service']
