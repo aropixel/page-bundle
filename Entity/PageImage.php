@@ -5,27 +5,25 @@ namespace Aropixel\PageBundle\Entity;
 use Aropixel\AdminBundle\Entity\AttachImage;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
+
 
 /**
- * @ORM\Entity(repositoryClass="Aropixel\PageBundle\Repository\PageImageRepository")
+ * PageImage
  */
 class PageImage extends AttachImage
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @var integer
      */
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="Page", mappedBy="image")
+     * @var Page
      */
     private $page;
 
     /**
-     * @ORM\OneToMany(targetEntity="PageImageCrop", mappedBy="image")
+     * @var PageImageCrop[]
      */
     private $crops;
 

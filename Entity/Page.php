@@ -2,10 +2,8 @@
 
 namespace Aropixel\PageBundle\Entity;
 
+use Aropixel\AdminBundle\Entity\Publishable;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 
 /**
@@ -16,120 +14,102 @@ class Page
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $status;
+    protected $status = Publishable::STATUS_OFFLINE;
 
     /**
      * @var string
      */
-    private $code;
+    protected $code;
 
     /**
      * @var string
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      */
-    private $slug;
+    protected $slug;
 
     /**
      * @var string
      */
-    private $excerpt;
+    protected $excerpt;
 
     /**
      * @var string
      */
-    private $description;
+    protected $description;
 
     /**
      * @var string
      */
-    private $metaTitle;
+    protected $metaTitle;
 
     /**
      * @var string
      */
-    private $metaDescription;
+    protected $metaDescription;
 
     /**
      * @var string
      */
-    private $metaKeywords;
+    protected $metaKeywords;
 
     /**
      * @var boolean
      */
-    private $isPageTitleEnabled;
+    protected $isPageTitleEnabled = true;
 
     /**
      * @var boolean
      */
-    private $isPageExcerptEnabled;
+    protected $isPageExcerptEnabled = true;
 
     /**
      * @var boolean
      */
-    private $isPageDescriptionEnabled;
+    protected $isPageDescriptionEnabled = true;
 
     /**
      * @var boolean
      */
-    private $isPageImageEnabled;
-
-    /**
-     * @var boolean
-     */
-    private $isPageGalleryEnabled;
+    protected $isPageImageEnabled = true;
 
     /**
      * @var \DateTime
      */
-    private $createdAt;
+    protected $createdAt;
 
     /**
      * @var \DateTime
      */
-    private $updatedAt;
+    protected $updatedAt;
 
     /**
      * @var \DateTime
      */
-    private $publishAt;
+    protected $publishAt;
 
     /**
      * @var \DateTime
      */
-    private $publishUntil;
+    protected $publishUntil;
 
     /**
      * @var PageImage
      */
-    private $image;
-
-    /**
-     * @var PageGallery[]
-     */
-    private $gallery;
-
-
-
-    public function __construct()
-    {
-        $this->gallery = new ArrayCollection();
-    }
-
+    protected $image;
 
 
 
@@ -306,18 +286,6 @@ class Page
         return $this;
     }
 
-    public function getIsPageGalleryEnabled(): ?bool
-    {
-        return $this->isPageGalleryEnabled;
-    }
-
-    public function setIsPageGalleryEnabled(bool $isPageGalleryEnabled): self
-    {
-        $this->isPageGalleryEnabled = $isPageGalleryEnabled;
-
-        return $this;
-    }
-
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
@@ -376,37 +344,6 @@ class Page
         if ($image->getImage()) {
             $this->image = $image;
             $this->image->setPage($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|PageGallery[]
-     */
-    public function getGallery(): Collection
-    {
-        return $this->gallery;
-    }
-
-    public function addGallery(PageGallery $gallery): self
-    {
-        if (!$this->gallery->contains($gallery)) {
-            $this->gallery[] = $gallery;
-            $gallery->setPage($this);
-        }
-
-        return $this;
-    }
-
-    public function removeGallery(PageGallery $gallery): self
-    {
-        if ($this->gallery->contains($gallery)) {
-            $this->gallery->removeElement($gallery);
-            // set the owning side to null (unless already changed)
-            if ($gallery->getPage() === $this) {
-                $gallery->setPage(null);
-            }
         }
 
         return $this;

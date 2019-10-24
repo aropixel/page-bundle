@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping">
+
+    <entity name="Aropixel\PageBundle\Entity\PageImage" repository-class="Aropixel\PageBundle\Repository\PageImageRepository" table="aropixel_page_image">
+
+        <id name="id" column="id" type="integer">
+            <generator strategy="AUTO" />
+        </id>
+        <one-to-one field="page" target-entity="Aropixel\PageBundle\Entity\Page" mapped-by="image" />
+        <one-to-many field="crops" target-entity="Aropixel\PageBundle\Entity\PageImageCrop" mapped-by="image" />
+
+    </entity>
+
+</doctrine-mapping>

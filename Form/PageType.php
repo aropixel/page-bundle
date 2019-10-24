@@ -127,20 +127,6 @@ class PageType extends AbstractType
                 ;
             }
 
-            // Affiche le champs GALLERY, seulement si:
-            // - on est super admin
-            // - ou si le champs est autorisé
-            if ($this->securityContext->isGranted(self::ALL_RIGHTS_MODE) || $page->getIsPageGalleryEnabled()) {
-                $builder
-                    ->add('gallery', GalleryType::class, array(
-                        'entry_options' => array(
-                            'data_class' => PageGallery::class,
-                            'crop_class' => PageGalleryCrop::class,
-                        )
-                    ))
-                ;
-            }
-
 
             // Affiche le slug et le status seulement si
             // ce n'est pas une page fixe (avec un code)
@@ -185,10 +171,6 @@ class PageType extends AbstractType
                 ))
                 ->add('isPageImageEnabled', null, array(
                     'label'  => 'Afficher le bloc image à la une',
-                    'attr' => array('class' => 'styled')
-                ))
-                ->add('isPageGalleryEnabled', null, array(
-                    'label'  => 'Autoriser les galleries',
                     'attr' => array('class' => 'styled')
                 ))
 
