@@ -18,7 +18,7 @@
     }
   },
   "require" : {
-    "aropixel/admin-bundle": "^0.1"
+    "aropixel/admin-bundle": "^1.0"
   },
   "scripts": {
     "auto-scripts": {

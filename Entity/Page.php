@@ -9,123 +9,117 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 
 /**
- * @ORM\Entity(repositoryClass="Aropixel\PageBundle\Repository\PageRepository")
+ * Page
  */
 class Page
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @var integer
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=20)
+     * @var string
      */
     private $status;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
      */
     private $code;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
      */
     private $title;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
      */
     private $name;
 
     /**
-     * @Gedmo\Slug(fields={"title"})
-     * @ORM\Column(type="string", length=255)
+     * @var string
      */
     private $slug;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @var string
      */
     private $excerpt;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @var string
      */
     private $description;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
      */
     private $metaTitle;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
      */
     private $metaDescription;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
      */
     private $metaKeywords;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @var boolean
      */
     private $isPageTitleEnabled;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @var boolean
      */
     private $isPageExcerptEnabled;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @var boolean
      */
     private $isPageDescriptionEnabled;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @var boolean
      */
     private $isPageImageEnabled;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @var boolean
      */
     private $isPageGalleryEnabled;
 
     /**
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime")
+     * @var \DateTime
      */
     private $createdAt;
 
     /**
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime", nullable=true)
+     * @var \DateTime
      */
     private $updatedAt;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @var \DateTime
      */
     private $publishAt;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @var \DateTime
      */
     private $publishUntil;
 
     /**
-     * @ORM\OneToOne(targetEntity="PageImage", inversedBy="page", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="image_id", referencedColumnName="id", onDelete="SET NULL")
+     * @var PageImage
      */
     private $image;
 
     /**
-     * @ORM\OneToMany(targetEntity="PageGallery", mappedBy="page")
+     * @var PageGallery[]
      */
     private $gallery;
 

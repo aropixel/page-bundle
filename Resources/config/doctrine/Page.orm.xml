@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping">
+
+    <entity name="Aropixel\PageBundle\Entity\Page" repository-class="Aropixel\PageBundle\Repository\PageRepository" table="aropixel_page">
+
+        <id name="id" column="id" type="integer">
+            <generator strategy="AUTO" />
+        </id>
+        <field name="status" length="20" />
+        <field name="code" nullable="true" />
+        <field name="title" nullable="true" />
+        <field name="name" nullable="true" />
+        <field name="slug">
+            <gedmo:slug fields="title" />
+        </field>
+        <field name="excerpt" type="text" nullable="true" />
+        <field name="description" type="text" nullable="true" />
+        <field name="metaTitle" nullable="true" />
+        <field name="metaDescription" nullable="true" />
+        <field name="metaKeywords" nullable="true" />
+        <field name="isPageTitleEnabled" nullable="true" />
+        <field name="isPageExcerptEnabled" nullable="true" />
+        <field name="isPageDescriptionEnabled" nullable="true" />
+        <field name="isPageImageEnabled" nullable="true" />
+        <field name="isPageGalleryEnabled" nullable="true" />
+
+        <one-to-one field="image" target-entity="Aropixel\PageBundle\Entity\PageImage" inversed-by="page">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+            <join-column name="image_id" referenced-column-name="id" on-delete="SET NULL" />
+        </one-to-one>
+
+        <one-to-many field="gallery" target-entity="Aropixel\PageBundle\Entity\PageGallery" mapped-by="page" />
+
+        <field name="createdAt" column="created_at" type="datetime">
+            <gedmo:timestampable on="create"/>
+        </field>
+        <field name="updatedAt" column="updated_at" type="datetime" nullable="true">
+            <gedmo:timestampable on="update"/>
+        </field>
+        <field name="publishAt" type="datetime" nullable="true" />
+        <field name="publishUntil" type="datetime" nullable="true" />
+
+    </entity>
+
+</doctrine-mapping>

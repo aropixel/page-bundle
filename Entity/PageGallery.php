@@ -2,14 +2,16 @@
 
 namespace Aropixel\PageBundle\Entity;
 
+use Aropixel\AdminBundle\Entity\AttachImage;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+
 /**
  * @ORM\Entity(repositoryClass="Aropixel\PageBundle\Repository\PageGalleryRepository")
  */
-class PageGallery
+class PageGallery extends AttachImage
 {
     /**
      * @ORM\Id()
