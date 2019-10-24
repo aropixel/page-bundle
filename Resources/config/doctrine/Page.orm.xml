@@ -34,8 +34,6 @@
             <join-column name="image_id" referenced-column-name="id" on-delete="SET NULL" />
         </one-to-one>
 
-        <one-to-many field="gallery" target-entity="Aropixel\PageBundle\Entity\PageGallery" mapped-by="page" />
-
         <field name="createdAt" column="created_at" type="datetime">
             <gedmo:timestampable on="create"/>
         </field>
