@@ -50,7 +50,6 @@ class PageController extends AbstractController
         $page->setIsPageExcerptEnabled(true);
         $page->setIsPageDescriptionEnabled(true);
         $page->setIsPageImageEnabled(true);
-        $page->setIsPageGalleryEnabled(false);
 
         $form = $this->createForm(PageType::class, $page);
         $form->handleRequest($request);
@@ -81,12 +80,6 @@ class PageController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $image = $page->getImage();
 
-        // Create an ArrayCollection of the current Tag objects in the database
-        $originalGallery = new ArrayCollection();
-        foreach ($page->getGallery() as $galleryImage) {
-            $originalGallery->add($galleryImage);
-        }
-
         $auth_checker = $this->get('security.authorization_checker');
         $isRoleAdmin = $auth_checker->isGranted('ROLE_HYPER_ADMIN');
 
@@ -98,13 +91,6 @@ class PageController extends AbstractController
 
             if ($image && $page->getImage()->getImage()==null) {
                 $em->remove($image);
-            }
-
-            foreach ($originalGallery as $galleryImage) {
-                if (false === $page->getGallery()->contains($galleryImage)) {
-                    $page->getGallery()->removeElement($galleryImage);
-                    $em->remove($galleryImage);
-                }
             }
 
             $this->addFlash('notice', 'La page a bien été enregistrée.');

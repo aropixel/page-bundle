@@ -24,7 +24,6 @@
         <field name="isPageExcerptEnabled" nullable="true" />
         <field name="isPageDescriptionEnabled" nullable="true" />
         <field name="isPageImageEnabled" nullable="true" />
-        <field name="isPageGalleryEnabled" nullable="true" />
 
         <one-to-one field="image" target-entity="Aropixel\PageBundle\Entity\PageImage" inversed-by="page">
             <cascade>
