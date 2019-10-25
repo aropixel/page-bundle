@@ -11,3 +11,4 @@ in 0.1 minor versions.
     * Externalize entities doctrine mapping with XML config files
     * Remove PageGallery entities
     * Prefix bundle tables names with "aropixel_"
+    * Upgrade Aropixel Admin Bundle dependency
