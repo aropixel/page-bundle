@@ -24,7 +24,7 @@ class PageController extends AbstractController
     public function index(PageRepository $pageRepository): Response
     {
         //
-        $pages = $pageRepository->findAll();
+        $pages = $pageRepository->findNotPresetPages();
 
         //
         $delete_forms = array();
@@ -35,7 +35,7 @@ class PageController extends AbstractController
 
         //
         return $this->render('@AropixelPage/page/index.html.twig', [
-            'pages' => $pageRepository->findAll(),
+            'pages' => $pages,
             'delete_forms' => $delete_forms,
         ]);
     }
@@ -50,6 +50,7 @@ class PageController extends AbstractController
         $page->setIsPageExcerptEnabled(true);
         $page->setIsPageDescriptionEnabled(true);
         $page->setIsPageImageEnabled(true);
+        $page->setIsPresetPage(false);
 
         $form = $this->createForm(PageType::class, $page);
         $form->handleRequest($request);

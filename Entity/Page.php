@@ -87,6 +87,11 @@ class Page
     protected $isPageImageEnabled = true;
 
     /**
+     * @var boolean
+     */
+    protected $isPresetPage = false;
+
+    /**
      * @var \DateTime
      */
     protected $createdAt;
@@ -283,6 +288,24 @@ class Page
     {
         $this->isPageImageEnabled = $isPageImageEnabled;
 
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPresetPage(): ?bool
+    {
+        return $this->isPresetPage;
+    }
+
+    /**
+     * @param bool $isPresetPage
+     * @return Page
+     */
+    public function setIsPresetPage(bool $isPresetPage): self
+    {
+        $this->isPresetPage = $isPresetPage;
         return $this;
     }
 
