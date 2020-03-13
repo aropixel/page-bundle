@@ -24,7 +24,7 @@ class PageController extends AbstractController
     public function index(PageRepository $pageRepository): Response
     {
         //
-        $pages = $pageRepository->findNotPresetPages();
+        $pages = $pageRepository->findNotPreset();
 
         //
         $delete_forms = array();

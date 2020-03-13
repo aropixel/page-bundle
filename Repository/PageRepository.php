@@ -23,9 +23,24 @@ class PageRepository extends PublishableRepository
     // /**
     //  * @return Page[] Returns an array of Page objects
     //  */
-    public function findNotPresetPages()
+    public function findNotPreset()
     {
         return $this->createQueryBuilder('p')
+            ->andWhere('p.isPresetPage = :preset')
+            ->orWhere('p.isPresetPage IS NULL')
+            ->setParameter('preset', false)
+            ->orderBy('p.title', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    // /**
+    //  * @return Page[] Returns an array of Page objects
+    //  */
+    public function findNotPresetAndPublished()
+    {
+        return $this->qbPublished('p')
             ->andWhere('p.isPresetPage = :preset')
             ->orWhere('p.isPresetPage IS NULL')
             ->setParameter('preset', false)
