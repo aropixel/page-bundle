@@ -4,6 +4,7 @@ namespace Aropixel\PageBundle\Entity;
 
 use Aropixel\AdminBundle\Entity\Publishable;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 
 /**
@@ -116,6 +117,15 @@ class Page
      */
     protected $image;
 
+    /**
+     * @var Block[]
+     */
+    protected $blocks;
+
+    public function __construct()
+    {
+        $this->blocks = new ArrayCollection();
+    }
 
 
     public function getId(): ?int
@@ -372,5 +382,36 @@ class Page
         return $this;
     }
 
+    public function addBlock(Block $block): self
+    {
+        if (!$this->blocks->contains($block)) {
+            $this->blocks[] = $block;
+            $block->setPage($this);
+        }
+
+        return $this;
+    }
+
+
+    public function removeBlock(Block $block): self
+    {
+        if ($this->blocks->contains($block)) {
+            $this->blocks->removeElement($block);
+            // set the owning side to null (unless already changed)
+            if ($block->getPage() === $this) {
+                $block->setPage(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PageImageCrop[]
+     */
+    public function getBlocks(): Collection
+    {
+        return $this->blocks;
+    }
 
 }
