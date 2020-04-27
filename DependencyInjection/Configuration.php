@@ -12,17 +12,56 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  */
 class Configuration implements ConfigurationInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $treeBuilder->root('aropixel_page');
+        $treeBuilder = new TreeBuilder('aropixel_block');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        $treeBuilder->getRootNode()
+                    ->children()
+
+
+                                ->arrayNode('blocks')
+                                    ->useAttributeAsKey('block_code')
+                                    ->arrayPrototype()
+                                    ->children()
+                                        ->scalarNode('page')->end()
+                                        ->scalarNode('name')->end()
+                                        ->arrayNode('inputs')
+                                            ->useAttributeAsKey('input_code')
+                                            ->arrayPrototype()
+                                            ->children()
+                                                ->scalarNode('type')->end()
+                                                ->scalarNode('help')->end()
+                                            ->end()
+                                        ->end()
+                                    ->end()
+                                ->end()
+
+
+        ;
+
+
+        // je veux pouvoir utiliser mes entités dans un array nommé "entities"
+        // mais qui n'existe pas dans la config yaml
+
+        //$crops['entities'];
+        //$crops['types'];
+
+        /*$treeBuilder->getRootNode()
+            ->children()
+                ->arrayNode('crops')
+                    ->defaultValue(array())
+                    ->useAttributeAsKey('name')
+                    ->prototype('variable')->end()
+                ->end()
+                ->arrayNode('entities')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('image')->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;*/
 
         return $treeBuilder;
     }

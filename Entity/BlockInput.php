@@ -17,12 +17,18 @@ class BlockInput
     /**
      * @var string
      */
-    private $type;
+    /*private $type;*/
+
+    /**
+     * @var string
+     */
+    /*private $help;*/
 
     /**
      * @var string
      */
     private $content;
+
 
     /**
      * @var Block
@@ -89,17 +95,33 @@ class BlockInput
     /**
      * @return string
      */
-    public function getType(): string
+    /*public function getType(): string
     {
         return $this->type;
-    }
+    }*/
 
     /**
      * @param string $type
      */
-    public function setType( string $type ): void
+    /*public function setType( string $type ): void
     {
         $this->type = $type;
-    }
+    }*/
+
+    /**
+     * @return string
+     */
+    /*public function getHelp(): string
+    {
+        return $this->help;
+    }*/
+
+    /**
+     * @param string $help
+     */
+    /*public function setHelp( string $help ): void
+    {
+        $this->help = $help;
+    }*/
 
 }

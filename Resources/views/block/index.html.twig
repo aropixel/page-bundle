@@ -1,0 +1,45 @@
+{% extends '@AropixelAdmin/List/datatable.html.twig' %}
+
+
+{% block header_title %}Blocks{% endblock %}
+{% block header_breadcrumb %}
+    <ul class="breadcrumb breadcrumb-caret position-right">
+        <li class="breadcrumb-item"><a href="{{ url('_admin') }}">Accueil</a></li>
+        <li class="breadcrumb-item active">Blocks</li>
+    </ul>
+{% endblock %}
+
+
+{% block paneltitle %}Liste des blocks{% endblock %}
+
+
+{% block paneldatatable %}
+
+    <table class="table card-table table-vcenter text-nowrap datatable">
+        <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Page</th>
+            <th>Etat</th>
+            <th class="no-sort" style="width:150px">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for block in vmConfiguredblocks %}
+            <tr>
+                <td>{{ block.name }}</td>
+                <td>{{ block.pageName ? block.pageName : 'Non renseignée' }}</td>
+                <td>{{ block.isPersisted ? 'Créé' : 'A créer' }}</td>
+                <td>
+                    <div class="btn-group">
+
+                        <a href="{{ path('block_edit', {'code': block.code}) }}" class="btn btn-primary btn-labeled"><b><i class="fas fa-edit"></i></b>Modifier</a>
+
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

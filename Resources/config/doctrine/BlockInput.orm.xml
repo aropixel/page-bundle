@@ -9,9 +9,13 @@
             <generator strategy="AUTO" />
         </id>
 
-        <field name="code" nullable="true" />
+        <field name="code" type="string" nullable="true" />
 
-        <field name="type" nullable="true" />
+        <!--<field name="type" type="string" nullable="true" />
+
+        <field name="help" type="string" nullable="true" />-->
+
+        <field name="content" type="json" nullable="true" />
 
         <many-to-one field="block" target-entity="Aropixel\PageBundle\Entity\Block" inversed-by="inputs" />
 

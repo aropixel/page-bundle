@@ -1,3 +1,7 @@
 aropixel_page:
     resource: "@AropixelPageBundle/Controller/PageController.php"
     type:     annotation
+
+aropixel_block:
+    resource: "@AropixelPageBundle/Controller/BlockController.php"
+    type:     annotation

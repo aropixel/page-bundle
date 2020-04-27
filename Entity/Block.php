@@ -23,6 +23,11 @@ class Block
     private $page;
 
     /**
+     * @var string
+     */
+    /*private $backUpConfig;*/
+
+    /**
      * @var BlockInput[]
      */
     protected $inputs;
@@ -104,5 +109,22 @@ class Block
     {
         return $this->inputs;
     }
+
+    /**
+     * @return string
+     */
+    /*public function getBackUpConfig(): string
+    {
+        return $this->backUpConfig;
+    }*/
+
+    /**
+     * @param string $backUpConfig
+     */
+    /*public function setBackUpConfig( string $backUpConfig ): void
+    {
+        $this->backUpConfig = $backUpConfig;
+    }*/
+
 
 }

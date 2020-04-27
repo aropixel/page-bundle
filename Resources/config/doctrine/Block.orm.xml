@@ -9,11 +9,17 @@
             <generator strategy="AUTO" />
         </id>
 
-        <field name="code" nullable="true" />
+        <field name="code" type="string" nullable="true" />
+
+        <!--<field name="backUpConfig" column="back_up_config" type="json" nullable="false"/>-->
 
         <many-to-one field="page" target-entity="Aropixel\PageBundle\Entity\Page" inversed-by="blocks" />
 
-        <one-to-many field="inputs" target-entity="Aropixel\PageBundle\Entity\BlockInput" mapped-by="block" />
+        <one-to-many field="inputs" target-entity="Aropixel\PageBundle\Entity\BlockInput" mapped-by="block">
+            <cascade>
+                <cascade-remove/>
+            </cascade>
+        </one-to-many>
 
     </entity>
 

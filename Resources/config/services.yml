@@ -21,3 +21,14 @@ services:
     resource: '../../Repository'
     autowire: true
     tags: ['doctrine.repository_service']
+
+  Aropixel\PageBundle\Block\BlockManager:
+    arguments:
+      - '@Aropixel\PageBundle\Repository\BlockRepository'
+      - '@parameter_bag'
+      - '@Aropixel\PageBundle\ViewModel\ViewBlockConfigAssembler'
+      - '@Aropixel\PageBundle\Repository\PageRepository'
+      - '@doctrine.orm.entity_manager'
+
+  Aropixel\PageBundle\ViewModel\ViewBlockConfigAssembler:
+    arguments: ['@Aropixel\PageBundle\Repository\BlockRepository', '@Aropixel\PageBundle\Repository\PageRepository']

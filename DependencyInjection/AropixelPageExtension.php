@@ -22,7 +22,23 @@ class AropixelPageExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
+        $this->registerParameters($container, $config);
+
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+    }
+
+    private function registerParameters(ContainerBuilder $container, array $config)
+    {
+
+        $configuredBlocks = [];
+
+        // put the key (the code of the block) as a value inside the block's array
+        foreach ($config['blocks'] as $configuredBlockKey => $configuredBlock) {
+            $configuredBlocks[$configuredBlockKey] = $configuredBlock;
+            $configuredBlocks[$configuredBlockKey]['code'] = $configuredBlockKey;
+        }
+
+        $container->setParameter('aropixel_page.blocks', $configuredBlocks);
     }
 }
