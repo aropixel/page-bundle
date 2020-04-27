@@ -17,7 +17,7 @@ class BlockInput
     /**
      * @var string
      */
-    /*private $type;*/
+    private $type;
 
     /**
      * @var string
@@ -63,7 +63,7 @@ class BlockInput
     /**
      * @return string
      */
-    public function getContent(): string
+    public function getContent()
     {
         return $this->content;
     }
@@ -71,7 +71,7 @@ class BlockInput
     /**
      * @param string $content
      */
-    public function setContent( string $content ): void
+    public function setContent( $content ): void
     {
         $this->content = $content;
     }
@@ -95,18 +95,18 @@ class BlockInput
     /**
      * @return string
      */
-    /*public function getType(): string
+    public function getType(): string
     {
         return $this->type;
-    }*/
+    }
 
     /**
      * @param string $type
      */
-    /*public function setType( string $type ): void
+    public function setType( string $type ): void
     {
         $this->type = $type;
-    }*/
+    }
 
     /**
      * @return string

@@ -11,9 +11,9 @@
 
         <field name="code" type="string" nullable="true" />
 
-        <!--<field name="type" type="string" nullable="true" />
+        <field name="type" type="string" nullable="true" />
 
-        <field name="help" type="string" nullable="true" />-->
+        <!--<field name="help" type="string" nullable="true" />-->
 
         <field name="content" type="json" nullable="true" />
 

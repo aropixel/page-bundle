@@ -5,7 +5,10 @@ declare( strict_types=1 );
 namespace Aropixel\PageBundle\Controller;
 
 use Aropixel\PageBundle\Block\BlockManager;
+use Aropixel\PageBundle\Form\BlockType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -30,10 +33,12 @@ class BlockController extends AbstractController
 	}
 
     /**
-     * @Route("/edit/{code}", name="block_edit", methods={"GET"})
+     * @Route("/edit/{code}", name="block_edit")
      */
     public function create(
         BlockManager $blockManager,
+        EntityManagerInterface $entityManager,
+        Request $request,
         $code
     ): Response
     {
@@ -43,14 +48,27 @@ class BlockController extends AbstractController
         }
 
         // on sauve en bdd tous les blocks de la config
-        $blockManager->persistBlock($code);
+        $block = $blockManager->persistBlock($code);
 
         // on supprime en bdd tous les blocks input qui n'existent pas dans la config
         $blockManager->cleanDeletedBlockInput($code);
 
-        dump('persisted'); die;
+        $form = $this->createForm(BlockType::class, $block);
 
-        // afficher le form des champs
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $entityManager->persist($block);
+            $entityManager->flush();
+
+            $this->addFlash('notice', 'Le block a bien été enregistré.');
+        }
+
+        return $this->render('@AropixelPage/block/form.html.twig', [
+            'form' => $form->createView(),
+            'block' => $block
+        ]);
 
     }
 

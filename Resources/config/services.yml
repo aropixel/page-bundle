@@ -17,6 +17,14 @@ services:
     arguments: ['@security.authorization_checker']
     tags: [form.type]
 
+  Aropixel\PageBundle\Form\BlockType:
+      arguments: ['@Aropixel\PageBundle\Block\BlockManager']
+      tags: [form.type]
+
+  Aropixel\PageBundle\Form\BlockInputType:
+      arguments: ['@Aropixel\PageBundle\Block\BlockManager']
+      tags: [form.type]
+
   Aropixel\PageBundle\Repository\:
     resource: '../../Repository'
     autowire: true

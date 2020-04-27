@@ -139,6 +139,25 @@ class BlockManager
         }
     }
 
+    public function getConfiguredBlock($blockCode)
+    {
+        $configuredBlocks = $this->getConfiguredBlocks();
+
+        $blockConfig = $configuredBlocks[$blockCode];
+
+        return $blockConfig;
+    }
+
+    public function getConfiguredBlockInput($inputCode, $blockCode)
+    {
+        $blockConfig = $this->getConfiguredBlock($blockCode);
+
+        $input = $blockConfig['inputs'][$inputCode];
+
+        return $input;
+
+    }
+
     /**
      * @param Block $dbBlock
      * @param $configuredBlocks
@@ -165,7 +184,7 @@ class BlockManager
 
         $dbBlockInputs = $dbBlock->getInputs();
 
-        $blockConfig = $this->getConfiguredBlocks()[$dbBlock->getCode()];
+        $blockConfig = $this->getConfiguredBlock($dbBlock->getCode());
 
         $configuredBlocksInput = $blockConfig['inputs'];
 
@@ -183,14 +202,14 @@ class BlockManager
      *
      * enregistre un block + ses blocks inputs en bdd
      */
-    public function persistBlock($code): void
+    public function persistBlock($code): Block
     {
 
         $configuredBlock = $this->getConfiguredBlockByCode($code);
 
         $page = $this->pageRepository->findOneBy( [ 'code' => $configuredBlock['page'] ] );
 
-        $dbBlock = $this->blockRepository->findOneBy($configuredBlock['code']);
+        $dbBlock = $this->blockRepository->findOneBy([ 'code' => $configuredBlock['code']]);
 
         // si le block n'existe pas en bdd, on le créé
         if (is_null($dbBlock)) {
@@ -205,6 +224,8 @@ class BlockManager
         $this->persistBlockInput( $configuredBlock, $dbBlock );
 
         $this->entityManager->flush();
+
+        return $dbBlock;
 
     }
 
@@ -225,6 +246,7 @@ class BlockManager
 
                 $blockInputEntity->setCode( $blockInputCode );
                 $blockInputEntity->setBlock( $blockEntity );
+                $blockInputEntity->setType( $blockInput['type'] );
 
                 $this->entityManager->persist( $blockInputEntity );
             }

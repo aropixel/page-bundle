@@ -1,0 +1,98 @@
+{% extends '@AropixelPage/block/form/base.html.twig' %}
+
+{% block header_title %}Block {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        jQuery(document).ready(function() {
+            var $wrapper = $('.js-block-admin-tabs-collection');
+            $wrapper.on('click', '.js-block-admin-tabs-add', function(e) {
+                e.preventDefault();
+                // Get the data-prototype explained earlier
+                var prototype = $wrapper.attr('data-prototype');
+
+                // get the new index
+                var index = $wrapper.data('index');
+
+                // Replace '__name__' in the prototype's HTML to
+                // instead be a number based on how many items we have
+                var newForm = prototype.replace(/__name__/g, index);
+
+                // increase the index with one for the next item
+                $wrapper.data('index', index + 1);
+                // Display the form in the page before the "new" link
+                $(this).before(newForm);
+            });
+        });
+    </script>
+
+{% endblock %}
+
+{% block header_breadcrumb %}
+    <ul class="breadcrumb breadcrumb-caret position-right">
+        <li class="breadcrumb-item"><a href="{{ url('_admin') }}">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{{ url('block_index') }}">Block</a></li>
+        <li class="breadcrumb-item active">Modifier</li>
+    </ul>
+{% endblock %}
+
+{% block mainPanel %}
+
+    <div class="card">
+
+        <div class="card-body">
+
+            <div class="panel-tab-content tab-content">
+
+                <div class="tab-pane active" id="panel-tab1">
+
+                    {{ form_start(form) }}
+
+                    {#  #}
+                    {% for inputForm in form.children.inputs %}
+
+                        {% if inputForm.vars.data.type == 'Tabs' %}
+                            {% set tabsForm = inputForm.content.children.content %}
+
+                            <ul class="js-block-admin-tabs-collection"
+                                data-index="{{ tabsForm.children|length }}"
+                                data-prototype="{{ form_row(tabsForm.vars.prototype)|e }}">
+
+                                {% for childForm in tabsForm.children %}
+                                    <li class="">
+                                        {{ form_errors(childForm) }}
+                                        {{ form_widget(childForm) }}
+                                    </li>
+                                {% endfor %}
+
+                                <a href="#" class="js-block-admin-tabs-add">
+                                    <span class="fa fa-plus-circle"></span>
+                                    Ajouter un onglet
+                                </a>
+
+                            </ul>
+
+                        {% endif %}
+
+                        {{ form_widget(inputForm) }}
+
+
+
+                    {% endfor %}
+                    {{ form_end(form, {'render_rest': false}) }}
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+{% endblock %}
+
+
