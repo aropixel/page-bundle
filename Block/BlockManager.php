@@ -23,26 +23,37 @@ class BlockManager
      * @var BlockRepository
      */
     private $blockRepository;
+
     /**
      * @var ParameterBagInterface
      */
     private $params;
+
     /**
      * @var ViewBlockConfigAssembler
      */
     private $viewBlockConfigAssembler;
+
     /**
      * @var PageRepository
      */
     private $pageRepository;
+
     /**
      * @var EntityManagerInterface
      */
     private $entityManager;
+
     /**
      * @var BlockInputRepository
      */
     private $blockInputRepository;
+
+    private $_configuredBlocks = [];
+
+    private $_dbBlock;
+
+    private $_configuredBlock;
 
     public function __construct(
         BlockRepository $blockRepository,
@@ -61,6 +72,21 @@ class BlockManager
         $this->blockInputRepository = $blockInputRepository;
     }
 
+
+    /**
+     * @return array
+     *
+     * Créé les view models des blocks à envoyer dans le twig de liste des blocks
+     */
+    public function getVMConfiguredBlocks(): array
+    {
+        $configuredBlocks = $this->getConfiguredBlocks();
+
+        $viewModelBlocks = $this->viewBlockConfigAssembler->createAll($configuredBlocks);
+
+        return $viewModelBlocks;
+    }
+
     /**
      * @return mixed
      *
@@ -68,7 +94,11 @@ class BlockManager
      */
     private function getConfiguredBlocks(): array
     {
-        return $this->params->get('aropixel_page.blocks');
+        if (empty($this->_configuredBlocks)) {
+            $this->_configuredBlocks = $this->params->get('aropixel_page.blocks');
+        }
+
+        return $this->_configuredBlocks;
     }
 
     /**
@@ -92,23 +122,25 @@ class BlockManager
      */
     public function getConfiguredBlockByCode($code): array
     {
-        $configuredBlocks = $this->getConfiguredBlocks();
-
-        return $configuredBlocks[$code];
+        if (empty($this->_configuredBlock)) {
+            $configuredBlocks       = $this->getConfiguredBlocks();
+            $this->_configuredBlock = $configuredBlocks[ $code ];
+        }
+        return $this->_configuredBlock;
     }
 
     /**
-     * @return array
+     * @param $code
      *
-     * Créé les view models des blocks à envoyer dans le twig de liste des blocks
+     * @return Block|null
      */
-    public function getVMConfiguredBlocks(): array
+    private function getDbBlock( $code )
     {
-        $configuredBlocks = $this->getConfiguredBlocks();
+        if (empty($this->_dbBlock)) {
+            $this->_dbBlock = $this->blockRepository->findOneBy( [ 'code' => $code ] );
+        }
 
-        $viewModelBlocks = $this->viewBlockConfigAssembler->createAll($configuredBlocks);
-
-        return $viewModelBlocks;
+        return  $this->_dbBlock;
     }
 
     /**
@@ -200,7 +232,7 @@ class BlockManager
      */
     public function cleanDeletedBlockInput($code): void
     {
-        $dbBlock = $this->blockRepository->findOneBy(['code'=> $code]);
+        $dbBlock = $this->getDbBlock( $code );
 
         $dbBlockInputs = $dbBlock->getInputs();
 
@@ -229,7 +261,7 @@ class BlockManager
 
         $page = $this->pageRepository->findOneBy( [ 'code' => $configuredBlock['page'] ] );
 
-        $dbBlock = $this->blockRepository->findOneBy([ 'code' => $configuredBlock['code']]);
+        $dbBlock = $this->getDbBlock( $code );
 
         // si le block n'existe pas en bdd, on le créé
         if (is_null($dbBlock)) {

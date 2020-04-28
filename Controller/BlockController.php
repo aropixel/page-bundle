@@ -47,11 +47,11 @@ class BlockController extends AbstractController
             return $this->redirectToRoute('block_index');
         }
 
-        // on sauve en bdd tous les blocks de la config
-        $block = $blockManager->persistBlock($code);
-
         // on supprime en bdd tous les blocks input qui n'existent pas dans la config
         $blockManager->cleanDeletedBlockInput($code);
+
+        // on sauve en bdd tous les blocks de la config
+        $block = $blockManager->persistBlock($code);
 
         $form = $this->createForm(BlockType::class, $block);
 
