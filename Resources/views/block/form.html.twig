@@ -2,32 +2,22 @@
 
 {% block header_title %}Block {% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    {#<link rel="stylesheet" href="{{ asset('bundles/aropixelpage/css/block.css') }}">#}
+
+    <style>
+
+        .block-admin-tabs > .form-group {
+            border-bottom: 1px solid #e4e6fc;
+        }
+
+    </style>
+{% endblock %}
+
 {% block javascripts %}
     {{ parent() }}
-
-    <script>
-        jQuery(document).ready(function() {
-            var $wrapper = $('.js-block-admin-tabs-collection');
-            $wrapper.on('click', '.js-block-admin-tabs-add', function(e) {
-                e.preventDefault();
-                // Get the data-prototype explained earlier
-                var prototype = $wrapper.attr('data-prototype');
-
-                // get the new index
-                var index = $wrapper.data('index');
-
-                // Replace '__name__' in the prototype's HTML to
-                // instead be a number based on how many items we have
-                var newForm = prototype.replace(/__name__/g, index);
-
-                // increase the index with one for the next item
-                $wrapper.data('index', index + 1);
-                // Display the form in the page before the "new" link
-                $(this).before(newForm);
-            });
-        });
-    </script>
-
+    <script src="{{ asset('bundles/aropixelpage/js/block.js') }}"></script>
 {% endblock %}
 
 {% block header_breadcrumb %}
@@ -40,52 +30,73 @@
 
 {% block mainPanel %}
 
+    <div class="tabbable">
+        <ul class="nav nav-tabs nav-tabs-highlight">
+            <li class="nav-item"><a href="#panel-tab1" data-toggle="tab" class="nav-link active"><i class="fa fa-paper-plane position-left"></i> Détails</a></li>
+
+            {% if blockHasTabs %}
+                <li class="nav-item"><a href="#panel-tab2" data-toggle="tab" class="nav-link"><i class="far fa-folder-open position-left"></i> Onglets</a></li>
+            {% endif %}
+        </ul>
+    </div>
+
     <div class="card">
 
         <div class="card-body">
 
             <div class="panel-tab-content tab-content">
 
+                {{ form_start(form) }}
+
                 <div class="tab-pane active" id="panel-tab1">
 
-                    {{ form_start(form) }}
-
-                    {#  #}
                     {% for inputForm in form.children.inputs %}
 
-                        {% if inputForm.vars.data.type == 'Tabs' %}
-                            {% set tabsForm = inputForm.content.children.content %}
-
-                            <ul class="js-block-admin-tabs-collection"
-                                data-index="{{ tabsForm.children|length }}"
-                                data-prototype="{{ form_row(tabsForm.vars.prototype)|e }}">
-
-                                {% for childForm in tabsForm.children %}
-                                    <li class="">
-                                        {{ form_errors(childForm) }}
-                                        {{ form_widget(childForm) }}
-                                    </li>
-                                {% endfor %}
-
-                                <a href="#" class="js-block-admin-tabs-add">
-                                    <span class="fa fa-plus-circle"></span>
-                                    Ajouter un onglet
-                                </a>
-
-                            </ul>
-
+                        {% if inputForm.vars.data.type != 'Tabs' %}
+                            {{ form_widget(inputForm) }}
                         {% endif %}
 
-                        {{ form_widget(inputForm) }}
-
-
-
                     {% endfor %}
-                    {{ form_end(form, {'render_rest': false}) }}
 
                 </div>
 
+                <div class="tab-pane" id="panel-tab2">
 
+                    {% for inputForm in form.children.inputs %}
+
+                        {% if inputForm.vars.data.type == 'Tabs' %}
+                            {% set tabsForm = inputForm.content.content %}
+
+                            <div class="form-group">
+                                {{ form_label(inputForm.content) }}
+                                <div class="js-block-admin-tabs-collection"
+                                     data-index="{{ tabsForm.children|length }}"
+                                     data-prototype="{{ form_row(tabsForm.vars.prototype)|e }}">
+
+                                    <div class="js-block-admin-tabs block-admin-tabs">
+                                        {% for childForm in tabsForm.children %}
+                                            {{ form_errors(childForm) }}
+                                            {{ form_widget(childForm) }}
+                                        {% endfor %}
+                                    </div>
+
+                                    <a href="#" class="btn btn-primary js-block-admin-tabs-add">
+                                        <span class="fa fa-plus-circle"></span>
+                                        Ajouter un onglet
+                                    </a>
+
+                                </div>
+                            </div>
+
+                            {% do inputForm.setRendered %}
+
+                        {% endif %}
+
+                    {% endfor %}
+                </div>
+
+
+                {{ form_end(form, {'render_rest': false}) }}
             </div>
 
         </div>

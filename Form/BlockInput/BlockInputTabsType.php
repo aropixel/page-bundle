@@ -21,6 +21,7 @@ class BlockInputTabsType extends AbstractType
 
         $builder->add('content', CollectionType::class, [
             'entry_type' => BlockInputTabsContentType::class,
+            'entry_options' => ['label' => false],
             'label' => false,
             'allow_add'    => true,
             'allow_delete' => true,

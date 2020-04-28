@@ -16,6 +16,8 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class BlockManager
 {
+    private const TABS_KEY = 'Tabs';
+    private const TABS_TYPE_KEY = 'type';
 
     /**
      * @var BlockRepository
@@ -148,11 +150,29 @@ class BlockManager
         return $blockConfig;
     }
 
-    public function getConfiguredBlockInput($inputCode, $blockCode)
+    public function getConfiguredBlockInputs($blockCode)
     {
         $blockConfig = $this->getConfiguredBlock($blockCode);
 
-        $input = $blockConfig['inputs'][$inputCode];
+        return $blockConfig['inputs'];
+    }
+
+    public function hasTabsInput($blockCode)
+    {
+        $inputs = $this->getConfiguredBlockInputs($blockCode);
+
+        if (in_array(  self::TABS_KEY, array_column($inputs, self::TABS_TYPE_KEY))) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getConfiguredBlockInput($inputCode, $blockCode)
+    {
+        $inputsBlockConfig = $this->getConfiguredBlockInputs($blockCode);
+
+        $input = $inputsBlockConfig[$inputCode];
 
         return $input;
 

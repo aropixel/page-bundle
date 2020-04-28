@@ -9,6 +9,7 @@ use Aropixel\PageBundle\Entity\BlockInput;
 use Aropixel\PageBundle\Form\BlockInputType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -24,8 +25,11 @@ class BlockInputTabsContentType extends AbstractType
             ->add('title', TextType::class, [
                 'label' => 'Titre'
             ])
-            ->add('content', TextType::class, [
-                'label' => 'Contenu'
+            ->add('content', TextareaType::class, [
+                'label' => 'Contenu',
+                'attr' => [
+                    'class' => 'ckeditor'
+                ]
             ])
         ;
     }

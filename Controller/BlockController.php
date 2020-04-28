@@ -65,9 +65,12 @@ class BlockController extends AbstractController
             $this->addFlash('notice', 'Le block a bien été enregistré.');
         }
 
+        $blockHasTabs = $blockManager->hasTabsInput($code);
+
         return $this->render('@AropixelPage/block/form.html.twig', [
             'form' => $form->createView(),
-            'block' => $block
+            'block' => $block,
+            'blockHasTabs' => $blockHasTabs
         ]);
 
     }
