@@ -1,4 +1,6 @@
-{% extends '@AropixelPage/block/form/base.html.twig' %}
+{% import '@AropixelPage/block/macro/_formMacro.html.twig' as formMacros %}
+
+{% extends '@AropixelAdmin/Form/base.html.twig' %}
 
 {% block header_title %}Block {% endblock %}
 
@@ -71,19 +73,18 @@
                                 {{ form_label(inputForm.content) }}
                                 <div class="js-block-admin-tabs-collection"
                                      data-index="{{ tabsForm.children|length }}"
-                                     data-prototype="{{ form_row(tabsForm.vars.prototype)|e }}">
+                                     data-prototype="{{ formMacros.printTabRow(tabsForm.vars.prototype)|e }}">
 
                                     <div class="js-block-admin-tabs block-admin-tabs">
                                         {% for childForm in tabsForm.children %}
-                                            {{ form_errors(childForm) }}
-                                            {{ form_widget(childForm) }}
+                                            {{ formMacros.printTabRow(childForm) }}
                                         {% endfor %}
                                     </div>
 
-                                    <a href="#" class="btn btn-primary js-block-admin-tabs-add">
+                                    <button  class="mt-3 btn btn-primary js-block-admin-tabs-add">
                                         <span class="fa fa-plus-circle"></span>
                                         Ajouter un onglet
-                                    </a>
+                                    </button>
 
                                 </div>
                             </div>
@@ -95,8 +96,7 @@
                     {% endfor %}
                 </div>
 
-
-                {{ form_end(form, {'render_rest': false}) }}
+                {{ form_end(form) }}
             </div>
 
         </div>

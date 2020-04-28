@@ -12,13 +12,10 @@ function addCKEditorInLastNode(tabsNode) {
     const ckEditorsInput = tabsNode.querySelectorAll('.ckeditor');
     const lastckEditorsInput = ckEditorsInput[ckEditorsInput.length - 1];
 
-    // ajouter l'instanciation de ckeditor
-
     CKEDITOR.replace(lastckEditorsInput)
 }
 
-docReady(() => {
-
+function addBlockTabOnClick() {
     const collectionWrapperNode = document.querySelector('.js-block-admin-tabs-collection');
 
     collectionWrapperNode.querySelector('.js-block-admin-tabs-add').addEventListener('click', function(e) {
@@ -43,6 +40,37 @@ docReady(() => {
         // Display the form in the page before the "new" link
         tabsNode.innerHTML += newFormContent;
 
+        // initialize le ck editor sur les champs textarea avec la classe ckeditor
         addCKEditorInLastNode(tabsNode);
+
+        // récupère tous les liens de remove
+        const removeTabLinks = document.querySelectorAll('.js-block-admin-tab-remove');
+
+        // recupère le dernier lien remove, soit celui qui vient d'être ajouté
+        const removeTabLinksLast = removeTabLinks[removeTabLinks.length - 1];
+
+        // ajoute l'event listener du remove sur ce lien
+        removeOneBlockTabOnClick(removeTabLinksLast);
+
     });
+}
+
+function removeOneBlockTabOnClick(element) {
+    element.addEventListener('click', function(e) {
+        e.preventDefault();
+        this.closest('.js-block-admin-tab').remove();
+    });
+}
+
+function removeBlockTabOnClick() {
+    const removeTabLinks = document.querySelectorAll('.js-block-admin-tab-remove');
+    removeTabLinks.forEach(function (element) {
+        removeOneBlockTabOnClick(element);
+    });
+
+}
+
+docReady(() => {
+    addBlockTabOnClick();
+    removeBlockTabOnClick();
 });

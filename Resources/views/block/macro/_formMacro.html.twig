@@ -1,0 +1,10 @@
+{% macro printTabRow(tabForm) %}
+    <div class="js-block-admin-tab">
+        {{ form_errors(tabForm) }}
+        {{ form_widget(tabForm) }}
+        <button href="#" class="mb-5 btn btn-danger btn-sm js-block-admin-tab-remove">
+            <span class="fa fa-trash"></span>
+            Supprimer l'onglet
+        </button>
+    </div>
+{% endmacro %}
