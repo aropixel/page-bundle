@@ -30,15 +30,24 @@ function addBlockTabOnClick() {
         // Replace '__name__' in the prototype's HTML to
         // instead be a number based on how many items we have
         const newFormContent = prototype.replace(/__name__/g, index);
+
+        // créé un node avec le nouveau formulaire
         let newFormNode = document.createElement('div');
+        newFormNode.innerHTML = newFormContent;
+
 
         const tabsNode = collectionWrapperNode.querySelector('.js-block-admin-tabs');
+        // récupère le dernier tabs node (celui qui vient d'être ajouté)
+        //const TabsNodeLast = tabsNode[tabsNode.length - 1];
 
         // increase the index with one for the next item
         collectionWrapperNode.dataset.index = index + 1;
 
-        // Display the form in the page before the "new" link
-        tabsNode.innerHTML += newFormContent;
+        // ajoute le nouveau formulaire à la fin de la liste des formulaires
+        tabsNode.appendChild(newFormNode);
+
+        // prend l'ancien
+        //tabsNode.innerHTML += newFormContent;
 
         // initialize le ck editor sur les champs textarea avec la classe ckeditor
         addCKEditorInLastNode(tabsNode);

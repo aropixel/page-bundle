@@ -30,6 +30,10 @@ services:
     autowire: true
     tags: ['doctrine.repository_service']
 
+  Aropixel\PageBundle\Twig\BlockExtension:
+      arguments: ['@Aropixel\PageBundle\Block\BlockManager']
+      tags: ['twig.extension']
+
   Aropixel\PageBundle\Block\BlockManager:
     arguments:
       - '@Aropixel\PageBundle\Repository\BlockRepository'

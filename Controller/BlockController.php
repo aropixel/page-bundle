@@ -46,7 +46,6 @@ class BlockController extends AbstractController
         if (!$blockManager->isConfiguredBlock($code)) {
             return $this->redirectToRoute('block_index');
         }
-
         // on supprime en bdd tous les blocks input qui n'existent pas dans la config
         $blockManager->cleanDeletedBlockInput($code);
 

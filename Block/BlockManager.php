@@ -151,12 +151,13 @@ class BlockManager
      *
      * recupère en bdd un block input en fonction de son code et du block relié
      */
-    public function getDbBlockInput($blockInputCode, $blockEntity)
+    public function getDbBlockInput($blockInputCode)
     {
-        return $this->blockInputRepository->findOneBy([
-            'code'=> $blockInputCode,
-            'block' => $blockEntity
+        $input = $this->blockInputRepository->findOneBy([
+            'code'=> $blockInputCode
         ]);
+
+        return $input->getContent()['content'];
     }
 
     /*
@@ -234,19 +235,22 @@ class BlockManager
     {
         $dbBlock = $this->getDbBlock( $code );
 
-        $dbBlockInputs = $dbBlock->getInputs();
+        if (!is_null($dbBlock)) {
+            $dbBlockInputs = $dbBlock->getInputs();
 
-        $blockConfig = $this->getConfiguredBlock($dbBlock->getCode());
+            $blockConfig = $this->getConfiguredBlock($dbBlock->getCode());
 
-        $configuredBlocksInput = $blockConfig['inputs'];
+            $configuredBlocksInput = $blockConfig['inputs'];
 
-        foreach ($dbBlockInputs as $dbBlockInput) {
+            foreach ($dbBlockInputs as $dbBlockInput) {
 
-            if (!array_key_exists($dbBlockInput->getCode(), $configuredBlocksInput)) {
-                $this->entityManager->remove($dbBlockInput);
-                $this->entityManager->flush();
+                if (!array_key_exists($dbBlockInput->getCode(), $configuredBlocksInput)) {
+                    $this->entityManager->remove($dbBlockInput);
+                    $this->entityManager->flush();
+                }
             }
         }
+
     }
 
     /**
@@ -291,7 +295,7 @@ class BlockManager
     {
         foreach ( $block['inputs'] as $blockInputCode => $blockInput ) {
 
-            $dbBlockInput = $this->getDbBlockInput($blockInputCode, $blockEntity);
+            $dbBlockInput = $this->getDbBlockInput($blockInputCode);
 
             if (is_null($dbBlockInput)) {
                 $blockInputEntity = new BlockInput();
@@ -299,6 +303,7 @@ class BlockManager
                 $blockInputEntity->setCode( $blockInputCode );
                 $blockInputEntity->setBlock( $blockEntity );
                 $blockInputEntity->setType( $blockInput['type'] );
+                $blockEntity->addInput($blockInputEntity);
 
                 $this->entityManager->persist( $blockInputEntity );
             }

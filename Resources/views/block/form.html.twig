@@ -2,7 +2,8 @@
 
 {% extends '@AropixelAdmin/Form/base.html.twig' %}
 
-{% block header_title %}Block {% endblock %}
+{% block header_title %}
+    Block #<i>{{ block.code }}</i>{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -25,7 +26,7 @@
 {% block header_breadcrumb %}
     <ul class="breadcrumb breadcrumb-caret position-right">
         <li class="breadcrumb-item"><a href="{{ url('_admin') }}">Accueil</a></li>
-        <li class="breadcrumb-item"><a href="{{ url('block_index') }}">Block</a></li>
+        <li class="breadcrumb-item"><a href="{{ url('block_index') }}">Block </a></li>
         <li class="breadcrumb-item active">Modifier</li>
     </ul>
 {% endblock %}
@@ -55,6 +56,7 @@
                     {% for inputForm in form.children.inputs %}
 
                         {% if inputForm.vars.data.type != 'Tabs' %}
+                            <i class="fas fa-crosshairs"></i><i>{{ inputForm.vars.data.code }}</i>
                             {{ form_widget(inputForm) }}
                         {% endif %}
 
@@ -70,6 +72,7 @@
                             {% set tabsForm = inputForm.content.content %}
 
                             <div class="form-group">
+                                <i class="fas fa-crosshairs"></i><i>{{ inputForm.vars.data.code }}</i>
                                 {{ form_label(inputForm.content) }}
                                 <div class="js-block-admin-tabs-collection"
                                      data-index="{{ tabsForm.children|length }}"

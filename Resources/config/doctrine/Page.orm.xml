@@ -12,7 +12,7 @@
         <field name="code" nullable="true" />
         <field name="title" nullable="true" />
         <field name="name" nullable="true" />
-        <field name="slug">
+        <field name="slug" nullable="true">
             <gedmo:slug fields="title" />
         </field>
         <field name="excerpt" type="text" nullable="true" />
