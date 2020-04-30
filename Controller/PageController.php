@@ -3,6 +3,8 @@
 namespace Aropixel\PageBundle\Controller;
 
 use Aropixel\AdminBundle\Services\Status;
+use Aropixel\PageBundle\Block\BlockManager;
+use Aropixel\PageBundle\Entity\Block;
 use Aropixel\PageBundle\Entity\Page;
 use Aropixel\PageBundle\Form\PageType;
 use Aropixel\PageBundle\Repository\PageRepository;
@@ -76,8 +78,18 @@ class PageController extends AbstractController
     /**
      * @Route("/{id}/edit", name="page_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Page $page): Response
+    public function edit(
+        Request $request,
+        Page $page,
+        BlockManager $blockManager
+    ): Response
     {
+
+        // clean les blocks supprimés / modifiés en config
+        $blockManager->cleanDeletedBlocksByPage($page);
+        // persist les nouveaux blocs de la config
+        $blockManager->persistBlocksByPage($page);
+
         $em = $this->getDoctrine()->getManager();
         $image = $page->getImage();
 

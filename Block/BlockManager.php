@@ -7,6 +7,7 @@ namespace Aropixel\PageBundle\Block;
 
 use Aropixel\PageBundle\Entity\Block;
 use Aropixel\PageBundle\Entity\BlockInput;
+use Aropixel\PageBundle\Entity\Page;
 use Aropixel\PageBundle\Repository\BlockInputRepository;
 use Aropixel\PageBundle\Repository\BlockRepository;
 use Aropixel\PageBundle\Repository\PageRepository;
@@ -101,6 +102,45 @@ class BlockManager
         return $this->_configuredBlocks;
     }
 
+
+    private function getConfiguredBlocksByPage(Page $page): array
+    {
+        $configuredBlocks = $this->getConfiguredBlocks();
+
+        $pageCode = $page->getCode();
+
+        $pageBlocks = [];
+
+        foreach ($configuredBlocks as $blockCode => $block) {
+            if ($block['page'] === $pageCode) {
+                $pageBlocks[$blockCode] = $block;
+            }
+        }
+
+        return $pageBlocks;
+    }
+
+    /**
+     * @param $code
+     *
+     * @return array
+     *
+     * récupère un block dans les blocks configurés
+     */
+    public function getConfiguredBlockByCode($code): array
+    {
+        $configuredBlocks = $this->getConfiguredBlocks();
+        return  $configuredBlocks[ $code ];
+    }
+
+
+    public function getConfiguredBlockInputs($blockCode)
+    {
+        $blockConfig = $this->getConfiguredBlockByCode($blockCode);
+
+        return $blockConfig['inputs'];
+    }
+
     /**
      * @param $code
      *
@@ -113,20 +153,24 @@ class BlockManager
         return array_key_exists($code, $this->getConfiguredBlocks());
     }
 
-    /**
-     * @param $code
-     *
-     * @return array
-     *
-     * récupère un block dans les blocks configurés
-     */
-    public function getConfiguredBlockByCode($code): array
+    public function getConfiguredBlockInput($inputCode, $blockCode)
     {
-        if (empty($this->_configuredBlock)) {
-            $configuredBlocks       = $this->getConfiguredBlocks();
-            $this->_configuredBlock = $configuredBlocks[ $code ];
+        $inputsBlockConfig = $this->getConfiguredBlockInputs($blockCode);
+
+        $input = $inputsBlockConfig[$inputCode];
+
+        return $input;
+    }
+
+    public function hasConfiguredTabsInput($blockCode)
+    {
+        $inputs = $this->getConfiguredBlockInputs($blockCode);
+
+        if (in_array(  self::TABS_KEY, array_column($inputs, self::TABS_TYPE_KEY))) {
+            return true;
         }
-        return $this->_configuredBlock;
+
+        return false;
     }
 
     /**
@@ -136,11 +180,7 @@ class BlockManager
      */
     private function getDbBlock( $code )
     {
-        if (empty($this->_dbBlock)) {
-            $this->_dbBlock = $this->blockRepository->findOneBy( [ 'code' => $code ] );
-        }
-
-        return  $this->_dbBlock;
+        return  $this->blockRepository->findOneBy( [ 'code' => $code ] );
     }
 
     /**
@@ -157,7 +197,7 @@ class BlockManager
             'code'=> $blockInputCode
         ]);
 
-        return $input->getContent()['content'];
+        return $input;
     }
 
     /*
@@ -165,51 +205,35 @@ class BlockManager
      */
     public function cleanDeletedBlocks(): void
     {
-        $configuredBlocks = $this->getConfiguredBlocks();
 
         $dbBlocks = $this->blockRepository->findAll();
 
         foreach ($dbBlocks as $dbBlock) {
-            $this->cleanDeletedBlock($dbBlock, $configuredBlocks);
+            $this->cleanDeletedBlock($dbBlock);
         }
     }
 
-    public function getConfiguredBlock($blockCode)
+    public function cleanDeletedBlocksByPage(Page $page)
     {
-        $configuredBlocks = $this->getConfiguredBlocks();
+        $dbBlocks = $this->blockRepository->findBy(['page' => $page]);
 
-        $blockConfig = $configuredBlocks[$blockCode];
-
-        return $blockConfig;
+        foreach ($dbBlocks as $dbBlock) {
+            $this->cleanDeletedBlock($dbBlock);
+        }
     }
 
-    public function getConfiguredBlockInputs($blockCode)
+    public function cleanDeletedBlockInputsByBlockCode($code)
     {
-        $blockConfig = $this->getConfiguredBlock($blockCode);
+        $dbBlock = $this->getDbBlock( $code );
 
-        return $blockConfig['inputs'];
-    }
-
-    public function hasTabsInput($blockCode)
-    {
-        $inputs = $this->getConfiguredBlockInputs($blockCode);
-
-        if (in_array(  self::TABS_KEY, array_column($inputs, self::TABS_TYPE_KEY))) {
-            return true;
+        // si le bloc en bdd existe, on clean ses inputs
+        if (!is_null($dbBlock)) {
+            $this->cleanDeletedInputsByBlock($dbBlock);
         }
 
-        return false;
+        $this->entityManager->flush();
     }
 
-    public function getConfiguredBlockInput($inputCode, $blockCode)
-    {
-        $inputsBlockConfig = $this->getConfiguredBlockInputs($blockCode);
-
-        $input = $inputsBlockConfig[$inputCode];
-
-        return $input;
-
-    }
 
     /**
      * @param Block $dbBlock
@@ -217,12 +241,17 @@ class BlockManager
      *
      * supprime un block existant en bdd mais non existant en config
      */
-    public function cleanDeletedBlock(Block $dbBlock, $configuredBlocks): void
+    public function cleanDeletedBlock(Block $dbBlock): void
     {
-        if (!array_key_exists($dbBlock->getCode(), $configuredBlocks)) {
+        // si le bloc n'existe plus en config on le supprime (par cascade ça supprime aussi les inputs liés) de la bdd
+        if (!array_key_exists($dbBlock->getCode(), $this->getConfiguredBlocks())) {
             $this->entityManager->remove($dbBlock);
-            $this->entityManager->flush();
+        // si le bloc est toujours valide, on vérifie et supprime les inputs s'ils sont invalides
+        } else {
+            $this->cleanDeletedInputsByBlock($dbBlock);
         }
+
+        $this->entityManager->flush();
     }
 
     /**
@@ -231,24 +260,54 @@ class BlockManager
      * vérifie pour un block donné que tous ses inputs en bdd correspondent à des inpits en config
      * sinon supprime les inputs en bdd
      */
-    public function cleanDeletedBlockInput($code): void
+    public function cleanDeletedInputsByBlock(Block $dbBlock): void
     {
-        $dbBlock = $this->getDbBlock( $code );
 
         if (!is_null($dbBlock)) {
             $dbBlockInputs = $dbBlock->getInputs();
 
-            $blockConfig = $this->getConfiguredBlock($dbBlock->getCode());
-
-            $configuredBlocksInput = $blockConfig['inputs'];
+            $configuredBlocksInputs = $this->getConfiguredBlockInputs($dbBlock->getCode());
 
             foreach ($dbBlockInputs as $dbBlockInput) {
 
-                if (!array_key_exists($dbBlockInput->getCode(), $configuredBlocksInput)) {
+                // on supprime les blocsinput non valides :
+                // si l'input existe en bdd mais plus en config ou si le type a été modifié en config
+                if ($this->isBlockInputInvalid($dbBlockInput, $configuredBlocksInputs)) {
                     $this->entityManager->remove($dbBlockInput);
-                    $this->entityManager->flush();
                 }
+
             }
+        }
+    }
+
+    /**
+     * @param $dbBlockInput
+     * @param $configuredBlocksInput
+     *
+     * @return bool
+     *
+     * vérifie si un input est présent en bdd alors qu'il a été supprimé de la config
+     * ou si le type en bdd ne correspond plus à celui de la config
+     */
+    private function isBlockInputInvalid(BlockInput $dbBlockInput, $configuredBlocksInput): bool
+    {
+        $dbCodeBlockInput = $dbBlockInput->getCode();
+        $dbtypeBlockInput = $dbBlockInput->getType();
+
+        $isBlockInputInvalid = (!array_key_exists($dbCodeBlockInput, $configuredBlocksInput))
+                               || ($dbtypeBlockInput!== $configuredBlocksInput[$dbCodeBlockInput]['type']);
+
+        return $isBlockInputInvalid;
+    }
+
+    public function persistBlocksByPage($page)
+    {
+        // je récupère en config tous les blocks liés à cette page
+        $pageBlocks = $this->getConfiguredBlocksByPage($page);
+
+        // je les persists avec persist block
+        foreach ($pageBlocks as $blockCode => $block) {
+            $this->persistBlock($blockCode, $page);
         }
 
     }
@@ -258,12 +317,13 @@ class BlockManager
      *
      * enregistre un block + ses blocks inputs en bdd
      */
-    public function persistBlock($code): Block
+    public function persistBlock($code, $page = null): Block
     {
-
         $configuredBlock = $this->getConfiguredBlockByCode($code);
 
-        $page = $this->pageRepository->findOneBy( [ 'code' => $configuredBlock['page'] ] );
+        if (is_null($page)) {
+            $page = $this->pageRepository->findOneBy( [ 'code' => $configuredBlock['page'] ] );
+        }
 
         $dbBlock = $this->getDbBlock( $code );
 

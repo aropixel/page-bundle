@@ -1,5 +1,6 @@
-{% extends '@AropixelAdmin/Form/base.html.twig' %}
+{% import '@AropixelPage/block/macro/_formMacro.html.twig' as formMacros %}
 
+{% extends '@AropixelAdmin/Form/base.html.twig' %}
 
 {% block header_title %}Pages{% endblock %}
 {% block header_breadcrumb %}
@@ -28,6 +29,7 @@
             {% if is_granted('ROLE_HYPER_ADMIN') %}
                 <li class="nav-item"><a href="#panel-tab4" data-toggle="tab" class="nav-link"><i class="fas fa-cog position-left"></i> Configuration</a></li>
             {% endif %}
+            <li class="nav-item"><a href="#panel-tab5" data-toggle="tab" class="nav-link"><i class="fas fa-cog position-left"></i> Blocks</a></li>
         </ul>
     </div>
 
@@ -111,6 +113,60 @@
                 </div>
 
             {% endif %}
+
+                <div class="tab-pane" id="panel-tab5">
+
+                    {#{% for inputForm in form.children.inputs %}
+
+                        {% if inputForm.vars.data.type != 'Tabs' %}
+                            <i class="fas fa-crosshairs"></i><i>{{ inputForm.vars.data.code }}</i>
+                            {{ form_widget(inputForm) }}
+                        {% endif %}
+
+                    {% endfor %}#}
+
+                    {% for blockForm in form.blocks %}
+
+                        {% for inputForm in blockForm.children.inputs %}
+
+                            {% if inputForm.vars.data.type == 'Tabs' %}
+                                {% set tabsForm = inputForm.content.content %}
+
+                                <div class="form-group">
+                                    <i class="fas fa-crosshairs"></i><i>{{ inputForm.vars.data.code }}</i>
+                                    {{ form_label(inputForm.content) }}
+                                    <div class="js-block-admin-tabs-collection"
+                                         data-index="{{ tabsForm.children|length }}"
+                                         data-prototype="{{ formMacros.printTabRow(tabsForm.vars.prototype)|e }}">
+
+                                        <div class="js-block-admin-tabs block-admin-tabs">
+                                            {% for childForm in tabsForm.children %}
+                                                {{ formMacros.printTabRow(childForm) }}
+                                            {% endfor %}
+                                        </div>
+
+                                        <button  class="mt-3 btn btn-primary js-block-admin-tabs-add">
+                                            <span class="fa fa-plus-circle"></span>
+                                            Ajouter un onglet
+                                        </button>
+
+                                    </div>
+                                </div>
+
+                                {% do inputForm.setRendered %}
+
+                            {% else %}
+
+                                <i class="fas fa-crosshairs"></i><i>{{ inputForm.vars.data.code }}</i>
+                                {{ form_widget(inputForm) }}
+
+                            {% endif %}
+
+                        {% endfor %}
+
+                    {% endfor %}
+
+                </div>
 
             </div>
 

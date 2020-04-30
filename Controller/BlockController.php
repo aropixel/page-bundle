@@ -47,7 +47,7 @@ class BlockController extends AbstractController
             return $this->redirectToRoute('block_index');
         }
         // on supprime en bdd tous les blocks input qui n'existent pas dans la config
-        $blockManager->cleanDeletedBlockInput($code);
+        $blockManager->cleanDeletedBlockInputsByBlockCode($code);
 
         // on sauve en bdd tous les blocks de la config
         $block = $blockManager->persistBlock($code);
@@ -64,7 +64,7 @@ class BlockController extends AbstractController
             $this->addFlash('notice', 'Le block a bien été enregistré.');
         }
 
-        $blockHasTabs = $blockManager->hasTabsInput($code);
+        $blockHasTabs = $blockManager->hasConfiguredTabsInput($code);
 
         return $this->render('@AropixelPage/block/form.html.twig', [
             'form' => $form->createView(),

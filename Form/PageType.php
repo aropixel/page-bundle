@@ -11,6 +11,7 @@ use Aropixel\PageBundle\Entity\PageImageCrop;
 use Aropixel\PageBundle\Entity\Page;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -68,6 +69,11 @@ class PageType extends AbstractType
                 'time_widget' => 'single_text',
                 'date_format' => 'yyyy-MM-dd',
             ))
+            ->add('blocks', CollectionType::class, [
+                'entry_type' => BlockType::class,
+                'entry_options' => ['label' => false],
+                'label' => false
+            ])
         ;
 
         // Si on est en création

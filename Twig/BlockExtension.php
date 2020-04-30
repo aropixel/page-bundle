@@ -30,6 +30,6 @@ class BlockExtension extends AbstractExtension
 
     public function getTextInput(string $code)
     {
-        return $this->blockManager->getDbBlockInput($code);
+        return $this->blockManager->getDbBlockInput($code)->getContent()['content'];
     }
 }
