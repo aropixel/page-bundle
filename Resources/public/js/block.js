@@ -25,7 +25,7 @@ function addBlockTabOnClick() {
         const prototype = collectionWrapperNode.dataset.prototype;
 
         // get the new index
-        const index = collectionWrapperNode.dataset.index;
+        const index = parseInt(collectionWrapperNode.dataset.index);
 
         // Replace '__name__' in the prototype's HTML to
         // instead be a number based on how many items we have

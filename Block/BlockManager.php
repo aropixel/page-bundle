@@ -133,6 +133,10 @@ class BlockManager
         return  $configuredBlocks[ $code ];
     }
 
+    public function getConfiguredBlockNameByCode($code): string
+    {
+        return $this->getConfiguredBlockByCode($code)['name'];
+    }
 
     public function getConfiguredBlockInputs($blockCode)
     {
