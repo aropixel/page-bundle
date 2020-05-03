@@ -14,7 +14,7 @@ class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder('aropixel_block');
+        $treeBuilder = new TreeBuilder('aropixel_page');
 
         $treeBuilder->getRootNode()
                     ->children()
