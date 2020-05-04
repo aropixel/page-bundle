@@ -34,7 +34,9 @@
             {% if is_granted('ROLE_HYPER_ADMIN') %}
                 <li class="nav-item"><a href="#panel-tab4" data-toggle="tab" class="nav-link"><i class="fas fa-cog position-left"></i> Configuration</a></li>
             {% endif %}
+            {% if form.blocks|length %}
             <li class="nav-item"><a href="#panel-tab5" data-toggle="tab" class="nav-link"><i class="fas fa-th-large position-left"></i> Blocks</a></li>
+            {% endif %}
         </ul>
     </div>
 
@@ -119,6 +121,8 @@
 
             {% endif %}
 
+            {% if form.blocks|length %}
+
                 <div class="tab-pane" id="panel-tab5">
 
 
@@ -185,6 +189,8 @@
                     </div>
 
                 </div>
+
+            {% endif %}
 
             </div>
 
