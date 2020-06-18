@@ -2,6 +2,7 @@
 
 namespace Aropixel\PageBundle\DependencyInjection;
 
+use Aropixel\PageBundle\Entity\Page;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -17,31 +18,30 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder('aropixel_page');
 
         $treeBuilder->getRootNode()
+            ->children()
+                ->scalarNode('entity')->defaultValue(Page::class)->end()
+                ->arrayNode('blocks')
+                    ->useAttributeAsKey('block_code')
+                    ->arrayPrototype()
                     ->children()
-
-                        ->arrayNode('blocks')
-                            ->useAttributeAsKey('block_code')
+                        ->scalarNode('page')->end()
+                        ->scalarNode('name')->end()
+                        ->arrayNode('inputs')
+                            ->useAttributeAsKey('input_code')
                             ->arrayPrototype()
                             ->children()
-                                ->scalarNode('page')->end()
-                                ->scalarNode('name')->end()
-                                ->arrayNode('inputs')
-                                    ->useAttributeAsKey('input_code')
-                                    ->arrayPrototype()
-                                    ->children()
-                                        ->scalarNode('type')
-                                            ->validate()
-                                                ->ifNotInArray(['Text', 'Textarea', 'Tabs'])
-                                                ->thenInvalid("Le type doit être 'Text', 'Textarea' ou 'Tabs'")
-                                            ->end()
-                                        ->end()
-                                        ->scalarNode('label')->end()
+                                ->scalarNode('type')
+                                    ->validate()
+                                        ->ifNotInArray(['Text', 'Textarea', 'Tabs'])
+                                        ->thenInvalid("Le type doit être 'Text', 'Textarea' ou 'Tabs'")
                                     ->end()
                                 ->end()
+                                ->scalarNode('label')->end()
                             ->end()
                         ->end()
-
-
+                    ->end()
+                ->end()
+            ->end()
         ;
 
 

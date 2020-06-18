@@ -25,12 +25,17 @@ class AropixelPageExtension extends Extension
         $this->registerParameters($container, $config);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('orm.yml');
         $loader->load('services.yml');
     }
 
+
     private function registerParameters(ContainerBuilder $container, array $config)
     {
+        //
+        $container->setParameter('aropixel_page.entity', $config['entity']);
 
+        //
         $configuredBlocks = [];
 
         // put the key (the code of the block) as a value inside the block's array

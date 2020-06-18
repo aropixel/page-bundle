@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\Collection;
 /**
  * Page
  */
-class Page
+class Page implements PageInterface
 {
     /**
      * @var integer
