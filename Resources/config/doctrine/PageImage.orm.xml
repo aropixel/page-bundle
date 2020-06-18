@@ -7,7 +7,7 @@
         <id name="id" column="id" type="integer">
             <generator strategy="AUTO" />
         </id>
-        <one-to-one field="page" target-entity="Aropixel\PageBundle\Entity\Page" mapped-by="image" />
+        <one-to-one field="page" target-entity="Aropixel\PageBundle\Entity\PageInterface" mapped-by="image" />
         <one-to-many field="crops" target-entity="Aropixel\PageBundle\Entity\PageImageCrop" mapped-by="image" />
 
     </entity>
