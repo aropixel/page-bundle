@@ -4,8 +4,11 @@ CHANGELOG for 1.0.x
 This changelog references the relevant changes (bug and security fixes) done
 in 1.1 minor versions.
 
-* **1.1.3** _(20xx-xx-xx)_
+* **1.1.4** _(20xx-xx-xx)_
 
+
+* **1.1.3** _(2020-06-18)_
+    * Allow overriding Page entity
 
 * **1.1.2** _(2020-04-04)_
     * Remove nullable on field slug in Page.orm.xml
