@@ -26,15 +26,15 @@ class MappedSuperClassSubscriber implements EventSubscriber
     /** @var RuntimeReflectionService */
     private $reflectionService;
 
-    /** @var string */
-    private $entityName;
+    /** @var array */
+    private $entitiesNames;
 
     /**
      * MapPageBundleSubscriber constructor.
      */
-    public function __construct($entityName)
+    public function __construct($entities)
     {
-        $this->entityName = $entityName;
+        $this->entitiesNames = $entities;
     }
 
 
@@ -48,19 +48,26 @@ class MappedSuperClassSubscriber implements EventSubscriber
     public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs): void
     {
         $metadata = $eventArgs->getClassMetadata();
-        if ($metadata->getReflectionClass()->implementsInterface(PageInterface::class)) {
 
-            if ($this->entityName == $metadata->getName() && $metadata->isMappedSuperclass) {
+        foreach ($this->entitiesNames as $interface => $model) {
 
-                $metadata->isMappedSuperclass = false;
-                $this->setAssociationMappings($metadata, $eventArgs->getEntityManager()->getConfiguration());
+            if ($metadata->getName() == $model) {
+
+                if (!$metadata->isMappedSuperclass) {
+                    $this->setAssociationMappings($metadata, $eventArgs->getEntityManager()->getConfiguration());
+                }
+                else {
+                    $metadata->isMappedSuperclass = false;
+                }
 
             }
             else {
-                $this->unsetAssociationMappings($metadata);
+                if (in_array($interface, class_implements($metadata->getName()))) {
+                    $this->unsetAssociationMappings($metadata);
+                }
             }
-
         }
+
     }
 
     private function setAssociationMappings(ClassMetadataInfo $metadata, Configuration $configuration): void

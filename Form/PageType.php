@@ -4,11 +4,11 @@ namespace Aropixel\PageBundle\Form;
 
 use Aropixel\AdminBundle\Form\Type\Image\Gallery\GalleryType;
 use Aropixel\AdminBundle\Form\Type\Image\Single\ImageType;
-use Aropixel\PageBundle\Entity\PageGallery;
-use Aropixel\PageBundle\Entity\PageGalleryCrop;
 use Aropixel\PageBundle\Entity\PageImage;
 use Aropixel\PageBundle\Entity\PageImageCrop;
 use Aropixel\PageBundle\Entity\Page;
+use Aropixel\PageBundle\Entity\PageInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -30,15 +30,28 @@ class PageType extends AbstractType
      */
     private $securityContext;
 
+    /**
+     * @var ParameterBagInterface
+     */
+    private $parameterBag;
+
+    /** @var string */
+    private $model = Page::class;
+
 
 
     /**
      * PageType constructor.
      * @param AuthorizationCheckerInterface $securityContext
+     * @param ParameterBagInterface $parameterBag
      */
-    public function __construct(AuthorizationCheckerInterface $securityContext)
+    public function __construct(AuthorizationCheckerInterface $securityContext, ParameterBagInterface $parameterBag)
     {
         $this->securityContext = $securityContext;
+        $this->parameterBag = $parameterBag;
+
+        $entities = $parameterBag->get('aropixel_page.entities');
+        $this->model = $entities[PageInterface::class];
     }
 
 
@@ -189,7 +202,7 @@ class PageType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Page::class,
+            'data_class' => $this->model,
         ]);
     }
 }

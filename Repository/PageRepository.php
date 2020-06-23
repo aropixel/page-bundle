@@ -4,8 +4,9 @@ namespace Aropixel\PageBundle\Repository;
 
 use Aropixel\AdminBundle\Repository\PublishableRepository;
 use Aropixel\PageBundle\Entity\Page;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Aropixel\PageBundle\Entity\PageInterface;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
  * @method Page|null find($id, $lockMode = null, $lockVersion = null)
@@ -15,9 +16,10 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class PageRepository extends PublishableRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, ParameterBagInterface $parameterBag)
     {
-        parent::__construct($registry, Page::class);
+        $entities = $parameterBag->get('aropixel_page.entities');
+        parent::__construct($registry, $entities[PageInterface::class]);
     }
 
     // /**
@@ -32,7 +34,7 @@ class PageRepository extends PublishableRepository
             ->orderBy('p.title', 'ASC')
             ->getQuery()
             ->getResult()
-        ;
+            ;
     }
 
     // /**
@@ -47,7 +49,7 @@ class PageRepository extends PublishableRepository
             ->orderBy('p.title', 'ASC')
             ->getQuery()
             ->getResult()
-        ;
+            ;
     }
 
 

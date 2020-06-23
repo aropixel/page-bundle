@@ -13,7 +13,7 @@
 
         <!--<field name="backUpConfig" column="back_up_config" type="json" nullable="false"/>-->
 
-        <many-to-one field="page" target-entity="Aropixel\PageBundle\Entity\Page" inversed-by="blocks" />
+        <many-to-one field="page" target-entity="Aropixel\PageBundle\Entity\PageInterface" inversed-by="blocks" />
 
         <one-to-many field="inputs" target-entity="Aropixel\PageBundle\Entity\BlockInput" mapped-by="block">
             <cascade>

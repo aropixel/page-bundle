@@ -5,22 +5,22 @@ namespace Aropixel\PageBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
-class Block
+class Block implements BlockInterface
 {
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $code;
+    protected $code;
 
     /**
      * @var Page
      */
-    private $page;
+    protected $page;
 
     /**
      * @var string

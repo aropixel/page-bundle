@@ -33,7 +33,8 @@ class AropixelPageExtension extends Extension
     private function registerParameters(ContainerBuilder $container, array $config)
     {
         //
-        $container->setParameter('aropixel_page.entity', $config['entity']);
+        $container->setParameter('aropixel_page.entities', $config['entities']);
+        $container->setParameter('aropixel_page.forms', $config['forms']);
 
         //
         $configuredBlocks = [];

@@ -21,8 +21,10 @@ class DoctrineTargetEntitiesResolverPass implements CompilerPassInterface
             return;
         }
 
-        $pageClass = $container->getParameter('aropixel_page.entity');
-        $resolveTargetEntityListener->addMethodCall('addResolveTargetEntity', [PageInterface::class, $pageClass, []]);
+        $entities  = $container->getParameter('aropixel_page.entities');
+        foreach ($entities as $interface => $model) {
+            $resolveTargetEntityListener->addMethodCall('addResolveTargetEntity', [$interface, $model, []]);
+        }
 
         if (!$resolveTargetEntityListener->hasTag('doctrine.event_subscriber')) {
             $resolveTargetEntityListener->addTag('doctrine.event_subscriber', ['event' => 'loadClassMetadata']);

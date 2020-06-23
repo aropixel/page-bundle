@@ -2,7 +2,11 @@
 
 namespace Aropixel\PageBundle\DependencyInjection;
 
+use Aropixel\PageBundle\Entity\Block;
+use Aropixel\PageBundle\Entity\BlockInterface;
 use Aropixel\PageBundle\Entity\Page;
+use Aropixel\PageBundle\Entity\PageInterface;
+use Aropixel\PageBundle\Form\PageType;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -19,7 +23,19 @@ class Configuration implements ConfigurationInterface
 
         $treeBuilder->getRootNode()
             ->children()
-                ->scalarNode('entity')->defaultValue(Page::class)->end()
+                ->arrayNode('entities')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode(PageInterface::class)->defaultValue(Page::class)->end()
+                        ->scalarNode(BlockInterface::class)->defaultValue(Block::class)->end()
+                    ->end()
+                ->end()
+                ->arrayNode('forms')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode(PageInterface::class)->defaultValue(PageType::class)->end()
+                    ->end()
+                ->end()
                 ->arrayNode('blocks')
                     ->useAttributeAsKey('block_code')
                     ->arrayPrototype()

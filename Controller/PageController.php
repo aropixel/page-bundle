@@ -6,10 +6,12 @@ use Aropixel\AdminBundle\Services\Status;
 use Aropixel\PageBundle\Block\BlockManager;
 use Aropixel\PageBundle\Entity\Block;
 use Aropixel\PageBundle\Entity\Page;
+use Aropixel\PageBundle\Entity\PageInterface;
 use Aropixel\PageBundle\Form\PageType;
 use Aropixel\PageBundle\Repository\PageRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,6 +22,33 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class PageController extends AbstractController
 {
+
+    /** @var ParameterBagInterface */
+    private $parameterBag;
+
+    /** @var string  */
+    private $model = Page::class;
+
+    /** @var string  */
+    private $form = PageType::class;
+
+
+    /**
+     * PageController constructor.
+     * @param ParameterBagInterface $parameterBag
+     */
+    public function __construct(ParameterBagInterface $parameterBag)
+    {
+        $this->parameterBag = $parameterBag;
+
+        $entities = $parameterBag->get('aropixel_page.entities');
+        $forms = $parameterBag->get('aropixel_page.forms');
+
+        $this->model = $entities[PageInterface::class];
+        $this->form = $forms[PageInterface::class];
+    }
+
+
     /**
      * @Route("/", name="page_index", methods={"GET"})
      */
@@ -47,14 +76,14 @@ class PageController extends AbstractController
      */
     public function new(Request $request): Response
     {
-        $page = new Page();
+        $page = new $this->model();
         $page->setIsPageTitleEnabled(true);
         $page->setIsPageExcerptEnabled(true);
         $page->setIsPageDescriptionEnabled(true);
         $page->setIsPageImageEnabled(true);
         $page->setIsPresetPage(false);
 
-        $form = $this->createForm(PageType::class, $page);
+        $form = $this->createForm($this->form, $page);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -64,8 +93,8 @@ class PageController extends AbstractController
             $entityManager->flush();
 
 
-            $this->addFlash('notice', 'La page a bien été enregistrée.');
-            return $this->redirectToRoute('page_edit', array('id' => $page->getId()));
+//            $this->addFlash('notice', 'La page a bien été enregistrée.');
+//            return $this->redirectToRoute('page_edit', array('id' => $page->getId()));
         }
 
         return $this->render('@AropixelPage/page/form.html.twig', [
@@ -80,24 +109,29 @@ class PageController extends AbstractController
      */
     public function edit(
         Request $request,
-        Page $page,
-        BlockManager $blockManager
+        BlockManager $blockManager,
+        $id
     ): Response
     {
+
+        $em = $this->getDoctrine()->getManager();
+        $page = $em->getRepository($this->model)->find($id);
+        if (!$page) {
+            throw $this->createNotFoundException();
+        }
 
         // clean les blocks supprimés / modifiés en config
         $blockManager->cleanDeletedBlocksByPage($page);
         // persist les nouveaux blocs de la config
         $blockManager->persistBlocksByPage($page);
 
-        $em = $this->getDoctrine()->getManager();
         $image = $page->getImage();
 
         $auth_checker = $this->get('security.authorization_checker');
         $isRoleAdmin = $auth_checker->isGranted('ROLE_HYPER_ADMIN');
 
         $deleteForm = $this->createDeleteForm($page);
-        $form = $this->createForm(PageType::class, $page);
+        $form = $this->createForm($this->form, $page);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

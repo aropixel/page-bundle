@@ -1,5 +1,5 @@
 services:
   Aropixel\PageBundle\EventListener\MappedSuperClassSubscriber:
-    arguments: ['%aropixel_page.entity%']
+    arguments: ['%aropixel_page.entities%']
     tags:
-      - { name: doctrine.event_subscriber, priority: 8194 }
+      - { name: doctrine.event_subscriber, priority: 8196 }
