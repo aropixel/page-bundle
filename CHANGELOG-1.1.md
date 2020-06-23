@@ -4,8 +4,11 @@ CHANGELOG for 1.0.x
 This changelog references the relevant changes (bug and security fixes) done
 in 1.1 minor versions.
 
-* **1.1.5** _(20xx-xx-xx)_
+* **1.1.6** _(20xx-xx-xx)_
 
+
+* **1.1.5** _(2020-06-23)_
+    * Bugfix overriding Page entity
 
 * **1.1.4** _(2020-06-19)_
     * Update for symfony 5.1 compatibility
