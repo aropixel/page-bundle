@@ -168,8 +168,15 @@ class PageController extends AbstractController
     /**
      * @Route("/{id}", name="page_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Page $page): Response
+    public function delete(Request $request, $id): Response
     {
+
+        $em = $this->getDoctrine()->getManager();
+        $page = $em->getRepository($this->model)->find($id);
+        if (!$page) {
+            throw $this->createNotFoundException();
+        }
+
         $titre = $page->getTitle();
         $form = $this->createDeleteForm($page);
         $form->handleRequest($request);
