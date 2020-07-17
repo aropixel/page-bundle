@@ -11,4 +11,17 @@ namespace Aropixel\PageBundle\Entity;
 interface PageInterface
 {
 
+    /**
+     * @return string
+     */
+    public function getType();
+
+    /**
+     * @return string
+     */
+    public function setType(string $type) : PageInterface;
+
+
+    public function addField(FieldInterface $field);
+
 }

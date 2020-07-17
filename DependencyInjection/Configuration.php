@@ -2,13 +2,14 @@
 
 namespace Aropixel\PageBundle\DependencyInjection;
 
-use Aropixel\PageBundle\Entity\Block;
-use Aropixel\PageBundle\Entity\BlockInterface;
+use Aropixel\PageBundle\Entity\Field;
+use Aropixel\PageBundle\Entity\FieldInterface;
 use Aropixel\PageBundle\Entity\Page;
 use Aropixel\PageBundle\Entity\PageInterface;
-use Aropixel\PageBundle\Form\PageType;
+use Aropixel\PageBundle\Form\Type\DefaultPageType;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+
 
 /**
  * This is the class that validates and merges configuration from your app/config files.
@@ -27,61 +28,18 @@ class Configuration implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->scalarNode(PageInterface::class)->defaultValue(Page::class)->end()
-                        ->scalarNode(BlockInterface::class)->defaultValue(Block::class)->end()
+                        ->scalarNode(FieldInterface::class)->defaultValue(Field::class)->end()
                     ->end()
                 ->end()
                 ->arrayNode('forms')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->scalarNode(PageInterface::class)->defaultValue(PageType::class)->end()
-                    ->end()
-                ->end()
-                ->arrayNode('blocks')
-                    ->useAttributeAsKey('block_code')
-                    ->arrayPrototype()
-                    ->children()
-                        ->scalarNode('page')->end()
-                        ->scalarNode('name')->end()
-                        ->arrayNode('inputs')
-                            ->useAttributeAsKey('input_code')
-                            ->arrayPrototype()
-                            ->children()
-                                ->scalarNode('type')
-                                    ->validate()
-                                        ->ifNotInArray(['Text', 'Textarea', 'Tabs'])
-                                        ->thenInvalid("Le type doit être 'Text', 'Textarea' ou 'Tabs'")
-                                    ->end()
-                                ->end()
-                                ->scalarNode('label')->end()
-                            ->end()
-                        ->end()
+                        ->scalarNode('default')->defaultValue(DefaultPageType::class)->end()
+                        ->scalarNode('template_path')->defaultValue('@AropixelPage/page')->end()
                     ->end()
                 ->end()
             ->end()
         ;
-
-
-        // je veux pouvoir utiliser mes entités dans un array nommé "entities"
-        // mais qui n'existe pas dans la config yaml
-
-        //$crops['entities'];
-        //$crops['types'];
-
-        /*$treeBuilder->getRootNode()
-            ->children()
-                ->arrayNode('crops')
-                    ->defaultValue(array())
-                    ->useAttributeAsKey('name')
-                    ->prototype('variable')->end()
-                ->end()
-                ->arrayNode('entities')
-                    ->addDefaultsIfNotSet()
-                    ->children()
-                        ->scalarNode('image')->end()
-                    ->end()
-                ->end()
-            ->end()
-        ;*/
 
         return $treeBuilder;
     }

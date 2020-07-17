@@ -35,16 +35,5 @@ class AropixelPageExtension extends Extension
         //
         $container->setParameter('aropixel_page.entities', $config['entities']);
         $container->setParameter('aropixel_page.forms', $config['forms']);
-
-        //
-        $configuredBlocks = [];
-
-        // put the key (the code of the block) as a value inside the block's array
-        foreach ($config['blocks'] as $configuredBlockKey => $configuredBlock) {
-            $configuredBlocks[$configuredBlockKey] = $configuredBlock;
-            $configuredBlocks[$configuredBlockKey]['code'] = $configuredBlockKey;
-        }
-
-        $container->setParameter('aropixel_page.blocks', $configuredBlocks);
     }
 }

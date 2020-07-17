@@ -8,7 +8,7 @@
 namespace Aropixel\PageBundle\Entity;
 
 
-interface BlockInterface
+interface FieldInterface
 {
 
 }

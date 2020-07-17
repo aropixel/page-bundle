@@ -7,40 +7,30 @@ services:
     # The best practice is to be explicit about your dependencies anyway.
 
 
+  aropixel.page.form.factory:
+    class: Aropixel\PageBundle\Form\FormFactory
+    arguments: ['@form.factory']
+    public: true
+
+  Aropixel\PageBundle\Factory\FieldFactory:
+    autowire: true
+
+  Aropixel\PageBundle\Form\DataMapper\PageFieldDataMapper:
+    autowire: true
+
+  Aropixel\PageBundle\Form\FormFactoryInterface: '@aropixel.page.form.factory'
+
   # controllers are imported separately to make sure services can be injected
   # as action arguments even if you don't extend any base controller class
   Aropixel\PageBundle\Controller\:
     resource: '../../Controller'
     tags: ['controller.service_arguments']
 
-  Aropixel\PageBundle\Form\PageType:
-    arguments: ['@security.authorization_checker']
-    tags: [form.type]
-
-  Aropixel\PageBundle\Form\BlockType:
-      arguments: ['@Aropixel\PageBundle\Block\BlockManager']
-      tags: [form.type]
-
-  Aropixel\PageBundle\Form\BlockInputType:
-      arguments: ['@Aropixel\PageBundle\Block\BlockManager']
-      tags: [form.type]
-
   Aropixel\PageBundle\Repository\:
     resource: '../../Repository'
     autowire: true
     tags: ['doctrine.repository_service']
-
-  Aropixel\PageBundle\Twig\BlockExtension:
-      arguments: ['@Aropixel\PageBundle\Block\BlockManager']
-      tags: ['twig.extension']
-
-  Aropixel\PageBundle\Block\BlockManager:
-    arguments:
-      - '@Aropixel\PageBundle\Repository\BlockRepository'
-      - '@parameter_bag'
-      - '@Aropixel\PageBundle\ViewModel\ViewBlockConfigAssembler'
-      - '@Aropixel\PageBundle\Repository\PageRepository'
-      - '@doctrine.orm.entity_manager'
-
-  Aropixel\PageBundle\ViewModel\ViewBlockConfigAssembler:
-    arguments: ['@Aropixel\PageBundle\Repository\BlockRepository', '@Aropixel\PageBundle\Repository\PageRepository']
+#
+#  Aropixel\PageBundle\Twig\BlockExtension:
+#      arguments: ['@Aropixel\PageBundle\Block\BlockManager']
+#      tags: ['twig.extension']

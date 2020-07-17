@@ -25,12 +25,7 @@ class Page implements PageInterface
     /**
      * @var string
      */
-    protected $code;
-
-    /**
-     * @var string
-     */
-    protected $title;
+    protected $type;
 
     /**
      * @var string
@@ -41,16 +36,6 @@ class Page implements PageInterface
      * @var string
      */
     protected $slug;
-
-    /**
-     * @var string
-     */
-    protected $excerpt;
-
-    /**
-     * @var string
-     */
-    protected $description;
 
     /**
      * @var string
@@ -66,31 +51,6 @@ class Page implements PageInterface
      * @var string
      */
     protected $metaKeywords;
-
-    /**
-     * @var boolean
-     */
-    protected $isPageTitleEnabled = true;
-
-    /**
-     * @var boolean
-     */
-    protected $isPageExcerptEnabled = true;
-
-    /**
-     * @var boolean
-     */
-    protected $isPageDescriptionEnabled = true;
-
-    /**
-     * @var boolean
-     */
-    protected $isPageImageEnabled = true;
-
-    /**
-     * @var boolean
-     */
-    protected $isPresetPage = false;
 
     /**
      * @var \DateTime
@@ -113,305 +73,246 @@ class Page implements PageInterface
     protected $publishUntil;
 
     /**
-     * @var PageImage
+     * @var FieldInterface[]|ArrayCollection
      */
-    protected $image;
+    protected $fields;
 
-    /**
-     * @var Block[]
-     */
-    protected $blocks;
 
     public function __construct()
     {
-        $this->blocks = new ArrayCollection();
+        $this->fields = new ArrayCollection();
     }
 
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return string|null
+     */
     public function getStatus(): ?string
     {
         return $this->status;
     }
 
+    /**
+     * @param string $status
+     * @return $this
+     */
     public function setStatus(string $status): self
     {
         $this->status = $status;
-
         return $this;
     }
 
-    public function getCode(): ?string
+    /**
+     * @return string
+     */
+    public function getType()
     {
-        return $this->code;
+        return $this->type;
     }
 
-    public function setCode(?string $code): self
+    /**
+     * @param string $type
+     * @return Page
+     */
+    public function setType(string $type): PageInterface
     {
-        $this->code = $code;
-
-        return $this;
+        $this->type = $type;return $this;
     }
 
-    public function getTitle(): ?string
-    {
-        return $this->title;
-    }
-
-    public function setTitle(?string $title): self
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    public function getName(): ?string
+    /**
+     * @return string
+     */
+    public function getName()
     {
         return $this->name;
     }
 
-    public function setName(?string $name): self
+    /**
+     * @param string $name
+     * @return Page
+     */
+    public function setName(string $name): Page
     {
-        $this->name = $name;
-
-        return $this;
+        $this->name = $name;return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getSlug(): ?string
     {
         return $this->slug;
     }
 
+    /**
+     * @param string $slug
+     * @return $this
+     */
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
-
         return $this;
     }
 
-    public function getExcerpt(): ?string
-    {
-        return $this->excerpt;
-    }
-
-    public function setExcerpt(?string $excerpt): self
-    {
-        $this->excerpt = $excerpt;
-
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(?string $description): self
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
+    /**
+     * @return string|null
+     */
     public function getMetaTitle(): ?string
     {
         return $this->metaTitle;
     }
 
+    /**
+     * @param string|null $metaTitle
+     * @return $this
+     */
     public function setMetaTitle(?string $metaTitle): self
     {
         $this->metaTitle = $metaTitle;
-
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getMetaDescription(): ?string
     {
         return $this->metaDescription;
     }
 
+    /**
+     * @param string|null $metaDescription
+     * @return $this
+     */
     public function setMetaDescription(?string $metaDescription): self
     {
         $this->metaDescription = $metaDescription;
-
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getMetaKeywords(): ?string
     {
         return $this->metaKeywords;
     }
 
+    /**
+     * @param string|null $metaKeywords
+     * @return $this
+     */
     public function setMetaKeywords(?string $metaKeywords): self
     {
         $this->metaKeywords = $metaKeywords;
-
-        return $this;
-    }
-
-    public function getIsPageTitleEnabled(): ?bool
-    {
-        return $this->isPageTitleEnabled;
-    }
-
-    public function setIsPageTitleEnabled(bool $isPageTitleEnabled): self
-    {
-        $this->isPageTitleEnabled = $isPageTitleEnabled;
-
-        return $this;
-    }
-
-    public function getIsPageExcerptEnabled(): ?bool
-    {
-        return $this->isPageExcerptEnabled;
-    }
-
-    public function setIsPageExcerptEnabled(bool $isPageExcerptEnabled): self
-    {
-        $this->isPageExcerptEnabled = $isPageExcerptEnabled;
-
-        return $this;
-    }
-
-    public function getIsPageDescriptionEnabled(): ?bool
-    {
-        return $this->isPageDescriptionEnabled;
-    }
-
-    public function setIsPageDescriptionEnabled(bool $isPageDescriptionEnabled): self
-    {
-        $this->isPageDescriptionEnabled = $isPageDescriptionEnabled;
-
-        return $this;
-    }
-
-    public function getIsPageImageEnabled(): ?bool
-    {
-        return $this->isPageImageEnabled;
-    }
-
-    public function setIsPageImageEnabled(bool $isPageImageEnabled): self
-    {
-        $this->isPageImageEnabled = $isPageImageEnabled;
-
         return $this;
     }
 
     /**
-     * @return bool
+     * @return \DateTimeInterface|null
      */
-    public function isPresetPage(): ?bool
-    {
-        return $this->isPresetPage;
-    }
-
-    /**
-     * @param bool $isPresetPage
-     * @return Page
-     */
-    public function setIsPresetPage(bool $isPresetPage): self
-    {
-        $this->isPresetPage = $isPresetPage;
-        return $this;
-    }
-
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
     }
 
+    /**
+     * @param \DateTimeInterface|null $createdAt
+     * @return $this
+     */
     public function setCreatedAt(?\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
-
         return $this;
     }
 
+    /**
+     * @return \DateTimeInterface|null
+     */
     public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
     }
 
+    /**
+     * @param \DateTimeInterface|null $updatedAt
+     * @return $this
+     */
     public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
-
         return $this;
     }
 
+    /**
+     * @return \DateTimeInterface|null
+     */
     public function getPublishAt(): ?\DateTimeInterface
     {
         return $this->publishAt;
     }
 
+    /**
+     * @param \DateTimeInterface|null $publishAt
+     * @return $this
+     */
     public function setPublishAt(?\DateTimeInterface $publishAt): self
     {
         $this->publishAt = $publishAt;
-
         return $this;
     }
 
+    /**
+     * @return \DateTimeInterface|null
+     */
     public function getPublishUntil(): ?\DateTimeInterface
     {
         return $this->publishUntil;
     }
 
+    /**
+     * @param \DateTimeInterface|null $publishUntil
+     * @return $this
+     */
     public function setPublishUntil(?\DateTimeInterface $publishUntil): self
     {
         $this->publishUntil = $publishUntil;
-
-        return $this;
-    }
-
-    public function getImage(): ?PageImage
-    {
-        return $this->image;
-    }
-
-    public function setImage(?PageImage $image): self
-    {
-        if ($image->getImage()) {
-            $this->image = $image;
-            $this->image->setPage($this);
-        }
-
-        return $this;
-    }
-
-    public function addBlock(Block $block): self
-    {
-        if (!$this->blocks->contains($block)) {
-            $this->blocks[] = $block;
-            $block->setPage($this);
-        }
-
-        return $this;
-    }
-
-
-    public function removeBlock(Block $block): self
-    {
-        if ($this->blocks->contains($block)) {
-            $this->blocks->removeElement($block);
-            // set the owning side to null (unless already changed)
-            if ($block->getPage() === $this) {
-                $block->setPage(null);
-            }
-        }
-
         return $this;
     }
 
     /**
-     * @return Collection|PageImageCrop[]
+     * @return Field[]|ArrayCollection
      */
-    public function getBlocks(): Collection
+    public function getFields()
     {
-        return $this->blocks;
+        return $this->fields;
     }
+
+    /**
+     * @param Field $field
+     */
+    public function addField(FieldInterface $field)
+    {
+        $this->fields->add($field);
+        $field->setPage($this);
+    }
+
+    /**
+     * @param Field $field
+     */
+    public function removeField(FieldInterface $field)
+    {
+        $this->fields->removeElement($field);
+        $field->setPage(null);
+    }
+
 
 }
