@@ -30,7 +30,6 @@ services:
     resource: '../../Repository'
     autowire: true
     tags: ['doctrine.repository_service']
-#
-#  Aropixel\PageBundle\Twig\BlockExtension:
-#      arguments: ['@Aropixel\PageBundle\Block\BlockManager']
-#      tags: ['twig.extension']
+
+  Aropixel\PageBundle\Twig\FieldExtension:
+      tags: ['twig.extension']

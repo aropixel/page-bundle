@@ -41,6 +41,13 @@ class Field implements FieldInterface
     private $page;
 
 
+
+    public function __toString()
+    {
+        return $this->getValue();
+    }
+
+
     /**
      * @return int
      */
@@ -56,6 +63,42 @@ class Field implements FieldInterface
     {
         return $this->code;
     }
+
+    /**
+     * @return string
+     */
+    public function getRootKey(): string
+    {
+        $codes = explode('.', $this->code);
+        return current($codes);
+    }
+
+    /**
+     * @return string
+     */
+    public function getExplodedValue($keys=null, $value=null)
+    {
+        if (is_null($keys)) {
+            $keys = explode('.', $this->code);
+        }
+
+        if (is_null($value)) {
+            $value = $this;
+        }
+
+        // Get the first child key
+        $currentKey = array_pop($keys);
+
+        // If there's no more child, we're done
+        if (is_null($currentKey)) {
+            return $value;
+        }
+
+        $newValue = [$currentKey => $value];
+
+        return $this->getExplodedValue($keys, $newValue);
+    }
+
 
     /**
      * @return string

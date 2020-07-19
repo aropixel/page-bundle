@@ -5,6 +5,7 @@ namespace Aropixel\PageBundle\Entity;
 use Aropixel\AdminBundle\Entity\Publishable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 
 /**
@@ -77,11 +78,65 @@ class Page implements PageInterface
      */
     protected $fields;
 
+    /**
+     * @var array
+     */
+    protected $fieldValues;
+
+
 
     public function __construct()
     {
         $this->fields = new ArrayCollection();
     }
+
+
+    private function compileFieldsValues()
+    {
+        //
+        $this->fieldValues = [];
+        foreach ($this->fields as $field) {
+
+            //
+            $key = $field->getRootKey();
+            $value = $field->getExplodedValue();
+//            dump($key, $value);
+
+            //
+//            if (!array_key_exists($key, $this->fieldValues)) {
+//                $this->fieldValues[$key] = $value;
+//            }
+//            else {
+                $this->fieldValues = array_replace_recursive($this->fieldValues, $value);
+//            }
+        }
+
+    }
+
+
+    public function getField($key)
+    {
+        //
+        $propertyAccessor = PropertyAccess::createPropertyAccessor();
+
+        //
+        try {
+            return $propertyAccessor->getValue($this, $key);
+        }
+        catch (\Exception $e) {
+
+            //
+            if (is_null($this->fieldValues)) {
+                $this->compileFieldsValues();
+            }
+
+            //
+            return (array_key_exists($key, $this->fieldValues) ? $this->fieldValues[$key] : null);
+
+        }
+
+    }
+
 
 
     /**
