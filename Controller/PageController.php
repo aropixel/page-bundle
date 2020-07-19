@@ -60,7 +60,7 @@ class PageController extends AbstractController
     public function index(PageRepository $pageRepository, $type): Response
     {
         //
-        $pages = $pageRepository->findBy(['type' => $type], ['name' => 'ASC']);
+        $pages = $pageRepository->findBy(['type' => $type], ['title' => 'ASC']);
 
         //
         $delete_forms = array();
@@ -71,6 +71,7 @@ class PageController extends AbstractController
 
         //
         return $this->render('@AropixelPage/page/index.html.twig', [
+            'type' => $type,
             'pages' => $pages,
             'delete_forms' => $delete_forms,
         ]);
@@ -133,7 +134,7 @@ class PageController extends AbstractController
             $em->flush();
 
             $this->addFlash('notice', 'La page a bien été enregistrée.');
-            return $this->redirectToRoute('aropixel_page_edit', array('id' => $page->getId()));
+            return $this->redirectToRoute('aropixel_page_edit', array('type' => $page->getType(), 'id' => $page->getId()));
         }
 
 
@@ -168,7 +169,7 @@ class PageController extends AbstractController
             $this->addFlash('notice', 'La page a bien été enregistrée.');
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('aropixel_page_edit', array('id' => $page->getId()));
+//            return $this->redirectToRoute('aropixel_page_edit', array('type' => $page->getType(), 'id' => $page->getId()));
 
         }
 

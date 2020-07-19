@@ -70,7 +70,6 @@ class PageFieldDataMapper implements DataMapperInterface
             //
             $propertyPath = $form->getPropertyPath();
             $config = $form->getConfig();
-            $innerType = $config->getType()->getInnerType();
 
             if (!$empty && null !== $propertyPath) {
 
@@ -94,7 +93,14 @@ class PageFieldDataMapper implements DataMapperInterface
 
                             // Shift the first element, to treate childs
                             $rootKey = array_shift($keys);
-                            $fieldValue = (get_class($innerType) == ImageType::class || get_class($innerType) == GalleryType::class) ? $field : $field->getValue();
+                            if ($field->getFormType() == 'ImageType' || $field->getFormType() == 'GalleryType') {
+                                $fieldValue = $field;
+                            }
+                            else {
+                                $fieldValue = $this->getFieldValue($field);
+                            }
+
+                            //
                             $value = $this->explodeValue($keys, $fieldValue);
 
                             //
@@ -138,6 +144,27 @@ class PageFieldDataMapper implements DataMapperInterface
 
 
     /**
+     * @param FieldInterface $field
+     * @return mixed
+     */
+    protected function getFieldValue(FieldInterface $field)
+    {
+        try {
+            // try to get value from a "real" property
+            $keys = explode('.', $field->getCode());
+            $last = end($keys);
+            $value = $this->propertyAccessor->getValue($field, $last);
+        }
+        catch (\Exception $e) {
+            // if not, use the value property
+            $value = $field->getValue();
+        }
+
+        return $value;
+    }
+
+
+    /**
      * @param $childKeys
      * @param FormInterface $form
      * @return mixed
@@ -153,6 +180,7 @@ class PageFieldDataMapper implements DataMapperInterface
         }
 
         $newValue = [$currentChildKey => $value];
+
         return $this->explodeValue($childKeys, $newValue);
     }
 
@@ -173,11 +201,19 @@ class PageFieldDataMapper implements DataMapperInterface
 
         $mappedFormFields = [];
 
-        // Iterate each field of the page form
+        /**
+         * Iterate each field of the page form
+         * @var FormInterface $form
+         */
         foreach ($forms as $form) {
 
             $propertyPath = $form->getPropertyPath();
             $propertyValue = $form->getData();
+
+            //
+            $fullClassType = $form->getConfig()->getType()->getInnerType();
+            $reflection = new \ReflectionClass($fullClassType);
+            $type = $reflection->getShortName();
 
             //
             if (!($propertyValue instanceof FieldInterface)) {
@@ -188,14 +224,30 @@ class PageFieldDataMapper implements DataMapperInterface
                     $mappedFormFields[] = (string)$propertyPath;
                 }
 
-                    // Otherwise, an exception is sent
+                // Otherwise, an exception is sent
                 catch (NoSuchPropertyException $e) {
 
-                    $this->mapToFieldData($data, $propertyPath, $propertyValue, $mappedFormFields);
+                    // Then we store the value in a Field
+                    $this->mapToFieldData($data, $form, $propertyPath, $propertyValue, $mappedFormFields);
 
                 }
             }
+            else {
 
+                /** @var FieldInterface $field */
+                $field = $propertyValue;
+                $field->setCode($propertyPath);
+                $field->setFormType($type);
+
+                /** @var PageInterface $page */
+                $page = $data;
+
+                if (!$field->getPage()) {
+                    $page->addField($field);
+                }
+                $mappedFormFields[] = (string)$propertyPath;
+
+            }
         }
 
         /** @var FieldInterface $field */
@@ -207,15 +259,19 @@ class PageFieldDataMapper implements DataMapperInterface
         }
     }
 
-    private function mapToFieldData($data, $propertyPath, $propertyValue, &$mappedFormFields)
+    private function mapToFieldData($data, $form, $propertyPath, $propertyValue, &$mappedFormFields)
     {
 
         if (is_array($propertyValue)) {
             foreach ($propertyValue as $childPropertyPath => $childPropertyValue) {
-                $this->mapToFieldData($data, $propertyPath.'.'.$childPropertyPath, $childPropertyValue, $mappedFormFields);
+                $this->mapToFieldData($data, $form->get($childPropertyPath), $propertyPath.'.'.$childPropertyPath, $childPropertyValue, $mappedFormFields);
             }
         }
         else {
+//
+            $fullClassType = $form->getConfig()->getType()->getInnerType();
+            $reflection = new \ReflectionClass($fullClassType);
+            $type = $reflection->getShortName();
 
             if (!($propertyValue instanceof FieldInterface)) {
 
@@ -227,7 +283,6 @@ class PageFieldDataMapper implements DataMapperInterface
                 foreach ($data->getFields() as $field) {
 
                     if ($field->getCode() == $propertyPath) {
-                        $field->setValue($propertyValue);
                         $found = true;
                         break;
                     }
@@ -238,6 +293,7 @@ class PageFieldDataMapper implements DataMapperInterface
                 if (!$found) {
                     $field = $this->fieldFactory->createField();
                     $field->setCode($propertyPath);
+                    $field->setFormType($type);
                     $data->addField($field);
                 }
 
@@ -257,11 +313,12 @@ class PageFieldDataMapper implements DataMapperInterface
                 /** @var FieldInterface $field */
                 $field = $propertyValue;
                 $field->setCode($propertyPath);
+                $field->setFormType($type);
 
                 /** @var PageInterface $page */
                 $page = $data;
 
-                if (!$field->getId()) {
+                if (!$field->getPage()) {
                     $page->addField($field);
                 }
 

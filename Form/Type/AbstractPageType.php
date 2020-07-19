@@ -9,6 +9,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataMapperInterface;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -56,9 +57,10 @@ abstract class AbstractPageType extends AbstractType implements PageFormTypeInte
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        if ($this->securityContext->isGranted(self::ALL_RIGHTS_MODE)) {
+        if ($builder->getData() && $builder->getData()->getType()=='default') {
             $builder
-                ->add('name', TextType::class, array('label'  => 'Nom de la page'))
+                ->add('title', TextType::class, array('label'  => 'Nom de la page'))
+                ->add('slug', HiddenType::class)
             ;
         }
 

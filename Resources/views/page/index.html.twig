@@ -12,7 +12,7 @@
 {% block header_elements %}
     {% set baseroute = get_baseroute() %}
     {% if route_exists(baseroute ~ '_new') %}
-        <a href="{{ path(baseroute ~ '_new', {'type': 'default'}) }}" class="fa-stack" data-toggle="tooltip" data-placement="bottom" title="Nouveau">
+        <a href="{{ path(baseroute ~ '_new', {'type': type}) }}" class="fa-stack" data-toggle="tooltip" data-placement="bottom" title="Nouveau">
             <i class="fas fa-circle fa-stack-2x"></i>
             <i class="fas fa-plus fa-stack-1x fa-inverse"></i>
         </a>
@@ -42,16 +42,16 @@
         <tbody>
         {% for page in pages %}
             <tr>
-                <td>{{ page.name ? page.name : page.title }}</td>
+                <td>{{ page.title }}</td>
                 <td>{{ page.createdAt|date('d/m/Y') }}</td>
                 <td>
                     <div class="btn-group">
 
-                        <a href="{{ path('page_edit', {'id': page.id}) }}" class="btn {{ page.status == 'online' or page.code ? 'btn-primary' : 'btn-default' }} btn-labeled"><b><i class="fas fa-edit"></i></b> Modifier</a>
-                        <button type="button" class="btn {{ page.status == 'online' or page.code ? 'btn-primary' : 'btn-default' }} dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                        <a href="{{ path('aropixel_page_edit', {'type': page.type, 'id': page.id}) }}" class="btn {{ page.status == 'online' ? 'btn-primary' : 'btn-default' }} btn-labeled"><b><i class="fas fa-edit"></i></b> Modifier</a>
+                        <button type="button" class="btn {{ page.status == 'online' ? 'btn-primary' : 'btn-default' }} dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
                         <ul class="dropdown-menu dropdown-menu-right">
-                            <li class="dropdown-item"><a href="{{ path('page_edit', {'id': page.id}) }}"><i class="fas fa-edit"></i> Modifier</a></li>
-                            <li class="dropdown-item"><a class="status" data-confirm="Êtes-vous certain de vouloir mettre cette page %s ?" data-path="{{ path('page_status', {'id': page.id}) }}"><i class="fas fa-toggle-on"></i>{{ page.status == 'online' ? 'Mettre hors ligne' : 'Mettre en ligne' }}</a></li>
+                            <li class="dropdown-item"><a href="{{ path('aropixel_page_edit', {'type': page.type, 'id': page.id}) }}"><i class="fas fa-edit"></i> Modifier</a></li>
+{#                            <li class="dropdown-item"><a class="status" data-confirm="Êtes-vous certain de vouloir mettre cette page %s ?" data-path="{{ path('page_status', {'id': page.id}) }}"><i class="fas fa-toggle-on"></i>{{ page.status == 'online' ? 'Mettre hors ligne' : 'Mettre en ligne' }}</a></li>#}
                             <li class="dropdown-divider"></li>
                             <li class="dropdown-item"><a class="delete" data-confirm="Supprimer la page|Êtes-vous certain de vouloir supprimer cette page ?"><i class="fas fa-trash"></i> Supprimer</a></li>
                         </ul>

@@ -18,6 +18,11 @@ class Field implements FieldInterface
     /**
      * @var string
      */
+    private $formType;
+
+    /**
+     * @var string
+     */
     private $value;
 
     /**
@@ -50,6 +55,24 @@ class Field implements FieldInterface
     public function getCode(): string
     {
         return $this->code;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFormType()
+    {
+        return $this->formType;
+    }
+
+    /**
+     * @param string $formType
+     * @return Field
+     */
+    public function setFormType(string $formType): Field
+    {
+        $this->formType = $formType;
+        return $this;
     }
 
     /**
@@ -117,7 +140,7 @@ class Field implements FieldInterface
     /**
      * @return Page
      */
-    public function getPage(): Page
+    public function getPage()
     {
         return $this->page;
     }

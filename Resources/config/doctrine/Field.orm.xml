@@ -10,6 +10,7 @@
         </id>
 
         <field name="code" length="100" />
+        <field name="formType" length="100" nullable="true" />
         <field name="value" type="text" nullable="true" />
         <field name="attributes" type="array" nullable="true" />
         <field name="crops" type="array" nullable="true" />

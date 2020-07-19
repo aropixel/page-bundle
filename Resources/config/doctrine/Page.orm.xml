@@ -10,9 +10,9 @@
         </id>
         <field name="status" length="20" />
         <field name="type" length="100" />
-        <field name="name" nullable="true" />
+        <field name="title" nullable="true" />
         <field name="slug">
-            <gedmo:slug fields="name" />
+            <gedmo:slug fields="title" />
         </field>
         <field name="metaTitle" nullable="true" />
         <field name="metaDescription" nullable="true" />

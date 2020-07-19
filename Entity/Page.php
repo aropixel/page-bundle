@@ -30,7 +30,7 @@ class Page implements PageInterface
     /**
      * @var string
      */
-    protected $name;
+    protected $title;
 
     /**
      * @var string
@@ -130,18 +130,19 @@ class Page implements PageInterface
     /**
      * @return string
      */
-    public function getName()
+    public function getTitle()
     {
-        return $this->name;
+        return $this->title;
     }
 
     /**
-     * @param string $name
+     * @param string $title
      * @return Page
      */
-    public function setName(string $name): Page
+    public function setTitle($title): self
     {
-        $this->name = $name;return $this;
+        $this->title = $title;
+        return $this;
     }
 
     /**
