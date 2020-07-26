@@ -93,7 +93,7 @@ class PageFieldDataMapper implements DataMapperInterface
 
                             // Shift the first element, to treate childs
                             $rootKey = array_shift($keys);
-                            if ($field->getFormType() == 'ImageType' || $field->getFormType() == 'GalleryType') {
+                            if ($field->getFormType() == 'ImageType' || $field->getFormType() == 'GalleryImageType') {
                                 $fieldValue = $field;
                             }
                             else {

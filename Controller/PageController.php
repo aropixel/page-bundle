@@ -2,6 +2,7 @@
 
 namespace Aropixel\PageBundle\Controller;
 
+use Aropixel\AdminBundle\Entity\Publishable;
 use Aropixel\AdminBundle\Services\Status;
 use Aropixel\PageBundle\Block\BlockManager;
 use Aropixel\PageBundle\Entity\Block;
@@ -90,6 +91,7 @@ class PageController extends AbstractController
 
             /** @var PageInterface $page */
             $page = new $this->model();
+            $page->setStatus(Publishable::STATUS_ONLINE);
             $page->setType($type);
 
         }
@@ -169,7 +171,7 @@ class PageController extends AbstractController
             $this->addFlash('notice', 'La page a bien été enregistrée.');
             $this->getDoctrine()->getManager()->flush();
 
-//            return $this->redirectToRoute('aropixel_page_edit', array('type' => $page->getType(), 'id' => $page->getId()));
+            return $this->redirectToRoute('aropixel_page_edit', array('type' => $page->getType(), 'id' => $page->getId()));
 
         }
 
