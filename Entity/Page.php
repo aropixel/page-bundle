@@ -13,6 +13,8 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
  */
 class Page implements PageInterface
 {
+    const TYPE_DEFAULT = 'default';
+
     /**
      * @var integer
      */
