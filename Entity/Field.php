@@ -44,7 +44,7 @@ class Field implements FieldInterface
 
     public function __toString()
     {
-        return $this->getValue();
+        return !is_null($this->getValue()) ? $this->getValue() : '';
     }
 
 
