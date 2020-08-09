@@ -31,4 +31,10 @@ class DefaultPageType extends AbstractPageType
 
     }
 
+    public function getType(): string
+    {
+        return 'default';
+    }
+
+
 }
