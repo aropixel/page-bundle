@@ -22,31 +22,30 @@ class PageRepository extends PublishableRepository
         parent::__construct($registry, $entities[PageInterface::class]);
     }
 
-    // /**
-    //  * @return Page[] Returns an array of Page objects
-    //  */
-    public function findNotPreset()
+
+    /**
+     * @param $type
+     * @return Page Returns an array of Page objects
+     */
+    public function findPage($type)
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.isPresetPage = :preset')
-            ->orWhere('p.isPresetPage IS NULL')
-            ->setParameter('preset', false)
-            ->orderBy('p.title', 'ASC')
+            ->andWhere('p.type = :type')
+            ->setParameter('type', $type)
             ->getQuery()
-            ->getResult()
+            ->getOneOrNullResult()
             ;
     }
+
 
     // /**
     //  * @return Page[] Returns an array of Page objects
     //  */
-    public function findNotPresetAndPublished()
+    public function findPages($type)
     {
-        return $this->qbPublished('p')
-            ->andWhere('p.isPresetPage = :preset')
-            ->orWhere('p.isPresetPage IS NULL')
-            ->setParameter('preset', false)
-            ->orderBy('p.title', 'ASC')
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.type = :type')
+            ->setParameter('type', $type)
             ->getQuery()
             ->getResult()
             ;

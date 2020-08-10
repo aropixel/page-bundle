@@ -1,0 +1,41 @@
+{% extends '@AropixelAdmin/Form/base.html.twig' %}
+
+{% block header_title %}Pages{% endblock %}
+{% block header_breadcrumb %}
+    {#    <ul class="breadcrumb breadcrumb-caret position-right">#}
+    {#        <li class="breadcrumb-item"><a href="{{ url('_admin') }}">Accueil</a></li>#}
+    {#        <li class="breadcrumb-item"><a href="{{ url('aropixel_page_index') }}">Pages</a></li>#}
+    {#        {% if page.id %}#}
+    {#            <li class="breadcrumb-item">Modifier</li>#}
+    {#        {% else %}#}
+    {#            <li class="breadcrumb-item active">Création</li>#}
+    {#        {% endif %}#}
+    {#    </ul>#}
+{% endblock %}
+
+
+
+{% block header_elements %}
+    {% set baseroute = get_baseroute() %}
+    {% if page and route_exists(baseroute ~ '_index')  %}
+        <a href="{{ path(baseroute ~ '_index', {type: page.type}) }}" class="fa-stack" data-toggle="tooltip" data-placement="bottom" title="Liste">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fas fa-list fa-stack-1x fa-inverse"></i>
+        </a>
+    {% endif %}
+    {% if app.request.get('_route') != baseroute ~ '_new' and route_exists(baseroute ~ '_new') %}
+        <a href="{{ path(baseroute ~ '_new', {'type': page.type}) }}" class="fa-stack" data-toggle="tooltip" data-placement="bottom" title="Nouveau">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fas fa-plus fa-stack-1x fa-inverse"></i>
+        </a>
+    {% endif %}
+    {% if delete_form is defined and delete_form %}
+        {{ form_start(delete_form, {'attr': {'class': 'd-inline-block'}}) }}
+        <button type="button" id="delete_button" class="fa-stack danger" data-toggle="tooltip" data-placement="bottom" title="Supprimer">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fas fa-trash fa-stack-1x fa-inverse"></i>
+        </button>
+        {{ form_widget(delete_form._token) }}
+        {{ form_end(delete_form) }}
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping">
+
+    <mapped-superclass name="Aropixel\PageBundle\Entity\Field" repository-class="Aropixel\PageBundle\Repository\FieldRepository" table="aropixel_page_field">
+
+        <id name="id" column="id" type="integer">
+            <generator strategy="AUTO" />
+        </id>
+
+        <field name="code" length="100" />
+        <field name="formType" length="100" nullable="true" />
+        <field name="value" type="text" nullable="true" />
+        <field name="attributes" type="array" nullable="true" />
+        <field name="crops" type="array" nullable="true" />
+
+        <many-to-one field="page" target-entity="Aropixel\PageBundle\Entity\PageInterface" inversed-by="fields" />
+
+    </mapped-superclass>
+
+</doctrine-mapping>
