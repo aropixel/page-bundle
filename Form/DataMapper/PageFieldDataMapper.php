@@ -236,16 +236,21 @@ class PageFieldDataMapper implements DataMapperInterface
 
                 /** @var FieldInterface $field */
                 $field = $propertyValue;
-                $field->setCode($propertyPath);
-                $field->setFormType($type);
 
-                /** @var PageInterface $page */
-                $page = $data;
+                if (!(is_null($field->getValue()) && $this->isFieldImage($field))) {
 
-                if (!$field->getPage()) {
-                    $page->addField($field);
+                    //
+                    $field->setCode($propertyPath);
+                    $field->setFormType($type);
+
+                    /** @var PageInterface $page */
+                    $page = $data;
+
+                    if (!$field->getPage()) {
+                        $page->addField($field);
+                    }
+                    $mappedFormFields[] = (string)$propertyPath;
                 }
-                $mappedFormFields[] = (string)$propertyPath;
 
             }
         }
@@ -258,6 +263,13 @@ class PageFieldDataMapper implements DataMapperInterface
             }
         }
     }
+
+
+    private function isFieldImage(FieldInterface $field)
+    {
+        return ($field->getFormType() == 'ImageType' || $field->getFormType() == 'GalleryType');
+    }
+
 
     private function mapToFieldData($data, $form, $propertyPath, $propertyValue, &$mappedFormFields)
     {
@@ -312,16 +324,21 @@ class PageFieldDataMapper implements DataMapperInterface
 
                 /** @var FieldInterface $field */
                 $field = $propertyValue;
-                $field->setCode($propertyPath);
-                $field->setFormType($type);
 
-                /** @var PageInterface $page */
-                $page = $data;
+                if (!(is_null($field->getValue()) && $this->isFieldImage($field))) {
 
-                if (!$field->getPage()) {
-                    $page->addField($field);
+                    //
+                    $field->setCode($propertyPath);
+                    $field->setFormType($type);
+
+                    /** @var PageInterface $page */
+                    $page = $data;
+
+                    if (!$field->getPage()) {
+                        $page->addField($field);
+                    }
+
                 }
-
             }
 
             $mappedFormFields[] = (string) $propertyPath;
