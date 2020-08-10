@@ -1,0 +1,67 @@
+{% extends '@AropixelPage/base.html.twig' %}
+
+{% block header_title %}Pages{% endblock %}
+{% block header_breadcrumb %}
+{#    <ul class="breadcrumb breadcrumb-caret position-right">#}
+{#        <li class="breadcrumb-item"><a href="{{ url('_admin') }}">Accueil</a></li>#}
+{#        <li class="breadcrumb-item"><a href="{{ url('aropixel_page_index') }}">Pages</a></li>#}
+{#        {% if page.id %}#}
+{#            <li class="breadcrumb-item">Modifier</li>#}
+{#        {% else %}#}
+{#            <li class="breadcrumb-item active">Création</li>#}
+{#        {% endif %}#}
+{#    </ul>#}
+{% endblock %}
+
+{% block mainPanel %}
+
+    <div class="tabbable">
+        <ul class="nav nav-tabs nav-tabs-highlight">
+            <li class="nav-item"><a href="#panel-tab1" data-toggle="tab" class="nav-link active"><i class="fa fa-paper-plane position-left"></i> Contenu</a></li>
+            <li class="nav-item"><a href="#panel-tab2" data-toggle="tab" class="nav-link"><i class="fab fa-google position-left"></i> Référencement</a></li>
+        </ul>
+    </div>
+
+
+    <div class="panel-tab-content tab-content">
+
+        <div class="tab-pane active" id="panel-tab1">
+
+            <div class="card">
+
+                <div class="card-body">
+
+                    {{ form_row(form.title) }}
+                    {{ form_row(form.excerpt) }}
+                    {{ form_row(form.description) }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="tab-pane" id="panel-tab2">
+
+            <div class="card">
+
+                <div class="card-body">
+
+                    {{ form_row(form.metaTitle) }}
+
+                    {{ form_row(form.metaDescription) }}
+
+                    {{ form_row(form.metaKeywords) }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+{% endblock %}
