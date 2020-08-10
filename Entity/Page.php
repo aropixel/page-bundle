@@ -214,7 +214,7 @@ class Page implements PageInterface
      * @param string $slug
      * @return $this
      */
-    public function setSlug(string $slug): self
+    public function setSlug($slug): self
     {
         $this->slug = $slug;
         return $this;

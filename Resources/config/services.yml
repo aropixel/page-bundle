@@ -26,6 +26,10 @@ services:
     resource: '../../Controller'
     tags: ['controller.service_arguments']
 
+  aropixel.page.form.default:
+    class: '%aropixel_page.form.default%'
+    tags: ['aropixel.page.form']
+
   Aropixel\PageBundle\Repository\:
     resource: '../../Repository'
     autowire: true

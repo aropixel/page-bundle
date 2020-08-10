@@ -35,7 +35,7 @@ class Configuration implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->scalarNode('default')->defaultValue(DefaultPageType::class)->end()
-                        ->scalarNode('template_path')->defaultValue('@AropixelPage/page')->end()
+                        ->scalarNode('template_path')->defaultValue('@AropixelPage')->end()
                     ->end()
                 ->end()
             ->end()

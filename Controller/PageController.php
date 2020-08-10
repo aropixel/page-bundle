@@ -71,7 +71,7 @@ class PageController extends AbstractController
         }
 
         //
-        return $this->render('@AropixelPage/page/index.html.twig', [
+        return $this->render('@AropixelPage/index.html.twig', [
             'type' => $type,
             'pages' => $pages,
             'delete_forms' => $delete_forms,

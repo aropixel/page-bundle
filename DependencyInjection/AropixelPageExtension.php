@@ -35,5 +35,6 @@ class AropixelPageExtension extends Extension
         //
         $container->setParameter('aropixel_page.entities', $config['entities']);
         $container->setParameter('aropixel_page.forms', $config['forms']);
+        $container->setParameter('aropixel_page.form.default', $config['forms']['default']);
     }
 }
