@@ -38,6 +38,16 @@ class Page implements PageInterface
     /**
      * @var string
      */
+    protected $excerpt;
+
+    /**
+     * @var string
+     */
+    protected $description;
+
+    /**
+     * @var string
+     */
     protected $slug;
 
     /**
@@ -109,7 +119,7 @@ class Page implements PageInterface
 //                $this->fieldValues[$key] = $value;
 //            }
 //            else {
-                $this->fieldValues = array_replace_recursive($this->fieldValues, $value);
+            $this->fieldValues = array_replace_recursive($this->fieldValues, $value);
 //            }
         }
 
@@ -217,6 +227,42 @@ class Page implements PageInterface
     public function setSlug($slug): self
     {
         $this->slug = $slug;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExcerpt()
+    {
+        return $this->excerpt;
+    }
+
+    /**
+     * @param string $excerpt
+     * @return Page
+     */
+    public function setExcerpt($excerpt): self
+    {
+        $this->excerpt = $excerpt;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     * @return Page
+     */
+    public function setDescription($description): self
+    {
+        $this->description = $description;
         return $this;
     }
 
