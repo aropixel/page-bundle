@@ -215,7 +215,7 @@ class Field implements FieldInterface, ImageInterface
 
     public function getFilename()
     {
-        if ($this->formType == 'ImageType' || $this->formType == 'GalleryType') {
+        if ($this->formType == 'ImageType' || $this->formType == 'GalleryImageType') {
             return $this->value;
         }
 
