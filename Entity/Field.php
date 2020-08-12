@@ -2,8 +2,11 @@
 
 namespace Aropixel\PageBundle\Entity;
 
+use Aropixel\AdminBundle\Entity\CropInterface;
+use Aropixel\AdminBundle\Entity\ImageInterface;
 
-class Field implements FieldInterface
+
+class Field implements FieldInterface, ImageInterface
 {
     /**
      * @var integer
@@ -31,7 +34,7 @@ class Field implements FieldInterface
     private $attributes;
 
     /**
-     * @var string
+     * @var array
      */
     private $crops;
 
@@ -163,7 +166,7 @@ class Field implements FieldInterface
     }
 
     /**
-     * @return string
+     * @return array
      */
     public function getCrops()
     {
@@ -171,7 +174,7 @@ class Field implements FieldInterface
     }
 
     /**
-     * @param string $crops
+     * @param array $crops
      * @return Field
      */
     public function setCrops($crops): FieldInterface
@@ -196,6 +199,27 @@ class Field implements FieldInterface
     {
         $this->page = $page;
         return $this;
+    }
+
+
+
+    public function getAbsolutePath()
+    {
+        // TODO: Implement getAbsolutePath() method.
+    }
+
+    public function getWebPath()
+    {
+        // TODO: Implement getWebPath() method.
+    }
+
+    public function getFilename()
+    {
+        if ($this->formType == 'ImageType' || $this->formType == 'GalleryType') {
+            return $this->value;
+        }
+
+        return null;
     }
 
 

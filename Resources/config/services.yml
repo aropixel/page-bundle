@@ -38,3 +38,10 @@ services:
 
   Aropixel\PageBundle\Twig\FieldExtension:
       tags: ['twig.extension']
+
+
+  Aropixel\PageBundle\EventListener\DoFileCropListener:
+    arguments: ['@Aropixel\AdminBundle\Image\Cropper']
+    tags:
+      - { name: doctrine.event_listener, event: postPersist }
+      - { name: doctrine.event_listener, event: postUpdate }
