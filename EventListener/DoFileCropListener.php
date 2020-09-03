@@ -47,11 +47,13 @@ class DoFileCropListener
 
             /** @var FieldInterface $entity */
             $crops = $entity->getCrops();
-            foreach ($crops as $crop) {
+            if ($crops && is_array($crops)) {
+                foreach ($crops as $crop) {
 
-                //
-                $this->cropper->applyCrop($fileName, $crop['filter'], $crop['crop']);
+                    //
+                    $this->cropper->applyCrop($fileName, $crop['filter'], $crop['crop']);
 
+                }
             }
 
         }
