@@ -54,7 +54,7 @@ class PageFieldDataMapper implements DataMapperInterface
      * Give data values to form when form is loaded
      * @param Page|null $data
      */
-    public function mapDataToForms($data, iterable $forms)
+    public function mapDataToForms($data, $forms)
     {
         $empty = null === $data || [] === $data;
 
@@ -189,7 +189,7 @@ class PageFieldDataMapper implements DataMapperInterface
     /**
      * Give form values to data when form is submitted
      */
-    public function mapFormsToData(iterable $forms, &$data)
+    public function mapFormsToData($forms, &$data)
     {
         if (null === $data) {
             return;
