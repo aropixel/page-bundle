@@ -4,8 +4,14 @@ CHANGELOG for 2.0.x
 This changelog references the relevant changes (bug and security fixes) done
 in 2.0 minor versions.
 
-* **2.0.2** _(20xx-xx-xx)_
+* **2.0.4** _(20xx-xx-xx)_
 
+
+* **2.0.3** _(2020-09-03)_
+    * Bugfix EventCropListener
+
+* **2.0.2** _(2020-08-12)_
+    * Bugfix: apply crop stored in field data   
 
 * **2.0.1** _(2020-08-11)_
     * Create back description & excerpt for non BC with v1  
