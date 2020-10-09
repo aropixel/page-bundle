@@ -202,6 +202,7 @@ class PageController extends AbstractController
         /** @var Page $page */
         $em = $this->getDoctrine()->getManager();
         $page = $em->getRepository($this->model)->find($id);
+        $type = $page->getType();
         if (!$page) {
             throw $this->createNotFoundException();
         }
@@ -219,7 +220,7 @@ class PageController extends AbstractController
             $this->get('session')->getFlashBag()->add('notice', 'La page "'.$titre.'" a bien été supprimé.');
         }
 
-        return $this->redirectToRoute('aropixel_page_index');
+        return $this->redirectToRoute('aropixel_page_index', ['type' => $type]);
     }
 
     /**
