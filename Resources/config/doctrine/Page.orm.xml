@@ -32,6 +32,7 @@
         <one-to-many field="fields" target-entity="Aropixel\PageBundle\Entity\FieldInterface" mapped-by="page">
             <cascade>
                 <cascade-persist />
+                <cascade-remove />
             </cascade>
         </one-to-many>
 
