@@ -33,6 +33,11 @@ class Page implements PageInterface
     /**
      * @var string
      */
+    protected $code;
+
+    /**
+     * @var string
+     */
     protected $title;
 
     /**
@@ -192,6 +197,24 @@ class Page implements PageInterface
     public function setType(string $type): PageInterface
     {
         $this->type = $type;return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param string $code
+     * @return Page
+     */
+    public function setCode($code): PageInterface
+    {
+        $this->code = $code;
+        return $this;
     }
 
     /**

@@ -4,14 +4,24 @@ CHANGELOG for 2.0.x
 This changelog references the relevant changes (bug and security fixes) done
 in 2.0 minor versions.
 
-* **2.0.4** _(20xx-xx-xx)_
+* **2.0.7** _(20xx-xx-xx)_
 
+
+* **2.0.6** _(2020-10-27)_
+    * Reintroduce code field in Page Entity, in order to differentiate pages of same type 
+
+* **2.0.5** _(2020-10-26)_
+    * Fix ManagerRegistry namespace for SF 5.0 compatibility
+    * Fix page removals
+
+* **2.0.4** _(2020-09-06)_
+    * Maintain compatibility to SF 4.4
 
 * **2.0.3** _(2020-09-03)_
     * Bugfix EventCropListener
 
 * **2.0.2** _(2020-08-12)_
-    * Bugfix: apply crop stored in field data   
+    * Bugfix: apply crop stored in field data
 
 * **2.0.1** _(2020-08-11)_
     * Create back description & excerpt for non BC with v1  
