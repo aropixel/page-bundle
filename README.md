@@ -32,8 +32,67 @@
 - Create your symfony 4 project & install Aropixel AdminBundle
 - Require Aropixel Page Bundle : `composer require aropixel/page-bundle`
 - Apply migrations
-- Include the routes
+- Include the routes :
 
+```
+aropixel_page:
+  resource: '@AropixelPageBundle/Resources/config/routing.yml'
+  prefix:   /admin
+```
+
+- create a ConfigureMenuListener class, register it as an event listener and include the page menu in the listener:
+
+````
+    App\EventListener\ConfigureMenuListener:
+        tags:
+            - { name: kernel.event_listener, event: aropixel.admin_menu_configure, method: onMenuConfigure }
+````
+
+
+````
+<?php
+
+declare(strict_types=1);
+
+// src/AppBundle/EventListener/ConfigureMenuListener.php
+
+namespace App\EventListener;
+
+use Aropixel\AdminBundle\Event\ConfigureMenuEvent;
+use Aropixel\AdminBundle\Menu\AbstractMenuListener;
+
+class ConfigureMenuListener extends AbstractMenuListener
+{
+    /**
+     * @param ConfigureMenuEvent $event
+     */
+    public function onMenuConfigure(ConfigureMenuEvent $event)
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        $this->factory = $event->getFactory();
+        $this->em = $event->getEntityManager();
+        $this->routeName = $request->get('_route');
+        $this->routeParameters = $request->get('_route_params');
+
+        $this->menu = $event->getAppMenu('main');
+        if (!$this->menu) {
+            $this->menu = $this->createRoot();
+        }
+
+        $pageMenu = [
+            'route' => 'aropixel_page_index',
+            'routeParameters' => [
+                'type' => 'default'
+            ]
+        ];
+
+        $this->addItem('Pages', $pageMenu, 'far fa-file');
+        
+        $event->addAppMenu($this->menu, false, 'main');
+    }
+}
+
+````
 
 ## License
 Aropixel Page Bundle is under the [MIT License](LICENSE)
