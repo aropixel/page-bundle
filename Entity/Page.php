@@ -115,19 +115,25 @@ class Page implements PageInterface
         foreach ($this->fields as $field) {
 
             //
-            $key = $field->getRootKey();
             $value = $field->getExplodedValue();
-//            dump($key, $value);
-
-            //
-//            if (!array_key_exists($key, $this->fieldValues)) {
-//                $this->fieldValues[$key] = $value;
-//            }
-//            else {
             $this->fieldValues = array_replace_recursive($this->fieldValues, $value);
-//            }
+            $this->ksortTree($this->fieldValues);
+
         }
 
+    }
+
+    function ksortTree( &$array )
+    {
+        if (!is_array($array)) {
+            return false;
+        }
+
+        ksort($array);
+        foreach ($array as $k=>$v) {
+            $this->ksortTree($array[$k]);
+        }
+        return true;
     }
 
 
