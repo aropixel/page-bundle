@@ -4,8 +4,11 @@ CHANGELOG for 2.0.x
 This changelog references the relevant changes (bug and security fixes) done
 in 2.0 minor versions.
 
-* **2.0.8** _(20xx-xx-xx)_
+* **2.0.9** _(20xx-xx-xx)_
 
+
+* **2.0.8** _(2021-03-17)_
+    * Update MappingDriver namespace for Doctrine 3
 
 * **2.0.7** _(2021-02-05)_
     * Fix order for collections field rendering 
