@@ -15,7 +15,9 @@
         <field name="attributes" type="array" nullable="true" />
         <field name="crops" type="array" nullable="true" />
 
-        <many-to-one field="page" target-entity="Aropixel\PageBundle\Entity\PageInterface" inversed-by="fields" />
+        <many-to-one field="page" target-entity="Aropixel\PageBundle\Entity\PageInterface" inversed-by="fields">
+            <join-column on-delete="CASCADE"/>
+        </many-to-one>
 
     </mapped-superclass>
 

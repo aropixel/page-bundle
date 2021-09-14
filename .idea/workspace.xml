@@ -31,7 +31,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="700a666a-ec40-48e7-853d-bd277e40917f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/Form/DataMapper/PageFieldDataMapper.php" beforeDir="false" afterPath="$PROJECT_DIR$/Form/DataMapper/PageFieldDataMapper.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resources/config/doctrine/Field.orm.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Resources/config/doctrine/Field.orm.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,6 +73,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
@@ -120,7 +123,8 @@
       <workItem from="1588253775364" duration="10364000" />
       <workItem from="1588328808577" duration="5815000" />
       <workItem from="1601990990641" duration="130000" />
-      <workItem from="1601991137577" duration="30000" />
+      <workItem from="1601991137577" duration="370000" />
+      <workItem from="1602577980836" duration="20000" />
     </task>
     <servers />
   </component>
