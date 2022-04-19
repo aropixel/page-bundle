@@ -4,7 +4,7 @@ namespace Aropixel\PageBundle\Repository;
 
 use Aropixel\PageBundle\Entity\Field;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method Field|null find($id, $lockMode = null, $lockVersion = null)
