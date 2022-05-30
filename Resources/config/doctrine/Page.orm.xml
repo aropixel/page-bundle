@@ -37,6 +37,10 @@
             </cascade>
         </one-to-many>
 
+        <indexes>
+            <index columns="code" />
+        </indexes>
+
     </mapped-superclass>
 
 </doctrine-mapping>
