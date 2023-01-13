@@ -1,3 +1,23 @@
+aropixel_page_index:
+    path: /page/{type}/list
+    controller: Aropixel\PageBundle\Http\Action\Page\IndexPageAction
+
+aropixel_page_new:
+    path: /page/{type}/new
+    controller: Aropixel\PageBundle\Http\Action\Page\CreatePageAction
+
+aropixel_page_edit:
+    path: /page/{type}/{id}/edit
+    controller: Aropixel\PageBundle\Http\Action\Page\EditPageAction
+
+aropixel_page_delete:
+    path: /page/{id}
+    controller: Aropixel\PageBundle\Http\Action\Page\DeletePageAction
+
 aropixel_page:
-    resource: "@AropixelPageBundle/Controller/PageController.php"
-    type:     annotation
+    path: /page/{type}/page
+    controller: Aropixel\PageBundle\Http\Action\Page\CreateUniquePageAction
+
+aropixel_page_status:
+    path: /page/{id}/status
+    controller: Aropixel\PageBundle\Http\Action\Page\StatusPageAction

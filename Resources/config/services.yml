@@ -26,6 +26,10 @@ services:
     resource: '../../Controller'
     tags: ['controller.service_arguments']
 
+  Aropixel\PageBundle\Http\:
+    resource: '../../Http'
+    tags: [ 'controller.service_arguments' ]
+
   aropixel.page.form.default:
     class: '%aropixel_page.form.default%'
     arguments: ['@security.authorization_checker', '@Aropixel\PageBundle\Form\DataMapper\PageFieldDataMapper', '@parameter_bag', '%aropixel_page.entities%']
