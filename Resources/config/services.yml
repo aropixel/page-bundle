@@ -20,11 +20,6 @@ services:
 
   Aropixel\PageBundle\Form\FormFactoryInterface: '@aropixel.page.form.factory'
 
-  # controllers are imported separately to make sure services can be injected
-  # as action arguments even if you don't extend any base controller class
-  Aropixel\PageBundle\Controller\:
-    resource: '../../Controller'
-    tags: ['controller.service_arguments']
 
   Aropixel\PageBundle\Http\:
     resource: '../../Http'
