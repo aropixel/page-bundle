@@ -3,13 +3,14 @@
 {% block header_title %}Pages <span>Créer une nouvelle page</span>{% endblock %}
 {% block header_breadcrumb %}{% endblock %}
 
+{% set tabbableCollapsed = true %}
+
 {% block tabbable %}
     <li class="nav-item"><a href="#panel-tab1" data-bs-toggle="pill" class="nav-link active"><i class="fa fa-paper-plane position-left"></i><span> Contenu</span></a></li>
     <li class="nav-item"><a href="#panel-tab2" data-bs-toggle="pill" class="nav-link"><i class="fab fa-google position-left"></i><span> Référencement</span></a></li>
 {% endblock %}
 
 {% block mainPanel %}
-
 
         <div class="tab-pane fade show active" role="tabpanel" id="panel-tab1">
 
@@ -43,8 +44,6 @@
             </div>
 
         </div>
-
-
 
 
 {% endblock %}

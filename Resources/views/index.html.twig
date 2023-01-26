@@ -45,18 +45,14 @@
                 <td>{{ page.title }}</td>
                 <td>{{ page.createdAt|date('d/m/Y') }}</td>
                 <td>
-                    <div class="btn-group">
-
-                        <a href="{{ path('aropixel_page_edit', {'type': page.type, 'id': page.id}) }}" class="btn {{ page.status == 'online' ? 'btn-primary' : 'btn-default' }} btn-labeled"><b><i class="fas fa-edit"></i></b> Modifier</a>
-                        <button type="button" class="btn {{ page.status == 'online' ? 'btn-primary' : 'btn-default' }} dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <li class="dropdown-item"><a href="{{ path('aropixel_page_edit', {'type': page.type, 'id': page.id}) }}"><i class="fas fa-edit"></i> Modifier</a></li>
-{#                            <li class="dropdown-item"><a class="status" data-confirm="Êtes-vous certain de vouloir mettre cette page %s ?" data-path="{{ path('page_status', {'id': page.id}) }}"><i class="fas fa-toggle-on"></i>{{ page.status == 'online' ? 'Mettre hors ligne' : 'Mettre en ligne' }}</a></li>#}
-                            <li class="dropdown-divider"></li>
-                            <li class="dropdown-item"><a class="delete" data-confirm="Supprimer la page|Êtes-vous certain de vouloir supprimer cette page ?"><i class="fas fa-trash"></i> Supprimer</a></li>
-                        </ul>
+                    <div class="btn-icon-group">
+                        <a href="{{ path('aropixel_page_edit', {'type': page.type, 'id': page.id}) }}" title="Modifier"><i class="fas fa-edit"></i></a>
+                        <a class="status" title="{% if page.status == 'online' %}Mettre hors-ligne{% else %}Mettre en ligne{% endif %}"
+                           data-confirm="Êtes-vous certain de vouloir mettre cette page %s ?" data-path="{{ path('aropixel_page_status', {'id': page.id}) }}">
+                            <i class="fas {% if page.status == 'online' %}fa-toggle-on{% else %}fa-toggle-off{% endif %}"></i>
+                        </a>
+                        <a class="delete" data-confirm="Supprimer la page|Êtes-vous certain de vouloir supprimer cette page ?" title="Supprimer"><i class="fas fa-trash"></i></a>
                         {{ form(delete_forms[page.id]) }}
-
                     </div>
                 </td>
             </tr>
