@@ -19,6 +19,14 @@
     <li class="nav-item"><a href="#panel-tab2" data-bs-toggle="pill" class="nav-link"><i class="fab fa-google position-left"></i><span> Référencement</span></a></li>
 {% endblock %}
 
+{% block header_image %}
+    {% set field = form.image.vars.value %}
+    <div class="section-header-left-image cursor-pointer" data-bs-toggle="offcanvas" data-bs-target="#offcanvasForm">
+        <img src="{{ (field ? field.value : null) | aropixel_imagine_filter('admin_thumbnail') }}" alt="" />
+        <i class="fas fa-external-link-alt editable-indicator"></i>
+    </div>
+{% endblock %}
+
 {% block mainPanel %}
 
         <div class="tab-pane fade show active" role="tabpanel" id="panel-tab1">
