@@ -55,13 +55,7 @@ class DefaultPageType extends AbstractPageType
                 'data_value' => 'value',
                 'library' => self::class
             ])
-            ->add('status', ChoiceType::class, array(
-                'choices'  => array(
-                    'Oui' => 'online',
-                    'Non' => 'offline',
-                ),
-                'expanded' => true
-            ))
+            ->add('status', HiddenType::class)
             ->add('createdAt', DateTimeType::class, array(
                 'required' => false,
                 'date_widget' => 'single_text',

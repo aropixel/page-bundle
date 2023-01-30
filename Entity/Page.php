@@ -3,6 +3,7 @@
 namespace Aropixel\PageBundle\Entity;
 
 use Aropixel\AdminBundle\Entity\Publishable;
+use Aropixel\AdminBundle\Entity\PublishableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -100,7 +101,7 @@ class Page implements PageInterface
      */
     protected $fieldValues;
 
-
+    use PublishableTrait;
 
     public function __construct()
     {
