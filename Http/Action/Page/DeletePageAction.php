@@ -2,7 +2,6 @@
 
 namespace Aropixel\PageBundle\Http\Action\Page;
 
-use Aropixel\PageBundle\Entity\Page;
 use Aropixel\PageBundle\Http\Form\Page\FormFactory;
 use Aropixel\PageBundle\Repository\PageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

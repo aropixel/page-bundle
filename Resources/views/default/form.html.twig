@@ -3,20 +3,20 @@
 {% block header_title %}Pages{% endblock %}
 {% block header_breadcrumb %}
     <ul class="breadcrumb breadcrumb-caret position-right">
-        <li class="breadcrumb-item"><a href="{{ url('_admin') }}">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{{ url('_admin') }}">{% trans %}Home{% endtrans %}</a></li>
         <li class="breadcrumb-item"><a href="{{ url('aropixel_page_index', {'type': 'default'}) }}">Pages</a></li>
         {% if page and page.id %}
-            <li class="breadcrumb-item active">Modifier</li>
+            <li class="breadcrumb-item active">{% trans %}Edit{% endtrans %}</li>
         {% else %}
-            <li class="breadcrumb-item active">Création</li>
+            <li class="breadcrumb-item active">{% trans %}Add{% endtrans %}</li>
         {% endif %}
     </ul>
 {% endblock %}
 
 
 {% block tabbable %}
-    <li class="nav-item"><a href="#panel-tab1" data-bs-toggle="pill" class="nav-link active"><i class="fa fa-paper-plane position-left"></i><span> Contenu</span></a></li>
-    <li class="nav-item"><a href="#panel-tab2" data-bs-toggle="pill" class="nav-link"><i class="fab fa-google position-left"></i><span> Référencement</span></a></li>
+    <li class="nav-item"><a href="#panel-tab1" data-bs-toggle="pill" class="nav-link active"><i class="fa fa-paper-plane position-left"></i><span> {% trans %}Content{% endtrans %}</span></a></li>
+    <li class="nav-item"><a href="#panel-tab2" data-bs-toggle="pill" class="nav-link"><i class="fab fa-google position-left"></i><span> {% trans %}SEO{% endtrans %}</span></a></li>
 {% endblock %}
 
 {% block header_image %}

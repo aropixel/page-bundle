@@ -48,7 +48,7 @@ class DefaultPageType extends AbstractPageType
         //
         parent::buildForm($builder, $options);
         $builder
-            ->add('excerpt', null, array('label'  => 'Chapeau'))
+            ->add('excerpt', null, array('label'  => 'Header'))
             ->add('description', TextareaType::class, array('label'  => 'Description', 'attr' => array('class' => 'ckeditor')))
             ->add('image', ImageType::class, [
                 'data_class' => $fieldClass,
