@@ -7,7 +7,7 @@
                 <target>Administrez les pages de votre site</target>
             </trans-unit>
             <trans-unit id="2">
-                <source>List of pages</source>
+                <source>Pages list</source>
                 <target>Liste des pages</target>
             </trans-unit>
             <trans-unit id="3">
@@ -53,6 +53,14 @@
             <trans-unit id="13">
                 <source>Until</source>
                 <target>Jusqu'au</target>
+            </trans-unit>
+            <trans-unit id="14">
+                <source>The page has been successfully saved.</source>
+                <target>La page a bien été enregistrée.</target>
+            </trans-unit>
+            <trans-unit id="15">
+                <source>The page has been successfully deleted.</source>
+                <target>La page a bien été supprimée.</target>
             </trans-unit>
 
         </body>

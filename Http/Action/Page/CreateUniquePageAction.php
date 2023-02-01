@@ -11,6 +11,7 @@ use Aropixel\PageBundle\Repository\PageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class CreateUniquePageAction extends AbstractController
 {
@@ -19,6 +20,7 @@ class CreateUniquePageAction extends AbstractController
         private readonly FormFactoryInterface $factory,
         private readonly PageRepository $pageRepository,
         private readonly RequestStack $request,
+        private readonly TranslatorInterface $translator,
     ){}
 
     private string $model = Page::class;
@@ -40,7 +42,7 @@ class CreateUniquePageAction extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->pageRepository->add($page, true);
 
-            $this->addFlash('notice', 'La page a bien été enregistrée.');
+            $this->addFlash('notice', $this->translator->trans('The page has been successfully saved.'));
             return $this->redirectToRoute('aropixel_page', array('type' => $page->getType(), 'id' => $page->getId()));
         }
 

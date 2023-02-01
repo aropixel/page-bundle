@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class EditPageAction extends AbstractController
 {
@@ -19,6 +20,7 @@ class EditPageAction extends AbstractController
         private readonly PageRepository $pageRepository,
         private readonly RequestStack $request,
         private readonly Security $security,
+        private readonly TranslatorInterface $translator,
     ){}
 
     public function __invoke(int $id) : Response
@@ -38,7 +40,7 @@ class EditPageAction extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->pageRepository->add($page, true);
 
-            $this->addFlash('notice', 'La page a bien été enregistrée.');
+            $this->addFlash('notice', $this->translator->trans('The page has been successfully saved.'));
             return $this->redirectToRoute('aropixel_page_edit', array('type' => $page->getType(), 'id' => $page->getId()));
         }
         return $this->render($this->formFactory->getTemplatePath().'/'.$page->getType().'/form.html.twig', [
