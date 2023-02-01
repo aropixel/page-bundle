@@ -13,6 +13,7 @@ aropixel_page_edit:
 aropixel_page_delete:
     path: /page/{id}
     controller: Aropixel\PageBundle\Http\Action\Page\DeletePageAction
+    methods: DELETE
 
 aropixel_page:
     path: /page/{type}/page
