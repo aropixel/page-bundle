@@ -40,7 +40,7 @@ services:
 
 
   Aropixel\PageBundle\EventListener\DoFileCropListener:
-    arguments: ['@Aropixel\AdminBundle\Image\Cropper']
+    arguments: ['@Aropixel\AdminBundle\Domain\Media\Image\Crop\CropApplierInterface']
     tags:
       - { name: doctrine.event_listener, event: postPersist }
       - { name: doctrine.event_listener, event: postUpdate }
