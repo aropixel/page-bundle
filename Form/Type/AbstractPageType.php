@@ -59,8 +59,8 @@ abstract class AbstractPageType extends AbstractType implements PageFormTypeInte
     {
         if ($builder->getData() && $builder->getData()->getType()=='default') {
             $builder
-                ->add('title', TextType::class, array('label'  => 'Titre de la page'))
-                ->add('slug', HiddenType::class)
+                ->add('title', TextType::class, array('label'  => 'Title of the page'))
+                ->add('slug', TextType::class, array('label'  => 'Permalink'))
             ;
         }
 

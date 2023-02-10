@@ -51,6 +51,25 @@ class PageRepository extends PublishableRepository
             ;
     }
 
+    public function add(Page $page, bool $flush = false): void
+    {
+        $this->getEntityManager()->persist($page);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function remove(Page $page, bool $flush = false) : void
+    {
+        $this->getEntityManager()->remove($page);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+
 
     /*
     public function findOneBySomeField($value): ?Page

@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="1">
+                <source>Manage the pages of your website</source>
+                <target>Administrez les pages de votre site</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>Pages list</source>
+                <target>Liste des pages</target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>Put offline</source>
+                <target>Mettre hors-ligne</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>Put online</source>
+                <target>Mettre en ligne</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>Are you sure you want to put this page</source>
+                <target>Êtes-vous certain de vouloir mettre cette page</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>Title of the page</source>
+                <target>Titre de la page</target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>Header</source>
+                <target>Chapeau</target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>Content</source>
+                <target>Contenu</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>SEO</source>
+                <target>Référencement</target>
+            </trans-unit>
+            <trans-unit id="10">
+                <source>Set your publication options</source>
+                <target>Paramétrez vos options de publication</target>
+            </trans-unit>
+            <trans-unit id="11">
+                <source>Post</source>
+                <target>Publier</target>
+            </trans-unit>
+            <trans-unit id="12">
+                <source>Post on</source>
+                <target>Publier le</target>
+            </trans-unit>
+            <trans-unit id="13">
+                <source>Until</source>
+                <target>Jusqu'au</target>
+            </trans-unit>
+            <trans-unit id="14">
+                <source>The page has been successfully saved.</source>
+                <target>La page a bien été enregistrée.</target>
+            </trans-unit>
+            <trans-unit id="15">
+                <source>The page has been successfully deleted.</source>
+                <target>La page a bien été supprimée.</target>
+            </trans-unit>
+
+        </body>
+    </file>
+</xliff>
