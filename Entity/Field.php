@@ -3,45 +3,32 @@
 namespace Aropixel\PageBundle\Entity;
 
 use Aropixel\AdminBundle\Entity\CropInterface;
+use Aropixel\AdminBundle\Entity\CroppableInterface;
 use Aropixel\AdminBundle\Entity\ImageInterface;
 
 
-class Field implements FieldInterface, ImageInterface
+class Field implements FieldInterface, ImageInterface, CroppableInterface
 {
-    /**
-     * @var integer
-     */
-    private $id;
+
+    private ?int $id;
 
     /**
-     * @var string
+     * Field name in the form (can be composed, for collections). Ex : "excerpt", "title", "slideshow.0", "slideshow.1"
      */
-    private $code;
+    private string $code;
 
     /**
-     * @var string
+     * Symfony Form Type of the field : TextType, TextareaType, ImageType
      */
-    private $formType;
+    private string $formType;
 
-    /**
-     * @var string
-     */
-    private $value;
+    private ?string $value = null;
 
-    /**
-     * @var ?string
-     */
-    private $attributes;
+    private ?array $attributes = null;
 
-    /**
-     * @var array
-     */
-    private $crops;
+    private ?array $crops = null;
 
-    /**
-     * @var Page
-     */
-    private $page;
+    private Page $page;
 
 
 
@@ -54,9 +41,19 @@ class Field implements FieldInterface, ImageInterface
     /**
      * @return int
      */
-    public function getId()
+    public function getId() : ?int
     {
         return $this->id;
+    }
+
+    /**
+     * @param int $id
+     * @return Field
+     */
+    public function setId(int $id): Field
+    {
+        $this->id = $id;
+        return $this;
     }
 
     /**
@@ -203,16 +200,6 @@ class Field implements FieldInterface, ImageInterface
 
 
 
-    public function getAbsolutePath()
-    {
-        // TODO: Implement getAbsolutePath() method.
-    }
-
-    public function getWebPath()
-    {
-        // TODO: Implement getWebPath() method.
-    }
-
     public function getFilename()
     {
         if ($this->formType == 'ImageType' || $this->formType == 'GalleryImageType') {
@@ -220,6 +207,32 @@ class Field implements FieldInterface, ImageInterface
         }
 
         return null;
+    }
+
+    public function getImageUid(): string
+    {
+        return uniqid();
+    }
+
+    public function getCropsInfos(): array
+    {
+        $cropsInfos = [];
+        if (!is_null($this->getCrops())) {
+
+            foreach ($this->getCrops() as $crop) {
+                $filterName = $crop['filter'];
+                $cropInfo = $crop['crop'];
+                $cropsInfos[$filterName] = $cropInfo;
+            }
+
+        }
+
+        return $cropsInfos;
+    }
+
+    public function getWebPath()
+    {
+        return $this->value;
     }
 
 
