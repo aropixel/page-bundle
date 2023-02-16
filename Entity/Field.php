@@ -10,7 +10,7 @@ use Aropixel\AdminBundle\Entity\ImageInterface;
 class Field implements FieldInterface, ImageInterface, CroppableInterface
 {
 
-    private ?int $id;
+    private ?int $id = null;
 
     /**
      * Field name in the form (can be composed, for collections). Ex : "excerpt", "title", "slideshow.0", "slideshow.1"
@@ -28,7 +28,7 @@ class Field implements FieldInterface, ImageInterface, CroppableInterface
 
     private ?array $crops = null;
 
-    private Page $page;
+    private ?Page $page = null;
 
 
 
@@ -39,7 +39,7 @@ class Field implements FieldInterface, ImageInterface, CroppableInterface
 
 
     /**
-     * @return int
+     * @return ?int
      */
     public function getId() : ?int
     {
@@ -181,7 +181,7 @@ class Field implements FieldInterface, ImageInterface, CroppableInterface
     }
 
     /**
-     * @return Page
+     * @return ?Page
      */
     public function getPage()
     {
@@ -211,7 +211,7 @@ class Field implements FieldInterface, ImageInterface, CroppableInterface
 
     public function getImageUid(): string
     {
-        return uniqid();
+        return $this->getId() ?: uniqid();
     }
 
     public function getCropsInfos(): array
