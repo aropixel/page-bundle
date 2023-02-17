@@ -4,13 +4,14 @@ namespace Aropixel\PageBundle\Entity;
 
 use Aropixel\AdminBundle\Entity\CropInterface;
 use Aropixel\AdminBundle\Entity\CroppableInterface;
+use Aropixel\AdminBundle\Entity\Image;
 use Aropixel\AdminBundle\Entity\ImageInterface;
 
 
 class Field implements FieldInterface, ImageInterface, CroppableInterface
 {
 
-    private ?int $id;
+    private ?int $id = null;
 
     /**
      * Field name in the form (can be composed, for collections). Ex : "excerpt", "title", "slideshow.0", "slideshow.1"
@@ -28,7 +29,7 @@ class Field implements FieldInterface, ImageInterface, CroppableInterface
 
     private ?array $crops = null;
 
-    private Page $page;
+    private ?Page $page = null;
 
 
 
@@ -232,7 +233,7 @@ class Field implements FieldInterface, ImageInterface, CroppableInterface
 
     public function getWebPath()
     {
-        return $this->value;
+        return Image::getFileNameWebPath($this->value);
     }
 
 
