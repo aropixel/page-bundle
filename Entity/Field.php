@@ -40,7 +40,7 @@ class Field implements FieldInterface, ImageInterface, CroppableInterface
 
 
     /**
-     * @return int
+     * @return ?int
      */
     public function getId() : ?int
     {
@@ -182,7 +182,7 @@ class Field implements FieldInterface, ImageInterface, CroppableInterface
     }
 
     /**
-     * @return Page
+     * @return ?Page
      */
     public function getPage()
     {
@@ -212,7 +212,7 @@ class Field implements FieldInterface, ImageInterface, CroppableInterface
 
     public function getImageUid(): string
     {
-        return uniqid();
+        return $this->getId() ?: uniqid();
     }
 
     public function getCropsInfos(): array
