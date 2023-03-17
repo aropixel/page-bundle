@@ -2,7 +2,6 @@
 
 namespace Aropixel\PageBundle\Repository;
 
-use Aropixel\AdminBundle\Repository\PublishableRepository;
 use Aropixel\PageBundle\Entity\Page;
 use Aropixel\PageBundle\Entity\PageInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -14,7 +13,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
  * @method Page[]    findAll()
  * @method Page[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class PageRepository extends PublishableRepository
+class PageRepository extends \Aropixel\AdminBundle\Infrastructure\Publication\Repository\PublishableRepository
 {
     public function __construct(ManagerRegistry $registry, ParameterBagInterface $parameterBag)
     {
