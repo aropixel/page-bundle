@@ -8,9 +8,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 class StatusPageAction
 {
-    public function __construct(
-        private readonly Status $status,
-    ){}
+    private Status $status;
+
+    /**
+     * @param Status $status
+     */
+    public function __construct(Status $status)
+    {
+        $this->status = $status;
+    }
 
     public function __invoke(Page $page) : Response
     {

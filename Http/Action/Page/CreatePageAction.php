@@ -13,15 +13,31 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class CreatePageAction extends AbstractController
 {
-    public function __construct(
-        private readonly FormFactory $formFactory,
-        private readonly FormFactoryInterface $factory,
-        private readonly PageRepository $pageRepository,
-        private readonly RequestStack $request,
-        private readonly TranslatorInterface $translator
-    ){}
+    private FormFactory $formFactory;
+    private FormFactoryInterface $factory;
+    private PageRepository $pageRepository;
+    private RequestStack $request;
+    private TranslatorInterface $translator;
 
     private string $model = Page::class;
+
+
+    /**
+     * @param FormFactory $formFactory
+     * @param FormFactoryInterface $factory
+     * @param PageRepository $pageRepository
+     * @param RequestStack $request
+     * @param TranslatorInterface $translator
+     */
+    public function __construct(FormFactory $formFactory, FormFactoryInterface $factory, PageRepository $pageRepository, RequestStack $request, TranslatorInterface $translator)
+    {
+        $this->formFactory = $formFactory;
+        $this->factory = $factory;
+        $this->pageRepository = $pageRepository;
+        $this->request = $request;
+        $this->translator = $translator;
+    }
+
 
     public function __invoke(string $type) : Response
     {

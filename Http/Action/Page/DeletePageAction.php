@@ -11,13 +11,25 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class DeletePageAction extends AbstractController
 {
-    public function __construct(
-        private readonly FormFactory $formFactory,
-        private readonly PageRepository $pageRepository,
-        private readonly RequestStack $request,
-        private readonly TranslatorInterface $translator,
-    )
-    {}
+    private FormFactory $formFactory;
+    private PageRepository $pageRepository;
+    private RequestStack $request;
+    private TranslatorInterface $translator;
+
+    /**
+     * @param FormFactory $formFactory
+     * @param PageRepository $pageRepository
+     * @param RequestStack $request
+     * @param TranslatorInterface $translator
+     */
+    public function __construct(FormFactory $formFactory, PageRepository $pageRepository, RequestStack $request, TranslatorInterface $translator)
+    {
+        $this->formFactory = $formFactory;
+        $this->pageRepository = $pageRepository;
+        $this->request = $request;
+        $this->translator = $translator;
+    }
+
 
     public function __invoke(int $id) : Response
     {

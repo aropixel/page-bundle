@@ -9,10 +9,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class IndexPageAction extends AbstractController
 {
-    public function __construct(
-        private readonly FormFactory $formFactory,
-        private readonly PageRepository $pageRepository,
-    ){}
+    private FormFactory $formFactory;
+    private PageRepository $pageRepository;
+
 
     public function __invoke(string $type) : Response
     {

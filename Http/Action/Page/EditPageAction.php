@@ -14,14 +14,31 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class EditPageAction extends AbstractController
 {
-    public function __construct(
-        private readonly FormFactory $formFactory,
-        private readonly FormFactoryInterface $factory,
-        private readonly PageRepository $pageRepository,
-        private readonly RequestStack $request,
-        private readonly Security $security,
-        private readonly TranslatorInterface $translator,
-    ){}
+    private FormFactory $formFactory;
+    private FormFactoryInterface $factory;
+    private PageRepository $pageRepository;
+    private RequestStack $request;
+    private Security $security;
+    private TranslatorInterface $translator;
+
+    /**
+     * @param FormFactory $formFactory
+     * @param FormFactoryInterface $factory
+     * @param PageRepository $pageRepository
+     * @param RequestStack $request
+     * @param Security $security
+     * @param TranslatorInterface $translator
+     */
+    public function __construct(FormFactory $formFactory, FormFactoryInterface $factory, PageRepository $pageRepository, RequestStack $request, Security $security, TranslatorInterface $translator)
+    {
+        $this->formFactory = $formFactory;
+        $this->factory = $factory;
+        $this->pageRepository = $pageRepository;
+        $this->request = $request;
+        $this->security = $security;
+        $this->translator = $translator;
+    }
+
 
     public function __invoke(int $id) : Response
     {
