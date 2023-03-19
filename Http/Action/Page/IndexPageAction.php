@@ -12,6 +12,16 @@ class IndexPageAction extends AbstractController
     private FormFactory $formFactory;
     private PageRepository $pageRepository;
 
+    /**
+     * @param FormFactory $formFactory
+     * @param PageRepository $pageRepository
+     */
+    public function __construct(FormFactory $formFactory, PageRepository $pageRepository)
+    {
+        $this->formFactory = $formFactory;
+        $this->pageRepository = $pageRepository;
+    }
+
 
     public function __invoke(string $type) : Response
     {

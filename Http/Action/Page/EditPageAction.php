@@ -10,32 +10,33 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class EditPageAction extends AbstractController
 {
+    private AuthorizationCheckerInterface $authorizationChecker;
     private FormFactory $formFactory;
     private FormFactoryInterface $factory;
     private PageRepository $pageRepository;
     private RequestStack $request;
-    private Security $security;
     private TranslatorInterface $translator;
 
     /**
+     * @param AuthorizationCheckerInterface $authorizationChecker
      * @param FormFactory $formFactory
      * @param FormFactoryInterface $factory
      * @param PageRepository $pageRepository
      * @param RequestStack $request
-     * @param Security $security
      * @param TranslatorInterface $translator
      */
-    public function __construct(FormFactory $formFactory, FormFactoryInterface $factory, PageRepository $pageRepository, RequestStack $request, Security $security, TranslatorInterface $translator)
+    public function __construct(AuthorizationCheckerInterface $authorizationChecker, FormFactory $formFactory, FormFactoryInterface $factory, PageRepository $pageRepository, RequestStack $request, TranslatorInterface $translator)
     {
+        $this->authorizationChecker = $authorizationChecker;
         $this->formFactory = $formFactory;
         $this->factory = $factory;
         $this->pageRepository = $pageRepository;
         $this->request = $request;
-        $this->security = $security;
         $this->translator = $translator;
     }
 
@@ -48,7 +49,7 @@ class EditPageAction extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        $isRoleAdmin = $this->security->isGranted('ROLE_HYPER_ADMIN');
+        $isRoleAdmin = $this->authorizationChecker->isGranted('ROLE_HYPER_ADMIN');
 
         $deleteForm = $this->formFactory->createDeleteForm($page);
         $form = $this->factory->createForm($page);
