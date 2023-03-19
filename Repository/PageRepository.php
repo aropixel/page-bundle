@@ -2,7 +2,7 @@
 
 namespace Aropixel\PageBundle\Repository;
 
-use Aropixel\AdminBundle\Repository\PublishableRepository;
+use Aropixel\AdminBundle\Infrastructure\Publication\Repository\PublishableRepository;
 use Aropixel\PageBundle\Entity\Page;
 use Aropixel\PageBundle\Entity\PageInterface;
 use Doctrine\Persistence\ManagerRegistry;
