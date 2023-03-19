@@ -18,7 +18,7 @@
     }
   },
   "require" : {
-    "aropixel/admin-bundle": "^1.2"
+    "aropixel/admin-bundle": "dev-feature/v3/boostrap"
   },
   "scripts": {
     "auto-scripts": {
