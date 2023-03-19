@@ -2,19 +2,19 @@
 
 namespace Aropixel\PageBundle\EventListener;
 
+use Aropixel\AdminBundle\Domain\Media\Image\Crop\CropApplierInterface;
 use Aropixel\AdminBundle\Entity\ImageInterface;
-use Aropixel\AdminBundle\Infrastructure\Media\Image\Crop\CropApplier;
 use Aropixel\PageBundle\Entity\FieldInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
 
 class DoFileCropListener
 {
-    private CropApplier $cropper;
+    private CropApplierInterface $cropper;
 
     /**
      */
-    public function __construct(CropApplier $cropper)
+    public function __construct(CropApplierInterface $cropper)
     {
         $this->cropper = $cropper;
     }
