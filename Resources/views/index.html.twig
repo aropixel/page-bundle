@@ -33,30 +33,43 @@
 
     <table class="table card-table table-vcenter text-nowrap datatable">
         <thead>
-        <tr>
-            <th>Titre</th>
-            <th style="width:200px">Date</th>
-            <th class="no-sort" style="width:150px">Actions</th>
-        </tr>
+            <tr>
+                <th>Titre</th>
+                <th style="width:200px">Date</th>
+                <th class="no-sort" style="width:150px">Actions</th>
+            </tr>
         </thead>
         <tbody>
-        {% for page in pages %}
-            <tr>
-                <td>{{ page.title }}</td>
-                <td>{{ page.createdAt|date('d/m/Y') }}</td>
-                <td>
-                    <div class="btn-icon-group">
-                        <a href="{{ path('aropixel_page_edit', {'type': page.type, 'id': page.id}) }}" title="Modifier"><i class="fas fa-edit"></i></a>
-                        <a class="status" title="{% if page.status == 'online' %}Mettre hors-ligne{% else %}Mettre en ligne{% endif %}"
-                           data-confirm="Êtes-vous certain de vouloir mettre cette page %s ?" data-path="{{ path('aropixel_page_status', {'id': page.id}) }}">
-                            <i class="fas {% if page.status == 'online' %}fa-toggle-on{% else %}fa-toggle-off{% endif %}"></i>
+
+            {% for page in pages %}
+
+                <tr>
+                    <td>
+                        <a href="{{ path('aropixel_page_edit', {'type': page.type, 'id': page.id}) }}">
+                            <span class="state-icon state-icon-{{ page.status }}" title="Mettre {{ page.status == 'online' ? 'en ligne' : 'hors ligne' }}"></span>
+                            {{ page.title }}
                         </a>
-                        <a class="delete" data-confirm="Supprimer la page|Êtes-vous certain de vouloir supprimer cette page ?" title="Supprimer"><i class="fas fa-trash"></i></a>
-                        {{ form(delete_forms[page.id]) }}
-                    </div>
-                </td>
-            </tr>
-        {% endfor %}
+                    </td>
+                    <td>{{ page.createdAt|date('d/m/Y') }}</td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button type="button" class="badge badge-light badge-icon" data-bs-toggle="dropdown" data-boundary="viewport">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end" data-bs-popper="static">
+                                <a href="{{ path('aropixel_page_edit', {'type': page.type, 'id': page.id}) }}" class="dropdown-item has-icon"><i class="fas fa-edit"></i> Modifier</a>
+                                <div class="dropdown-divider"></div>
+                                <a data-confirm="Supprimer la page|Êtes-vous certain de vouloir supprimer cette page ?" class="delete dropdown-item has-icon text-danger">
+                                    <i class="fas fa-trash"></i> Supprimer
+                                </a>
+                                {{ form(delete_forms[page.id]) }}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+            {% endfor %}
+
         </tbody>
     </table>
 
