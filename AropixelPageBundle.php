@@ -2,7 +2,6 @@
 
 namespace Aropixel\PageBundle;
 
-use Aropixel\AdminBundle\DependencyInjection\Compiler\MenuCompilerPass;
 use Aropixel\PageBundle\DependencyInjection\Compiler\DoctrineTargetEntitiesResolverPass;
 use Aropixel\PageBundle\DependencyInjection\Compiler\PageFormResolverPass;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
@@ -11,7 +10,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class AropixelPageBundle extends Bundle
 {
-    public function build(ContainerBuilder $container)
+    public function build(ContainerBuilder $container) : void
     {
         parent::build($container);
         $container->addCompilerPass(new PageFormResolverPass());
