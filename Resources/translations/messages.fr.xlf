@@ -62,6 +62,18 @@
                 <source>The page has been successfully deleted.</source>
                 <target>La page a bien été supprimée.</target>
             </trans-unit>
+            <trans-unit id="16">
+                <source>Add</source>
+                <target>Ajouter</target>
+            </trans-unit>
+            <trans-unit id="17">
+                <source>New</source>
+                <target>Créer</target>
+            </trans-unit>
+            <trans-unit id="18">
+                <source>Created on</source>
+                <target>Date de création</target>
+            </trans-unit>
 
         </body>
     </file>
