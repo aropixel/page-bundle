@@ -44,15 +44,20 @@
             <tr>
                 <td>{{ page.title }}</td>
                 <td>{{ page.createdAt|date('d/m/Y') }}</td>
-                <td>
-                    <div class="btn-icon-group">
-                        <a href="{{ path('aropixel_page_edit', {'type': page.type, 'id': page.id}) }}" title="{% trans %}Edit{% endtrans %}"><i class="fas fa-edit"></i></a>
-                        <a class="status" title="{% if page.status == 'online' %}{% trans %}Put offline{% endtrans %}{% else %}{% trans %}Put online{% endtrans %}{% endif %}"
-                           data-confirm="{% trans %}Are you sure you want to put this page{% endtrans %} %s ?" data-path="{{ path('aropixel_page_status', {'id': page.id}) }}">
-                            <i class="fas {% if page.status == 'online' %}fa-toggle-on{% else %}fa-toggle-off{% endif %}"></i>
-                        </a>
-                        <a class="delete" data-confirm="Supprimer la page|Êtes-vous certain de vouloir supprimer cette page ?" title="{% trans %}Delete{% endtrans %}"><i class="fas fa-trash"></i></a>
-                        {{ form(delete_forms[page.id]) }}
+                <td class="text-right">
+                    <div class="btn-group">
+                        <button type="button" class="badge badge-light badge-icon" data-bs-toggle="dropdown" data-boundary="viewport">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end" data-bs-popper="static">
+                            <a href="{{ path('aropixel_page_edit', {'type': page.type, 'id': page.id}) }}" class="dropdown-item has-icon"><i class="fas fa-edit"></i> Modifier</a>
+                            <a class="dropdown-item has-icon status" data-confirm="Êtes-vous certain de vouloir mettre cette page %s ?" data-path="{{ path('aropixel_page_status', {'id': page.id}) }}"><i class="fas fa-toggle-on"></i>{{ page.status == 'online' ? 'Mettre hors ligne' : 'Mettre en ligne' }}</a></li>
+                            <div class="dropdown-divider"></div>
+                            <a data-confirm="Êtes-vous certain de vouloir supprimer cette page ?" class="delete dropdown-item has-icon text-danger">
+                                <i class="fas fa-trash"></i> Supprimer
+                            </a>
+                            {{ form(delete_forms[page.id]) }}
+                        </div>
                     </div>
                 </td>
             </tr>
