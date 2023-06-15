@@ -45,8 +45,8 @@
 
                 <tr>
                     <td>
-                        <a href="{{ path('aropixel_page_edit', {'type': page.type, 'id': page.id}) }}">
-                            <span class="state-icon state-icon-{{ page.status }}" title="Mettre {{ page.status == 'online' ? 'en ligne' : 'hors ligne' }}"></span>
+                        <a class="d-flex align-items-center" href="{{ path('aropixel_page_edit', {'type': page.type, 'id': page.id}) }}">
+                            <span class="state-icon state-icon-{{ page.status }} me-2" title="Mettre {{ page.status == 'online' ? 'en ligne' : 'hors ligne' }}"></span>
                             {{ page.title }}
                         </a>
                     </td>
