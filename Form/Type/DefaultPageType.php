@@ -51,6 +51,7 @@ class DefaultPageType extends AbstractPageType
             ->add('excerpt', null, array('label'  => 'Chapeau'))
             ->add('description', TextareaType::class, array('label'  => 'Description', 'attr' => array('class' => 'ckeditor')))
             ->add('image', ImageType::class, [
+                'label' => 'Image principale',
                 'data_class' => $fieldClass,
                 'data_value' => 'value',
                 'library' => self::class
