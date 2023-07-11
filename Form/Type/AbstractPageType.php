@@ -59,17 +59,17 @@ abstract class AbstractPageType extends AbstractType implements PageFormTypeInte
     {
         if ($builder->getData() && $builder->getData()->getType()=='default') {
             $builder
-                ->add('title', TextType::class, array('label'  => 'Titre de la page'))
-                ->add('slug', TextType::class, array('label'  => 'Permalien'))
+                ->add('title', TextType::class, ['label'  => 'Titre de la page'])
+                ->add('slug', TextType::class, ['label'  => 'Permalien', 'required' => false])
             ;
         }
 
 
         // Si le titre n'est pas autorisé et qu'on est pas super admin,
         $builder
-            ->add('metaTitle', null, array('label'  => 'Meta title'))
-            ->add('metaDescription', null, array('label'  => 'Meta description'))
-            ->add('metaKeywords', null, array('label'  => 'Meta keywords'))
+            ->add('metaTitle', null, ['label'  => 'Meta title'])
+            ->add('metaDescription', null, ['label'  => 'Meta description'])
+            ->add('metaKeywords', null, ['label'  => 'Meta keywords'])
         ;
 
         $builder

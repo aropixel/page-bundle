@@ -11,16 +11,14 @@
 
 {% block header_elements %}
     {% set baseroute = get_baseroute() %}
-    {% if route_exists(baseroute ~ '_new') %}
-        <a href="{{ path(baseroute ~ '_new', {'type': type}) }}" class="fa-stack" data-toggle="tooltip" data-placement="bottom" title="Nouveau">
-            <i class="fas fa-circle fa-stack-2x"></i>
-            <i class="fas fa-plus fa-stack-1x fa-inverse"></i>
+    {% if route_exists(baseroute ~ '_order') %}
+        <a href="{{ path(baseroute ~ '_order') }}" class="btn btn-small btn-default">
+            <i class="fas fa-arrows-alt me-2"></i> Organiser
         </a>
     {% endif %}
-    {% if route_exists(baseroute ~ '_order') %}
-        <a href="{{ path(baseroute ~ '_order') }}" class="fa-stack" data-toggle="tooltip" data-placement="bottom" title="Réorganiser">
-            <i class="fas fa-circle fa-stack-2x"></i>
-            <i class="fas fa-arrows-alt fa-stack-1x fa-inverse"></i>
+    {% if app.request.get('_route') != baseroute ~ '_new' and route_exists(baseroute ~ '_new') %}
+        <a href="{{ path(baseroute ~ '_new', {'type': type}) }}" class="btn btn-small btn-primary">
+            <i class="fas fa-plus me-2"></i> Créer
         </a>
     {% endif %}
 {% endblock %}
@@ -34,9 +32,10 @@
     <table class="table card-table table-vcenter text-nowrap datatable">
         <thead>
             <tr>
+                <th class="no-sort" style="width: 100px"></th>
                 <th>Titre</th>
-                <th style="width:200px">Date</th>
-                <th class="no-sort" style="width:150px">Actions</th>
+                <th>Date</th>
+                <th class="no-sort" style="width:100px">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -45,8 +44,14 @@
 
                 <tr>
                     <td>
+                        {% set webPath = page|field('image') ? 'images/' ~ page|field('image') : null %}
+                        <a class="position-relative" href="{{ path('aropixel_page_edit', {'type': page.type, 'id': page.id}) }}">
+                            <img class="img-rounded rounded-3" src="{{ webPath | aropixel_imagine_filter('admin_thumbnail') }}" height="60" />
+                            <span class="img-state-icon img-state-icon--{{ page.status }}" title="{{ page.status == 'online' ? "En ligne" : "Hors ligne" }}"></span>
+                        </a>
+                    </td>
+                    <td>
                         <a class="d-flex align-items-center" href="{{ path('aropixel_page_edit', {'type': page.type, 'id': page.id}) }}">
-                            <span class="state-icon state-icon-{{ page.status }} me-2" title="Mettre {{ page.status == 'online' ? 'en ligne' : 'hors ligne' }}"></span>
                             {{ page.title }}
                         </a>
                     </td>
