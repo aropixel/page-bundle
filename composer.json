@@ -18,7 +18,7 @@
     }
   },
   "require" : {
-    "aropixel/admin-bundle": "^1.2"
+    "aropixel/admin-bundle": "dev-release/v3.0.0"
   },
   "scripts": {
     "auto-scripts": {
