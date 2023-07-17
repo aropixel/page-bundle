@@ -2,10 +2,10 @@
 
 namespace Aropixel\PageBundle\Http\Action\Page;
 
+use Aropixel\PageBundle\Entity\PageInterface;
 use Aropixel\PageBundle\Form\FormFactoryInterface;
 use Aropixel\PageBundle\Http\Form\Page\FormFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Aropixel\PageBundle\Entity\Page;
 use Aropixel\PageBundle\Repository\PageRepository;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,11 +20,13 @@ class CreatePageAction extends AbstractController
 
     ){}
 
-    private string $model = Page::class;
-
     public function __invoke(string $type) : Response
     {
-        $page = new $this->model();
+
+        $entities = $this->getParameter('aropixel_page.entities');
+        $entityName = $entities[PageInterface::class];
+
+        $page = new $entityName();
         $page->setType($type);
 
         $form = $this->factory->createForm($page);
@@ -34,12 +36,14 @@ class CreatePageAction extends AbstractController
             $this->pageRepository->add($page, true);
 
             $this->addFlash('notice', 'La page a bien été enregistrée.');
-            return $this->redirectToRoute('aropixel_page_edit', array('type' => $page->getType(), 'id' => $page->getId()));
+            return $this->redirectToRoute('aropixel_page_edit', ['type' => $page->getType(), 'id' => $page->getId()]);
         }
 
         return $this->render($this->formFactory->getTemplatePath().'/'.$type.'/form.html.twig', [
             'page' => $page,
             'form' => $form->createView(),
         ]);
+
     }
+
 }
