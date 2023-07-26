@@ -1,6 +1,6 @@
 {% extends '@AropixelAdmin/List/datatable.html.twig' %}
 
-{% block header_title %}Pages <span>Administrez les pages de votre site</span>{% endblock %}
+{% block header_title %}Administrez les pages de votre site{% endblock %}
 {% block header_breadcrumb %}
     <ul class="breadcrumb breadcrumb-caret position-right">
         <li class="breadcrumb-item"><a href="{{ url('_admin') }}">Accueil</a></li>
@@ -9,7 +9,7 @@
 {% endblock %}
 
 
-{% block header_elements %}
+{% block header_top_right %}
     {% set baseroute = get_baseroute() %}
     {% if route_exists(baseroute ~ '_order') %}
         <a href="{{ path(baseroute ~ '_order') }}" class="btn btn-small btn-default">
