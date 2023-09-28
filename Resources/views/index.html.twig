@@ -67,7 +67,9 @@
                                 <a data-confirm="Supprimer la page|Êtes-vous certain de vouloir supprimer cette page ?" class="delete dropdown-item has-icon text-danger">
                                     <i class="fas fa-trash"></i> Supprimer
                                 </a>
-                                {{ form(delete_forms[page.id]) }}
+                                <form method="post" action="{{ path('aropixel_page_delete', {'id': page.id}) }}">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete__' ~ page.type ~ '_page' ~ page.id) }}">
+                                </form>
                             </div>
                         </div>
                     </td>
