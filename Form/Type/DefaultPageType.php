@@ -58,12 +58,14 @@ class DefaultPageType extends AbstractPageType
             ])
             ->add('status', HiddenType::class)
             ->add('createdAt', DateTimeType::class, array(
+                'label' => "Créé le",
                 'required' => false,
                 'date_widget' => 'single_text',
                 'time_widget' => 'single_text',
                 'date_format' => 'yyyy-MM-dd',
             ))
             ->add('publishAt', null, array(
+                'label' => "Publié le",
                 'required' => false,
                 'date_widget' => 'single_text',
                 'time_widget' => 'single_text',
@@ -71,6 +73,7 @@ class DefaultPageType extends AbstractPageType
                 'years' => range(date('Y') - 50, date('Y') + 50),
             ))
             ->add('publishUntil', null, array(
+                'label' => "Jusqu'au",
                 'required' => false,
                 'date_widget' => 'single_text',
                 'time_widget' => 'single_text',
