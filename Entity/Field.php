@@ -6,30 +6,38 @@ use Aropixel\AdminBundle\Entity\CropInterface;
 use Aropixel\AdminBundle\Entity\CroppableInterface;
 use Aropixel\AdminBundle\Entity\Image;
 use Aropixel\AdminBundle\Entity\ImageInterface;
+use Aropixel\PageBundle\Repository\FieldRepository;
+use Doctrine\ORM\Mapping as ORM;
 
 
+#[ORM\MappedSuperclass]
+#[ORM\Table(name: "aropixel_page_field")]
+#[ORM\Entity(repositoryClass: FieldRepository::class)]
 class Field implements FieldInterface, ImageInterface, CroppableInterface
 {
 
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: "AUTO")]
     private ?int $id = null;
 
-    /**
-     * Field name in the form (can be composed, for collections). Ex : "excerpt", "title", "slideshow.0", "slideshow.1"
-     */
+    #[ORM\Column(name: "code", type: "string", length: 100)]
     private string $code;
 
-    /**
-     * Symfony Form Type of the field : TextType, TextareaType, ImageType
-     */
+    #[ORM\Column(name: "form_type", type: "string", length: 100, nullable: true)]
     private string $formType;
 
+    #[ORM\Column(name: "value", type: "text", nullable: true)]
     private ?string $value = null;
 
+    #[ORM\Column(name: "attributes", type: "json", nullable: true)]
     private ?array $attributes = null;
 
+    #[ORM\Column(name: "crops", type: "json", nullable: true)]
     private ?array $crops = null;
 
-    private ?Page $page = null;
+    #[ORM\ManyToOne(targetEntity: PageInterface::class, inversedBy: "fields")]
+    #[ORM\JoinColumn(name: "page_id", referencedColumnName: "id", onDelete: "CASCADE")]
+    private ?PageInterface $page = null;
 
 
 

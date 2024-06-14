@@ -25,6 +25,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
+use Traversable;
 
 /**
  * Maps arrays/objects to/from forms using property paths.
@@ -54,7 +55,7 @@ class PageFieldDataMapper implements DataMapperInterface
      * Give data values to form when form is loaded
      * @param Page|null $data
      */
-    public function mapDataToForms($data, $forms)
+    public function mapDataToForms($data, Traversable $forms) : void
     {
         $empty = null === $data || [] === $data;
 
@@ -189,7 +190,7 @@ class PageFieldDataMapper implements DataMapperInterface
     /**
      * Give form values to data when form is submitted
      */
-    public function mapFormsToData($forms, &$data)
+    public function mapFormsToData(Traversable $forms, &$viewData): void
     {
         if (null === $data) {
             return;
