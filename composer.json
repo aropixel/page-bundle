@@ -18,7 +18,7 @@
     }
   },
   "require" : {
-    "aropixel/admin-bundle": "dev-release/v3.0.0|dev-main"
+    "aropixel/admin-bundle": "dev-release/symfony7|dev-main"
   },
   "scripts": {
     "auto-scripts": {
