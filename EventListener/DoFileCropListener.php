@@ -3,7 +3,7 @@
 namespace Aropixel\PageBundle\EventListener;
 
 use Aropixel\AdminBundle\Domain\Media\Image\Crop\CropApplierInterface;
-use Aropixel\AdminBundle\Entity\ImageInterface;
+use Aropixel\AdminBundle\Entity\AttachedImageInterface;
 use Aropixel\PageBundle\Entity\FieldInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
@@ -38,7 +38,7 @@ class DoFileCropListener
         //
         if ($entity instanceof FieldInterface) {
 
-            /** @var ImageInterface $entity */
+            /** @var AttachedImageInterface $entity */
             $fileName = $entity->getFilename();
             if (is_null($fileName))    return;
 

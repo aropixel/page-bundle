@@ -5,7 +5,7 @@ namespace Aropixel\PageBundle\Entity;
 use Aropixel\AdminBundle\Entity\CropInterface;
 use Aropixel\AdminBundle\Entity\CroppableInterface;
 use Aropixel\AdminBundle\Entity\Image;
-use Aropixel\AdminBundle\Entity\ImageInterface;
+use Aropixel\AdminBundle\Entity\AttachedImageInterface;
 use Aropixel\PageBundle\Repository\FieldRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\MappedSuperclass]
 #[ORM\Table(name: "aropixel_page_field")]
 #[ORM\Entity(repositoryClass: FieldRepository::class)]
-class Field implements FieldInterface, ImageInterface, CroppableInterface
+class Field implements FieldInterface, AttachedImageInterface, CroppableInterface
 {
 
     #[ORM\Id]
