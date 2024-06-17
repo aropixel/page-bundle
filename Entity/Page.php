@@ -22,6 +22,7 @@ class Page implements PageInterface
 
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: "AUTO")]
+    #[ORM\Column(type: 'integer')]
     protected ?int $id = null;
 
     #[ORM\Column(name: "status", type: "string", length: 20)]

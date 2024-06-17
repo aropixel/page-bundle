@@ -18,6 +18,7 @@ class Field implements FieldInterface, AttachedImageInterface, CroppableInterfac
 
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: "AUTO")]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
     #[ORM\Column(name: "code", type: "string", length: 100)]
