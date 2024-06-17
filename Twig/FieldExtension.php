@@ -18,7 +18,7 @@ class FieldExtension extends AbstractExtension
     public function getFilters()
     {
         return [
-            new TwigFilter('field', [$this, 'getField'])
+            new TwigFilter('field', $this->getField(...))
         ];
     }
 
@@ -34,7 +34,7 @@ class FieldExtension extends AbstractExtension
             try {
                 $value = $propertyAccessor->getValue($pageField, $code);
             }
-            catch (\Exception $e) {
+            catch (\Exception) {
                 $value = $pageField->getValue();
             }
 

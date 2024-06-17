@@ -10,13 +10,10 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 
 class DoFileCropListener
 {
-    private CropApplierInterface $cropper;
-
     /**
      */
-    public function __construct(CropApplierInterface $cropper)
+    public function __construct(private readonly CropApplierInterface $cropper)
     {
-        $this->cropper = $cropper;
     }
 
     public function postUpdate(LifecycleEventArgs $args)

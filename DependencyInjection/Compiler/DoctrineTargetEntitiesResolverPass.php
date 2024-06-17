@@ -17,7 +17,7 @@ class DoctrineTargetEntitiesResolverPass implements CompilerPassInterface
 
         try {
             $resolveTargetEntityListener = $container->findDefinition('doctrine.orm.listeners.resolve_target_entity');
-        } catch (InvalidArgumentException $exception) {
+        } catch (InvalidArgumentException) {
             return;
         }
 

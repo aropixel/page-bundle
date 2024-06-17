@@ -26,15 +26,12 @@ class MappedSuperClassSubscriber implements EventSubscriber
     /** @var RuntimeReflectionService */
     private $reflectionService;
 
-    /** @var array */
-    private $entitiesNames;
-
     /**
      * MapPageBundleSubscriber constructor.
+     * @param mixed[] $entities
      */
-    public function __construct($entities)
+    public function __construct(private $entitiesNames)
     {
-        $this->entitiesNames = $entities;
     }
 
 

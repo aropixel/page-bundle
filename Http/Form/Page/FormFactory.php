@@ -14,7 +14,7 @@ class FormFactory extends AbstractController
     public function createDeleteForm(Page $page) : FormInterface
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('aropixel_page_delete', array('id' => $page->getId())))
+            ->setAction($this->generateUrl('aropixel_page_delete', ['id' => $page->getId()]))
             ->setMethod('DELETE')
             ->getForm()
             ;

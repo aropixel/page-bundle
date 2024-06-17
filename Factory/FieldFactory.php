@@ -14,16 +14,12 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 class FieldFactory
 {
 
-    /** @var ParameterBagInterface */
-    private $parameterBag;
-
     /**
      * FieldFactory constructor.
      * @param ParameterBagInterface $parameterBag
      */
-    public function __construct(ParameterBagInterface $parameterBag)
+    public function __construct(private readonly ParameterBagInterface $parameterBag)
     {
-        $this->parameterBag = $parameterBag;
     }
 
 

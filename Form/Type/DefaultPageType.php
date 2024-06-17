@@ -22,10 +22,6 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class DefaultPageType extends AbstractPageType
 {
-    /** @var array */
-    private $entities;
-
-
     /**
      * DefaultPageType constructor.
      * @param AuthorizationCheckerInterface $securityContext
@@ -33,10 +29,9 @@ class DefaultPageType extends AbstractPageType
      * @param ParameterBagInterface $parameterBag
      * @param array $entities
      */
-    public function __construct(AuthorizationCheckerInterface $securityContext, PageFieldDataMapper $pageFieldDataMapper, ParameterBagInterface $parameterBag, array $entities)
+    public function __construct(AuthorizationCheckerInterface $securityContext, PageFieldDataMapper $pageFieldDataMapper, ParameterBagInterface $parameterBag, private array $entities)
     {
         parent::__construct($securityContext, $pageFieldDataMapper, $parameterBag);
-        $this->entities = $entities;
     }
 
 
@@ -48,8 +43,8 @@ class DefaultPageType extends AbstractPageType
         //
         parent::buildForm($builder, $options);
         $builder
-            ->add('excerpt', null, array('label'  => 'Chapeau'))
-            ->add('description', TextareaType::class, array('label'  => 'Description', 'attr' => array('class' => 'ckeditor')))
+            ->add('excerpt', null, ['label'  => 'Chapeau'])
+            ->add('description', TextareaType::class, ['label'  => 'Description', 'attr' => ['class' => 'ckeditor']])
             ->add('image', ImageType::class, [
                 'label' => 'Image principale',
                 'data_class' => $fieldClass,
@@ -57,29 +52,9 @@ class DefaultPageType extends AbstractPageType
                 'library' => self::class
             ])
             ->add('status', HiddenType::class)
-            ->add('createdAt', DateTimeType::class, array(
-                'label' => "Créé le",
-                'required' => false,
-                'date_widget' => 'single_text',
-                'time_widget' => 'single_text',
-                'date_format' => 'yyyy-MM-dd',
-            ))
-            ->add('publishAt', null, array(
-                'label' => "Publié le",
-                'required' => false,
-                'date_widget' => 'single_text',
-                'time_widget' => 'single_text',
-                'date_format' => 'yyyy-MM-dd',
-                'years' => range(date('Y') - 50, date('Y') + 50),
-            ))
-            ->add('publishUntil', null, array(
-                'label' => "Jusqu'au",
-                'required' => false,
-                'date_widget' => 'single_text',
-                'time_widget' => 'single_text',
-                'date_format' => 'yyyy-MM-dd',
-                'years' => range(date('Y') - 50, date('Y') + 50),
-            ))
+            ->add('createdAt', DateTimeType::class, ['label' => "Créé le", 'required' => false, 'date_widget' => 'single_text', 'time_widget' => 'single_text', 'date_format' => 'yyyy-MM-dd'])
+            ->add('publishAt', null, ['label' => "Publié le", 'required' => false, 'date_widget' => 'single_text', 'time_widget' => 'single_text', 'date_format' => 'yyyy-MM-dd', 'years' => range(date('Y') - 50, date('Y') + 50)])
+            ->add('publishUntil', null, ['label' => "Jusqu'au", 'required' => false, 'date_widget' => 'single_text', 'time_widget' => 'single_text', 'date_format' => 'yyyy-MM-dd', 'years' => range(date('Y') - 50, date('Y') + 50)])
         ;
 
     }

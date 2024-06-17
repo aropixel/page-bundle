@@ -34,20 +34,12 @@ use Traversable;
  */
 class PageFieldDataMapper implements DataMapperInterface
 {
-    /** @var EntityManagerInterface */
-    private $em;
-
-    /** @var FieldFactory */
-    private $fieldFactory;
-
     /** @var PropertyAccessorInterface|null  */
     private $propertyAccessor;
 
 
-    public function __construct(EntityManagerInterface $em, FieldFactory $fieldFactory, PropertyAccessorInterface $propertyAccessor = null)
+    public function __construct(private readonly EntityManagerInterface $em, private readonly FieldFactory $fieldFactory, PropertyAccessorInterface $propertyAccessor = null)
     {
-        $this->em = $em;
-        $this->fieldFactory = $fieldFactory;
         $this->propertyAccessor = $propertyAccessor ?: PropertyAccess::createPropertyAccessor();
     }
 
@@ -81,7 +73,7 @@ class PageFieldDataMapper implements DataMapperInterface
                 }
 
                 // Otherwise, an exception is sent
-                catch (NoSuchPropertyException $e) {
+                catch (NoSuchPropertyException) {
 
                     /**
                      * Then, we iterate each field of the page to check if it map current form field
@@ -156,7 +148,7 @@ class PageFieldDataMapper implements DataMapperInterface
             $last = end($keys);
             $value = $this->propertyAccessor->getValue($field, $last);
         }
-        catch (\Exception $e) {
+        catch (\Exception) {
             // if not, use the value property
             $value = $field->getValue();
         }
@@ -226,7 +218,7 @@ class PageFieldDataMapper implements DataMapperInterface
                 }
 
                 // Otherwise, an exception is sent
-                catch (NoSuchPropertyException $e) {
+                catch (NoSuchPropertyException) {
 
                     // Then we store the value in a Field
                     $this->mapToFieldData($data, $form, $propertyPath, $propertyValue, $mappedFormFields);
@@ -312,11 +304,11 @@ class PageFieldDataMapper implements DataMapperInterface
 
                 //
                 try {
-                    $path = explode('.', $propertyPath);
+                    $path = explode('.', (string) $propertyPath);
                     $fieldPath = end($path);
                     $this->propertyAccessor->setValue($field, $fieldPath, $propertyValue);
                 }
-                catch (\Exception $e) {
+                catch (\Exception) {
                     $field->setValue($propertyValue);
                 }
 

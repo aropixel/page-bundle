@@ -33,7 +33,7 @@ class EditPageAction extends AbstractController
             $this->pageRepository->add($page, true);
 
             $this->addFlash('notice', 'La page a bien été enregistrée.');
-            return $this->redirectToRoute('aropixel_page_edit', array('type' => $page->getType(), 'id' => $page->getId()));
+            return $this->redirectToRoute('aropixel_page_edit', ['type' => $page->getType(), 'id' => $page->getId()]);
         }
 
         return $this->render($this->formFactory->getTemplatePath().'/'.$page->getType().'/form.html.twig', [

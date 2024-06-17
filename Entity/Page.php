@@ -18,7 +18,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Entity(repositoryClass: PageRepository::class)]
 class Page implements PageInterface
 {
-    const TYPE_DEFAULT = 'default';
+    public const TYPE_DEFAULT = 'default';
 
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: "AUTO")]
@@ -118,7 +118,7 @@ class Page implements PageInterface
         try {
             return $propertyAccessor->getValue($this, $key);
         }
-        catch (\Exception $e) {
+        catch (\Exception) {
 
             //
             if (is_null($this->fieldValues)) {

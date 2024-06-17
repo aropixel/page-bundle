@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\MappedSuperclass]
 #[ORM\Table(name: "aropixel_page_field")]
 #[ORM\Entity(repositoryClass: FieldRepository::class)]
-class Field implements FieldInterface, AttachedImageInterface, CroppableInterface
+class Field implements FieldInterface, AttachedImageInterface, CroppableInterface, \Stringable
 {
 
     #[ORM\Id]
@@ -41,7 +41,7 @@ class Field implements FieldInterface, AttachedImageInterface, CroppableInterfac
 
 
 
-    public function __toString()
+    public function __toString(): string
     {
         return !is_null($this->getValue()) ? $this->getValue() : '';
     }
@@ -162,10 +162,9 @@ class Field implements FieldInterface, AttachedImageInterface, CroppableInterfac
     }
 
     /**
-     * @param mixed $attributes
      * @return Field
      */
-    public function setAttributes($attributes)
+    public function setAttributes(mixed $attributes)
     {
         $this->attributes = $attributes;
         return $this;

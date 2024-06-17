@@ -20,13 +20,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 abstract class AbstractPageType extends AbstractType implements PageFormTypeInterface
 {
 
-    const ALL_RIGHTS_MODE = 'ROLE_SUPER_ADMIN';
-
-    /** @var AuthorizationCheckerInterface */
-    private $securityContext;
-
-    /** @var PageFieldDataMapper  */
-    private $pageFieldDataMapper;
+    public const ALL_RIGHTS_MODE = 'ROLE_SUPER_ADMIN';
 
     /** @var string */
     protected $pageClass;
@@ -41,12 +35,8 @@ abstract class AbstractPageType extends AbstractType implements PageFormTypeInte
      * @param PageFieldDataMapper $pageFieldDataMapper
      * @param ParameterBagInterface $parameterBag
      */
-    public function __construct(AuthorizationCheckerInterface $securityContext, PageFieldDataMapper $pageFieldDataMapper, ParameterBagInterface $parameterBag)
+    public function __construct(private readonly AuthorizationCheckerInterface $securityContext, private readonly PageFieldDataMapper $pageFieldDataMapper, ParameterBagInterface $parameterBag)
     {
-        //
-        $this->securityContext = $securityContext;
-        $this->pageFieldDataMapper = $pageFieldDataMapper;
-
         //
         $entities = $parameterBag->get('aropixel_page.entities');
         $this->pageClass = $entities[PageInterface::class];
