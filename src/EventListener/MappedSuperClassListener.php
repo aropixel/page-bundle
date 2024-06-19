@@ -7,9 +7,7 @@
 
 namespace Aropixel\PageBundle\EventListener;
 
-use Aropixel\PageBundle\Entity\Page;
-use Aropixel\PageBundle\Entity\PageInterface;
-use Doctrine\Common\EventSubscriber;
+use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Persistence\Mapping\ReflectionService;
 use Doctrine\Persistence\Mapping\RuntimeReflectionService;
@@ -18,10 +16,9 @@ use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
-use Webmozart\Assert\Assert;
 
 
-class MappedSuperClassSubscriber implements EventSubscriber
+class MappedSuperClassListener
 {
     /** @var RuntimeReflectionService */
     private $reflectionService;
@@ -34,24 +31,16 @@ class MappedSuperClassSubscriber implements EventSubscriber
     {
     }
 
-
-    public function getSubscribedEvents(): array
+    public function loadClassMetadata(LoadClassMetadataEventArgs $args): void
     {
-        return [
-            Events::loadClassMetadata,
-        ];
-    }
-
-    public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs): void
-    {
-        $metadata = $eventArgs->getClassMetadata();
+        $metadata = $args->getClassMetadata();
 
         foreach ($this->entitiesNames as $interface => $model) {
 
             if ($metadata->getName() == $model) {
 
                 if (!$metadata->isMappedSuperclass) {
-                    $this->setAssociationMappings($metadata, $eventArgs->getEntityManager()->getConfiguration());
+                    $this->setAssociationMappings($metadata, $args->getEntityManager()->getConfiguration());
                 }
                 else {
                     $metadata->isMappedSuperclass = false;

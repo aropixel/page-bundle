@@ -11,67 +11,43 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
-
-
-#[ORM\MappedSuperclass]
-#[ORM\Table(name: "aropixel_page")]
-#[ORM\Entity(repositoryClass: PageRepository::class)]
 class Page implements PageInterface
 {
     public const TYPE_DEFAULT = 'default';
 
-    #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: "AUTO")]
-    #[ORM\Column(type: 'integer')]
     protected ?int $id = null;
 
-    #[ORM\Column(name: "status", type: "string", length: 20)]
     protected string $status = Publishable::STATUS_OFFLINE;
 
-    #[ORM\Column(name: "type", type: "string", length: 100)]
     protected string $type;
 
-    #[ORM\Column(name: "code", type: "string", length: 100, nullable: true)]
     protected ?string $code = null;
 
-    #[ORM\Column(name: "title", type: "string", nullable: true)]
     protected ?string $title = null;
 
-    #[ORM\Column(name: "excerpt", type: "text", nullable: true)]
     protected ?string $excerpt = null;
 
-    #[ORM\Column(name: "description", type: "text", nullable: true)]
     protected ?string $description = null;
 
-    #[ORM\Column(name: "slug", type: "string", nullable: true)]
-    #[Gedmo\Slug(fields:['title'])]
-    protected string $slug;
+    protected ?string $slug = null;
 
-    #[ORM\Column(name: "meta_title", type: "string", nullable: true)]
     protected ?string $metaTitle = null;
 
-    #[ORM\Column(name: "meta_description", type: "text", nullable: true)]
     protected ?string $metaDescription = null;
 
-    #[ORM\Column(name: "meta_keywords", type: "text", nullable: true)]
     protected ?string $metaKeywords = null;
 
-    #[ORM\Column(name: "created_at", type: "datetime")]
-    #[Gedmo\Timestampable(on:"create")]
-    protected \DateTimeInterface $createdAt;
+    protected ?\DateTimeInterface $createdAt = null;
 
-    #[ORM\Column(name: "updated_at", type: "datetime", nullable: true)]
-    #[Gedmo\Timestampable(on:"update")]
     protected ?\DateTimeInterface $updatedAt = null;
 
-    #[ORM\Column(name: "publish_at", type: "datetime", nullable: true)]
     protected ?\DateTimeInterface $publishAt = null;
 
-    #[ORM\Column(name: "publish_until", type: "datetime", nullable: true)]
     protected ?\DateTimeInterface $publishUntil = null;
 
-    #[ORM\OneToMany(targetEntity: FieldInterface::class, mappedBy: "page", cascade: ["persist", "remove"])]
     protected Collection $fields;
+
+    protected ?array  $fieldValues = null;
 
     use PublishableTrait;
 

@@ -5,9 +5,15 @@ namespace Aropixel\PageBundle\EventListener;
 use Aropixel\AdminBundle\Domain\Media\Image\Crop\CropApplierInterface;
 use Aropixel\AdminBundle\Entity\AttachedImageInterface;
 use Aropixel\PageBundle\Entity\FieldInterface;
+use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PostPersistEventArgs;
+use Doctrine\ORM\Event\PostUpdateEventArgs;
+use Doctrine\ORM\Events;
 
 
+#[AsDoctrineListener(event: Events::postPersist)]
+#[AsDoctrineListener(event: Events::postUpdate)]
 class DoFileCropListener
 {
     /**
@@ -16,21 +22,19 @@ class DoFileCropListener
     {
     }
 
-    public function postUpdate(LifecycleEventArgs $args)
+    public function postUpdate(PostUpdateEventArgs $args)
     {
         $this->doCrop($args);
     }
 
-    public function postPersist(LifecycleEventArgs $args)
+    public function postPersist(PostPersistEventArgs $args)
     {
         $this->doCrop($args);
     }
 
-    public function doCrop(LifecycleEventArgs $args)
+    private function doCrop(LifecycleEventArgs $args)
     {
-
-        //
-        $entity = $args->getEntity();
+        $entity = $args->getObject();
 
         //
         if ($entity instanceof FieldInterface) {

@@ -20,6 +20,10 @@ services:
 
   Aropixel\PageBundle\Form\FormFactoryInterface: '@aropixel.page.form.factory'
 
+  Aropixel\PageBundle\EventListener\MappedSuperClassListener:
+    arguments: ['%aropixel_page.entities%']
+    tags:
+      - { name: doctrine.event_listener, event: 'loadClassMetadata', priority: 8192 }
 
   Aropixel\PageBundle\Http\:
     resource: '../../Http'
@@ -37,10 +41,3 @@ services:
 
   Aropixel\PageBundle\Twig\FieldExtension:
       tags: ['twig.extension']
-
-
-  Aropixel\PageBundle\EventListener\DoFileCropListener:
-    arguments: ['@Aropixel\AdminBundle\Domain\Media\Image\Crop\CropApplierInterface']
-    tags:
-      - { name: doctrine.event_listener, event: postPersist }
-      - { name: doctrine.event_listener, event: postUpdate }

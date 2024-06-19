@@ -47,12 +47,12 @@ class PageFieldDataMapper implements DataMapperInterface
      * Give data values to form when form is loaded
      * @param Page|null $data
      */
-    public function mapDataToForms($data, Traversable $forms) : void
+    public function mapDataToForms(mixed $viewData, \Traversable $forms): void
     {
-        $empty = null === $data || [] === $data;
+        $empty = null === $viewData || [] === $viewData;
 
-        if (!$empty && !\is_array($data) && !\is_object($data)) {
-            throw new UnexpectedTypeException($data, 'object, array or empty');
+        if (!$empty && !\is_array($viewData) && !\is_object($viewData)) {
+            throw new UnexpectedTypeException($viewData, 'object, array or empty');
         }
 
         $formValues = [];
@@ -68,7 +68,7 @@ class PageFieldDataMapper implements DataMapperInterface
 
                 // If current form field really map a page field entity, it's OK
                 try {
-                    $value = $this->propertyAccessor->getValue($data, $propertyPath);
+                    $value = $this->propertyAccessor->getValue($viewData, $propertyPath);
                     $form->setData($value);
                 }
 
@@ -79,7 +79,7 @@ class PageFieldDataMapper implements DataMapperInterface
                      * Then, we iterate each field of the page to check if it map current form field
                      * @var Field $field
                      */
-                    foreach ($data->getFields() as $field) {
+                    foreach ($viewData->getFields() as $field) {
 
                         $keys = explode('.', $field->getCode());
                         if (current($keys) == $propertyPath) {
@@ -182,14 +182,14 @@ class PageFieldDataMapper implements DataMapperInterface
     /**
      * Give form values to data when form is submitted
      */
-    public function mapFormsToData(Traversable $forms, &$viewData): void
+    public function mapFormsToData(\Traversable $forms, mixed &$viewData): void
     {
-        if (null === $data) {
+        if (null === $viewData) {
             return;
         }
 
-        if (!\is_array($data) && !\is_object($data)) {
-            throw new UnexpectedTypeException($data, 'object, array or empty');
+        if (!\is_array($viewData) && !\is_object($viewData)) {
+            throw new UnexpectedTypeException($viewData, 'object, array or empty');
         }
 
         $mappedFormFields = [];
@@ -213,7 +213,7 @@ class PageFieldDataMapper implements DataMapperInterface
 
                 // If the form field effectively map a page field, it's OK
                 try {
-                    $this->propertyAccessor->setValue($data, $propertyPath, $propertyValue);
+                    $this->propertyAccessor->setValue($viewData, $propertyPath, $propertyValue);
                     $mappedFormFields[] = (string)$propertyPath;
                 }
 
@@ -221,7 +221,7 @@ class PageFieldDataMapper implements DataMapperInterface
                 catch (NoSuchPropertyException) {
 
                     // Then we store the value in a Field
-                    $this->mapToFieldData($data, $form, $propertyPath, $propertyValue, $mappedFormFields);
+                    $this->mapToFieldData($viewData, $form, $propertyPath, $propertyValue, $mappedFormFields);
 
                 }
             }
@@ -237,7 +237,7 @@ class PageFieldDataMapper implements DataMapperInterface
                     $field->setFormType($type);
 
                     /** @var PageInterface $page */
-                    $page = $data;
+                    $page = $viewData;
 
                     if (!$field->getPage()) {
                         $page->addField($field);
@@ -249,7 +249,7 @@ class PageFieldDataMapper implements DataMapperInterface
         }
 
         /** @var FieldInterface $field */
-        foreach ($data->getFields() as $field) {
+        foreach ($viewData->getFields() as $field) {
             if (!in_array($field->getCode(), $mappedFormFields)) {
                 $this->em->remove($field);
                 $this->em->flush();
