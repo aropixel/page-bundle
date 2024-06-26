@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" target-language="en" datatype="plaintext" original="file.ext">
+    <header>
+      <tool tool-id="symfony" tool-name="Symfony"/>
+    </header>
+    <body>
+      <trans-unit id="xjqJYOJ" resname="pages.title">
+        <source>pages.title</source>
+        <target>Pages</target>
+      </trans-unit>
+      <trans-unit id="MEgEMng" resname="text.list">
+        <source>text.list</source>
+        <target>List</target>
+      </trans-unit>
+      <trans-unit id="7p1PCbD" resname="text.create">
+        <source>text.create</source>
+        <target>Create</target>
+      </trans-unit>
+      <trans-unit id="igmwK8E" resname="text.dashboard">
+        <source>text.dashboard</source>
+        <target>Dashboard</target>
+      </trans-unit>
+      <trans-unit id=".cJ8GU_" resname="text.edit">
+        <source>text.edit</source>
+        <target>Edit</target>
+      </trans-unit>
+      <trans-unit id="acrIEkB" resname="page.form.content">
+        <source>page.form.content</source>
+        <target>Content</target>
+      </trans-unit>
+      <trans-unit id="7rueTqP" resname="page.form.image">
+        <source>page.form.image</source>
+        <target>Images</target>
+      </trans-unit>
+      <trans-unit id="N7dPGEy" resname="page.form.seo">
+        <source>page.form.seo</source>
+        <target>SEO</target>
+      </trans-unit>
+      <trans-unit id="vkfsCdn" resname="pages.title.description">
+        <source>pages.title.description</source>
+        <target>Edit your website pages</target>
+      </trans-unit>
+      <trans-unit id="xHrbKiG" resname="text.reorder">
+        <source>text.reorder</source>
+        <target>Reorder</target>
+      </trans-unit>
+      <trans-unit id="FyoPdd9" resname="page.text.list">
+        <source>page.text.list</source>
+        <target>List of pages</target>
+      </trans-unit>
+      <trans-unit id="NNP31tP" resname="text.actions">
+        <source>text.actions</source>
+        <target>Actions</target>
+      </trans-unit>
+      <trans-unit id="uohJbCo" resname="status.published">
+        <source>status.published</source>
+        <target>Published</target>
+      </trans-unit>
+      <trans-unit id="sIWTG7_" resname="status.offline">
+        <source>status.offline</source>
+        <target>Offline</target>
+      </trans-unit>
+      <trans-unit id="VqGIGJq" resname="pages.list.delete_warning">
+        <source>pages.list.delete_warning</source>
+        <target>Are you sure you want to delete this page ?</target>
+      </trans-unit>
+      <trans-unit id="NGuUr2n" resname="form.delete">
+        <source>form.delete</source>
+        <target>Delete</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

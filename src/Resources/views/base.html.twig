@@ -1,6 +1,6 @@
 {% extends '@AropixelAdmin/Form/base.html.twig' %}
 
-{% block header_title %}Pages{% endblock %}
+{% block header_title %}{% trans %}pages.title{% endtrans %}{% endblock %}
 {% block header_breadcrumb %}{% endblock %}
 
 
@@ -8,12 +8,12 @@
     {% set baseroute = get_baseroute() %}
     {% if page and route_exists(baseroute ~ '_index')  %}
         <a href="{{ path(baseroute ~ '_index', {type: page.type}) }}" class="btn btn-small btn-default">
-            <i class="fas fa-list me-2"></i> Liste
+            <i class="fas fa-list me-2"></i> {% trans %}text.list{% endtrans %}
         </a>
     {% endif %}
     {% if app.request.get('_route') != baseroute ~ '_new' and route_exists(baseroute ~ '_new') %}
         <a href="{{ path(baseroute ~ '_new', {'type': page.type}) }}" class="btn btn-small btn-primary ms-3">
-            <i class="fas fa-plus me-2"></i> Créer
+            <i class="fas fa-plus me-2"></i> {% trans %}text.create{% endtrans %}
         </a>
     {% endif %}
 {% endblock %}
