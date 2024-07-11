@@ -7,7 +7,8 @@
 
 namespace Aropixel\PageBundle\EventListener;
 
-use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
+
+use Doctrine\Common\EventSubscriber;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Persistence\Mapping\ReflectionService;
 use Doctrine\Persistence\Mapping\RuntimeReflectionService;
@@ -15,50 +16,75 @@ use Doctrine\ORM\Configuration;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Webmozart\Assert\Assert;
 
 
 class MappedSuperClassListener
 {
-    /** @var RuntimeReflectionService */
-    private $reflectionService;
 
-    /**
-     * MapPageBundleSubscriber constructor.
-     * @param mixed[] $entities
-     */
-    public function __construct(private $entitiesNames)
-    {
+    const TRANSLATABLE_ENTITIES = [
+        'Aropixel\PageBundle\Entity\PageTranslatable',
+        'Aropixel\PageBundle\Entity\PageTranslation',
+        'Aropixel\PageBundle\Entity\FieldTranslatable',
+        'Aropixel\PageBundle\Entity\FieldTranslation',
+    ];
+
+    private RuntimeReflectionService $reflectionService;
+    private array $entitiesNames;
+
+
+    public function __construct(
+        $entities,
+        protected readonly ParameterBagInterface $parameterBag
+    ){
+        $this->entitiesNames = $entities;
     }
 
-    public function loadClassMetadata(LoadClassMetadataEventArgs $args): void
+    public function getSubscribedEvents(): array
     {
-        $metadata = $args->getClassMetadata();
+        return [
+            Events::loadClassMetadata,
+        ];
+    }
+
+    public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs): void
+    {
+        $metadata = $eventArgs->getClassMetadata();
 
         foreach ($this->entitiesNames as $interface => $model) {
 
-            if ($metadata->getName() == $model) {
+            $isTranslatable = $this->parameterBag->has('translatable') && $this->parameterBag->get('translatable');
+
+            if (!$isTranslatable && in_array($metadata->getName(), self::TRANSLATABLE_ENTITIES)) {
+
+                $this->unsetAssociationMappings($metadata);
+
+            } elseif ($metadata->getName() == $model) {
 
                 if (!$metadata->isMappedSuperclass) {
-                    $this->setAssociationMappings($metadata, $args->getEntityManager()->getConfiguration());
+                    $this->setAssociationMappings($metadata, $eventArgs->getEntityManager()->getConfiguration());
                 }
                 else {
                     $metadata->isMappedSuperclass = false;
                 }
 
-            }
-            else {
+            } else {
+
                 if (in_array($interface, class_implements($metadata->getName()))) {
                     $this->unsetAssociationMappings($metadata);
                 }
+
             }
+
         }
 
     }
 
-    private function setAssociationMappings(ClassMetadataInfo $metadata, Configuration $configuration): void
+    private function setAssociationMappings(ClassMetadata $metadata, Configuration $configuration): void
     {
         $class = $metadata->getName();
+
         if (!class_exists($class)) {
             return;
         }
@@ -92,7 +118,7 @@ class MappedSuperClassListener
         }
     }
 
-    private function unsetAssociationMappings(ClassMetadataInfo $metadata): void
+    private function unsetAssociationMappings(ClassMetadata $metadata): void
     {
         foreach ($metadata->getAssociationMappings() as $key => $value) {
             if ($this->isRelation($value['type'])) {
@@ -106,9 +132,9 @@ class MappedSuperClassListener
         return in_array(
             $type,
             [
-                ClassMetadataInfo::MANY_TO_MANY,
-                ClassMetadataInfo::ONE_TO_MANY,
-                ClassMetadataInfo::ONE_TO_ONE,
+                ClassMetadata::MANY_TO_MANY,
+                ClassMetadata::ONE_TO_MANY,
+                ClassMetadata::ONE_TO_ONE,
             ],
             true
         );

@@ -7,6 +7,7 @@ use Aropixel\PageBundle\Form\FormFactoryInterface;
 use Aropixel\PageBundle\Http\Form\Page\FormFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Aropixel\PageBundle\Repository\PageRepository;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -17,14 +18,19 @@ class CreatePageAction extends AbstractController
         private readonly FormFactoryInterface $factory,
         private readonly RequestStack $request,
         private readonly PageRepository $pageRepository,
-
+        private readonly ParameterBagInterface $parameterBag
     ){}
 
     public function __invoke(string $type) : Response
     {
+        $isTranslatable = $this->parameterBag->has('translatable') && $this->parameterBag->get('translatable');
 
         $entities = $this->getParameter('aropixel_page.entities');
         $entityName = $entities[PageInterface::class];
+
+        if ($isTranslatable) {
+            $type = 'default_translatable';
+        }
 
         $page = new $entityName();
         $page->setType($type);
@@ -42,6 +48,7 @@ class CreatePageAction extends AbstractController
         return $this->render($this->formFactory->getTemplatePath().'/'.$type.'/form.html.twig', [
             'page' => $page,
             'form' => $form->createView(),
+            'isTranslatable' => $isTranslatable
         ]);
 
     }

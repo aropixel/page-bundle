@@ -4,14 +4,15 @@ namespace Aropixel\PageBundle\Repository;
 
 use Aropixel\PageBundle\Entity\Page;
 use Aropixel\PageBundle\Entity\PageInterface;
+use Aropixel\PageBundle\Entity\PageTranslatable;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
- * @method Page|null find($id, $lockMode = null, $lockVersion = null)
- * @method Page|null findOneBy(array $criteria, array $orderBy = null)
- * @method Page[]    findAll()
- * @method Page[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Page|PageTranslatable|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Page|PageTranslatable|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Page|PageTranslatable[]    findAll()
+ * @method Page|PageTranslatable[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class PageRepository extends \Aropixel\AdminBundle\Infrastructure\Publication\Repository\PublishableRepository
 {
@@ -22,11 +23,7 @@ class PageRepository extends \Aropixel\AdminBundle\Infrastructure\Publication\Re
     }
 
 
-    /**
-     * @param $type
-     * @return Page Returns an array of Page objects
-     */
-    public function findPage($type)
+    public function findPage($type): Page|PageTranslatable|null
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.type = :type')
@@ -37,9 +34,6 @@ class PageRepository extends \Aropixel\AdminBundle\Infrastructure\Publication\Re
     }
 
 
-    // /**
-    //  * @return Page[] Returns an array of Page objects
-    //  */
     public function findPages($type)
     {
         return $this->createQueryBuilder('p')
@@ -50,7 +44,7 @@ class PageRepository extends \Aropixel\AdminBundle\Infrastructure\Publication\Re
             ;
     }
 
-    public function add(Page $page, bool $flush = false): void
+    public function add(Page|PageTranslatable $page, bool $flush = false): void
     {
         $this->getEntityManager()->persist($page);
 
@@ -59,7 +53,7 @@ class PageRepository extends \Aropixel\AdminBundle\Infrastructure\Publication\Re
         }
     }
 
-    public function remove(Page $page, bool $flush = false) : void
+    public function remove(Page|PageTranslatable $page, bool $flush = false) : void
     {
         $this->getEntityManager()->remove($page);
 
@@ -68,17 +62,4 @@ class PageRepository extends \Aropixel\AdminBundle\Infrastructure\Publication\Re
         }
     }
 
-
-
-    /*
-    public function findOneBySomeField($value): ?Page
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

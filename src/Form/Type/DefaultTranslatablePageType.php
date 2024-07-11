@@ -3,7 +3,9 @@
 namespace Aropixel\PageBundle\Form\Type;
 
 use Aropixel\AdminBundle\Form\Type\Image\Single\ImageType;
+use Aropixel\AdminBundle\Form\Type\TranslatableType;
 use Aropixel\PageBundle\Entity\FieldInterface;
+use Aropixel\PageBundle\Entity\PageTranslation;
 use Aropixel\PageBundle\Form\DataMapper\PageFieldDataMapper;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
@@ -13,8 +15,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 
-class DefaultPageType extends AbstractPageType
+class DefaultTranslatablePageType extends AbstractPageType
 {
+
     public function __construct(
         protected readonly AuthorizationCheckerInterface $securityContext,
         protected readonly PageFieldDataMapper $pageFieldDataMapper,
@@ -30,9 +33,20 @@ class DefaultPageType extends AbstractPageType
         $fieldClass = $this->entities[FieldInterface::class];
 
         parent::buildForm($builder, $options);
+
         $builder
-            ->add('excerpt', null, ['label'  => 'Chapeau'])
-            ->add('description', TextareaType::class, ['label'  => 'Description', 'attr' => ['class' => 'ckeditor']])
+            ->add('excerpt', TranslatableType::class, [
+                'label'                => 'Chapeau',
+                'personal_translation' => PageTranslation::class,
+                'property_path'        => 'translations'
+            ])
+            ->add('description', TranslatableType::class, [
+                'label'                => 'Description',
+                'personal_translation' => PageTranslation::class,
+                'property_path'        => 'translations',
+                'widget' => TextareaType::class,
+                'attr' => ['class' => 'ckeditor']
+            ])
             ->add('image', ImageType::class, [
                 'label' => 'Image principale',
                 'data_class' => $fieldClass,
@@ -69,7 +83,7 @@ class DefaultPageType extends AbstractPageType
 
     public function getType(): string
     {
-        return 'default';
+        return 'default_translatable';
     }
 
 

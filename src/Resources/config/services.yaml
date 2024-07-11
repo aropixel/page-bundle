@@ -21,7 +21,7 @@ services:
   Aropixel\PageBundle\Form\FormFactoryInterface: '@aropixel.page.form.factory'
 
   Aropixel\PageBundle\EventListener\MappedSuperClassListener:
-    arguments: ['%aropixel_page.entities%']
+    arguments: ['%aropixel_page.entities%', '@parameter_bag']
     tags:
       - { name: doctrine.event_listener, event: 'loadClassMetadata', priority: 8192 }
 
@@ -33,6 +33,11 @@ services:
     class: '%aropixel_page.form.default%'
     arguments: ['@security.authorization_checker', '@Aropixel\PageBundle\Form\DataMapper\PageFieldDataMapper', '@parameter_bag', '%aropixel_page.entities%']
     tags: ['aropixel.page.form']
+
+  aropixel.page.form.default_translatable:
+    class: '%aropixel_page.form.default_translatable%'
+    arguments: [ '@security.authorization_checker', '@Aropixel\PageBundle\Form\DataMapper\PageFieldDataMapper', '@parameter_bag', '%aropixel_page.entities%' ]
+    tags: [ 'aropixel.page.form' ]
 
   Aropixel\PageBundle\Repository\:
     resource: '../../Repository'
