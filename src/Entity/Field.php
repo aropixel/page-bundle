@@ -24,52 +24,34 @@ class Field implements FieldInterface, AttachedImageInterface, CroppableInterfac
     private ?PageInterface $page = null;
 
 
-
     public function __toString(): string
     {
         return !is_null($this->getValue()) ? $this->getValue() : '';
     }
 
-
-    /**
-     * @return ?int
-     */
     public function getId() : ?int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     * @return Field
-     */
-    public function setId(int $id): Field
+    public function setId(int $id): self
     {
         $this->id = $id;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getCode(): string
     {
         return $this->code;
     }
 
-    /**
-     * @return string
-     */
     public function getRootKey(): string
     {
         $codes = explode('.', $this->code);
         return current($codes);
     }
 
-    /**
-     * @return string
-     */
-    public function getExplodedValue($keys=null, $value=null)
+    public function getExplodedValue($keys = null, $value = null): string
     {
         if (is_null($keys)) {
             $keys = explode('.', $this->code);
@@ -93,106 +75,67 @@ class Field implements FieldInterface, AttachedImageInterface, CroppableInterfac
     }
 
 
-    /**
-     * @return string
-     */
-    public function getFormType()
+    public function getFormType(): string
     {
         return $this->formType;
     }
 
-    /**
-     * @param string $formType
-     * @return Field
-     */
-    public function setFormType(string $formType): Field
+    public function setFormType(string $formType): self
     {
         $this->formType = $formType;
         return $this;
     }
 
-    /**
-     * @param string $code
-     */
-    public function setCode( string $code ): void
+    public function setCode(string $code): void
     {
         $this->code = $code;
     }
 
-    /**
-     * @return string
-     */
-    public function getValue()
+    public function getValue(): ?string
     {
         return $this->value;
     }
 
-    /**
-     * @param string $value
-     * @return Field
-     */
-    public function setValue($value): FieldInterface
+    public function setValue(?string $value): self
     {
         $this->value = $value;
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getAttributes()
     {
         return $this->attributes;
     }
 
-    /**
-     * @return Field
-     */
-    public function setAttributes(mixed $attributes)
+    public function setAttributes(mixed $attributes): self
     {
         $this->attributes = $attributes;
         return $this;
     }
 
-    /**
-     * @return array
-     */
-    public function getCrops()
+    public function getCrops(): array
     {
         return $this->crops;
     }
 
-    /**
-     * @param array $crops
-     * @return Field
-     */
-    public function setCrops($crops): FieldInterface
+    public function setCrops(?array $crops): self
     {
         $this->crops = $crops;
         return $this;
     }
 
-    /**
-     * @return ?Page
-     */
-    public function getPage()
+    public function getPage(): ?PageInterface
     {
         return $this->page;
     }
 
-    /**
-     * @param Page $page
-     * @return Field
-     */
-    public function setPage(Page $page): FieldInterface
+    public function setPage(?PageInterface $page): self
     {
         $this->page = $page;
         return $this;
     }
 
-
-
-    public function getFilename()
+    public function getFilename(): ?string
     {
         if ($this->formType == 'ImageType' || $this->formType == 'GalleryImageType') {
             return $this->value;
@@ -222,7 +165,7 @@ class Field implements FieldInterface, AttachedImageInterface, CroppableInterfac
         return $cropsInfos;
     }
 
-    public function getWebPath()
+    public function getWebPath(): ?string
     {
         return Image::getFileNameWebPath($this->value);
     }

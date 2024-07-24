@@ -54,6 +54,13 @@
             <index columns="code" />
         </indexes>
 
+        <one-to-many field="translations" target-entity="Aropixel\PageBundle\Entity\PageTranslation" mapped-by="object">
+            <cascade>
+                <cascade-persist />
+                <cascade-remove />
+            </cascade>
+        </one-to-many>
+
         <gedmo:translation entity="Aropixel\PageBundle\Entity\PageTranslation" locale="locale"/>
 
     </mapped-superclass>

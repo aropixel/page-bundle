@@ -6,6 +6,7 @@ use Aropixel\AdminBundle\Entity\Publishable;
 use Aropixel\AdminBundle\Entity\PublishableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Mapping\Annotation\Slug;
 use Gedmo\Translatable\Translatable;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
@@ -29,6 +30,7 @@ class PageTranslatable implements PageInterface, Translatable
     protected ?string $description = null;
 
     #[Gedmo\Translatable]
+    #[Slug(fields: ['title'])]
     protected ?string $slug = null;
 
     #[Gedmo\Translatable]
@@ -52,7 +54,7 @@ class PageTranslatable implements PageInterface, Translatable
      * this is not a mapped field of entity metadata, just a simple property
      */
     #[Gedmo\Locale]
-    private string $locale;
+    private ?string $locale = null;
     private ?iterable $translations = null;
 
     use PublishableTrait;
