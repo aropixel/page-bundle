@@ -5,12 +5,9 @@ namespace Aropixel\PageBundle\Entity;
 use Aropixel\AdminBundle\Entity\Publishable;
 use Aropixel\AdminBundle\Entity\PublishableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
-use Gedmo\Translatable\Translatable;
 use Symfony\Component\PropertyAccess\PropertyAccess;
-use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 
-class Page implements Translatable, PageInterface
+class Page implements PageInterface
 {
     protected ?int $id = null;
     protected string $status = Publishable::STATUS_OFFLINE;
@@ -30,50 +27,12 @@ class Page implements Translatable, PageInterface
     protected ?iterable $fields = null;
     protected ?array $fieldValues = null;
 
-    #[Gedmo\Locale]
-    private $locale;
-
-    private $translations;
-
     use PublishableTrait;
 
     public function __construct()
     {
         $this->fields = new ArrayCollection();
-        $this->translations = new ArrayCollection();
     }
-
-    public function getTranslations()
-    {
-        return $this->translations;
-    }
-
-    public function addTranslation(PageTranslation $t)
-    {
-        if (!$this->translations->contains($t)) {
-            $this->translations[] = $t;
-            $t->setObject($this);
-        }
-    }
-
-    public function setTranslatableLocale($locale)
-    {
-        $this->locale = $locale;
-    }
-
-    public function getLocales()
-    {
-        $languages = [];
-
-        foreach ($this->getTranslations() as $translation) {
-            if (!in_array($translation->getLocale(), $languages)) {
-                $languages[] = $translation->getLocale();
-            }
-        }
-
-        return implode(", ", $languages);
-    }
-
 
     private function compileFieldsValues()
     {

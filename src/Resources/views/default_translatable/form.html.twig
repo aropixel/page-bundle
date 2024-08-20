@@ -28,9 +28,9 @@
 
             <div class="card-body">
 
-                {% include '@AropixelAdmin/Form/translatable_field.html.twig' with {'children': form.title.children} %}
-                {% include '@AropixelAdmin/Form/translatable_field.html.twig' with {'children': form.excerpt.children} %}
-                {% include '@AropixelAdmin/Form/translatable_field.html.twig' with {'children': form.description.children} %}
+                {{ form_row(form.title) }}
+                {{ form_row(form.excerpt) }}
+                {{ form_row(form.description) }}
 
             </div>
 
@@ -46,6 +46,26 @@
 
                 {{ form_row(form.image) }}
 
+                <hr>
+
+                <div class="form-group">
+                    <div class="d-flex justify-content-between align-items-center mb-2 w-100">
+                        <label class="control-label">Citations</label>
+                        <a class="btn btn-primary btn-xs" data-form-collection-add="{{ form.testimonials.vars.id }}"><i class="fa fa-plus"></i> Ajouter une citation</a>
+                    </div>
+                    {{ form_widget(form.testimonials, {'attr': {'class': 'w-100'}}) }}
+                </div>
+
+                <hr>
+
+                <div class="form-group">
+                    <div class="d-flex justify-content-between align-items-center mb-2 w-100">
+                        <label class="control-label">Evènements</label>
+                        <a class="btn btn-primary btn-xs" data-form-collection-add="{{ form.events.vars.id }}"><i class="fa fa-plus"></i> Ajouter un évènement</a>
+                    </div>
+                    {{ form_widget(form.events, {'attr': {'class': 'w-100'}}) }}
+                </div>
+
             </div>
 
         </div>
@@ -58,9 +78,9 @@
 
             <div class="card-body">
 
-                {% include '@AropixelAdmin/Form/translatable_field.html.twig' with {'children': form.metaTitle.children} %}
-                {% include '@AropixelAdmin/Form/translatable_field.html.twig' with {'children': form.metaDescription.children} %}
-                {% include '@AropixelAdmin/Form/translatable_field.html.twig' with {'children': form.metaKeywords.children} %}
+                {{ form_row(form.metaTitle) }}
+                {{ form_row(form.metaDescription) }}
+                {{ form_row(form.metaKeywords) }}
 
             </div>
 

@@ -5,10 +5,13 @@ namespace Aropixel\PageBundle\Entity;
 use Aropixel\AdminBundle\Entity\CroppableInterface;
 use Aropixel\AdminBundle\Entity\Image;
 use Aropixel\AdminBundle\Entity\ImageInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Translatable\Translatable;
 use Symfony\Component\HttpFoundation\File\File;
 
 
+#[Gedmo\TranslationEntity(class: FieldTranslation::class)]
 class FieldTranslatable implements FieldInterface, ImageInterface, CroppableInterface, Translatable
 {
 
@@ -32,6 +35,15 @@ class FieldTranslatable implements FieldInterface, ImageInterface, CroppableInte
 
     private ?PageTranslatable $page = null;
 
+    #[Gedmo\Locale]
+    private ?string $locale = null;
+
+    private ?iterable $translations = null;
+
+    public function __construct()
+    {
+        $this->translations = new ArrayCollection();
+    }
 
     public function __toString()
     {
@@ -192,6 +204,54 @@ class FieldTranslatable implements FieldInterface, ImageInterface, CroppableInte
     public function getFile(): ?File
     {
         // TODO: Implement getFile() method.
+    }
+
+
+    public function removeTranslation(FieldTranslation $t)
+    {
+        $this->translations->removeElement($t);
+        $t->setObject(null);
+    }
+
+
+    public function getTranslations()
+    {
+        return $this->translations;
+    }
+
+    public function addTranslation(FieldTranslation $t)
+    {
+        if (!$this->translations->contains($t)) {
+            $this->translations[] = $t;
+            $t->setObject($this);
+        }
+    }
+
+    // method used when values is set throught a type collection (add new throught the data-prototype)
+    public function setTranslations($at)
+    {
+        foreach ($at as $t) {
+            $this->addTranslation($t);
+        }
+        return $this;
+    }
+
+    public function setTranslatableLocale($locale)
+    {
+        $this->locale = $locale;
+    }
+
+    public function getLocales()
+    {
+        $languages = [];
+
+        foreach ($this->getTranslations() as $translation) {
+            if (!in_array($translation->getLocale(), $languages)) {
+                $languages[] = $translation->getLocale();
+            }
+        }
+
+        return implode(", ", $languages);
     }
 
 

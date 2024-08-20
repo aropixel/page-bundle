@@ -308,6 +308,12 @@ class PageTranslatable implements PageInterface, Translatable
         $field->setPage(null);
     }
 
+    public function removeTranslation(PageTranslation $t)
+    {
+        $this->translations->removeElement($t);
+        $t->setObject(null);
+    }
+
     public function getTranslations()
     {
         return $this->translations;
@@ -319,6 +325,15 @@ class PageTranslatable implements PageInterface, Translatable
             $this->translations[] = $t;
             $t->setObject($this);
         }
+    }
+
+    // method used when values is set throught a type collection (add new throught the data-prototype)
+    public function setTranslations($at)
+    {
+        foreach ($at as $t) {
+            $this->addTranslation($t);
+        }
+        return $this;
     }
 
     public function setTranslatableLocale($locale)
