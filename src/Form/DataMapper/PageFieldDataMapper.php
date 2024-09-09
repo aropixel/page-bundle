@@ -306,9 +306,10 @@ class PageFieldDataMapper implements DataMapperInterface
                 try {
                     $path = explode('.', (string) $propertyPath);
                     $fieldPath = end($path);
+
                     $this->propertyAccessor->setValue($field, $fieldPath, $propertyValue);
                 }
-                catch (\Exception) {
+                catch (\Exception $e) {
                     $field->setValue($propertyValue);
                 }
 

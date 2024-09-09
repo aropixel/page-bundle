@@ -2,17 +2,31 @@
 
 namespace Aropixel\PageBundle\Entity;
 
+use Aropixel\AdminBundle\Entity\AttachedImageInterface;
 use Aropixel\AdminBundle\Entity\CroppableInterface;
 use Aropixel\AdminBundle\Entity\Image;
-use Aropixel\AdminBundle\Entity\AttachedImageInterface;
+use Aropixel\AdminBundle\Entity\TranslatableTrait;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Translatable\Translatable;
+use Symfony\Component\HttpFoundation\File\File;
 
 
-class Field implements FieldInterface, AttachedImageInterface, CroppableInterface, \Stringable
+#[Gedmo\TranslationEntity(class: FieldTranslation::class)]
+class Field implements FieldInterface, AttachedImageInterface, CroppableInterface, Translatable
 {
+
+    use TranslatableTrait;
+
     private ?int $id = null;
 
+    /**
+     * Field name in the form (can be composed, for collections). Ex : "excerpt", "title", "slideshow.0", "slideshow.1"
+     */
     private string $code;
 
+    /**
+     * Symfony Form Type of the field : TextType, TextareaType, ImageType
+     */
     private string $formType;
 
     private ?string $value = null;
@@ -21,10 +35,10 @@ class Field implements FieldInterface, AttachedImageInterface, CroppableInterfac
 
     private ?array $crops = null;
 
-    private ?PageInterface $page = null;
+    private ?Page $page = null;
 
 
-    public function __toString(): string
+    public function __toString()
     {
         return !is_null($this->getValue()) ? $this->getValue() : '';
     }
@@ -37,6 +51,7 @@ class Field implements FieldInterface, AttachedImageInterface, CroppableInterfac
     public function setId(int $id): self
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -51,7 +66,7 @@ class Field implements FieldInterface, AttachedImageInterface, CroppableInterfac
         return current($codes);
     }
 
-    public function getExplodedValue($keys = null, $value = null): string
+    public function getExplodedValue($keys = null, $value = null)
     {
         if (is_null($keys)) {
             $keys = explode('.', $this->code);
@@ -83,6 +98,7 @@ class Field implements FieldInterface, AttachedImageInterface, CroppableInterfac
     public function setFormType(string $formType): self
     {
         $this->formType = $formType;
+
         return $this;
     }
 
@@ -95,14 +111,14 @@ class Field implements FieldInterface, AttachedImageInterface, CroppableInterfac
     {
         return $this->value;
     }
-
-    public function setValue(?string $value): self
+    public function setValue($value): self
     {
         $this->value = $value;
+
         return $this;
     }
 
-    public function getAttributes()
+    public function getAttributes(): mixed
     {
         return $this->attributes;
     }
@@ -110,32 +126,35 @@ class Field implements FieldInterface, AttachedImageInterface, CroppableInterfac
     public function setAttributes(mixed $attributes): self
     {
         $this->attributes = $attributes;
+
         return $this;
     }
 
-    public function getCrops(): array
+    public function getCrops(): ?array
     {
         return $this->crops;
     }
 
-    public function setCrops(?array $crops): self
+    public function setCrops(array $crops): self
     {
         $this->crops = $crops;
+
         return $this;
     }
 
-    public function getPage(): ?PageInterface
+    public function getPage(): ?Page
     {
         return $this->page;
     }
 
-    public function setPage(?PageInterface $page): self
+    public function setPage(Page $page): self
     {
         $this->page = $page;
+
         return $this;
     }
 
-    public function getFilename(): ?string
+    public function getFilename() : ?string
     {
         if ($this->formType == 'ImageType' || $this->formType == 'GalleryImageType') {
             return $this->value;
@@ -165,9 +184,19 @@ class Field implements FieldInterface, AttachedImageInterface, CroppableInterfac
         return $cropsInfos;
     }
 
-    public function getWebPath(): ?string
+    public function getWebPath() : ?string
     {
         return Image::getFileNameWebPath($this->value);
+    }
+
+    public function getTempPath(): ?string
+    {
+        // TODO: Implement getTempPath() method.
+    }
+
+    public function getFile(): ?File
+    {
+        // TODO: Implement getFile() method.
     }
 
 

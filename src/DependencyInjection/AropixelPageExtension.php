@@ -2,6 +2,7 @@
 
 namespace Aropixel\PageBundle\DependencyInjection;
 
+use Aropixel\PageBundle\Entity\PageInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
@@ -33,10 +34,10 @@ class AropixelPageExtension extends Extension implements PrependExtensionInterfa
     private function registerParameters(ContainerBuilder $container, array $config)
     {
         $container->setParameter('aropixel_page.entities', $config['entities']);
+        $container->setParameter('aropixel_page.entities.page', $config['entities'][PageInterface::class]);
         $container->setParameter('aropixel_page.forms', $config['forms']);
         $container->setParameter('aropixel_page.form.default', $config['forms']['default']);
         $container->setParameter('aropixel_page.form.default_translatable', $config['forms']['default_translatable']);
-
     }
 
 

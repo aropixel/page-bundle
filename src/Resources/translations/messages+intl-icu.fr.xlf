@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file source-language="en" target-language="fr" datatype="plaintext" original="file.ext">
+  <file source-language="fr" target-language="fr" datatype="plaintext" original="file.ext">
     <header>
       <tool tool-id="symfony" tool-name="Symfony"/>
     </header>
@@ -61,13 +61,25 @@
         <source>status.offline</source>
         <target>Hors ligne</target>
       </trans-unit>
-      <trans-unit id="VqGIGJq" resname="pages.list.delete_warning">
+      <trans-unit id="M5Vtr_6" resname="pages.list.delete_warning">
         <source>pages.list.delete_warning</source>
         <target>Êtes-vous certain de vouloir supprimer cette page ?</target>
       </trans-unit>
       <trans-unit id="NGuUr2n" resname="form.delete">
         <source>form.delete</source>
         <target>Supprimer</target>
+      </trans-unit>
+      <trans-unit id="5e4s9b1" resname="form.field.created_at">
+        <source>form.field.created_at</source>
+        <target>Crée le</target>
+      </trans-unit>
+      <trans-unit id="UErOO7D" resname="form.field.publish_at">
+        <source>form.field.publish_at</source>
+        <target>Publié le</target>
+      </trans-unit>
+      <trans-unit id="o5fIg51" resname="form.field.publish_until">
+        <source>form.field.publish_until</source>
+        <target>Jusqu'au</target>
       </trans-unit>
     </body>
   </file>

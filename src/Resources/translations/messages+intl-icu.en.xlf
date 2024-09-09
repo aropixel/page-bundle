@@ -61,13 +61,25 @@
         <source>status.offline</source>
         <target>Offline</target>
       </trans-unit>
-      <trans-unit id="VqGIGJq" resname="pages.list.delete_warning">
+      <trans-unit id="M5Vtr_6" resname="pages.list.delete_warning">
         <source>pages.list.delete_warning</source>
         <target>Are you sure you want to delete this page ?</target>
       </trans-unit>
       <trans-unit id="NGuUr2n" resname="form.delete">
         <source>form.delete</source>
         <target>Delete</target>
+      </trans-unit>
+      <trans-unit id="5e4s9b1" resname="form.field.created_at">
+        <source>form.field.created_at</source>
+        <target>Created at</target>
+      </trans-unit>
+      <trans-unit id="UErOO7D" resname="form.field.publish_at">
+        <source>form.field.publish_at</source>
+        <target>Published at</target>
+      </trans-unit>
+      <trans-unit id="o5fIg51" resname="form.field.publish_until">
+        <source>form.field.publish_until</source>
+        <target>Published until</target>
       </trans-unit>
     </body>
   </file>

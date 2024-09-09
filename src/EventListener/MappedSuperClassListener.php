@@ -1,14 +1,8 @@
 <?php
-/**
- * Créé par Aropixel @2019.
- * Par: Joël Gomez Caballe
- * Date: 16/04/2019 à 15:56
- */
 
 namespace Aropixel\PageBundle\EventListener;
 
 
-use Doctrine\Common\EventSubscriber;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Persistence\Mapping\ReflectionService;
 use Doctrine\Persistence\Mapping\RuntimeReflectionService;
@@ -16,27 +10,17 @@ use Doctrine\ORM\Configuration;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Webmozart\Assert\Assert;
 
 
 class MappedSuperClassListener
 {
-
-    const TRANSLATABLE_ENTITIES = [
-        'Aropixel\PageBundle\Entity\PageTranslatable',
-        'Aropixel\PageBundle\Entity\PageTranslation',
-        'Aropixel\PageBundle\Entity\FieldTranslatable',
-        'Aropixel\PageBundle\Entity\FieldTranslation',
-    ];
-
     private RuntimeReflectionService $reflectionService;
     private array $entitiesNames;
 
 
     public function __construct(
         $entities,
-        protected readonly ParameterBagInterface $parameterBag
     ){
         $this->entitiesNames = $entities;
     }
@@ -54,13 +38,7 @@ class MappedSuperClassListener
 
         foreach ($this->entitiesNames as $interface => $model) {
 
-            $isTranslatable = $this->parameterBag->has('translatable') && $this->parameterBag->get('translatable');
-
-            if (!$isTranslatable && in_array($metadata->getName(), self::TRANSLATABLE_ENTITIES)) {
-
-                $this->unsetAssociationMappings($metadata);
-
-            } elseif ($metadata->getName() == $model) {
+            if ($metadata->getName() == $model) {
 
                 if (!$metadata->isMappedSuperclass) {
                     $this->setAssociationMappings($metadata, $eventArgs->getEntityManager()->getConfiguration());
@@ -70,13 +48,10 @@ class MappedSuperClassListener
                 }
 
             } else {
-
                 if (in_array($interface, class_implements($metadata->getName()))) {
                     $this->unsetAssociationMappings($metadata);
                 }
-
             }
-
         }
 
     }

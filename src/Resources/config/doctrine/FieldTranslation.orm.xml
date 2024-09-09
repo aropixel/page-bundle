@@ -13,7 +13,7 @@
         <field name="field" length="32"/>
         <field name="content" type="text" nullable="true"/>
 
-        <many-to-one field="object" target-entity="Aropixel\PageBundle\Entity\FieldTranslatable" inversed-by="translations">
+        <many-to-one field="object" target-entity="Aropixel\PageBundle\Entity\Field" inversed-by="translations">
             <join-column on-delete="CASCADE" name="object_id" referenced-column-name="id"/>
         </many-to-one>
 

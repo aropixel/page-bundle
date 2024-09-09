@@ -1,9 +1,4 @@
 <?php
-/**
- * Créé par Aropixel @2020.
- * Par: Joël Gomez Caballe
- * Date: 18/07/2020 à 00:00
- */
 
 namespace Aropixel\PageBundle\Factory;
 
@@ -27,6 +22,7 @@ class FieldFactory
     {
         $entities = $this->parameterBag->get('aropixel_page.entities');
         $fieldEntityClass = $entities[FieldInterface::class];
+
         return new $fieldEntityClass();
     }
 

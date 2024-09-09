@@ -4,22 +4,45 @@ namespace Aropixel\PageBundle\Entity;
 
 use Aropixel\AdminBundle\Entity\Publishable;
 use Aropixel\AdminBundle\Entity\PublishableTrait;
+use Aropixel\AdminBundle\Entity\TranslatableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Mapping\Annotation\Slug;
+use Gedmo\Translatable\Translatable;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-class Page implements PageInterface
+#[Gedmo\TranslationEntity(class: PageTranslation::class)]
+class Page implements PageInterface, Translatable
 {
+    const TYPE_DEFAULT = 'default';
+
     protected ?int $id = null;
     protected string $status = Publishable::STATUS_OFFLINE;
     protected string $type;
     protected string $code;
+
+    #[Gedmo\Translatable]
     protected ?string $title = null;
+
+    #[Gedmo\Translatable]
     protected ?string $excerpt = null;
+
+    #[Gedmo\Translatable]
     protected ?string $description = null;
+
+    #[Gedmo\Translatable]
+    #[Slug(fields: ['title'])]
     protected ?string $slug = null;
+
+    #[Gedmo\Translatable]
     protected ?string $metaTitle = null;
+
+    #[Gedmo\Translatable]
     protected ?string $metaDescription = null;
+
+    #[Gedmo\Translatable]
     protected ?string $metaKeywords = null;
+
     protected ?\DateTimeInterface $createdAt = null;
     protected ?\DateTimeInterface $updatedAt = null;
     protected ?\DateTimeInterface $publishAt = null;
@@ -28,11 +51,13 @@ class Page implements PageInterface
     protected ?array $fieldValues = null;
 
     use PublishableTrait;
+    use TranslatableTrait;
 
     public function __construct()
     {
         $this->fields = new ArrayCollection();
     }
+
 
     private function compileFieldsValues()
     {
@@ -68,7 +93,7 @@ class Page implements PageInterface
         try {
             return $propertyAccessor->getValue($this, $key);
         }
-        catch (\Exception) {
+        catch (\Exception $e) {
 
             if (is_null($this->fieldValues)) {
                 $this->compileFieldsValues();
@@ -98,6 +123,7 @@ class Page implements PageInterface
     public function setStatus(string $status): self
     {
         $this->status = $status;
+
         return $this;
     }
 
@@ -106,9 +132,11 @@ class Page implements PageInterface
         return $this->type;
     }
 
-    public function setType(string $type): PageInterface
+    public function setType(string $type): self
     {
-        $this->type = $type;return $this;
+        $this->type = $type;
+
+        return $this;
     }
 
     public function getCode(): string
@@ -116,9 +144,10 @@ class Page implements PageInterface
         return $this->code;
     }
 
-    public function setCode(string $code): PageInterface
+    public function setCode(string $code): self
     {
         $this->code = $code;
+
         return $this;
     }
 
@@ -130,6 +159,7 @@ class Page implements PageInterface
     public function setTitle(string $title): self
     {
         $this->title = $title;
+
         return $this;
     }
 
@@ -141,6 +171,7 @@ class Page implements PageInterface
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
+
         return $this;
     }
 
@@ -149,9 +180,10 @@ class Page implements PageInterface
         return $this->excerpt;
     }
 
-    public function setExcerpt(?string $excerpt): self
+    public function setExcerpt(string $excerpt): self
     {
         $this->excerpt = $excerpt;
+
         return $this;
     }
 
@@ -160,9 +192,10 @@ class Page implements PageInterface
         return $this->description;
     }
 
-    public function setDescription(?string $description): self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -174,6 +207,7 @@ class Page implements PageInterface
     public function setMetaTitle(?string $metaTitle): self
     {
         $this->metaTitle = $metaTitle;
+
         return $this;
     }
 
@@ -185,6 +219,7 @@ class Page implements PageInterface
     public function setMetaDescription(?string $metaDescription): self
     {
         $this->metaDescription = $metaDescription;
+
         return $this;
     }
 
@@ -196,6 +231,7 @@ class Page implements PageInterface
     public function setMetaKeywords(?string $metaKeywords): self
     {
         $this->metaKeywords = $metaKeywords;
+
         return $this;
     }
 
@@ -207,6 +243,7 @@ class Page implements PageInterface
     public function setCreatedAt(?\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
         return $this;
     }
 
@@ -218,6 +255,7 @@ class Page implements PageInterface
     public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
         return $this;
     }
 
@@ -229,6 +267,7 @@ class Page implements PageInterface
     public function setPublishAt(?\DateTimeInterface $publishAt): self
     {
         $this->publishAt = $publishAt;
+
         return $this;
     }
 
@@ -240,17 +279,19 @@ class Page implements PageInterface
     public function setPublishUntil(?\DateTimeInterface $publishUntil): self
     {
         $this->publishUntil = $publishUntil;
+
         return $this;
     }
 
-    public function getFields(): iterable
+    public function getFields()
     {
         return $this->fields;
     }
 
-    public function addField(FieldInterface $field)
+    public function addField(?FieldInterface $field = null)
     {
         $this->fields->add($field);
+
         $field->setPage($this);
     }
 

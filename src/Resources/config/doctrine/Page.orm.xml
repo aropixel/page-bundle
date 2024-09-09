@@ -11,15 +11,28 @@
         <field name="status" length="20" />
         <field name="type" length="100" />
         <field name="code" length="100" nullable="true" />
-        <field name="title" nullable="true" />
+        <field name="title" nullable="true">
+            <gedmo:translatable/>
+        </field>
         <field name="slug">
             <gedmo:slug fields="title" />
+            <gedmo:translatable/>
         </field>
-        <field name="excerpt" type="text" nullable="true" />
-        <field name="description" type="text" nullable="true" />
-        <field name="metaTitle" nullable="true" />
-        <field name="metaDescription" nullable="true" />
-        <field name="metaKeywords" nullable="true" />
+        <field name="excerpt" type="text" nullable="true">
+            <gedmo:translatable/>
+        </field>
+        <field name="description" type="text" nullable="true">
+            <gedmo:translatable/>
+        </field>
+        <field name="metaTitle" nullable="true">
+            <gedmo:translatable/>
+        </field>
+        <field name="metaDescription" nullable="true">
+            <gedmo:translatable/>
+        </field>
+        <field name="metaKeywords" nullable="true">
+            <gedmo:translatable/>
+        </field>
 
         <field name="createdAt" column="created_at" type="datetime">
             <gedmo:timestampable on="create"/>
@@ -40,6 +53,15 @@
         <indexes>
             <index columns="code" />
         </indexes>
+
+        <one-to-many field="translations" target-entity="Aropixel\PageBundle\Entity\PageTranslation" mapped-by="object">
+            <cascade>
+                <cascade-persist />
+                <cascade-remove />
+            </cascade>
+        </one-to-many>
+
+        <gedmo:translation entity="Aropixel\PageBundle\Entity\PageTranslation" locale="locale"/>
 
     </mapped-superclass>
 

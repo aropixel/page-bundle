@@ -2,19 +2,19 @@
 
 namespace Aropixel\PageBundle\Repository;
 
+use Aropixel\AdminBundle\Infrastructure\Publication\Repository\PublishableRepository;
 use Aropixel\PageBundle\Entity\Page;
 use Aropixel\PageBundle\Entity\PageInterface;
-use Aropixel\PageBundle\Entity\PageTranslatable;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
- * @method Page|PageTranslatable|null find($id, $lockMode = null, $lockVersion = null)
- * @method Page|PageTranslatable|null findOneBy(array $criteria, array $orderBy = null)
- * @method Page|PageTranslatable[]    findAll()
- * @method Page|PageTranslatable[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Page|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Page|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Page[]    findAll()
+ * @method Page[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class PageRepository extends \Aropixel\AdminBundle\Infrastructure\Publication\Repository\PublishableRepository
+class PageRepository extends PublishableRepository
 {
     public function __construct(ManagerRegistry $registry, ParameterBagInterface $parameterBag)
     {
@@ -23,7 +23,7 @@ class PageRepository extends \Aropixel\AdminBundle\Infrastructure\Publication\Re
     }
 
 
-    public function findPage($type): Page|PageTranslatable|null
+    public function findPage($type): Page|null
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.type = :type')
@@ -44,7 +44,7 @@ class PageRepository extends \Aropixel\AdminBundle\Infrastructure\Publication\Re
             ;
     }
 
-    public function add(Page|PageTranslatable $page, bool $flush = false): void
+    public function add(Page $page, bool $flush = false): void
     {
         $this->getEntityManager()->persist($page);
 
@@ -53,7 +53,7 @@ class PageRepository extends \Aropixel\AdminBundle\Infrastructure\Publication\Re
         }
     }
 
-    public function remove(Page|PageTranslatable $page, bool $flush = false) : void
+    public function remove(Page $page, bool $flush = false) : void
     {
         $this->getEntityManager()->remove($page);
 
