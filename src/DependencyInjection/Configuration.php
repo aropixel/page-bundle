@@ -4,8 +4,6 @@ namespace Aropixel\PageBundle\DependencyInjection;
 
 use Aropixel\PageBundle\Entity\Field;
 use Aropixel\PageBundle\Entity\FieldInterface;
-use Aropixel\PageBundle\Entity\FieldTranslation;
-use Aropixel\PageBundle\Entity\FieldTranslationInterface;
 use Aropixel\PageBundle\Entity\Page;
 use Aropixel\PageBundle\Entity\PageInterface;
 use Aropixel\PageBundle\Entity\PageTranslation;
@@ -35,7 +33,6 @@ class Configuration implements ConfigurationInterface
             ->scalarNode(PageInterface::class)->defaultValue(Page::class)->end()
             ->scalarNode(FieldInterface::class)->defaultValue(Field::class)->end()
             ->scalarNode(PageTranslationInterface::class)->defaultValue(PageTranslation::class)->end()
-            ->scalarNode(FieldTranslationInterface::class)->defaultValue(FieldTranslation::class)->end()
             ->end()
             ->end()
             ->arrayNode('forms')

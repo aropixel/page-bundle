@@ -1,18 +1,8 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
 namespace Aropixel\PageBundle\Form\DataMapper;
 
-use Aropixel\AdminBundle\Form\Type\Image\Gallery\GalleryType;
-use Aropixel\AdminBundle\Form\Type\Image\Single\ImageType;
 use Aropixel\PageBundle\Entity\Field;
 use Aropixel\PageBundle\Entity\FieldInterface;
 use Aropixel\PageBundle\Entity\Page;
@@ -25,7 +15,6 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
-use Traversable;
 
 /**
  * Maps arrays/objects to/from forms using property paths.
@@ -60,7 +49,6 @@ class PageFieldDataMapper implements DataMapperInterface
         /** @var FormInterface $form */
         foreach ($forms as $form) {
 
-            //
             $propertyPath = $form->getPropertyPath();
             $config = $form->getConfig();
 
@@ -73,7 +61,7 @@ class PageFieldDataMapper implements DataMapperInterface
                 }
 
                 // Otherwise, an exception is sent
-                catch (NoSuchPropertyException) {
+                catch (NoSuchPropertyException $e) {
 
                     /**
                      * Then, we iterate each field of the page to check if it map current form field
@@ -93,10 +81,8 @@ class PageFieldDataMapper implements DataMapperInterface
                                 $fieldValue = $this->getFieldValue($field);
                             }
 
-                            //
                             $value = $this->explodeValue($keys, $fieldValue);
 
-                            //
                             if (!array_key_exists($rootKey, $formValues)) {
                                 $formValues[$rootKey] = $value;
                             }
@@ -117,7 +103,6 @@ class PageFieldDataMapper implements DataMapperInterface
         /** @var FormInterface $form */
         foreach ($forms as $form) {
 
-            //
             $propertyPath = $form->getPropertyPath();
             foreach ($formValues as $rootKey => $value) {
 
@@ -148,9 +133,11 @@ class PageFieldDataMapper implements DataMapperInterface
             $last = end($keys);
             $value = $this->propertyAccessor->getValue($field, $last);
         }
-        catch (\Exception) {
+        catch (\Exception $e) {
+
             // if not, use the value property
             $value = $field->getValue();
+
         }
 
         return $value;
@@ -203,36 +190,37 @@ class PageFieldDataMapper implements DataMapperInterface
             $propertyPath = $form->getPropertyPath();
             $propertyValue = $form->getData();
 
-            //
             $fullClassType = $form->getConfig()->getType()->getInnerType();
             $reflection = new \ReflectionClass($fullClassType);
             $type = $reflection->getShortName();
 
-            //
             if (!($propertyValue instanceof FieldInterface)) {
 
-                // If the form field effectively map a page field, it's OK
-                try {
-                    $this->propertyAccessor->setValue($viewData, $propertyPath, $propertyValue);
-                    $mappedFormFields[] = (string)$propertyPath;
+                if (null !== $propertyValue) {
+
+                    // If the form field effectively map a page field, it's OK
+                    try {
+                        $this->propertyAccessor->setValue($viewData, $propertyPath, $propertyValue);
+                        $mappedFormFields[] = (string)$propertyPath;
+                    }
+
+                        // Otherwise, an exception is sent
+                    catch (NoSuchPropertyException $e) {
+
+                        // Then we store the value in a Field
+                        $this->mapToFieldData($viewData, $form, $propertyPath, $propertyValue, $mappedFormFields);
+
+                    }
+
                 }
 
-                // Otherwise, an exception is sent
-                catch (NoSuchPropertyException) {
-
-                    // Then we store the value in a Field
-                    $this->mapToFieldData($viewData, $form, $propertyPath, $propertyValue, $mappedFormFields);
-
-                }
-            }
-            else {
+            } else {
 
                 /** @var FieldInterface $field */
                 $field = $propertyValue;
 
                 if (!(is_null($field->getValue()) && $this->isFieldImage($field))) {
 
-                    //
                     $field->setCode($propertyPath);
                     $field->setFormType($type);
 
@@ -266,14 +254,15 @@ class PageFieldDataMapper implements DataMapperInterface
 
     private function mapToFieldData($data, $form, $propertyPath, $propertyValue, &$mappedFormFields)
     {
-
         if (is_array($propertyValue)) {
+
             foreach ($propertyValue as $childPropertyPath => $childPropertyValue) {
                 $this->mapToFieldData($data, $form->get($childPropertyPath), $propertyPath.'.'.$childPropertyPath, $childPropertyValue, $mappedFormFields);
             }
+
         }
         else {
-//
+
             $fullClassType = $form->getConfig()->getType()->getInnerType();
             $reflection = new \ReflectionClass($fullClassType);
             $type = $reflection->getShortName();
@@ -302,7 +291,6 @@ class PageFieldDataMapper implements DataMapperInterface
                     $data->addField($field);
                 }
 
-                //
                 try {
                     $path = explode('.', (string) $propertyPath);
                     $fieldPath = end($path);
@@ -340,6 +328,5 @@ class PageFieldDataMapper implements DataMapperInterface
         }
 
     }
-
 
 }

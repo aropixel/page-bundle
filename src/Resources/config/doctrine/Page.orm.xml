@@ -15,8 +15,8 @@
             <gedmo:translatable/>
         </field>
         <field name="slug">
-            <gedmo:slug fields="title" />
             <gedmo:translatable/>
+            <gedmo:slug fields="title" />
         </field>
         <field name="excerpt" type="text" nullable="true">
             <gedmo:translatable/>

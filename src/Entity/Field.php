@@ -6,12 +6,10 @@ use Aropixel\AdminBundle\Entity\AttachedImageInterface;
 use Aropixel\AdminBundle\Entity\CroppableInterface;
 use Aropixel\AdminBundle\Entity\Image;
 use Aropixel\AdminBundle\Entity\TranslatableTrait;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Translatable\Translatable;
 use Symfony\Component\HttpFoundation\File\File;
 
 
-#[Gedmo\TranslationEntity(class: FieldTranslation::class)]
 class Field implements FieldInterface, AttachedImageInterface, CroppableInterface, Translatable
 {
 

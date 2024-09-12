@@ -8,7 +8,6 @@ use Aropixel\PageBundle\Entity\FieldInterface;
 use Aropixel\PageBundle\Entity\PageTranslation;
 use Aropixel\PageBundle\Form\DataMapper\PageFieldDataMapper;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;

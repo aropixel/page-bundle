@@ -19,15 +19,6 @@
             <join-column on-delete="CASCADE"/>
         </many-to-one>
 
-        <one-to-many field="translations" target-entity="Aropixel\PageBundle\Entity\FieldTranslation" mapped-by="object">
-            <cascade>
-                <cascade-persist />
-                <cascade-remove />
-            </cascade>
-        </one-to-many>
-
-        <gedmo:translation entity="Aropixel\PageBundle\Entity\FieldTranslation" locale="locale"/>
-
     </mapped-superclass>
 
 </doctrine-mapping>

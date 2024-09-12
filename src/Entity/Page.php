@@ -153,7 +153,7 @@ class Page implements PageInterface, Translatable
 
     public function getTitle(): ?string
     {
-        return $this->title;
+        return $this->getTranslation('title');
     }
 
     public function setTitle(string $title): self
@@ -165,7 +165,7 @@ class Page implements PageInterface, Translatable
 
     public function getSlug(): ?string
     {
-        return $this->slug;
+        return $this->getTranslation('slug');
     }
 
     public function setSlug(string $slug): self
@@ -177,7 +177,7 @@ class Page implements PageInterface, Translatable
 
     public function getExcerpt(): ?string
     {
-        return $this->excerpt;
+        return $this->getTranslation('excerpt');
     }
 
     public function setExcerpt(string $excerpt): self
@@ -189,7 +189,7 @@ class Page implements PageInterface, Translatable
 
     public function getDescription(): ?string
     {
-        return $this->description;
+        return $this->getTranslation('description');
     }
 
     public function setDescription(string $description): self
@@ -201,7 +201,7 @@ class Page implements PageInterface, Translatable
 
     public function getMetaTitle(): ?string
     {
-        return $this->metaTitle;
+        return $this->getTranslation('metaTitle');
     }
 
     public function setMetaTitle(?string $metaTitle): self
@@ -213,7 +213,7 @@ class Page implements PageInterface, Translatable
 
     public function getMetaDescription(): ?string
     {
-        return $this->metaDescription;
+        return $this->getTranslation('metaDescription');
     }
 
     public function setMetaDescription(?string $metaDescription): self
@@ -225,7 +225,7 @@ class Page implements PageInterface, Translatable
 
     public function getMetaKeywords(): ?string
     {
-        return $this->metaKeywords;
+        return $this->getTranslation('metaKeywords');
     }
 
     public function setMetaKeywords(?string $metaKeywords): self
