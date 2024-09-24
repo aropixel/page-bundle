@@ -45,4 +45,5 @@ services:
     tags: ['doctrine.repository_service']
 
   Aropixel\PageBundle\Twig\FieldExtension:
+      arguments: ['@Symfony\Component\HttpFoundation\RequestStack']
       tags: ['twig.extension']
