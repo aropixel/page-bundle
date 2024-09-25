@@ -15,6 +15,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 class Page implements PageInterface, Translatable
 {
     const TYPE_DEFAULT = 'default';
+    const TYPE_DEFAULT_TRANSLATABLE = 'default_translatable';
 
     protected ?int $id = null;
     protected string $status = Publishable::STATUS_OFFLINE;
