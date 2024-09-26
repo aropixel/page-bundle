@@ -33,10 +33,6 @@ class FieldExtension extends AbstractExtension
     {
         $pageField = $page->getField($code);
 
-        if (is_array($pageField)) {
-            return $this->getTranslatableCollectionField($pageField);
-        }
-
         if ($pageField instanceof FieldInterface) {
 
             $propertyAccessor = PropertyAccess::createPropertyAccessor();
@@ -51,7 +47,37 @@ class FieldExtension extends AbstractExtension
             return $value;
         }
 
+        if ($this->isCollection($pageField)) {
+
+            return $this->getTranslatableCollectionField($pageField);
+
+        } elseif (is_array($pageField)) {
+
+            return $this->getTranslatableField($pageField, $code);
+        }
+
         return $pageField;
+    }
+
+    private function isCollection($pageField): bool
+    {
+        if (is_array($pageField)) {
+
+            foreach ($pageField as $field) {
+                return is_array($field);
+            }
+
+        }
+
+        return false;
+    }
+
+    private function getTranslatableField(array $pageField, string $code)
+    {
+        $currentLocale = $this->getCurrentLocale();
+        $key = $code . ':' . $currentLocale;
+
+        return $pageField[$key];
     }
 
     public function getTranslatableCollectionField($pageField): array
