@@ -2,6 +2,7 @@
 
 namespace Aropixel\PageBundle\Http\Action\Page;
 
+use Aropixel\AdminBundle\Domain\Translation\TranslationResolverInterface;
 use Aropixel\PageBundle\Entity\PageInterface;
 use Aropixel\PageBundle\Form\FormFactoryInterface;
 use Aropixel\PageBundle\Http\Form\Page\FormFactory;
@@ -18,12 +19,12 @@ class CreatePageAction extends AbstractController
         private readonly FormFactoryInterface $factory,
         private readonly RequestStack $request,
         private readonly PageRepository $pageRepository,
-        private readonly ParameterBagInterface $parameterBag
+        private readonly TranslationResolverInterface $translationResolver
     ){}
 
     public function __invoke(string $type) : Response
     {
-        $isTranslatable = $this->parameterBag->has('translatable') && $this->parameterBag->get('translatable');
+        $isTranslatable = $this->translationResolver->isTranslatable();
 
         $entities = $this->getParameter('aropixel_page.entities');
         $entityName = $entities[PageInterface::class];
