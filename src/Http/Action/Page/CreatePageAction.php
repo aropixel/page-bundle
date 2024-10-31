@@ -5,17 +5,14 @@ namespace Aropixel\PageBundle\Http\Action\Page;
 use Aropixel\AdminBundle\Domain\Translation\TranslationResolverInterface;
 use Aropixel\PageBundle\Entity\PageInterface;
 use Aropixel\PageBundle\Form\FormFactoryInterface;
-use Aropixel\PageBundle\Http\Form\Page\FormFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Aropixel\PageBundle\Repository\PageRepository;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 
 class CreatePageAction extends AbstractController
 {
     public function __construct(
-        private readonly FormFactory $formFactory,
         private readonly FormFactoryInterface $factory,
         private readonly RequestStack $request,
         private readonly PageRepository $pageRepository,
@@ -46,7 +43,7 @@ class CreatePageAction extends AbstractController
             return $this->redirectToRoute('aropixel_page_edit', ['type' => $page->getType(), 'id' => $page->getId()]);
         }
 
-        return $this->render($this->formFactory->getTemplatePath().'/'.$type.'/form.html.twig', [
+        return $this->render($this->factory->getTemplatePath().'/'.$type.'/form.html.twig', [
             'page' => $page,
             'form' => $form->createView(),
             'isTranslatable' => $isTranslatable

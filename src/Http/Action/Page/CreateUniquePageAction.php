@@ -3,10 +3,8 @@
 namespace Aropixel\PageBundle\Http\Action\Page;
 
 use Aropixel\AdminBundle\Entity\Publishable;
-use Aropixel\PageBundle\Entity\Page;
 use Aropixel\PageBundle\Entity\PageInterface;
 use Aropixel\PageBundle\Form\FormFactoryInterface;
-use Aropixel\PageBundle\Http\Form\Page\FormFactory;
 use Aropixel\PageBundle\Repository\PageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -15,13 +13,10 @@ use Symfony\Component\HttpFoundation\Response;
 class CreateUniquePageAction extends AbstractController
 {
     public function __construct(
-        private readonly FormFactory $formFactory,
         private readonly FormFactoryInterface $factory,
         private readonly PageRepository $pageRepository,
         private readonly RequestStack $request,
     ){}
-
-    private string $model = Page::class;
 
     public function __invoke(string $type) : Response
     {
@@ -48,7 +43,7 @@ class CreateUniquePageAction extends AbstractController
             return $this->redirectToRoute('aropixel_page', ['type' => $page->getType(), 'id' => $page->getId()]);
         }
 
-        return $this->render($this->formFactory->getTemplatePath().'/'.$type.'/form.html.twig', [
+        return $this->render($this->factory->getTemplatePath().'/'.$type.'/form.html.twig', [
             'page' => $page,
             'form' => $form->createView(),
         ]);

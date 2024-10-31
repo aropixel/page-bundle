@@ -10,6 +10,7 @@ namespace Aropixel\PageBundle\Form;
 
 use Aropixel\PageBundle\Entity\PageInterface;
 use Aropixel\PageBundle\Form\Type\PageFormTypeInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\FormFactoryInterface as SfFormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 
@@ -18,7 +19,10 @@ class FormFactory implements FormFactoryInterface
 
     private $forms = [];
 
-    public function __construct(private readonly SfFormFactoryInterface $sfFormFactory)
+    public function __construct(
+        private readonly SfFormFactoryInterface $sfFormFactory,
+        private readonly ParameterBagInterface $parameterBag,
+    )
     {}
 
     public function addForm(PageFormTypeInterface $formType)
@@ -44,6 +48,12 @@ class FormFactory implements FormFactoryInterface
         }
 
         throw new \Exception(sprintf('The page form with "%s" type couldn\'t be not found', $page->getType()));
+    }
+
+    public function getTemplatePath() : string
+    {
+        $formsConfig = $this->parameterBag->get('aropixel_page.forms');
+        return $formsConfig['template_path'];
     }
 
 }

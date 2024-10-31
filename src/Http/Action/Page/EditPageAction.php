@@ -3,7 +3,6 @@
 namespace Aropixel\PageBundle\Http\Action\Page;
 
 use Aropixel\PageBundle\Form\FormFactoryInterface;
-use Aropixel\PageBundle\Http\Form\Page\FormFactory;
 use Aropixel\PageBundle\Repository\PageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -12,7 +11,6 @@ use Symfony\Component\HttpFoundation\Response;
 class EditPageAction extends AbstractController
 {
     public function __construct(
-        private readonly FormFactory $formFactory,
         private readonly FormFactoryInterface $factory,
         private readonly PageRepository $pageRepository,
         private readonly RequestStack $request,
@@ -36,7 +34,7 @@ class EditPageAction extends AbstractController
             return $this->redirectToRoute('aropixel_page_edit', ['type' => $page->getType(), 'id' => $page->getId()]);
         }
 
-        return $this->render($this->formFactory->getTemplatePath().'/'.$page->getType().'/form.html.twig', [
+        return $this->render($this->factory->getTemplatePath().'/'.$page->getType().'/form.html.twig', [
             'page' => $page,
             'form' => $form->createView()
         ]);
