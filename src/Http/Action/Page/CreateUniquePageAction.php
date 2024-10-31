@@ -28,8 +28,12 @@ class CreateUniquePageAction extends AbstractController
         $page = $this->pageRepository->findOneBy(['type' => $type]);
 
         if (!$page) {
+
+            $entities = $this->getParameter('aropixel_page.entities');
+            $entityName = $entities[PageInterface::class];
+
             /** @var PageInterface $page */
-            $page = new $this->model();
+            $page = new $entityName();
             $page->setStatus(Publishable::STATUS_ONLINE);
             $page->setType($type);
         }
