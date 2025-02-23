@@ -190,6 +190,8 @@ class Field implements FieldInterface, CroppableInterface, Translatable
     {
         $dtoImage = new Image();
         $dtoImage->setFilename($this->value);
+
+        return $dtoImage;
     }
 
 
