@@ -2,15 +2,14 @@
 
 namespace Aropixel\PageBundle\Entity;
 
-use Aropixel\AdminBundle\Entity\AttachedImageInterface;
 use Aropixel\AdminBundle\Entity\CroppableInterface;
 use Aropixel\AdminBundle\Entity\Image;
+use Aropixel\AdminBundle\Entity\ImageInterface;
 use Aropixel\AdminBundle\Entity\TranslatableTrait;
 use Gedmo\Translatable\Translatable;
-use Symfony\Component\HttpFoundation\File\File;
 
 
-class Field implements FieldInterface, AttachedImageInterface, CroppableInterface, Translatable
+class Field implements FieldInterface, CroppableInterface, Translatable
 {
 
     use TranslatableTrait;
@@ -187,14 +186,10 @@ class Field implements FieldInterface, AttachedImageInterface, CroppableInterfac
         return Image::getFileNameWebPath($this->value);
     }
 
-    public function getTempPath(): ?string
+    public function getImage(): ?ImageInterface
     {
-        // TODO: Implement getTempPath() method.
-    }
-
-    public function getFile(): ?File
-    {
-        // TODO: Implement getFile() method.
+        $dtoImage = new Image();
+        $dtoImage->setFilename($this->value);
     }
 
 
