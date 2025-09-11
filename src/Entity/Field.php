@@ -9,7 +9,7 @@ use Aropixel\AdminBundle\Entity\TranslatableTrait;
 use Gedmo\Translatable\Translatable;
 
 
-class Field implements FieldInterface, CroppableInterface, Translatable
+class Field implements FieldInterface, CroppableInterface, Translatable, \Stringable
 {
 
     use TranslatableTrait;
@@ -35,7 +35,7 @@ class Field implements FieldInterface, CroppableInterface, Translatable
     private ?Page $page = null;
 
 
-    public function __toString()
+    public function __toString(): string
     {
         return !is_null($this->getValue()) ? $this->getValue() : '';
     }

@@ -30,7 +30,7 @@ class FormFactory implements FormFactoryInterface
         $type = $formType->getType();
 
         if (array_key_exists($type, $this->forms)) {
-            throw new \Exception(sprintf('The page form with "%s" type has already been declared by "%s"', $type, get_class($this->forms[$type])));
+            throw new \Exception(sprintf('The page form with "%s" type has already been declared by "%s"', $type, $this->forms[$type]::class));
         }
 
         $this->forms[$type] = $formType;
@@ -43,7 +43,7 @@ class FormFactory implements FormFactoryInterface
     {
         foreach ($this->forms as $type => $formType) {
             if ($page->getType() == $type) {
-                return $this->sfFormFactory->create(get_class($formType), $page, $options);
+                return $this->sfFormFactory->create($formType::class, $page, $options);
             }
         }
 

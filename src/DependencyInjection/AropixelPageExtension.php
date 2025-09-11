@@ -51,16 +51,7 @@ class AropixelPageExtension extends Extension implements PrependExtensionInterfa
 
             // do not register mappings if dbal not configured.
             if (!empty($config['dbal']) && !empty($config['orm'])) {
-                $container->prependExtensionConfig('doctrine', array(
-                    'orm' => array(
-                        'mappings' => array(
-                            'AropixelPageBundle' => array(
-                                'is_bundle' => true,
-                                'type' => 'xml',
-                            ),
-                        ),
-                    ),
-                ));
+                $container->prependExtensionConfig('doctrine', ['orm' => ['mappings' => ['AropixelPageBundle' => ['is_bundle' => true, 'type' => 'xml']]]]);
             }
         }
 

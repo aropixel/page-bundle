@@ -14,8 +14,8 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 #[Gedmo\TranslationEntity(class: PageTranslation::class)]
 class Page implements PageInterface, Translatable
 {
-    const TYPE_DEFAULT = 'default';
-    const TYPE_DEFAULT_TRANSLATABLE = 'default_translatable';
+    public const TYPE_DEFAULT = 'default';
+    public const TYPE_DEFAULT_TRANSLATABLE = 'default_translatable';
 
     protected ?int $id = null;
     protected string $status = Publishable::STATUS_OFFLINE;
@@ -94,7 +94,7 @@ class Page implements PageInterface, Translatable
         try {
             return $propertyAccessor->getValue($this, $key);
         }
-        catch (\Exception $e) {
+        catch (\Exception) {
 
             if (is_null($this->fieldValues)) {
                 $this->compileFieldsValues();

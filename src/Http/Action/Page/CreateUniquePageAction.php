@@ -40,7 +40,7 @@ class CreateUniquePageAction extends AbstractController
             $this->pageRepository->add($page, true);
 
             $this->addFlash('notice', 'La page a bien été enregistrée.');
-            return $this->redirectToRoute('aropixel_page', ['type' => $page->getType(), 'id' => $page->getId()]);
+            return $this->redirectToRoute('aropixel_page', ['type' => $page->getType()]);
         }
 
         return $this->render($this->factory->getTemplatePath().'/'.$type.'/form.html.twig', [

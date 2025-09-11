@@ -61,7 +61,7 @@ class PageFieldDataMapper implements DataMapperInterface
                 }
 
                 // Otherwise, an exception is sent
-                catch (NoSuchPropertyException $e) {
+                catch (NoSuchPropertyException) {
 
                     /**
                      * Then, we iterate each field of the page to check if it map current form field
@@ -133,7 +133,7 @@ class PageFieldDataMapper implements DataMapperInterface
             $last = end($keys);
             $value = $this->propertyAccessor->getValue($field, $last);
         }
-        catch (\Exception $e) {
+        catch (\Exception) {
 
             // if not, use the value property
             $value = $field->getValue();
@@ -205,7 +205,7 @@ class PageFieldDataMapper implements DataMapperInterface
                     }
 
                         // Otherwise, an exception is sent
-                    catch (NoSuchPropertyException $e) {
+                    catch (NoSuchPropertyException) {
 
                         // Then we store the value in a Field
                         $this->mapToFieldData($viewData, $form, $propertyPath, $propertyValue, $mappedFormFields);
@@ -297,7 +297,7 @@ class PageFieldDataMapper implements DataMapperInterface
 
                     $this->propertyAccessor->setValue($field, $fieldPath, $propertyValue);
                 }
-                catch (\Exception $e) {
+                catch (\Exception) {
                     $field->setValue($propertyValue);
                 }
 

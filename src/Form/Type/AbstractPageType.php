@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 abstract class AbstractPageType extends AbstractType implements PageFormTypeInterface
 {
-    const ALL_RIGHTS_MODE = 'ROLE_SUPER_ADMIN';
+    public const ALL_RIGHTS_MODE = 'ROLE_SUPER_ADMIN';
     protected string $pageClass;
 
     abstract public function getType() : string;
