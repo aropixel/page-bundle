@@ -19,7 +19,7 @@ class AropixelPageExtension extends Extension implements PrependExtensionInterfa
     /**
      * {@inheritdoc}
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
@@ -31,7 +31,7 @@ class AropixelPageExtension extends Extension implements PrependExtensionInterfa
     }
 
 
-    private function registerParameters(ContainerBuilder $container, array $config)
+    private function registerParameters(ContainerBuilder $container, array $config): void
     {
         $container->setParameter('aropixel_page.entities', $config['entities']);
         $container->setParameter('aropixel_page.entities.page', $config['entities'][PageInterface::class]);
@@ -41,7 +41,7 @@ class AropixelPageExtension extends Extension implements PrependExtensionInterfa
     }
 
 
-    public function prepend(ContainerBuilder $container)
+    public function prepend(ContainerBuilder $container): void
     {
         // get all bundles
         $bundles = $container->getParameter('kernel.bundles');
@@ -54,9 +54,5 @@ class AropixelPageExtension extends Extension implements PrependExtensionInterfa
                 $container->prependExtensionConfig('doctrine', ['orm' => ['mappings' => ['AropixelPageBundle' => ['is_bundle' => true, 'type' => 'xml']]]]);
             }
         }
-
-//        $configs = $container->getExtensionConfig($this->getAlias());
-//        $config = $this->processConfiguration(new Configuration(), $configs);
-
     }
 }

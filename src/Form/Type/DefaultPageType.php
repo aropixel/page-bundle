@@ -16,16 +16,15 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 class DefaultPageType extends AbstractPageType
 {
     public function __construct(
-        protected readonly AuthorizationCheckerInterface $securityContext,
-        protected readonly PageFieldDataMapper $pageFieldDataMapper,
-        protected readonly ParameterBagInterface $parameterBag,
-        private array $entities)
-    {
-        parent::__construct($securityContext, $pageFieldDataMapper, $parameterBag);
+        PageFieldDataMapper $pageFieldDataMapper,
+        ParameterBagInterface $parameterBag,
+        private array $entities = []
+    ) {
+        parent::__construct($pageFieldDataMapper, $parameterBag);
     }
 
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $fieldClass = $this->entities[FieldInterface::class];
 

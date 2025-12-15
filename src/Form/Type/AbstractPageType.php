@@ -22,7 +22,6 @@ abstract class AbstractPageType extends AbstractType implements PageFormTypeInte
     abstract public function getType() : string;
 
     public function __construct(
-        private readonly AuthorizationCheckerInterface $securityContext,
         private readonly PageFieldDataMapper $pageFieldDataMapper,
         private readonly ParameterBagInterface $parameterBag
     ){
@@ -31,7 +30,7 @@ abstract class AbstractPageType extends AbstractType implements PageFormTypeInte
     }
 
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
 
         $type = $builder->getData()->getType();
@@ -99,7 +98,7 @@ abstract class AbstractPageType extends AbstractType implements PageFormTypeInte
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => $this->pageClass,
