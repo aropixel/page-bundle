@@ -12,14 +12,6 @@ services:
     arguments: ['@form.factory']
     public: true
 
-  Aropixel\PageBundle\Factory\FieldFactory:
-    autowire: true
-
-  Aropixel\PageBundle\Form\DataMapper\PageFieldDataMapper:
-    autowire: true
-
-  Aropixel\PageBundle\Form\FormFactoryInterface: '@aropixel.page.form.factory'
-
   Aropixel\PageBundle\EventListener\MappedSuperClassListener:
     arguments: ['%aropixel_page.entities%', '@parameter_bag']
     tags:
@@ -43,7 +35,3 @@ services:
     resource: '../../Repository'
     autowire: true
     tags: ['doctrine.repository_service']
-
-  Aropixel\PageBundle\Twig\FieldExtension:
-      arguments: ['@Symfony\Component\HttpFoundation\RequestStack']
-      tags: ['twig.extension']

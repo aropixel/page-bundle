@@ -2,8 +2,6 @@
 
 namespace Aropixel\PageBundle\DependencyInjection;
 
-use Aropixel\PageBundle\Entity\Field;
-use Aropixel\PageBundle\Entity\FieldInterface;
 use Aropixel\PageBundle\Entity\Page;
 use Aropixel\PageBundle\Entity\PageInterface;
 use Aropixel\PageBundle\Entity\PageTranslation;
@@ -31,7 +29,6 @@ class Configuration implements ConfigurationInterface
             ->addDefaultsIfNotSet()
             ->children()
             ->scalarNode(PageInterface::class)->defaultValue(Page::class)->end()
-            ->scalarNode(FieldInterface::class)->defaultValue(Field::class)->end()
             ->scalarNode(PageTranslationInterface::class)->defaultValue(PageTranslation::class)->end()
             ->end()
             ->end()
@@ -40,7 +37,6 @@ class Configuration implements ConfigurationInterface
             ->children()
             ->scalarNode('default')->defaultValue(DefaultPageType::class)->end()
             ->scalarNode('default_translatable')->defaultValue(DefaultTranslatablePageType::class)->end()
-            ->scalarNode('template_path')->defaultValue('@AropixelPage')->end()
             ->end()
             ->end()
             ->end()

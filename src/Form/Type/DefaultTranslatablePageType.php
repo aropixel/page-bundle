@@ -2,35 +2,25 @@
 
 namespace Aropixel\PageBundle\Form\Type;
 
-use Aropixel\AdminBundle\Form\Type\Image\Single\ImageType;
 use Aropixel\AdminBundle\Form\Type\TranslatableType;
-use Aropixel\PageBundle\Entity\FieldInterface;
 use Aropixel\PageBundle\Entity\PageTranslation;
-use Aropixel\PageBundle\Form\DataMapper\PageFieldDataMapper;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 
+/**
+ * Form type for the default page with translatable HTML content.
+ */
 class DefaultTranslatablePageType extends AbstractPageType
 {
-
-    public function __construct(
-        PageFieldDataMapper $pageFieldDataMapper,
-        ParameterBagInterface $parameterBag,
-        private array $entities = [],
-    ) {
-        parent::__construct($pageFieldDataMapper, $parameterBag);
-    }
-
-
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $fieldClass = $this->entities[FieldInterface::class];
-
         parent::buildForm($builder, $options);
 
         $builder
@@ -39,18 +29,12 @@ class DefaultTranslatablePageType extends AbstractPageType
                 'personal_translation' => PageTranslation::class,
                 'property_path'        => 'translations'
             ])
-            ->add('description', TranslatableType::class, [
-                'label'                => 'Description',
+            ->add('htmlContent', TranslatableType::class, [
+                'label'                => 'Contenu',
                 'personal_translation' => PageTranslation::class,
                 'property_path'        => 'translations',
                 'widget' => TextareaType::class,
                 'attr' => ['class' => 'ckeditor']
-            ])
-            ->add('image', ImageType::class, [
-                'label' => 'Image principale',
-                'data_class' => $fieldClass,
-                'data_value' => 'value',
-                'library' => self::class
             ])
             ->add('status', HiddenType::class)
             ->add('createdAt', DateTimeType::class, [

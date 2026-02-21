@@ -31,28 +31,29 @@ class AropixelPageExtension extends Extension implements PrependExtensionInterfa
     }
 
 
+    /**
+     * @param array<array<mixed>> $config
+     */
     private function registerParameters(ContainerBuilder $container, array $config): void
     {
         $container->setParameter('aropixel_page.entities', $config['entities']);
         $container->setParameter('aropixel_page.entities.page', $config['entities'][PageInterface::class]);
-        $container->setParameter('aropixel_page.forms', $config['forms']);
         $container->setParameter('aropixel_page.form.default', $config['forms']['default']);
         $container->setParameter('aropixel_page.form.default_translatable', $config['forms']['default_translatable']);
     }
 
 
+    /**
+     * {@inheritdoc}
+     */
     public function prepend(ContainerBuilder $container): void
     {
-        // get all bundles
-        $bundles = $container->getParameter('kernel.bundles');
+        $config = array_merge(...$container->getExtensionConfig('doctrine'));
 
-        if (isset($bundles['DoctrineBundle'])) {
-            $config = array_merge(...$container->getExtensionConfig('doctrine'));
-
-            // do not register mappings if dbal not configured.
-            if (!empty($config['dbal']) && !empty($config['orm'])) {
-                $container->prependExtensionConfig('doctrine', ['orm' => ['mappings' => ['AropixelPageBundle' => ['is_bundle' => true, 'type' => 'xml']]]]);
-            }
+        // Automatically register the bundle's entities as PHP attributes.
+        // This avoids having to manually configure the mapping in doctrine.yaml.
+        if (!empty($config['dbal']) && !empty($config['orm'])) {
+            $container->prependExtensionConfig('doctrine', ['orm' => ['mappings' => ['AropixelPageBundle' => ['is_bundle' => true, 'type' => 'attribute']]]]);
         }
     }
 }

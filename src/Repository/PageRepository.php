@@ -2,7 +2,7 @@
 
 namespace Aropixel\PageBundle\Repository;
 
-use Aropixel\AdminBundle\Infrastructure\Publication\Repository\PublishableRepository;
+use Aropixel\AdminBundle\Repository\PublishableRepository;
 use Aropixel\PageBundle\Entity\Page;
 use Aropixel\PageBundle\Entity\PageInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -23,22 +23,27 @@ class PageRepository extends PublishableRepository
     }
 
 
-    public function findPage($type): Page|null
+    /**
+     * @return Page[]
+     */
+    public function findDefaultPages(): array
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.type = :type')
-            ->setParameter('type', $type)
+            ->setParameter('type', Page::TYPE_DEFAULT)
             ->getQuery()
-            ->getOneOrNullResult()
+            ->getResult()
             ;
     }
 
-
-    public function findPages($type)
+    /**
+     * @return Page[]
+     */
+    public function findCustomPages(): array
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.type = :type')
-            ->setParameter('type', $type)
+            ->setParameter('type', Page::TYPE_CUSTOM)
             ->getQuery()
             ->getResult()
             ;

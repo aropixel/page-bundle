@@ -14,15 +14,25 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 
+/**
+ * Base form type for all page types.
+ *
+ * It handles common fields like title, slug, and SEO metadata.
+ */
 abstract class AbstractPageType extends AbstractType implements PageFormTypeInterface
 {
-    public const ALL_RIGHTS_MODE = 'ROLE_SUPER_ADMIN';
+    /** @var string The class name of the Page entity */
     protected string $pageClass;
 
+    /**
+     * @return string The type identifier (e.g., 'default').
+     */
     abstract public function getType() : string;
 
+    /**
+     * @param ParameterBagInterface $parameterBag
+     */
     public function __construct(
-        private readonly PageFieldDataMapper $pageFieldDataMapper,
         private readonly ParameterBagInterface $parameterBag
     ){
         $entities = $this->parameterBag->get('aropixel_page.entities');
@@ -92,10 +102,6 @@ abstract class AbstractPageType extends AbstractType implements PageFormTypeInte
                 ->add('metaKeywords', null, ['label' => 'Meta keywords']);
 
         }
-
-        $builder
-            ->setDataMapper($this->pageFieldDataMapper)
-        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

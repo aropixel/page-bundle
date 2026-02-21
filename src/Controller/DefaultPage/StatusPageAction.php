@@ -1,15 +1,15 @@
 <?php
 
-namespace Aropixel\PageBundle\Http\Action\Page;
+namespace Aropixel\PageBundle\Controller\DefaultPage;
 
-use Aropixel\AdminBundle\Infrastructure\Status;
+use Aropixel\AdminBundle\Component\Status\StatusInterface;
 use Aropixel\PageBundle\Entity\Page;
 use Symfony\Component\HttpFoundation\Response;
 
 class StatusPageAction
 {
     public function __construct(
-        private readonly Status $status,
+        private readonly StatusInterface $status,
     ){}
 
     public function __invoke(Page $page) : Response

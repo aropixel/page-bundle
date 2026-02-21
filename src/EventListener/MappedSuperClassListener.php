@@ -2,21 +2,17 @@
 
 namespace Aropixel\PageBundle\EventListener;
 
-use Doctrine\Persistence\Mapping\RuntimeReflectionService;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
-
 
 class MappedSuperClassListener
 {
-    private ?RuntimeReflectionService $reflectionService = null;
-
     /**
      * MapPageBundleSubscriber constructor.
      *
-     * @param mixed[] $entitiesNames
+     * @param string[] $entitiesNames
      */
     public function __construct(
-        private $entitiesNames
+        private readonly array $entitiesNames,
     ) {
     }
 

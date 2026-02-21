@@ -6,104 +6,138 @@ use Aropixel\AdminBundle\Entity\Publishable;
 use Aropixel\AdminBundle\Entity\PublishableTrait;
 use Aropixel\AdminBundle\Entity\TranslatableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Mapping\Annotation\Slug;
 use Gedmo\Translatable\Translatable;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
+/**
+ * Base Page entity.
+ *
+ * This entity supports both standard HTML content and custom JSON content
+ * for future page builder integration.
+ */
+#[ORM\MappedSuperclass(repositoryClass: \Aropixel\PageBundle\Repository\PageRepository::class)]
+#[ORM\Table(name: 'aropixel_page')]
+#[ORM\Index(columns: ['code'])]
 #[Gedmo\TranslationEntity(class: PageTranslation::class)]
 class Page implements PageInterface, Translatable
 {
+    use PublishableTrait;
+    use TranslatableTrait;
+
+    /**
+     * Standard page type with HTML content.
+     */
     public const TYPE_DEFAULT = 'default';
-    public const TYPE_DEFAULT_TRANSLATABLE = 'default_translatable';
 
+    /**
+     * Custom page type with JSON content (e.g., for page builders).
+     */
+    public const TYPE_CUSTOM = 'custom';
+
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\Column(type: 'integer')]
     protected ?int $id = null;
-    protected string $status = Publishable::STATUS_OFFLINE;
-    protected string $type;
-    protected string $code;
 
+    /**
+     * Publication status of the page.
+     */
+    #[ORM\Column(type: 'string', length: 20)]
+    protected string $status = Publishable::STATUS_OFFLINE;
+
+    /**
+     * The type of page (default or custom).
+     */
+    #[ORM\Column(type: 'string', length: 100)]
+    protected string $type;
+
+    /**
+     * Page title (translatable).
+     */
+    #[ORM\Column(type: 'string', nullable: true)]
     #[Gedmo\Translatable]
     protected ?string $title = null;
 
+    /**
+     * Short summary or excerpt (translatable).
+     */
+    #[ORM\Column(type: 'text', nullable: true)]
     #[Gedmo\Translatable]
     protected ?string $excerpt = null;
 
+    /**
+     * Standard HTML content (translatable).
+     */
+    #[ORM\Column(type: 'text', nullable: true)]
     #[Gedmo\Translatable]
-    protected ?string $description = null;
+    protected ?string $htmlContent = null;
 
+    /**
+     * Structured JSON content for custom page builders (translatable).
+     */
+    #[ORM\Column(type: 'text', nullable: true)]
+    #[Gedmo\Translatable]
+    protected ?string $jsonContent = null;
+
+    /**
+     * URL-friendly identifier (translatable).
+     */
+    #[ORM\Column(type: 'string')]
     #[Gedmo\Translatable]
     #[Slug(fields: ['title'])]
     protected ?string $slug = null;
 
+    /**
+     * SEO Meta Title (translatable).
+     */
+    #[ORM\Column(type: 'string', nullable: true)]
     #[Gedmo\Translatable]
     protected ?string $metaTitle = null;
 
+    /**
+     * SEO Meta Description (translatable).
+     */
+    #[ORM\Column(type: 'string', nullable: true)]
     #[Gedmo\Translatable]
     protected ?string $metaDescription = null;
 
+    /**
+     * SEO Meta Keywords (translatable).
+     */
+    #[ORM\Column(type: 'string', nullable: true)]
     #[Gedmo\Translatable]
     protected ?string $metaKeywords = null;
 
+    #[ORM\Column(type: 'datetime')]
+    #[Gedmo\Timestampable(on: 'create')]
     protected ?\DateTimeInterface $createdAt = null;
-    protected ?\DateTimeInterface $updatedAt = null;
-    protected ?\DateTimeInterface $publishAt = null;
-    protected ?\DateTimeInterface $publishUntil = null;
-    protected ?iterable $fields = null;
-    protected ?array $fieldValues = null;
 
-    use PublishableTrait;
-    use TranslatableTrait;
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    #[Gedmo\Timestampable(on: 'update')]
+    protected ?\DateTimeInterface $updatedAt = null;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    protected ?\DateTimeInterface $publishAt = null;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    protected ?\DateTimeInterface $publishUntil = null;
+
+    /**
+     * @var ?Collection<int,PageTranslation>
+     */
+    #[ORM\OneToMany(mappedBy: 'object', targetEntity: PageTranslation::class, cascade: ['persist', 'remove'])]
+    protected ?Collection $translations = null;
+
+    #[Gedmo\Locale]
+    protected ?string $locale = null;
 
     public function __construct()
     {
-        $this->fields = new ArrayCollection();
-    }
-
-
-    private function compileFieldsValues()
-    {
-        $this->fieldValues = [];
-        foreach ($this->fields as $field) {
-
-            $value = $field->getExplodedValue();
-            $this->fieldValues = array_replace_recursive($this->fieldValues, $value);
-            $this->ksortTree($this->fieldValues);
-
-        }
-
-    }
-
-    function ksortTree( &$array )
-    {
-        if (!is_array($array)) {
-            return false;
-        }
-
-        ksort($array);
-        foreach ($array as $k=>$v) {
-            $this->ksortTree($array[$k]);
-        }
-        return true;
-    }
-
-
-    public function getField($key)
-    {
-        $propertyAccessor = PropertyAccess::createPropertyAccessor();
-
-        try {
-            return $propertyAccessor->getValue($this, $key);
-        }
-        catch (\Exception) {
-
-            if (is_null($this->fieldValues)) {
-                $this->compileFieldsValues();
-            }
-
-            return (array_key_exists($key, $this->fieldValues) ? $this->fieldValues[$key] : null);
-
-        }
-
+        $this->translations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -136,18 +170,6 @@ class Page implements PageInterface, Translatable
     public function setType(string $type): self
     {
         $this->type = $type;
-
-        return $this;
-    }
-
-    public function getCode(): string
-    {
-        return $this->code;
-    }
-
-    public function setCode(string $code): self
-    {
-        $this->code = $code;
 
         return $this;
     }
@@ -188,14 +210,26 @@ class Page implements PageInterface, Translatable
         return $this;
     }
 
-    public function getDescription(): ?string
+    public function getHtmlContent(): ?string
     {
-        return $this->getTranslation('description');
+        return $this->getTranslation('htmlContent');
     }
 
-    public function setDescription(string $description): self
+    public function setHtmlContent(?string $htmlContent): static
     {
-        $this->description = $description;
+        $this->htmlContent = $htmlContent;
+
+        return $this;
+    }
+
+    public function getJsonContent(): ?string
+    {
+        return $this->getTranslation('jsonContent');
+    }
+
+    public function setJsonContent(?string $jsonContent): static
+    {
+        $this->jsonContent = $jsonContent;
 
         return $this;
     }
@@ -283,23 +317,4 @@ class Page implements PageInterface, Translatable
 
         return $this;
     }
-
-    public function getFields()
-    {
-        return $this->fields;
-    }
-
-    public function addField(?FieldInterface $field = null)
-    {
-        $this->fields->add($field);
-
-        $field->setPage($this);
-    }
-
-    public function removeField(FieldInterface $field)
-    {
-        $this->fields->removeElement($field);
-        $field->setPage(null);
-    }
-
 }
