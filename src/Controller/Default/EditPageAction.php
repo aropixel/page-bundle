@@ -15,6 +15,13 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class EditPageAction extends AbstractController
 {
+    public function __construct(
+        private readonly PageRepository $pageRepository,
+        private readonly RequestStack $request,
+        private readonly TranslationResolverInterface $translationResolver,
+    ) {
+    }
+
     /**
      * @param int $id The ID of the page to edit.
      * @return Response

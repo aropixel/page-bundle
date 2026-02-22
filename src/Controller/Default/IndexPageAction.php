@@ -12,6 +12,11 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class IndexPageAction extends AbstractController
 {
+    public function __construct(
+        private readonly PageRepository $pageRepository,
+    ) {
+    }
+
     /**
      * @param string $type The page type to filter by.
      * @return Response

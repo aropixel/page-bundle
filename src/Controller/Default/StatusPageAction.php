@@ -10,7 +10,8 @@ class StatusPageAction
 {
     public function __construct(
         private readonly StatusInterface $status,
-    ){}
+    ) {
+    }
 
     public function __invoke(Page $page) : Response
     {

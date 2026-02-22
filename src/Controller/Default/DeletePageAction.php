@@ -12,8 +12,8 @@ class DeletePageAction extends AbstractController
 {
     public function __construct(
         private readonly PageRepository $pageRepository,
-    )
-    {}
+    ) {
+    }
 
     public function __invoke(Request $request, Page $page) : Response
     {

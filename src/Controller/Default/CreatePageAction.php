@@ -17,6 +17,13 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class CreatePageAction extends AbstractController
 {
+    public function __construct(
+        private readonly PageRepository $pageRepository,
+        private readonly RequestStack $request,
+        private readonly TranslationResolverInterface $translationResolver
+    ) {
+    }
+
     /**
      * @param string $type The page type (standard: 'default').
      * @return Response
