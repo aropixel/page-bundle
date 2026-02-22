@@ -1,6 +1,6 @@
 <?php
 
-namespace Aropixel\PageBundle\Controller\Default;
+namespace Aropixel\PageBundle\Controller;
 
 use Aropixel\PageBundle\Entity\Page;
 use Aropixel\PageBundle\Repository\PageRepository;
@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class DeletePageAction extends AbstractController
+class DeleteAction extends AbstractController
 {
     public function __construct(
         private readonly PageRepository $pageRepository,

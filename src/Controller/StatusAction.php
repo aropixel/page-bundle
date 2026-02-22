@@ -1,12 +1,12 @@
 <?php
 
-namespace Aropixel\PageBundle\Controller\Default;
+namespace Aropixel\PageBundle\Controller;
 
 use Aropixel\AdminBundle\Component\Status\StatusInterface;
 use Aropixel\PageBundle\Entity\Page;
 use Symfony\Component\HttpFoundation\Response;
 
-class StatusPageAction
+class StatusAction
 {
     public function __construct(
         private readonly StatusInterface $status,

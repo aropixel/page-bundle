@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Handles the creation of a new page.
  */
-class CreatePageAction extends AbstractController
+class CreateAction extends AbstractController
 {
     public function __construct(
         private readonly PageRepository $pageRepository,

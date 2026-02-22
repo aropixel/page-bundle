@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Handles the edition of an existing page.
  */
-class EditPageAction extends AbstractController
+class EditAction extends AbstractController
 {
     public function __construct(
         private readonly PageRepository $pageRepository,
