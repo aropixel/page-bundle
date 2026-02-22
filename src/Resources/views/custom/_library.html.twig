@@ -1,0 +1,282 @@
+<div class="card mb-3">
+
+    <div class="px-3 py-2">
+        <ul class="nav nav-tabs nav-tabs-line border-0" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active px-3 py-2 d-flex align-items-center"
+                   role="tab"
+                   data-bs-toggle="tab"
+                   aria-controls="nav-bloc"
+                   aria-selected="true"
+                   href="#nav-bloc"
+                   id="nav-bloc-tab">
+                    <span style="font-size: 0.875rem;">Blocs</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link px-3 py-2 d-flex align-items-center"
+                   role="tab"
+                   data-bs-toggle="tab"
+                   aria-controls="nav-media"
+                   aria-selected="false"
+                   href="#nav-media"
+                   id="nav-media-tab">
+                    <span style="font-size: 0.875rem;">Médias</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link px-3 py-2 d-flex align-items-center"
+                   role="tab"
+                   data-bs-toggle="tab"
+                   aria-controls="nav-module"
+                   aria-selected="false"
+                   href="#nav-module"
+                   id="nav-module-tab">
+                    <span style="font-size: 0.875rem;">Modules</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="card-body p-3">
+
+        <div class="tab-content">
+            <div class="tab-pane pt-0 pb-0 fade show active" id="nav-bloc" role="tabpanel" aria-labelledby="nav-bloc-tab">
+                <div class="row g-2">
+                    <div class="col-4">
+                        <button type="button"
+                                class="pb-block-card"
+                                data-block-type="title"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon">
+                                <i class="fas fa-heading"></i>
+                            </div>
+                            <span class="pb-block-card-label">Titre</span>
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button"
+                                class="pb-block-card"
+                                data-block-type="text"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon">
+                                <i class="fas fa-align-left"></i>
+                            </div>
+                            <span class="pb-block-card-label">Texte</span>
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button"
+                                class="pb-block-card"
+                                data-block-type="button"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon">
+                                <i class="fas fa-hand-pointer"></i>
+                            </div>
+                            <span class="pb-block-card-label">Bouton</span>
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button"
+                                class="pb-block-card"
+                                data-block-type="spacer"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon">
+                                <i class="fas fa-arrows-alt-v"></i>
+                            </div>
+                            <span class="pb-block-card-label">Espacement</span>
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button"
+                                class="pb-block-card"
+                                data-block-type="divider"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon">
+                                <i class="fas fa-minus"></i>
+                            </div>
+                            <span class="pb-block-card-label">Séparateur</span>
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <button class="pb-block-card"
+                                data-action="click->page-builder#addBlockFromLibrary"
+                                data-block-type="cta">
+                            <div class="pb-block-card-icon">
+                                <i class="fas fa-bullhorn"></i>
+                            </div>
+                            <span class="pb-block-card-label">CTA</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="nav-media" role="tabpanel" aria-labelledby="nav-media-tab">
+                <div class="row g-2">
+                    <div class="col-4">
+                        <button type="button"
+                                class="pb-block-card"
+                                data-block-type="image"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon">
+                                <i class="fas fa-image"></i>
+                            </div>
+                            <span class="pb-block-card-label">Image</span>
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button"
+                                class="pb-block-card"
+                                data-block-type="video"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon">
+                                <i class="fas fa-video"></i>
+                            </div>
+                            <span class="pb-block-card-label">Vidéo</span>
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button"
+                                class="pb-block-card"
+                                data-block-type="slider"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon">
+                                <i class="fas fa-images"></i>
+                            </div>
+                            <span class="pb-block-card-label">Slider</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="nav-module" role="tabpanel" aria-labelledby="nav-module-tab">
+                <div class="row g-2">
+                    <div class="col-4">
+                        <button type="button"
+                                class="pb-block-card"
+                                data-block-type="accordion"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon">
+                                <i class="fas fa-align-justify"></i>
+                            </div>
+                            <span class="pb-block-card-label">Accordéon</span>
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button"
+                                class="pb-block-card"
+                                data-block-type="lineup"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon">
+                                <i class="fas fa-align-center"></i>
+                            </div>
+                            <span class="pb-block-card-label">Line Up</span>
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button"
+                                class="pb-block-card"
+                                data-block-type="banner"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon">
+                                <i class="fas fa-bullhorn"></i>
+                            </div>
+                            <span class="pb-block-card-label">Bandeau défilant</span>
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <button class="pb-block-card"
+                                data-action="click->page-builder#addBlockFromLibrary"
+                                data-block-type="nested-row">
+                            <div class="pb-block-card-icon">
+                                <i class="fas fa-th-large"></i>
+                            </div>
+                            <span class="pb-block-card-label">Grille</span>
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button"
+                                class="pb-block-card"
+                                data-block-type="ticket"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon">
+                                <i class="fas fa-ticket-alt"></i>
+                            </div>
+                            <span class="pb-block-card-label">Billetterie</span>
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button"
+                                class="pb-block-card"
+                                data-block-type="contact-form"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon">
+                                <i class="fas fa-address-card"></i>
+                            </div>
+                            <span class="pb-block-card-label">Formulaire de contact</span>
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button"
+                                class="pb-block-card"
+                                data-block-type="blog"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon">
+                                <i class="fas fa-newspaper"></i>
+                            </div>
+                            <span class="pb-block-card-label">Actus</span>
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button"
+                                class="pb-block-card"
+                                data-block-type="deezer"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon">
+                                <i class="fas fa-music"></i>
+                            </div>
+                            <span class="pb-block-card-label">Deezer</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<button type="button" class="btn btn-primary w-100 mb-3" data-action="click->page-builder#addSection">
+    + Ajouter une section
+</button>
+
+<div class="card card-template">
+
+    <div class="px-3 py-2">
+        <ul class="nav nav-tabs nav-tabs-line border-0" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link px-3 py-2 d-flex align-items-center active"
+                   role="tab"
+                   data-bs-toggle="tab"
+                   aria-controls="nav-template"
+                   aria-selected="false"
+                   href="#nav-template"
+                   id="nav-template-tab">
+                    <span style="font-size: 0.875rem;">Templates</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="card-body p-3">
+
+        <div class="tab-content">
+
+            {% include 'admin/page-builder/_template.html.twig' %}
+
+        </div>
+
+    </div>
+
+</div>

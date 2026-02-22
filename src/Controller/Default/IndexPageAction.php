@@ -1,6 +1,6 @@
 <?php
 
-namespace Aropixel\PageBundle\Controller\DefaultPage;
+namespace Aropixel\PageBundle\Controller\Default;
 
 use Aropixel\PageBundle\Entity\Page;
 use Aropixel\PageBundle\Repository\PageRepository;

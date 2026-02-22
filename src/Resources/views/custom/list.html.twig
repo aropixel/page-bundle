@@ -1,0 +1,72 @@
+{% extends '@AropixelAdmin/List/datatable.html.twig' %}
+
+{% block header_title %}Liste des pages{% endblock %}
+
+{% block header_breadcrumb %}
+    <ul class="breadcrumb breadcrumb-caret position-right">
+        <li class="breadcrumb-item"><a href="{{ url('_admin') }}">Accueil</a></li>
+        <li class="breadcrumb-item active">Page Builder</li>
+    </ul>
+{% endblock %}
+
+{% block header_top_right %}
+    <a href="{{ path('aropixel_custom_page_index') }}" class="btn btn-small btn-primary ms-3">
+        <i class="fas fa-plus me-2"></i>Créer
+    </a>
+{% endblock %}
+
+{% block panels %}
+
+    <div class="card">
+
+        <div class="table-responsive">
+
+            <table class="table card-table table-vcenter text-nowrap datatable">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Titre</th>
+                    <th>Slug</th>
+                    <th>Dernière modification</th>
+                    <th style="width:100px" class="no-sort"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for page in pages %}
+                    <tr>
+                        <td>{{ page.id }}</td>
+                        <td>
+                            <a href="{{ path('aropixel_custom_page_index', {id: page.id}) }}">{{ page.title }}</a>
+                        </td>
+                        <td>{{ page.slug }}</td>
+                        <td>{{ page.updatedAt|date('d/m/Y H:i') }}</td>
+                        <td class="text-right">
+                            <div class="btn-group">
+                                <button type="button" class="badge badge-light badge-icon" data-bs-toggle="dropdown" data-boundary="viewport">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-end" data-bs-popper="static">
+                                    <a href="{{ path('aropixel_custom_page_index', {id: page.id}) }}" class="dropdown-item has-icon">
+                                        <i class="fas fa-pen"></i> Éditer
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item has-icon delete text-danger" data-confirm="Êtes-vous certain de vouloir supprimer cette page ?"><i class="fas fa-trash"></i> Supprimer</a>
+                                    <form method="post" action="{{ path('aropixel_custom_page_delete', {'id': page.id}) }}">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete__page' ~ page.id) }}">
+                                    </form>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    {# Vide #}
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,39 @@
+<?php
+
+namespace Aropixel\PageBundle\Controller\Custom;
+
+use Aropixel\PageBundle\Entity\Page;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+
+/**
+ * Custom page builder editor.
+ */
+#[IsGranted('ROLE_CONTENT_EDITOR')]
+class BuilderAction extends AbstractController
+{
+    /**
+     * @param EntityManagerInterface $entityManager
+     */
+    public function __construct(
+        private readonly EntityManagerInterface $entityManager,
+    ) {
+    }
+
+    #[Route("/page-builder/{id?}", name: "aropixel_custom_page_index", methods: ["GET"], requirements: ['id' => '\d+'])]
+    public function __invoke(Request $request, ?Page $page = null): Response
+    {
+        if ($page && method_exists($page, 'setTranslatableLocale')) {
+            $page->setTranslatableLocale($request->getLocale());
+            $this->entityManager->refresh($page);
+        }
+
+        return $this->render('@AropixelPage/custom/index.html.twig', [
+            'page' => $page
+        ]);
+    }
+}

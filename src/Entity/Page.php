@@ -5,6 +5,7 @@ namespace Aropixel\PageBundle\Entity;
 use Aropixel\AdminBundle\Entity\Publishable;
 use Aropixel\AdminBundle\Entity\PublishableTrait;
 use Aropixel\AdminBundle\Entity\TranslatableTrait;
+use Aropixel\PageBundle\Repository\PageRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,9 +20,9 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
  * This entity supports both standard HTML content and custom JSON content
  * for future page builder integration.
  */
-#[ORM\MappedSuperclass(repositoryClass: \Aropixel\PageBundle\Repository\PageRepository::class)]
+#[ORM\MappedSuperclass(repositoryClass: PageRepository::class)]
 #[ORM\Table(name: 'aropixel_page')]
-#[ORM\Index(columns: ['code'])]
+#[ORM\Index(columns: ['type'])]
 #[Gedmo\TranslationEntity(class: PageTranslation::class)]
 class Page implements PageInterface, Translatable
 {
