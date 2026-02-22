@@ -3,9 +3,14 @@ services:
     autowire: true      # Automatically injects dependencies in your services.
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
     public: false       # Allows optimizing the container by removing unused services; this also means
-      # fetching services directly from the container via $container->get() won't work.
-    # The best practice is to be explicit about your dependencies anyway.
 
+  Aropixel\PageBundle\:
+    resource: '../../*'
+    exclude:
+      - '../../DependencyInjection/'
+      - '../../Entity/'
+      - '../../AropixelPageBundle.php'
+      - '../../Resources/'
 
   aropixel.page.form.factory:
     class: Aropixel\PageBundle\Form\FormFactory
@@ -17,18 +22,16 @@ services:
     tags:
       - { name: doctrine.event_listener, event: 'loadClassMetadata', priority: 8192 }
 
-  Aropixel\PageBundle\Http\:
-    resource: '../../Http'
+  Aropixel\PageBundle\Controller\:
+    resource: '../../Controller'
     tags: [ 'controller.service_arguments' ]
 
   aropixel.page.form.default:
     class: '%aropixel_page.form.default%'
-    arguments: ['@security.authorization_checker', '@Aropixel\PageBundle\Form\DataMapper\PageFieldDataMapper', '@parameter_bag', '%aropixel_page.entities%']
     tags: ['aropixel.page.form']
 
   aropixel.page.form.default_translatable:
     class: '%aropixel_page.form.default_translatable%'
-    arguments: [ '@security.authorization_checker', '@Aropixel\PageBundle\Form\DataMapper\PageFieldDataMapper', '@parameter_bag', '%aropixel_page.entities%' ]
     tags: [ 'aropixel.page.form' ]
 
   Aropixel\PageBundle\Repository\:
