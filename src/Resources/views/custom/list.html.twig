@@ -1,17 +1,17 @@
 {% extends '@AropixelAdmin/List/datatable.html.twig' %}
 
-{% block header_title %}Liste des pages{% endblock %}
+{% block header_title %}{% trans %}page.text.list{% endtrans %}{% endblock %}
 
 {% block header_breadcrumb %}
     <ul class="breadcrumb breadcrumb-caret position-right">
-        <li class="breadcrumb-item"><a href="{{ url('_admin') }}">Accueil</a></li>
-        <li class="breadcrumb-item active">Page Builder</li>
+        <li class="breadcrumb-item"><a href="{{ url('_admin') }}">{% trans %}text.dashboard{% endtrans %}</a></li>
+        <li class="breadcrumb-item active">{% trans %}pages.builder{% endtrans %}</li>
     </ul>
 {% endblock %}
 
 {% block header_top_right %}
     <a href="{{ path('aropixel_custom_page_index') }}" class="btn btn-small btn-primary ms-3">
-        <i class="fas fa-plus me-2"></i>Créer
+        <i class="fas fa-plus me-2"></i>{% trans %}text.create{% endtrans %}
     </a>
 {% endblock %}
 
@@ -25,9 +25,9 @@
                 <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Titre</th>
-                    <th>Slug</th>
-                    <th>Dernière modification</th>
+                    <th>{% trans %}page.list.header.title{% endtrans %}</th>
+                    <th>{% trans %}page.list.header.slug{% endtrans %}</th>
+                    <th>{% trans %}page.list.header.updated_at{% endtrans %}</th>
                     <th style="width:100px" class="no-sort"></th>
                 </tr>
                 </thead>
@@ -47,10 +47,10 @@
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-end" data-bs-popper="static">
                                     <a href="{{ path('aropixel_custom_page_index', {id: page.id}) }}" class="dropdown-item has-icon">
-                                        <i class="fas fa-pen"></i> Éditer
+                                        <i class="fas fa-pen"></i> {% trans %}text.edit{% endtrans %}
                                     </a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item has-icon delete text-danger" data-confirm="Êtes-vous certain de vouloir supprimer cette page ?"><i class="fas fa-trash"></i> Supprimer</a>
+                                    <a class="dropdown-item has-icon delete text-danger" data-confirm="{% trans %}pages.list.delete_warning{% endtrans %}"><i class="fas fa-trash"></i> {% trans %}form.delete{% endtrans %}</a>
                                     <form method="post" action="{{ path('aropixel_custom_page_delete', {'id': page.id}) }}">
                                         <input type="hidden" name="_method" value="DELETE">
                                         <input type="hidden" name="_token" value="{{ csrf_token('delete__page' ~ page.id) }}">

@@ -1,5 +1,5 @@
 aropixel_page_index:
-    path: /page/{type}/list
+    path: /page/list
     controller: Aropixel\PageBundle\Controller\ListAction
 
 aropixel_page_delete:
@@ -17,3 +17,7 @@ aropixel_default_page_new:
 aropixel_default_page_edit:
     path: /page/default/{id}/edit
     controller: Aropixel\PageBundle\Controller\Default\EditPageAction
+
+aropixel_custom_page:
+    path: /page/custom/{?id}
+    controller: Aropixel\PageBundle\Controller\Custom\BuilderAction

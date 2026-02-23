@@ -10,17 +10,59 @@
 
 
 {% block header_top_right %}
-    {% set baseroute = get_baseroute() %}
-    {% if route_exists(baseroute ~ '_order') %}
-        <a href="{{ path(baseroute ~ '_order') }}" class="btn btn-small btn-default">
-            <i class="fas fa-arrows-alt me-2"></i> {% trans %}text.reorder{% endtrans %}
-        </a>
-    {% endif %}
-    {% if app.request.get('_route') != baseroute ~ '_new' and route_exists(baseroute ~ '_new') %}
-        <a href="{{ path(baseroute ~ '_new', {'type': type}) }}" class="btn btn-small btn-primary ms-3">
-            <i class="fas fa-plus me-2"></i> {% trans %}text.create{% endtrans %}
-        </a>
-    {% endif %}
+    <button type="button" class="btn btn-small btn-primary ms-3"
+            data-bs-toggle="popover"
+            data-bs-html="true"
+            data-bs-placement="bottom"
+            data-bs-trigger="focus"
+            data-bs-custom-class="popover-large"
+            data-bs-content="
+                <div class='p-0'>
+                    <a href='{{ path('aropixel_default_page_new') }}' class='d-block text-decoration-none p-2 mb-3'>
+                        <div class='fw-bold text-darker-primary mb-1'>{% trans %}pages.create.default.title{% endtrans %}</div>
+                        <div class='text-muted small'>{% trans %}pages.create.default.desc{% endtrans %}</div>
+                    </a>
+                    <hr class='my-2'>
+                    <a href='{{ path('aropixel_custom_page') }}' class='d-block text-decoration-none p-2 mt-2'>
+                        <div class='fw-bold text-darker-primary mb-1'>{% trans %}pages.create.custom.title{% endtrans %}</div>
+                        <div class='text-muted small'>{% trans %}pages.create.custom.desc{% endtrans %}</div>
+                    </a>
+                </div>
+            ">
+        <i class="fas fa-plus me-2"></i> {% trans %}pages.create.button{% endtrans %}
+    </button>
+{% endblock %}
+
+
+{% block theme_stylesheets %}
+    {{ parent() }}
+    <style>
+        .popover-large {
+            --bs-popover-max-width: 350px;
+            --bs-popover-border-color: var(--main-bg-color, #0CABA8);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+        .popover-large .popover-body {
+            padding: 0.5rem;
+        }
+        .popover-large a:hover {
+            background-color: var(--light-grey, #f5f8fa);
+            border-radius: 0.25rem;
+        }
+    </style>
+{% endblock %}
+
+
+{% block theme_javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+            var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+                return new bootstrap.Popover(popoverTriggerEl)
+            })
+        });
+    </script>
 {% endblock %}
 
 
@@ -33,8 +75,8 @@
         <thead>
             <tr>
                 <th class="no-sort" style="width: 100px"></th>
-                <th>Titre</th>
-                <th>Date</th>
+                <th>{% trans %}page.list.header.title{% endtrans %}</th>
+                <th>{% trans %}page.list.header.date{% endtrans %}</th>
                 <th class="no-sort" style="width:100px">{% trans %}text.actions{% endtrans %}</th>
             </tr>
         </thead>

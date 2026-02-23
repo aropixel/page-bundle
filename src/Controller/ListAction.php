@@ -21,12 +21,11 @@ class ListAction extends AbstractController
      * @param string $type The page type to filter by.
      * @return Response
      */
-    public function __invoke(string $type) : Response
+    public function __invoke() : Response
     {
-        $pages = $this->pageRepository->findBy(['type' => Page::TYPE_DEFAULT], ['title' => 'ASC']);
+        $pages = $this->pageRepository->findBy([], ['title' => 'ASC']);
 
         return $this->render('@AropixelPage/index.html.twig', [
-            'type' => $type,
             'pages' => $pages
         ]);
     }

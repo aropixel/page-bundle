@@ -13,7 +13,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Custom page builder editor.
  */
-#[IsGranted('ROLE_CONTENT_EDITOR')]
 class BuilderAction extends AbstractController
 {
     /**
@@ -24,7 +23,6 @@ class BuilderAction extends AbstractController
     ) {
     }
 
-    #[Route("/page-builder/{id?}", name: "aropixel_custom_page_index", methods: ["GET"], requirements: ['id' => '\d+'])]
     public function __invoke(Request $request, ?Page $page = null): Response
     {
         if ($page && method_exists($page, 'setTranslatableLocale')) {

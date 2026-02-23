@@ -47,8 +47,8 @@ abstract class AbstractPageType extends AbstractType implements PageFormTypeInte
 
         if ($builder->getData() && $type == 'default') {
             $builder
-                ->add('title', TextType::class, ['label'  => 'Titre de la page'])
-                ->add('slug', TextType::class, ['label'  => 'Permalien', 'required' => false])
+                ->add('title', TextType::class, ['label'  => 'page.form.title'])
+                ->add('slug', TextType::class, ['label'  => 'page.form.slug', 'required' => false])
             ;
         }
 
@@ -56,12 +56,12 @@ abstract class AbstractPageType extends AbstractType implements PageFormTypeInte
 
             $builder
                 ->add('title', TranslatableType::class, [
-                    'label'                => 'Titre de la page',
+                    'label'                => 'page.form.title',
                     'personal_translation' => PageTranslation::class,
                     'property_path'        => 'translations'
                 ])
                 ->add('slug', TranslatableType::class, [
-                    'label'                => 'Permalien',
+                    'label'                => 'page.form.slug',
                     'personal_translation' => PageTranslation::class,
                     'property_path'        => 'translations',
                     'required' => false
@@ -74,19 +74,19 @@ abstract class AbstractPageType extends AbstractType implements PageFormTypeInte
 
             $builder
                 ->add('metaTitle', TranslatableType::class, [
-                    'label' => 'Meta title',
+                    'label' => 'page.form.meta_title',
                     'personal_translation' => PageTranslation::class,
                     'property_path' => 'translations',
                     'required' => false
                 ])
                 ->add('metaDescription', TranslatableType::class, [
-                    'label' => 'Meta description',
+                    'label' => 'page.form.meta_description',
                     'personal_translation' => PageTranslation::class,
                     'property_path' => 'translations',
                     'required' => false
                 ])
                 ->add('metaKeywords', TranslatableType::class, [
-                    'label' => 'Meta keywords',
+                    'label' => 'page.form.meta_keywords',
                     'personal_translation' => PageTranslation::class,
                     'property_path' => 'translations',
                     'required' => false
@@ -97,9 +97,9 @@ abstract class AbstractPageType extends AbstractType implements PageFormTypeInte
 
             // Si le titre n'est pas autorisé et qu'on est pas super admin,
             $builder
-                ->add('metaTitle', null, ['label' => 'Meta title'])
-                ->add('metaDescription', null, ['label' => 'Meta description'])
-                ->add('metaKeywords', null, ['label' => 'Meta keywords']);
+                ->add('metaTitle', null, ['label' => 'page.form.meta_title'])
+                ->add('metaDescription', null, ['label' => 'page.form.meta_description'])
+                ->add('metaKeywords', null, ['label' => 'page.form.meta_keywords']);
 
         }
     }

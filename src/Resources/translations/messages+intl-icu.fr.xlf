@@ -81,6 +81,82 @@
         <source>form.field.publish_until</source>
         <target>Jusqu'au</target>
       </trans-unit>
+      <trans-unit id="pg_create_btn" resname="pages.create.button">
+        <source>pages.create.button</source>
+        <target>Créer une page</target>
+      </trans-unit>
+      <trans-unit id="pg_create_def_t" resname="pages.create.default.title">
+        <source>pages.create.default.title</source>
+        <target>Page classique</target>
+      </trans-unit>
+      <trans-unit id="pg_create_def_d" resname="pages.create.default.desc">
+        <source>pages.create.default.desc</source>
+        <target>Créer une page avec le constructeur par défaut.</target>
+      </trans-unit>
+      <trans-unit id="pg_create_cus_t" resname="pages.create.custom.title">
+        <source>pages.create.custom.title</source>
+        <target>Page personnalisée</target>
+      </trans-unit>
+      <trans-unit id="pg_create_cus_d" resname="pages.create.custom.desc">
+        <source>pages.create.custom.desc</source>
+        <target>Créer une page avec le constructeur de blocs.</target>
+      </trans-unit>
+      <trans-unit id="pg_list_head_title" resname="page.list.header.title">
+        <source>page.list.header.title</source>
+        <target>Titre</target>
+      </trans-unit>
+      <trans-unit id="pg_list_head_date" resname="page.list.header.date">
+        <source>page.list.header.date</source>
+        <target>Date</target>
+      </trans-unit>
+      <trans-unit id="pg_list_head_slug" resname="page.list.header.slug">
+        <source>page.list.header.slug</source>
+        <target>Slug</target>
+      </trans-unit>
+      <trans-unit id="pg_list_head_updated" resname="page.list.header.updated_at">
+        <source>page.list.header.updated_at</source>
+        <target>Dernière modification</target>
+      </trans-unit>
+      <trans-unit id="pg_builder_title" resname="pages.builder">
+        <source>pages.builder</source>
+        <target>Page Builder</target>
+      </trans-unit>
+      <trans-unit id="pg_form_title" resname="page.form.title">
+        <source>page.form.title</source>
+        <target>Titre de la page</target>
+      </trans-unit>
+      <trans-unit id="pg_form_title_ph" resname="page.form.title.placeholder">
+        <source>page.form.title.placeholder</source>
+        <target>ex: Mentions légales</target>
+      </trans-unit>
+      <trans-unit id="pg_form_subtitle" resname="page.form.subtitle">
+        <source>page.form.subtitle</source>
+        <target>Sous-titre</target>
+      </trans-unit>
+      <trans-unit id="pg_form_slug" resname="page.form.slug">
+        <source>page.form.slug</source>
+        <target>Slug (URL)</target>
+      </trans-unit>
+      <trans-unit id="pg_form_slug_ph" resname="page.form.slug.placeholder">
+        <source>page.form.slug.placeholder</source>
+        <target>Laisser vide pour générer automatiquement</target>
+      </trans-unit>
+      <trans-unit id="pg_form_slug_help" resname="page.form.slug.help">
+        <source>page.form.slug.help</source>
+        <target>Identifiant unique dans l'URL.</target>
+      </trans-unit>
+      <trans-unit id="pg_form_meta_title" resname="page.form.meta_title">
+        <source>page.form.meta_title</source>
+        <target>Titre (SEO)</target>
+      </trans-unit>
+      <trans-unit id="pg_form_meta_desc" resname="page.form.meta_description">
+        <source>page.form.meta_description</source>
+        <target>Description (SEO)</target>
+      </trans-unit>
+      <trans-unit id="pg_form_meta_keys" resname="page.form.meta_keywords">
+        <source>page.form.meta_keywords</source>
+        <target>Mots-clés (SEO)</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
