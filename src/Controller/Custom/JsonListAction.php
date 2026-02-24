@@ -6,13 +6,10 @@ use Aropixel\PageBundle\Entity\Page;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Get custom pages as JSON.
  */
-#[IsGranted('ROLE_CONTENT_EDITOR')]
 class JsonListAction extends AbstractController
 {
     /**

@@ -15,7 +15,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Save custom page data via API.
  */
-#[IsGranted('ROLE_CONTENT_EDITOR')]
 class SaveAction extends AbstractController
 {
     /**

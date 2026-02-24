@@ -1,9 +1,5 @@
 {% extends '@AropixelAdmin/base.html.twig' %}
 
-{% block asset_manager %}
-    {{ importmap(['@aropixel/admin-bundle', 'admin']) }}
-{% endblock %}
-
 {% block theme_javascripts %}
     <script type="application/json" id="page-json-list-url">
         {{ url('aropixel_custom_page_json_list')|json_encode(constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_HEX_TAG'))|raw }}
@@ -104,12 +100,12 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item d-flex align-items-center" href="{{ path('aropixel_custom_page_index') }}">
+                                            <a class="dropdown-item d-flex align-items-center" href="{{ path('aropixel_custom_page') }}">
                                                 <i class="fas fa-file me-1"></i> Nouvelle page
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item d-flex align-items-center" href="{{ path('aropixel_custom_page_list') }}">
+                                            <a class="dropdown-item d-flex align-items-center" href="{{ path('aropixel_page_index') }}">
                                                 <i class="fas fa-list me-1"></i> Retour à la liste
                                             </a>
                                         </li>
@@ -157,13 +153,13 @@
                         <aside class="position-sticky" style="width: 320px; top: 135px; align-self: start;">
                             <div class="tab-content">
                                 <div class="tab-pane pt-0 fade" id="nav-param" role="tabpanel" aria-labelledby="nav-param-tab">
-                                    {% include 'admin/page-builder/_param.html.twig' %}
+                                    {% include '@AropixelPage/custom/_param.html.twig' %}
                                 </div>
                                 <div class="tab-pane pt-0 fade" id="nav-structure" role="tabpanel" aria-labelledby="nav-structure-tab">
-                                    {% include 'admin/page-builder/_structure.html.twig' %}
+                                    {% include '@AropixelPage/custom/_structure.html.twig' %}
                                 </div>
                                 <div class="tab-pane pt-0 fade show active" id="nav-library" role="tabpanel" aria-labelledby="nav-library-tab">
-                                    {% include 'admin/page-builder/_library.html.twig' %}
+                                    {% include '@AropixelPage/custom/_library.html.twig' %}
                                 </div>
                             </div>
                         </aside>

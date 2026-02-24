@@ -18,6 +18,14 @@ aropixel_default_page_edit:
     path: /page/default/{id}/edit
     controller: Aropixel\PageBundle\Controller\Default\EditPageAction
 
+aropixel_custom_page_json_list:
+    path: /page/custom/json/list
+    controller: Aropixel\PageBundle\Controller\Custom\JsonListAction
+
+aropixel_custom_page_save:
+    path: /page/custom/save
+    controller: Aropixel\PageBundle\Controller\Custom\SaveAction
+
 aropixel_custom_page:
     path: /page/custom/{?id}
     controller: Aropixel\PageBundle\Controller\Custom\BuilderAction
