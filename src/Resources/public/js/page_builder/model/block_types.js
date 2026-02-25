@@ -5,12 +5,7 @@ import { spacerBlockType } from '../block_types/spacer.js';
 import { dividerBlockType } from '../block_types/divider.js';
 import { imageBlockType } from '../block_types/image.js';
 import { sliderBlockType } from '../block_types/slider.js';
-import { accordionBlockType } from '../block_types/accordion.js';
-import { contactFormBlockType } from '../block_types/contact-form.js';
 import { blogBlockType } from '../block_types/blog.js';
-import { deezerBlockType } from '../block_types/deezer.js';
-import { ticketBlockType } from '../block_types/ticket.js';
-import { lineupBlockType } from '../block_types/lineup.js';
 import { nestedRowBlockType } from '../block_types/nested-row.js';
 import { ctaBlockType } from '../block_types/cta.js';
 import { bannerBlockType } from '../block_types/banner.js';
@@ -20,7 +15,7 @@ export class BlockTypesRegistry {
         this.types = {};
 
         // on enregistre chaque type
-        [titleBlockType, textBlockType, btnBlockType, spacerBlockType, dividerBlockType, imageBlockType, sliderBlockType, accordionBlockType, contactFormBlockType, blogBlockType, deezerBlockType, ticketBlockType, lineupBlockType, nestedRowBlockType, ctaBlockType, bannerBlockType].forEach((def) => {
+        [titleBlockType, textBlockType, btnBlockType, spacerBlockType, dividerBlockType, imageBlockType, sliderBlockType, blogBlockType, nestedRowBlockType, ctaBlockType, bannerBlockType].forEach((def) => {
             this.types[def.type] = def;
         });
     }

@@ -48,12 +48,24 @@ class AropixelPageExtension extends Extension implements PrependExtensionInterfa
      */
     public function prepend(ContainerBuilder $container): void
     {
+        $bundles = $container->getParameter('kernel.bundles');
+
         $config = array_merge(...$container->getExtensionConfig('doctrine'));
 
         // Automatically register the bundle's entities as PHP attributes.
         // This avoids having to manually configure the mapping in doctrine.yaml.
         if (!empty($config['dbal']) && !empty($config['orm'])) {
             $container->prependExtensionConfig('doctrine', ['orm' => ['mappings' => ['AropixelPageBundle' => ['is_bundle' => true, 'type' => 'attribute']]]]);
+        }
+
+        if (isset($bundles['FrameworkBundle'])) {
+            $container->prependExtensionConfig('framework', [
+                'asset_mapper' => [
+                    'paths' => [
+                        __DIR__.'/../../assets' => '@aropixel/page-bundle',
+                    ],
+                ],
+            ]);
         }
     }
 }

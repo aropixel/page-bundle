@@ -1,5 +1,5 @@
 import { Controller } from '@hotwired/stimulus';
-import { showNotification } from '../utils/notification.js';
+import { showNotification } from './utils/notification.js';
 
 /*
  * Ce contrôleur gère l'enregistrement de la page ET relaie les actions globales

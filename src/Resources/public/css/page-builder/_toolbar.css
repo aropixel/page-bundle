@@ -1,0 +1,233 @@
+/* Toolbar d’ajout dans les colonnes */
+.pb-column-add-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    justify-content: center;
+}
+
+.pb-column-add-toolbar button {
+    border-radius: 999px;
+    border: 1px dashed #d1d5db;
+    background: #ffffff;
+    padding: 0.15rem 0.6rem;
+    font-size: 0.7rem;
+    cursor: pointer;
+}
+
+/* Toolbars contextuelles */
+.pb-toolbar {
+    position: absolute;
+    display: flex;
+    gap: 4px;
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 100;
+}
+
+.pb-toolbar-btn {
+    width: 24px;
+    height: 24px;
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    color: #495057;
+}
+
+.pb-toolbar-btn:hover {
+    background: #f8f9fa;
+    border-color: #0caba8;
+    color: #0caba8;
+}
+
+.pb-toolbar-btn--danger:hover {
+    background: #dc3545;
+    border-color: #dc3545;
+    color: white;
+}
+
+/* Toolbar Section */
+.pb-toolbar--section {
+    top: 8px;
+    right: 8px;
+}
+
+.pb-page-section--selected > .pb-toolbar--section {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* Masquer la toolbar section si un enfant est sélectionné */
+.pb-page-section--selected:has(.pb-page-section-row--selected) > .pb-toolbar--section,
+.pb-page-section--selected:has(.pb-page-column--selected) > .pb-toolbar--section,
+.pb-page-section--selected:has(.pb-block--selected) > .pb-toolbar--section {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Toolbar Row - visible uniquement si la row est sélectionnée ET qu'aucun enfant n'est sélectionné */
+.pb-toolbar--row {
+    top: 8px;
+    right: 8px;
+}
+
+.pb-page-section-row--selected > .pb-toolbar--row {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* Masquer la toolbar row si un enfant est sélectionné */
+.pb-page-section-row--selected:has(.pb-page-column--selected) > .pb-toolbar--row,
+.pb-page-section-row--selected:has(.pb-block--selected) > .pb-toolbar--row {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Toolbar Column - visible uniquement si la colonne est sélectionnée ET qu'aucun enfant n'est sélectionné */
+.pb-toolbar--column, .pb-toolbar--nested-column {
+    top: 8px;
+    right: 8px;
+}
+
+.pb-page-column--selected > .pb-toolbar--column,
+.pb-page-column--selected > .pb-toolbar--nested-column {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* Masquer la toolbar column si un bloc est sélectionné */
+.pb-page-column--selected:has(.pb-block--selected) > .pb-toolbar--column,
+.pb-page-column--selected:has(.pb-block--selected) > .pb-toolbar--nested-column
+{
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Toolbar Block - visible uniquement si le bloc est sélectionné */
+.pb-toolbar--block, .pb-toolbar--nested-block {
+    top: 4px;
+    right: 4px;
+}
+
+.pb-block--selected > .pb-toolbar--block,
+.pb-block--selected > .pb-toolbar--nested-block
+{
+    opacity: 1;
+    pointer-events: all;
+}
+
+
+/* Toolbar d'insertion de section */
+.pb-section-insert-toolbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.pb-section-insert-btn {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 32px;
+    height: 16px;
+    background: #0caba8;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    pointer-events: all;
+}
+
+.pb-page-section:hover .pb-section-insert-btn {
+    opacity: 1;
+}
+
+.pb-section-insert-btn:hover {
+    background: #085a59;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+.pb-section-insert-btn--before {
+    top: -10px;
+}
+
+.pb-section-insert-btn--after {
+    bottom: -10px;
+}
+
+
+/* Conteneur du bloc texte avec toolbar */
+.pb-text-block-container {
+    position: relative;
+    width: 100%;
+}
+
+/* Toolbar d'édition de texte */
+.pb-text-toolbar {
+    display: flex;
+    gap: 2px;
+    flex-wrap: wrap;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.2s ease, max-height 0.2s ease;
+}
+
+.pb-text-block-container:hover .pb-text-toolbar,
+.pb-text-block-container:focus-within .pb-text-toolbar {
+    opacity: 1;
+    max-height: 100px;
+}
+
+.pb-text-toolbar-btn {
+    min-width: 28px;
+    height: 28px;
+    padding: 4px 8px;
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    color: #495057;
+    user-select: none;
+}
+
+.pb-text-toolbar-btn:hover {
+    background: #e9ecef;
+    border-color: #adb5bd;
+}
+
+.pb-text-toolbar-btn:active {
+    background: #dee2e6;
+}

@@ -1,0 +1,28 @@
+@import url('./page-builder/_toolbar.css');
+@import url("https://use.typekit.net/tpb1kxh.css");
+
+@import url('./page-builder/_layout.css');
+@import url('./page-builder/_panels.css');
+@import url('./page-builder/_ui.css');
+@import url('./page-builder/_canvas.css');
+@import url('./page-builder/_blocks.css');
+@import url('./page-builder/_lineup.css');
+@import url('./page-builder/_ticketing.css');
+@import url('./page-builder/_inspector.css');
+
+
+.page-name-editable {
+    border-radius: 4px;
+    padding: 2px 6px;
+    transition: background-color 0.2s, color 0.2s;
+    border-bottom: 1px dashed rgba(0, 0, 0, 0.18);
+}
+
+.page-name-editable:hover {
+    color: #333 !important;
+    border-bottom: 1px dot-dash transparent;
+}
+
+.page-name-editable.editing {
+    background-color: transparent;
+}

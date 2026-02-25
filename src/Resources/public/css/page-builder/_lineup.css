@@ -1,0 +1,156 @@
+/* ============================================
+   PAGE BUILDER - LINEUP BLOCK PREVIEW
+   ============================================ */
+
+.pb-block-lineup {
+    font-family: var(--bs-body-font-family, sans-serif);
+}
+
+.pb-block-lineup .lineup-preview {
+    width: 100%;
+    padding: 1rem;
+}
+
+/* --- Gestion des Tiers (Niveaux) --- */
+
+/* Conteneurs de niveaux */
+.pb-block-lineup .tier-headliners,
+.pb-block-lineup .tier-medium,
+.pb-block-lineup .tier-small {
+    text-align: center;
+    line-height: 1.2;
+}
+
+.pb-block-lineup .tier-headliners .artist-preview {
+    font-size: 2.5rem; /* ~40px */
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+}
+
+/* Typography Medium */
+.pb-block-lineup .tier-medium .artist-preview {
+    font-size: 1.5rem; /* ~24px */
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+/* Typography Small */
+.pb-block-lineup .tier-small .artist-preview {
+    font-size: 1rem; /* ~16px */
+    font-weight: 500;
+}
+
+/* --- Mode Liste (Par défaut) --- */
+
+.pb-block-lineup .artist-preview {
+    display: inline-block;
+    position: relative;
+    padding: 0 0.2em;
+}
+
+/* Séparateur (Point médian) */
+/* On l'ajoute via CSS pour ne pas polluer le HTML, sauf pour le dernier élément */
+.pb-block-lineup .artist-preview:not(:last-child)::after {
+    content: "•";
+    display: inline-block;
+    font-family: Arial, sans-serif;
+    margin-left: 0.6em;
+    margin-right: 0.4em;
+    color: var(--third-color);
+    font-weight: 300;
+}
+
+/* Gestion des sauts de ligne (si gérés via des <br> dans le HTML ou classes utilitaires) */
+.pb-block-lineup .lineup-break {
+    display: block;
+    height: 0;
+    margin: 0.5rem 0;
+    content: "";
+}
+
+/* --- Mode Vignettes (Cards) --- */
+/* Si vous décidez d'afficher des images dans le preview.html.twig plus tard */
+
+.pb-block-lineup .mode-vignettes .tier-headliners,
+.pb-block-lineup .mode-vignettes .tier-medium,
+.pb-block-lineup .mode-vignettes .tier-small {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.pb-block-lineup .mode-vignettes .artist-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 200px; /* Largeur fixe pour les vignettes */
+}
+
+.pb-block-lineup .mode-vignettes .artist-preview::after {
+    content: none; /* Pas de séparateur en mode vignette */
+}
+
+.pb-block-lineup .mode-vignettes .artist-image {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* --- Responsive Mobile (Preview) --- */
+
+.pb-block-lineup .mode-mobile .tier-headliners .artist-preview {
+    font-size: 1.8rem;
+}
+
+.pb-block-lineup .mode-mobile .tier-medium .artist-preview {
+    font-size: 1.2rem;
+}
+
+.pb-block-lineup .mode-mobile .tier-small .artist-preview {
+    font-size: 0.9rem;
+}
+
+
+.pb-lineup-preview .title {
+    font-family: forevs, sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 1.2;
+    text-transform: uppercase;
+    color: var(--primary-color);
+}
+
+
+.pb-lineup-preview .name.big {
+    font-family: forevs, sans-serif;
+    font-weight: 800;
+    font-size: 44px;
+    text-decoration: none;
+    line-height: 1.2;
+    color: var(--primary-color-xdark);
+    text-transform: uppercase;
+}
+
+.pb-lineup-preview .name {
+    font-family: forevs, sans-serif;
+    text-decoration: none;
+    text-transform: uppercase;
+    color: var(--primary-color-xdark);
+}
+
+.pb-lineup-preview .name.middle {
+    font-size: 32px;
+}
+
+.bkg-warmup .pb-lineup-preview .name {
+    color: var(--primary-color-light) !important;
+}
+
+.bkg-warmup .pb-block-lineup .artist-preview:not(:last-child)::after {
+    color: var(--primary-color-light);
+}
