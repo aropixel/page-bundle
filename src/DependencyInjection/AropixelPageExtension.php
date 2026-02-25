@@ -67,5 +67,13 @@ class AropixelPageExtension extends Extension implements PrependExtensionInterfa
                 ],
             ]);
         }
+
+        if (isset($bundles['StimulusBundle'])) {
+            $container->prependExtensionConfig('stimulus', [
+                'controller_paths' => [
+                    __DIR__.'/../../assets',
+                ],
+            ]);
+        }
     }
 }

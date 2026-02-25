@@ -2,7 +2,7 @@
 
 {% block asset_manager %}
     {% if aropixel_admin_entry_available %}
-        {{ importmap(['@aropixel/admin-bundle', '@aropixel/page-bundle']) }}
+        {{ importmap() }}
     {% else %}
         {{ parent() }}
     {% endif %}

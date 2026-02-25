@@ -1,0 +1,7 @@
+{
+    "name": "aropixel/page-bundle",
+    "version": "1.0.0",
+    "symfony": {
+        "controllers": "assets/controllers.json"
+    }
+}
