@@ -2,6 +2,7 @@
 
 namespace Aropixel\PageBundle\Form\Type;
 
+use Aropixel\AdminBundle\Form\Type\EditorType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -23,7 +24,7 @@ class DefaultPageType extends AbstractPageType
 
         $builder
             ->add('excerpt', null, ['label'  => 'Extrait'])
-            ->add('htmlContent', TextareaType::class, ['label'  => 'Contenu', 'attr' => ['class' => 'ckeditor']])
+            ->add('htmlContent', EditorType::class, ['label'  => 'Contenu'])
             ->add('status', HiddenType::class)
             ->add('createdAt', DateTimeType::class, [
                 'label' => "Créé le",
