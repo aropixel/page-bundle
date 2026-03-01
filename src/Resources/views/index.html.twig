@@ -87,7 +87,7 @@
                 <tr>
                     <td>
                         <a class="position-relative" href="{{ path('aropixel_default_page_edit', {'type': page.type, 'id': page.id}) }}">
-                            <img class="img-rounded rounded-3" src="{{ page.image | aropixel_imagine_filter('admin_thumbnail') }}" height="60" />
+                            <img class="img-rounded rounded-3" src="{{ null | aropixel_imagine_filter('admin_thumbnail') }}" height="60" />
                             <span class="state-icon img-state-icon state-icon--{{ page.status }}" title="{{ page.status == 'online' ? "status.published"|trans : "status.offline"|trans }}"></span>
                         </a>
                     </td>

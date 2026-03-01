@@ -45,7 +45,7 @@ class EditAction extends AbstractController
 
             $this->addFlash('notice', 'La page a bien été enregistrée.');
 
-            return $this->redirectToRoute('aropixel_page_edit', ['type' => $page->getType(), 'id' => $page->getId()]);
+            return $this->redirectToRoute('aropixel_default_page_edit', ['type' => $page->getType(), 'id' => $page->getId()]);
         }
 
         return $this->render('@AropixelPage/default/form.html.twig', [
