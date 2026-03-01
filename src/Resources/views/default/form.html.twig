@@ -16,8 +16,7 @@
 
 {% block tabbable %}
     <li class="nav-item"><a href="#panel-tab1" data-bs-toggle="pill" class="nav-link active"><span>{% trans %}page.form.content{% endtrans %}</span></a></li>
-    <li class="nav-item"><a href="#panel-tab2" data-bs-toggle="pill" class="nav-link"><span>{% trans %}page.form.image{% endtrans %}</span></a></li>
-    <li class="nav-item"><a href="#panel-tab3" data-bs-toggle="pill" class="nav-link"><span>{% trans %}page.form.seo{% endtrans %}</span></a></li>
+    <li class="nav-item"><a href="#panel-tab2" data-bs-toggle="pill" class="nav-link"><span>{% trans %}page.form.seo{% endtrans %}</span></a></li>
 {% endblock %}
 
 
@@ -31,7 +30,7 @@
 
                 {{ form_row(form.title) }}
                 {{ form_row(form.excerpt) }}
-                {{ form_row(form.description) }}
+                {{ form_row(form.htmlContent) }}
 
             </div>
 
@@ -39,21 +38,7 @@
 
     </div>
 
-    <div class="tab-pane tab-pane-img" id="panel-tab2">
-
-        <div class="card card-centered-large">
-
-            <div class="card-body">
-
-                {{ form_row(form.image) }}
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="tab-pane" id="panel-tab3">
+    <div class="tab-pane" id="panel-tab2">
 
         <div class="card card-centered-large">
 

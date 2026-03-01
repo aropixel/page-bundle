@@ -12,7 +12,7 @@ aropixel_page_status:
 
 aropixel_default_page_new:
     path: /page/default/new
-    controller: Aropixel\PageBundle\Controller\Default\CreatePageAction
+    controller: Aropixel\PageBundle\Controller\Default\CreateAction
 
 aropixel_default_page_edit:
     path: /page/default/{id}/edit

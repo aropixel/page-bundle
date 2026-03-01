@@ -48,7 +48,7 @@ class EditAction extends AbstractController
             return $this->redirectToRoute('aropixel_page_edit', ['type' => $page->getType(), 'id' => $page->getId()]);
         }
 
-        return $this->render(sprintf('@AropixelPage/default%s/form.html.twig', $isTranslatable ? '_translatable' : ''), [
+        return $this->render('@AropixelPage/default/form.html.twig', [
             'page' => $page,
             'form' => $form->createView()
         ]);

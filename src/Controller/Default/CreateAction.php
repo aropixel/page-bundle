@@ -25,10 +25,9 @@ class CreateAction extends AbstractController
     }
 
     /**
-     * @param string $type The page type (standard: 'default').
      * @return Response
      */
-    public function __invoke(string $type) : Response
+    public function __invoke() : Response
     {
         $isTranslatable = $this->translationResolver->isTranslatable();
 
@@ -53,7 +52,7 @@ class CreateAction extends AbstractController
             return $this->redirectToRoute('aropixel_page_edit', ['type' => $page->getType(), 'id' => $page->getId()]);
         }
 
-        return $this->render(sprintf('@AropixelPage/default%s/form.html.twig', $isTranslatable ? '_translatable' : ''), [
+        return $this->render('@AropixelPage/default/form.html.twig', [
             'page' => $page,
             'form' => $form->createView(),
             'isTranslatable' => $isTranslatable

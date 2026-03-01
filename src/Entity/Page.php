@@ -127,10 +127,6 @@ class Page implements PageInterface, Translatable
     #[ORM\Column(type: 'datetime', nullable: true)]
     protected ?\DateTimeInterface $publishUntil = null;
 
-    #[ORM\OneToOne(targetEntity: PageImage::class, inversedBy: "post", cascade: ["persist", "remove"])]
-    #[ORM\JoinColumn(name: "image_id", onDelete: "SET NULL")]
-    protected ?PageImage $image = null;
-
     /**
      * @var ?Collection<int,PageTranslation>
      */
@@ -323,18 +319,4 @@ class Page implements PageInterface, Translatable
         return $this;
     }
 
-    public function getImage(): ?PageImage
-    {
-        return $this->image;
-    }
-
-    public function setImage(?PageImage $image): self
-    {
-        if ($image->getImage()) {
-            $this->image = $image;
-            $this->image->setPost($this);
-        }
-
-        return $this;
-    }
 }
