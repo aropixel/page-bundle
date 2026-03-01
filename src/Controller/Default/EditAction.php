@@ -23,10 +23,9 @@ class EditAction extends AbstractController
     }
 
     /**
-     * @param int $id The ID of the page to edit.
-     * @return Response
+     * @param int $id the ID of the page to edit
      */
-    public function __invoke(int $id) : Response
+    public function __invoke(int $id): Response
     {
         $page = $this->pageRepository->find($id);
         if (!$page) {
@@ -45,12 +44,13 @@ class EditAction extends AbstractController
             $this->pageRepository->add($page, true);
 
             $this->addFlash('notice', 'La page a bien été enregistrée.');
+
             return $this->redirectToRoute('aropixel_page_edit', ['type' => $page->getType(), 'id' => $page->getId()]);
         }
 
         return $this->render('@AropixelPage/default/form.html.twig', [
             'page' => $page,
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 }

@@ -24,16 +24,12 @@ class CreateAction extends AbstractController
     ) {
     }
 
-    /**
-     * @return Response
-     */
-    public function __invoke() : Response
+    public function __invoke(): Response
     {
         $isTranslatable = $this->translationResolver->isTranslatable();
 
         $entities = $this->getParameter('aropixel_page.entities');
         $entityName = $entities[PageInterface::class];
-
 
         $page = new $entityName();
         $page->setType(Page::TYPE_DEFAULT);
@@ -49,15 +45,14 @@ class CreateAction extends AbstractController
             $this->pageRepository->add($page, true);
 
             $this->addFlash('notice', 'La page a bien été enregistrée.');
+
             return $this->redirectToRoute('aropixel_page_edit', ['type' => $page->getType(), 'id' => $page->getId()]);
         }
 
         return $this->render('@AropixelPage/default/form.html.twig', [
             'page' => $page,
             'form' => $form->createView(),
-            'isTranslatable' => $isTranslatable
+            'isTranslatable' => $isTranslatable,
         ]);
-
     }
-
 }

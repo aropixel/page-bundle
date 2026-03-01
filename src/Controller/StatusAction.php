@@ -13,10 +13,10 @@ class StatusAction
     ) {
     }
 
-    public function __invoke(Page $page) : Response
+    public function __invoke(Page $page): Response
     {
         $this->status->changeStatus($page);
+
         return new Response('OK', Response::HTTP_OK);
     }
-
 }

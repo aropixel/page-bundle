@@ -22,7 +22,6 @@ class PageRepository extends PublishableRepository
         parent::__construct($registry, $entities[PageInterface::class]);
     }
 
-
     /**
      * @return Page[]
      */
@@ -33,7 +32,7 @@ class PageRepository extends PublishableRepository
             ->setParameter('type', Page::TYPE_DEFAULT)
             ->getQuery()
             ->getResult()
-            ;
+        ;
     }
 
     /**
@@ -46,7 +45,7 @@ class PageRepository extends PublishableRepository
             ->setParameter('type', Page::TYPE_CUSTOM)
             ->getQuery()
             ->getResult()
-            ;
+        ;
     }
 
     public function add(Page $page, bool $flush = false): void
@@ -58,7 +57,7 @@ class PageRepository extends PublishableRepository
         }
     }
 
-    public function remove(Page $page, bool $flush = false) : void
+    public function remove(Page $page, bool $flush = false): void
     {
         $this->getEntityManager()->remove($page);
 
@@ -66,5 +65,4 @@ class PageRepository extends PublishableRepository
             $this->getEntityManager()->flush();
         }
     }
-
 }

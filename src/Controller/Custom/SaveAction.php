@@ -10,16 +10,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Save custom page data via API.
  */
 class SaveAction extends AbstractController
 {
-    /**
-     * @param EntityManagerInterface $entityManager
-     */
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
     ) {
@@ -65,14 +61,14 @@ class SaveAction extends AbstractController
                 if (isset($data[$field])) {
                     $valueToSave = $data[$field];
 
-                    if ($field === 'content' && is_array($valueToSave)) {
+                    if ('content' === $field && \is_array($valueToSave)) {
                         $valueToSave = json_encode($valueToSave);
                     }
 
                     $translation = $repository->findOneBy([
                         'object' => $page,
                         'locale' => $locale,
-                        'field' => $field
+                        'field' => $field,
                     ]);
 
                     if (!$translation) {
@@ -85,7 +81,6 @@ class SaveAction extends AbstractController
                     }
                 }
             }
-
 
             // Hydratation des champs
             if (isset($data['title'])) {
@@ -110,7 +105,7 @@ class SaveAction extends AbstractController
                 $page->setOgImage($data['ogImage']);
             }
             if (isset($data['content'])) {
-                $contentToSave = is_array($data['content']) ? $data['content'] : json_decode($data['content'], true);
+                $contentToSave = \is_array($data['content']) ? $data['content'] : json_decode($data['content'], true);
                 $page->setJsonContent(json_encode($contentToSave));
             }
 
@@ -123,13 +118,12 @@ class SaveAction extends AbstractController
                 'id' => $page->getId(),
                 'slug' => $page->getSlug(),
                 'status' => $page->getStatus(),
-                'message' => 'Page enregistrée avec succès.'
+                'message' => 'Page enregistrée avec succès.',
             ]);
-
         } catch (\Exception $e) {
             return new JsonResponse([
                 'success' => false,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

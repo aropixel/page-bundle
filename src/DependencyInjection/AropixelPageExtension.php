@@ -3,22 +3,19 @@
 namespace Aropixel\PageBundle\DependencyInjection;
 
 use Aropixel\PageBundle\Entity\PageInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
  * This is the class that loads and manages your bundle configuration.
  *
- * @link http://symfony.com/doc/current/cookbook/bundles/extension.html
+ * @see http://symfony.com/doc/current/cookbook/bundles/extension.html
  */
 class AropixelPageExtension extends Extension implements PrependExtensionInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = $this->getConfiguration($configs, $container);
@@ -26,10 +23,9 @@ class AropixelPageExtension extends Extension implements PrependExtensionInterfa
 
         $this->registerParameters($container, $config);
 
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yaml');
     }
-
 
     /**
      * @param array<array<mixed>> $config
@@ -42,10 +38,6 @@ class AropixelPageExtension extends Extension implements PrependExtensionInterfa
         $container->setParameter('aropixel_page.form.default_translatable', $config['forms']['default_translatable']);
     }
 
-
-    /**
-     * {@inheritdoc}
-     */
     public function prepend(ContainerBuilder $container): void
     {
         $bundles = $container->getParameter('kernel.bundles');
@@ -62,7 +54,7 @@ class AropixelPageExtension extends Extension implements PrependExtensionInterfa
             $container->prependExtensionConfig('framework', [
                 'asset_mapper' => [
                     'paths' => [
-                        __DIR__.'/../../assets' => '@aropixel/page-bundle',
+                        __DIR__ . '/../../assets' => '@aropixel/page-bundle',
                     ],
                 ],
             ]);
@@ -71,7 +63,7 @@ class AropixelPageExtension extends Extension implements PrependExtensionInterfa
         if (isset($bundles['StimulusBundle'])) {
             $container->prependExtensionConfig('stimulus', [
                 'controller_paths' => [
-                    __DIR__.'/../../assets',
+                    __DIR__ . '/../../assets',
                 ],
             ]);
         }

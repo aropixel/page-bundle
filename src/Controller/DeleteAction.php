@@ -15,9 +15,8 @@ class DeleteAction extends AbstractController
     ) {
     }
 
-    public function __invoke(Request $request, Page $page) : Response
+    public function __invoke(Request $request, Page $page): Response
     {
-
         $type = $page->getType();
         $title = $page->getTitle();
 
@@ -27,6 +26,5 @@ class DeleteAction extends AbstractController
         }
 
         return $this->redirectToRoute('aropixel_page_index', ['type' => $type]);
-
     }
 }

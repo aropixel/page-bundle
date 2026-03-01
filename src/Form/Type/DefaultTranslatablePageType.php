@@ -9,43 +9,38 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-
 /**
  * Form type for the default page with translatable HTML content.
  */
 class DefaultTranslatablePageType extends AbstractPageType
 {
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         parent::buildForm($builder, $options);
 
         $builder
             ->add('excerpt', TranslatableType::class, [
-                'label'                => 'Chapeau',
+                'label' => 'Chapeau',
                 'personal_translation' => PageTranslation::class,
-                'property_path'        => 'translations'
+                'property_path' => 'translations',
             ])
             ->add('htmlContent', TranslatableType::class, [
-                'label'                => 'Contenu',
+                'label' => 'Contenu',
                 'personal_translation' => PageTranslation::class,
-                'property_path'        => 'translations',
+                'property_path' => 'translations',
                 'widget' => TextareaType::class,
-                'attr' => ['class' => 'ckeditor']
+                'attr' => ['class' => 'ckeditor'],
             ])
             ->add('status', HiddenType::class)
             ->add('createdAt', DateTimeType::class, [
-                'label' => "Créé le",
+                'label' => 'Créé le',
                 'required' => false,
                 'date_widget' => 'single_text',
                 'time_widget' => 'single_text',
                 'date_format' => 'yyyy-MM-dd',
             ])
             ->add('publishAt', null, [
-                'label' => "Publié le",
+                'label' => 'Publié le',
                 'required' => false,
                 'date_widget' => 'single_text',
                 'time_widget' => 'single_text',
@@ -61,13 +56,10 @@ class DefaultTranslatablePageType extends AbstractPageType
                 'years' => range(date('Y') - 50, date('Y') + 50),
             ])
         ;
-
     }
 
     public function getType(): string
     {
         return 'default_translatable';
     }
-
-
 }

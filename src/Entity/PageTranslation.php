@@ -16,9 +16,9 @@ use Gedmo\Translatable\Entity\Repository\TranslationRepository;
 class PageTranslation extends AbstractPersonalTranslation implements PageTranslationInterface
 {
     /**
-     * @param string $locale Locale of the translation (e.g., 'en', 'fr').
-     * @param string $field The property name being translated.
-     * @param string|null $value The translated content.
+     * @param string      $locale Locale of the translation (e.g., 'en', 'fr').
+     * @param string      $field  the property name being translated
+     * @param string|null $value  the translated content
      */
     public function __construct(string $locale, string $field, ?string $value = null)
     {

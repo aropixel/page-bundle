@@ -12,20 +12,17 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class JsonListAction extends AbstractController
 {
-    /**
-     * @param EntityManagerInterface $entityManager
-     */
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
     ) {
     }
 
-    #[Route("/page-builder/json/list", name: "aropixel_custom_page_json_list", methods: ["GET"])]
+    #[Route('/page-builder/json/list', name: 'aropixel_custom_page_json_list', methods: ['GET'])]
     public function __invoke(): JsonResponse
     {
         $pages = $this->entityManager->getRepository(Page::class)->findCustomPages();
 
-        $data = array_map(fn(Page $page) => [
+        $data = array_map(fn (Page $page) => [
             'slug' => $page->getSlug(),
             'title' => $page->getTitle(),
         ], $pages);

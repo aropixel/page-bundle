@@ -12,7 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Mapping\Annotation\Slug;
 use Gedmo\Translatable\Translatable;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
  * Base Page entity.
@@ -318,5 +317,4 @@ class Page implements PageInterface, Translatable
 
         return $this;
     }
-
 }

@@ -2,7 +2,6 @@
 
 namespace Aropixel\PageBundle\Controller;
 
-use Aropixel\PageBundle\Entity\Page;
 use Aropixel\PageBundle\Repository\PageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,17 +16,12 @@ class ListAction extends AbstractController
     ) {
     }
 
-    /**
-     * @param string $type The page type to filter by.
-     * @return Response
-     */
-    public function __invoke() : Response
+    public function __invoke(): Response
     {
         $pages = $this->pageRepository->findBy([], ['title' => 'ASC']);
 
         return $this->render('@AropixelPage/index.html.twig', [
-            'pages' => $pages
+            'pages' => $pages,
         ]);
     }
-
 }

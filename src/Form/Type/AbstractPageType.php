@@ -5,14 +5,11 @@ namespace Aropixel\PageBundle\Form\Type;
 use Aropixel\AdminBundle\Form\Type\TranslatableType;
 use Aropixel\PageBundle\Entity\PageInterface;
 use Aropixel\PageBundle\Entity\PageTranslation;
-use Aropixel\PageBundle\Form\DataMapper\PageFieldDataMapper;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-
 
 /**
  * Base form type for all page types.
@@ -27,80 +24,70 @@ abstract class AbstractPageType extends AbstractType implements PageFormTypeInte
     /**
      * @return string The type identifier (e.g., 'default').
      */
-    abstract public function getType() : string;
+    abstract public function getType(): string;
 
-    /**
-     * @param ParameterBagInterface $parameterBag
-     */
     public function __construct(
         private readonly ParameterBagInterface $parameterBag
-    ){
+    ) {
         $entities = $this->parameterBag->get('aropixel_page.entities');
         $this->pageClass = $entities[PageInterface::class];
     }
 
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-
         $type = $builder->getData()->getType();
 
-        if ($builder->getData() && $type == 'default') {
+        if ($builder->getData() && 'default' == $type) {
             $builder
-                ->add('title', TextType::class, ['label'  => 'page.form.title'])
-                ->add('slug', TextType::class, ['label'  => 'page.form.slug', 'required' => false])
+                ->add('title', TextType::class, ['label' => 'page.form.title'])
+                ->add('slug', TextType::class, ['label' => 'page.form.slug', 'required' => false])
             ;
         }
 
-        if ($builder->getData() && $type == 'default_translatable') {
-
+        if ($builder->getData() && 'default_translatable' == $type) {
             $builder
                 ->add('title', TranslatableType::class, [
-                    'label'                => 'page.form.title',
+                    'label' => 'page.form.title',
                     'personal_translation' => PageTranslation::class,
-                    'property_path'        => 'translations'
+                    'property_path' => 'translations',
                 ])
                 ->add('slug', TranslatableType::class, [
-                    'label'                => 'page.form.slug',
+                    'label' => 'page.form.slug',
                     'personal_translation' => PageTranslation::class,
-                    'property_path'        => 'translations',
-                    'required' => false
+                    'property_path' => 'translations',
+                    'required' => false,
                 ])
             ;
-
         }
 
-        if ($type == 'default_translatable') {
-
+        if ('default_translatable' == $type) {
             $builder
                 ->add('metaTitle', TranslatableType::class, [
                     'label' => 'page.form.meta_title',
                     'personal_translation' => PageTranslation::class,
                     'property_path' => 'translations',
-                    'required' => false
+                    'required' => false,
                 ])
                 ->add('metaDescription', TranslatableType::class, [
                     'label' => 'page.form.meta_description',
                     'personal_translation' => PageTranslation::class,
                     'property_path' => 'translations',
-                    'required' => false
+                    'required' => false,
                 ])
                 ->add('metaKeywords', TranslatableType::class, [
                     'label' => 'page.form.meta_keywords',
                     'personal_translation' => PageTranslation::class,
                     'property_path' => 'translations',
-                    'required' => false
+                    'required' => false,
                 ])
             ;
-
         } else {
-
             // Si le titre n'est pas autorisé et qu'on est pas super admin,
             $builder
                 ->add('metaTitle', null, ['label' => 'page.form.meta_title'])
                 ->add('metaDescription', null, ['label' => 'page.form.meta_description'])
-                ->add('metaKeywords', null, ['label' => 'page.form.meta_keywords']);
-
+                ->add('metaKeywords', null, ['label' => 'page.form.meta_keywords'])
+            ;
         }
     }
 
@@ -111,5 +98,4 @@ abstract class AbstractPageType extends AbstractType implements PageFormTypeInte
             'multiple' => false,
         ]);
     }
-
 }
