@@ -35,16 +35,21 @@ abstract class AbstractPageType extends AbstractType implements PageFormTypeInte
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $type = $builder->getData()->getType();
+        $page = $builder->getData();
+        $type = $page?->getType();
 
-        if ($builder->getData() && 'default' == $type) {
-            $builder
-                ->add('title', TextType::class, ['label' => 'page.form.title'])
-                ->add('slug', TextType::class, ['label' => 'page.form.slug', 'required' => false])
-            ;
+        // Common fields for all pages
+        $builder
+            ->add('title', TextType::class, ['label' => 'page.form.title'])
+            ->add('slug', TextType::class, ['label' => 'page.form.slug', 'required' => false])
+        ;
+
+        if ($page && $page->getStaticCode()) {
+            $builder->get('slug')->setDisabled(true);
         }
 
-        if ($builder->getData() && 'default_translatable' == $type) {
+        // Translation logic for SEO fields
+        if ('default_translatable' == $type) {
             $builder
                 ->add('title', TranslatableType::class, [
                     'label' => 'page.form.title',
@@ -57,11 +62,6 @@ abstract class AbstractPageType extends AbstractType implements PageFormTypeInte
                     'property_path' => 'translations',
                     'required' => false,
                 ])
-            ;
-        }
-
-        if ('default_translatable' == $type) {
-            $builder
                 ->add('metaTitle', TranslatableType::class, [
                     'label' => 'page.form.meta_title',
                     'personal_translation' => PageTranslation::class,
@@ -82,7 +82,6 @@ abstract class AbstractPageType extends AbstractType implements PageFormTypeInte
                 ])
             ;
         } else {
-            // Si le titre n'est pas autorisé et qu'on est pas super admin,
             $builder
                 ->add('metaTitle', null, ['label' => 'page.form.meta_title'])
                 ->add('metaDescription', null, ['label' => 'page.form.meta_description'])

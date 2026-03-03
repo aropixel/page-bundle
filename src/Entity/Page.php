@@ -63,6 +63,18 @@ class Page implements PageInterface, Translatable
     protected ?string $title = null;
 
     /**
+     * Unique identifier for system pages.
+     */
+    #[ORM\Column(type: 'string', length: 50, nullable: true, unique: true)]
+    protected ?string $staticCode = null;
+
+    /**
+     * Whether the page can be deleted through the admin UI.
+     */
+    #[ORM\Column(type: 'boolean')]
+    protected bool $isDeletable = true;
+
+    /**
      * Short summary or excerpt (translatable).
      */
     #[ORM\Column(type: 'text', nullable: true)]
@@ -170,6 +182,44 @@ class Page implements PageInterface, Translatable
     public function setType(string $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getStaticCode(): ?string
+    {
+        return $this->staticCode;
+    }
+
+    /**
+     * @param string|null $staticCode
+     * @return self
+     */
+    public function setStaticCode(?string $staticCode): self
+    {
+        $this->staticCode = $staticCode;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDeletable(): bool
+    {
+        return $this->isDeletable;
+    }
+
+    /**
+     * @param bool $isDeletable
+     * @return self
+     */
+    public function setIsDeletable(bool $isDeletable): self
+    {
+        $this->isDeletable = $isDeletable;
 
         return $this;
     }

@@ -24,37 +24,38 @@
 ## Table of contents
 
 - [Quick start](#quick-start)
+- [Configuration des pages fixes](#configuration-des-pages-fixes)
+- [Types de pages personnalisés (JSON)](#types-de-pages-personnalisés-json)
 - [License](#license)
 
 
 ## Quick start
 
-- Create your symfony 4 project & install Aropixel AdminBundle
+- Create your symfony project & install Aropixel AdminBundle
 - Require Aropixel Page Bundle : `composer require aropixel/page-bundle`
 - Apply migrations
 - Include the routes :
 
-```
+```yaml
 aropixel_page:
   resource: '@AropixelPageBundle/Resources/config/routing.yml'
   prefix:   /admin
 ```
 
-- create a ConfigureMenuListener class, register it as an event listener and include the page menu in the listener:
+- Create a ConfigureMenuListener class, register it as an event listener and include the page menu in the listener:
 
-````
+```yaml
+services:
     App\EventListener\ConfigureMenuListener:
         tags:
             - { name: kernel.event_listener, event: aropixel.admin_menu_configure, method: onMenuConfigure }
-````
+```
 
 
-````
+```php
 <?php
 
 declare(strict_types=1);
-
-// src/AppBundle/EventListener/ConfigureMenuListener.php
 
 namespace App\EventListener;
 
@@ -63,9 +64,6 @@ use Aropixel\AdminBundle\Menu\AbstractMenuListener;
 
 class ConfigureMenuListener extends AbstractMenuListener
 {
-    /**
-     * @param ConfigureMenuEvent $event
-     */
     public function onMenuConfigure(ConfigureMenuEvent $event)
     {
         $request = $this->requestStack->getCurrentRequest();
@@ -91,8 +89,84 @@ class ConfigureMenuListener extends AbstractMenuListener
         $event->addAppMenu($this->menu, false, 'main');
     }
 }
+```
 
-````
+## Configuration des pages fixes
+
+Vous pouvez définir des pages "système" qui doivent être présentes et non supprimables par l'utilisateur (ex: accueil, contact).
+
+### 1. Déclarer les pages dans la configuration
+
+Dans `config/packages/aropixel_page.yaml` :
+
+```yaml
+aropixel_page:
+    fixed_pages:
+        homepage:
+            title: "Accueil"
+            type: "default"
+            deletable: false
+        contact:
+            title: "Contact"
+            type: "custom"
+            deletable: false
+```
+
+### 2. Synchroniser les pages avec la base de données
+
+Utilisez la commande suivante pour créer ou mettre à jour les pages fixes en base de données :
+
+```bash
+php bin/console aropixel:page:sync-fixed
+```
+
+Le `staticCode` sera utilisé comme identifiant unique, vous permettant de récupérer la page de manière fiable dans votre code :
+`$repo->findOneBy(['staticCode' => 'homepage'])`.
+
+
+## Types de pages personnalisés (JSON)
+
+En plus des pages par défaut (WYSIWYG), vous pouvez créer des types de pages avec des formulaires structurés dont les données sont stockées en JSON.
+
+### 1. Créer une classe FormType
+
+Héritez de `AbstractJsonPageType` et implémentez `buildCustomForm` :
+
+```php
+namespace App\Form\Type;
+
+use Aropixel\PageBundle\Form\Type\AbstractJsonPageType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+
+class ContactPageType extends AbstractJsonPageType
+{
+    protected function buildCustomForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('phone', TextType::class, ['label' => 'Téléphone'])
+            ->add('address', TextType::class, ['label' => 'Adresse'])
+        ;
+    }
+
+    public function getType(): string
+    {
+        return 'contact';
+    }
+}
+```
+
+### 2. Enregistrer le type de page
+
+Déclarez votre nouveau formulaire dans la configuration :
+
+```yaml
+aropixel_page:
+    forms:
+        contact: App\Form\Type\ContactPageType
+```
+
+Les données saisies dans les champs `phone` et `address` seront automatiquement sérialisées en JSON dans la colonne `jsonContent` de l'entité `Page`.
 
 ## License
 Aropixel Page Bundle is under the [MIT License](LICENSE)

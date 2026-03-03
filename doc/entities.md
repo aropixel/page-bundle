@@ -9,6 +9,20 @@ The `AropixelPageBundle` uses interfaces and mapped superclasses to allow for ea
 | `PageInterface` | `Page` | Stores the main page content and status. |
 | `PageTranslationInterface` | `PageTranslation` | Stores the translatable content for a page. |
 
+### Fields
+
+| Field | Type | Purpose |
+| --- | --- | --- |
+| `id` | `int` | Unique identifier. |
+| `type` | `string` | The type of the page (`default`, `custom`, etc.). |
+| `status` | `string` | Publication status (`online`, `offline`). |
+| `staticCode` | `string` | A unique code for system pages (e.g., `homepage`). |
+| `isDeletable` | `boolean` | Whether the page can be deleted in the admin. |
+| `title` | `string` | The page title (translatable). |
+| `slug` | `string` | URL-friendly title (translatable). |
+| `htmlContent` | `text` | Main HTML content (translatable). |
+| `jsonContent` | `text` | Structured JSON content (translatable). |
+
 ## Customizing the `Page` Entity
 
 To add new fields to the `Page` entity:

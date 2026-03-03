@@ -20,6 +20,11 @@ class DeleteAction extends AbstractController
         $type = $page->getType();
         $title = $page->getTitle();
 
+        if (!$page->isDeletable()) {
+            $this->addFlash('error', 'Cette page est protégée et ne peut pas être supprimée.');
+            return $this->redirectToRoute('aropixel_page_index', ['type' => $type]);
+        }
+
         if ($this->isCsrfTokenValid('delete__' . $page->getType() . '_page' . $page->getId(), $request->request->get('_token'))) {
             $this->pageRepository->remove($page, true);
             $this->addFlash('notice', 'La page "' . $title . '" a bien été supprimée.');

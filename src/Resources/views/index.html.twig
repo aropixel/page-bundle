@@ -104,6 +104,7 @@
                             </button>
                             <div class="dropdown-menu dropdown-menu-end" data-bs-popper="static">
                                 <a href="{{ path('aropixel_default_page_edit', {'type': page.type, 'id': page.id}) }}" class="dropdown-item has-icon"><i class="fas fa-edit"></i> {% trans %}text.edit{% endtrans %}</a>
+                                {% if page.isDeletable %}
                                 <div class="dropdown-divider"></div>
                                 <a data-confirm="{% trans %}pages.list.delete_warning{% endtrans %}" class="delete dropdown-item has-icon text-danger">
                                     <i class="fas fa-trash"></i> {% trans %}form.delete{% endtrans %}
@@ -111,6 +112,7 @@
                                 <form method="post" action="{{ path('aropixel_page_delete', {'id': page.id}) }}">
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete__' ~ page.type ~ '_page' ~ page.id) }}">
                                 </form>
+                                {% endif %}
                             </div>
                         </div>
                     </td>

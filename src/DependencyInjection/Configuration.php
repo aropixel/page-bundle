@@ -38,6 +38,16 @@ class Configuration implements ConfigurationInterface
             ->scalarNode('default_translatable')->defaultValue(DefaultTranslatablePageType::class)->end()
             ->end()
             ->end()
+            ->arrayNode('fixed_pages')
+            ->useAttributeAsKey('code')
+            ->arrayPrototype()
+            ->children()
+            ->scalarNode('title')->isRequired()->end()
+            ->scalarNode('type')->defaultValue('default')->end()
+            ->booleanNode('deletable')->defaultFalse()->end()
+            ->end()
+            ->end()
+            ->end()
             ->end()
         ;
 
