@@ -27,8 +27,8 @@ abstract class AbstractJsonPageType extends AbstractPageType
      */
     abstract protected function buildCustomForm(FormBuilderInterface $builder, array $options): void;
 
-    public function getType(): string
-    {
-        return 'custom';
-    }
+    /**
+     * @return string The type identifier (e.g., 'contact').
+     */
+    abstract public function getType(): string;
 }

@@ -135,8 +135,13 @@ In your Twig template:
 <div>
     {% if page.type == 'default' %}
         {{ page.htmlContent|raw }}
-    {% else %}
+    {% elseif page.type == 'custom' %}
         {# Render JSON content for custom builder #}
+    {% else %}
+        {# Render structured JSON content (e.g., for type 'contact') #}
+        {% set data = page.jsonContent|json_decode %}
+        <p>Phone: {{ data.phone }}</p>
+        <p>Address: {{ data.address }}</p>
     {% endif %}
 </div>
 ```

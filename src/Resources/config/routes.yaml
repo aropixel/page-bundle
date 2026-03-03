@@ -11,12 +11,14 @@ aropixel_page_status:
     controller: Aropixel\PageBundle\Controller\StatusAction
 
 aropixel_default_page_new:
-    path: /page/default/new
+    path: /page/{type}/new
     controller: Aropixel\PageBundle\Controller\Default\CreateAction
+    defaults:
+        type: default
 
 aropixel_default_page_edit:
-    path: /page/default/{id}/edit
-    controller: Aropixel\PageBundle\Controller\Default\EditPageAction
+    path: /page/{id}/edit
+    controller: Aropixel\PageBundle\Controller\Default\EditAction
 
 aropixel_custom_page_json_list:
     path: /page/custom/json/list

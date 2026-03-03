@@ -24,29 +24,30 @@ class CreateAction extends AbstractController
     ) {
     }
 
-    public function __invoke(): Response
+    /**
+     * @param string $type The type of page to create (defaults to 'default').
+     */
+    public function __invoke(string $type = Page::TYPE_DEFAULT): Response
     {
         $isTranslatable = $this->translationResolver->isTranslatable();
 
         $entities = $this->getParameter('aropixel_page.entities');
+        $forms = $this->getParameter('aropixel_page.forms');
         $entityName = $entities[PageInterface::class];
 
         $page = new $entityName();
-        $page->setType(Page::TYPE_DEFAULT);
+        $page->setType($type);
 
-        $form = $this->createForm($isTranslatable ?
-            DefaultTranslatablePageType::class :
-            DefaultPageType::class,
-            $page
-        );
+        $formType = $forms[$type] ?? ($isTranslatable ? DefaultTranslatablePageType::class : DefaultPageType::class);
+
+        $form = $this->createForm($formType, $page);
         $form->handleRequest($this->request->getMainRequest());
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->pageRepository->add($page, true);
 
             $this->addFlash('notice', 'La page a bien été enregistrée.');
-
-            return $this->redirectToRoute('aropixel_default_page_edit', ['type' => $page->getType(), 'id' => $page->getId()]);
+            return $this->redirectToRoute('aropixel_default_page_edit', ['id' => $page->getId()]);
         }
 
         return $this->render('@AropixelPage/default/form.html.twig', [

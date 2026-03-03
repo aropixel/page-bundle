@@ -9,6 +9,8 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -88,6 +90,14 @@ abstract class AbstractPageType extends AbstractType implements PageFormTypeInte
                 ->add('metaKeywords', null, ['label' => 'page.form.meta_keywords'])
             ;
         }
+
+        // Automatically set the page type from the form type
+        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+            $page = $event->getData();
+            if ($page instanceof PageInterface) {
+                $page->setType($this->getType());
+            }
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver): void
