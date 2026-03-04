@@ -41,9 +41,41 @@ class JsonPageDataMapper implements DataMapperInterface
         $values = [];
         /** @var FormInterface[] $forms */
         foreach ($forms as $name => $form) {
+            $innerType = $form->getConfig()->getType()->getInnerType();
+            $blockPrefix = $innerType->getBlockPrefix();
+
+            // Special handling for Aropixel Image/File types when they don't use a data_class
+            // (common in JSON storage scenarios)
+            if (null === $form->getConfig()->getDataClass()) {
+                if ('aropixel_admin_image' === $blockPrefix || 'aropixel_admin_file' === $blockPrefix) {
+                    $values[$name] = $this->extractFormData($form);
+                    continue;
+                }
+
+                if ('aropixel_admin_gallery' === $blockPrefix || 'aropixel_admin_gallery_image' === $blockPrefix) {
+                    $values[$name] = [];
+                    foreach ($form as $child) {
+                        $values[$name][] = $this->extractFormData($child);
+                    }
+                    continue;
+                }
+            }
+
             $values[$name] = $form->getData();
         }
 
         $data->setJsonContent(json_encode($values));
+    }
+
+    /**
+     * Extracts all child field data from a composite form.
+     */
+    private function extractFormData(FormInterface $form): array
+    {
+        $data = [];
+        foreach ($form as $childName => $childForm) {
+            $data[$childName] = $childForm->getData();
+        }
+        return $data;
     }
 }
