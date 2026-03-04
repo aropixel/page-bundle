@@ -34,15 +34,49 @@ To create a custom JSON page type:
                ->add('address', TextType::class, ['label' => 'Address'])
            ;
        }
-
        public function getType(): string
        {
            return 'contact';
        }
+
+       /**
+        * Optional: define a custom template for the form rendering.
+        * By default, it looks for '@AropixelPage/contact/form.html.twig'.
+        */
+       public function getTemplate(): string
+       {
+           return '@App/admin/page/contact_form.html.twig';
+       }
    }
    ```
 
-2. **Register it in your configuration**:
+2. **Create the form template**:
+   By default, the bundle will look for a template in `@AropixelPage/{type}/form.html.twig`.
+   You can provide it by creating a file in `templates/bundles/AropixelPageBundle/contact/form.html.twig`.
+
+   Example of a custom form template:
+   ```twig
+   {# templates/bundles/AropixelPageBundle/contact/form.html.twig #}
+   {% extends '@AropixelPage/default/form.html.twig' %}
+
+   {% block mainPanel %}
+       <div class="tab-pane active" id="panel-tab1">
+           <div class="card card-centered-large">
+               <div class="card-body">
+                   {{ form_row(form.title) }}
+                   <hr>
+                   <div class="row">
+                       <div class="col-md-6">{{ form_row(form.phone) }}</div>
+                       <div class="col-md-6">{{ form_row(form.address) }}</div>
+                   </div>
+               </div>
+           </div>
+       </div>
+       {{ parent() }}
+   {% endblock %}
+   ```
+
+3. **Register it in your configuration**:
    ```yaml
    aropixel_page:
        forms:

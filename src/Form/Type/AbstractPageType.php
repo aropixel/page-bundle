@@ -28,6 +28,14 @@ abstract class AbstractPageType extends AbstractType implements PageFormTypeInte
      */
     abstract public function getType(): string;
 
+    /**
+     * @return string|null The template to use for rendering the form (e.g., '@AropixelPage/contact/form.html.twig').
+     */
+    public function getTemplate(): string
+    {
+        return '@AropixelPage/'.$this->getType().'/form.html.twig';
+    }
+
     public function __construct(
         private readonly ParameterBagInterface $parameterBag
     ) {
