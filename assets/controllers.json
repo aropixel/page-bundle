@@ -1,0 +1,15 @@
+{
+    "controllers": {
+        "page-builder": {
+            "main": "../src/Resources/public/js/page_builder_controller.js",
+            "fetch": "eager",
+            "enabled": true
+        },
+        "page-builder-saver": {
+            "main": "../src/Resources/public/js/page_builder_saver_controller.js",
+            "fetch": "eager",
+            "enabled": true
+        }
+    },
+    "entrypoints": []
+}

@@ -1,0 +1,34 @@
+{
+  "name" : "aropixel/page-bundle",
+  "description" : "Gestion de page pour admin Aropixel",
+  "type" : "symfony-bundle",
+  "authors" : [{
+    "name" : "Joël Gomez Caballe",
+    "email" : "joel.gomez@aropixel.com"
+  }],
+  "keywords" : [
+    "aropixel page bundle"
+  ],
+  "license" : [
+    "MIT"
+  ],
+  "autoload" : {
+    "psr-4" : {
+      "Aropixel\\PageBundle\\" : "src/"
+    }
+  },
+  "require" : {
+    "aropixel/admin-bundle": "dev-feature/phpstan|dev-release/finalversion|dev-main"
+  },
+  "scripts": {
+    "auto-scripts": {
+      "aropixel:admin:setup": "symfony-cmd"
+    },
+    "post-install-cmd": [
+      "@auto-scripts"
+    ],
+    "post-update-cmd": [
+      "@auto-scripts"
+    ]
+  }
+}

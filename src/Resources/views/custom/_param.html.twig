@@ -1,0 +1,65 @@
+<div class="card">
+
+    <div class="card-body">
+
+        <div class="mb-2 form-group">
+            <label for="page_title" class="col-form-label required">{% trans %}page.form.title{% endtrans %}</label>
+            <input type="text"
+                   id="page_title"
+                   name="page[title]"
+                   class="form-control"
+                   required="required"
+                   value="{{ page ? page.title : '' }}"
+                   data-page-builder-target="titleField"
+                   data-page-builder-saver-target="paramTitle"
+                   placeholder="{% trans %}page.form.title.placeholder{% endtrans %}"/>
+        </div>
+
+        <div class="mb-2 form-group">
+            <label for="page_subtitle" class="col-form-label">{% trans %}page.form.subtitle{% endtrans %}</label>
+            <input type="text"
+                   id="page_subtitle"
+                   name="page[subtitle]"
+                   class="form-control"
+                   value="{{ page ? page.subtitle : '' }}"
+                   data-page-builder-saver-target="paramSubtitle">
+        </div>
+
+        <div class="mb-2 form-group">
+            <label for="page_slug" class="col-form-label">{% trans %}page.form.slug{% endtrans %}</label>
+            <input type="text"
+                   id="page_slug"
+                   class="form-control"
+                   value="{{ page ? page.slug : '' }}"
+                   data-page-builder-saver-target="paramSlug"
+                   placeholder="{% trans %}page.form.slug.placeholder{% endtrans %}">
+            <small class="text-muted">{% trans %}page.form.slug.help{% endtrans %}</small>
+        </div>
+
+        <div class="mb-2 form-group">
+            <label for="page_meta_title" class="col-form-label">{% trans %}page.form.meta_title{% endtrans %}</label>
+            <textarea id="page_meta_title"
+                      class="form-control"
+                      data-page-builder-saver-target="paramMetaTitle"
+                      rows="3">{{ page ? page.metaTitle : '' }}</textarea>
+        </div>
+
+        <div class="mb-2 form-group">
+            <label for="page_description" class="col-form-label">{% trans %}page.form.meta_description{% endtrans %}</label>
+            <textarea id="page_description"
+                      class="form-control"
+                      data-page-builder-saver-target="paramDescription"
+                      rows="3">{{ page ? page.description : '' }}</textarea>
+        </div>
+
+{#        <div class="mb-2 form-group">#}
+{#            <label for="page_ogimage" class="col-form-label">Image de partage (Og Image)</label>#}
+{#            <input type="text"#}
+{#                   id="page_ogimage"#}
+{#                   class="form-control"#}
+{#                   value="{{ page ? page.ogImage : '' }}"#}
+{#                   data-page-builder-saver-target="paramOgImage">#}
+{#        </div>#}
+
+    </div>
+</div>

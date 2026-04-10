@@ -1,0 +1,49 @@
+/* Panels & Sidebar Sections */
+.pb-panel {
+    display: none;
+}
+
+.pb-panel--active {
+    display: block;
+}
+
+.card {
+    border: none;
+}
+
+.card-template .card-body {
+    max-height: 300px;
+    overflow: auto;
+}
+
+/* Sections dans la sidebar (Inspecteur) */
+.pb-section {
+    border-radius: 0.75rem;
+    background: #ffffff;
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+}
+
+.pb-section-header {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid #e5e7eb;
+    background: #f9fafb;
+}
+
+.pb-section-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.pb-section-body {
+    font-size: 0.85rem;
+}
+
+.pb-section-body--stack > * + * {
+    margin-top: 0.5rem;
+}
+
+.pb-section-body--muted {
+    color: #6b7280;
+}

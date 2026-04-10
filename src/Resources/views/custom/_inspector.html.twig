@@ -1,0 +1,424 @@
+{# Contenu onglet Inspecteur #}
+<div class="pb-panel pb-panel--active" data-panel="inspector" data-page-builder-target="panel">
+
+    {# Inspecteur : état par défaut #}
+    <section class="pb-section" data-page-builder-target="inspectorPanelDefault">
+        <div class="pb-section-body pb-section-body--muted">
+            <p class="pb-empty-state">
+                Sélectionnez un élément dans la page pour modifier ses paramètres.
+            </p>
+        </div>
+    </section>
+
+    {# Container des accordéons #}
+    <div class="pb-accordion-inspector accordion accordion-flush d-none" id="inspectorAccordion" data-page-builder-target="inspectorAccordionContainer">
+
+        {# --- 1. BLOC --- #}
+        <div class="accordion-item d-none" data-page-builder-target="inspectorPanelBlock">
+            <h2 class="accordion-header" id="headingBlock">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBlock" aria-expanded="false" aria-controls="collapseBlock">
+                    <span data-page-builder-target="blockTitle">Bloc</span>
+                </button>
+            </h2>
+            <div id="collapseBlock" class="accordion-collapse collapse" aria-labelledby="headingBlock" data-bs-parent="#inspectorAccordion">
+                <div class="accordion-body pb-inspector-block-content">
+                    <div class="mb-2">
+                        <label class="form-label form-label-sm">Contenu du texte</label>
+                        <textarea
+                            class="form-control form-control-sm"
+                            rows="4"
+                            placeholder="Votre texte…"
+                            data-page-builder-target="blockContentInput"
+                            data-action="input->page-builder#updateBlockContent"
+                        ></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# --- 2. COLUMN --- #}
+        <div class="accordion-item d-none" data-page-builder-target="inspectorPanelColumn">
+            <h2 class="accordion-header" id="headingColumn">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseColumn" aria-expanded="true" aria-controls="collapseColumn">
+                    Colonne
+                </button>
+            </h2>
+            <div id="collapseColumn" class="accordion-collapse collapse show" aria-labelledby="headingColumn" data-bs-parent="#inspectorAccordion">
+                <div class="accordion-body">
+                    <div class="mb-2">
+                        <label class="form-label form-label-sm d-block mb-1" for="column-horizontal-alignment">Alignement horizontal</label>
+                        <div class="d-flex gap-1">
+                            <button type="button"
+                                    class="pb-button pb-button--ghost flex-fill"
+                                    data-alignment="left"
+                                    data-page-builder-target="columnAlignmentButton"
+                                    data-action="click->page-builder#updateColumnHorizontalAlignment"
+                                    title="Aligné à gauche">
+                                <i class="fas fa-align-left"></i>
+                            </button>
+                            <button type="button"
+                                    class="pb-button pb-button--ghost flex-fill"
+                                    data-alignment="center"
+                                    data-page-builder-target="columnAlignmentButton"
+                                    data-action="click->page-builder#updateColumnHorizontalAlignment"
+                                    title="Centré">
+                                <i class="fas fa-align-center"></i>
+                            </button>
+                            <button type="button"
+                                    class="pb-button pb-button--ghost flex-fill"
+                                    data-alignment="right"
+                                    data-page-builder-target="columnAlignmentButton"
+                                    data-action="click->page-builder#updateColumnHorizontalAlignment"
+                                    title="Aligné à droite">
+                                <i class="fas fa-align-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label form-label-sm d-block mb-1" for="column-link-type">Type de lien</label>
+                        <select class="form-select form-select-sm" id="column-link-type"
+                                data-page-builder-target="columnLinkTypeSelect"
+                                data-action="change->page-builder#updateColumnLinkType">
+                            <option value="">Aucun</option>
+                            <option value="url">Lien (URL)</option>
+                            <option value="page">Page du site</option>
+                        </select>
+                    </div>
+                    <div class="mb-2 d-none" data-page-builder-target="columnUrlInputContainer">
+                        <label class="form-label form-label-sm d-block mb-1" for="column-url">Lien (URL)</label>
+                        <input type="text"
+                               class="form-control form-control-sm"
+                               id="column-url"
+                               placeholder="https://..."
+                               data-page-builder-target="columnUrlInput"
+                               data-action="input->page-builder#updateColumnUrl">
+                    </div>
+                    <div class="mb-2 d-none" data-page-builder-target="columnPagePathSelectContainer">
+                        <label class="form-label form-label-sm d-block mb-1" for="column-page-path">Lien vers une page du site</label>
+                        <select class="form-select form-select-sm" id="column-page-path"
+                                data-page-builder-target="columnPagePathSelect"
+                                data-action="change->page-builder#updateColumnPagePath"
+                        >
+                            <option value="">-- Choisir --</option>
+                        </select>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label form-label-sm d-block mb-1" for="column-height">Hauteur</label>
+                        <select class="form-select form-select-sm" id="column-height"
+                                data-page-builder-target="columnHeightSelect"
+                                data-action="change->page-builder#updateColumnHeight"
+                        >
+                            <option value="auto">Automatique</option>
+                            <option value="small">Petite (150px)</option>
+                            <option value="medium">Moyenne (300px)</option>
+                            <option value="large">Large (450px)</option>
+                        </select>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label form-label-sm d-block mb-1" for="column-background-type">Type de fond</label>
+                        <select class="form-select form-select-sm" id="column-background-type"
+                                data-page-builder-target="columnBackgroundTypeSelect"
+                                data-action="change->page-builder#updateColumnBackgroundType">
+                            <option value="">Aucun</option>
+                            <option value="color">Couleur</option>
+                            <option value="image">Image</option>
+                            <option value="class">Classe CSS</option>
+                        </select>
+                    </div>
+
+                    {# Input couleur #}
+                    <div class="mb-2 d-none" data-page-builder-target="columnBackgroundColorInput">
+                        <label class="form-label form-label-sm d-block mb-1" for="column-bg-color">Couleur de fond</label>
+                        <input type="color"
+                               class="form-control form-control-lg form-control-color"
+                               id="column-bg-color"
+                               data-action="input->page-builder#updateColumnBackgroundValue">
+                    </div>
+
+                    <div class="mb-3 d-none" data-page-builder-target="columnBackgroundImageInput">
+                        <div class="pb-column-background-image-content">
+                            {# Le contenu sera injecté dynamiquement #}
+                        </div>
+                    </div>
+
+                    {# Select classe CSS #}
+                    <div class="mb-2 d-none" data-page-builder-target="columnBackgroundClassInput">
+                        <label class="form-label form-label-sm d-block mb-1" for="column-bg-class">Classe CSS</label>
+                        <select class="form-select form-select-sm" id="column-bg-class"
+                                data-action="change->page-builder#updateColumnBackgroundValue">
+                            <option value="">Sélectionner une classe</option>
+                            <option value="bg-primary">Fond primaire</option>
+                            <option value="bg-secondary">Fond secondaire</option>
+                            <option value="bg-light">Fond clair</option>
+                            <option value="bg-dark">Fond sombre</option>
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        {# --- 3. LIGNE (ROW) --- #}
+        <div class="accordion-item d-none" data-page-builder-target="inspectorPanelRow">
+            <h2 class="accordion-header" id="headingRow">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRow" aria-expanded="false" aria-controls="collapseRow">
+                    Ligne
+                </button>
+            </h2>
+            <div id="collapseRow" class="accordion-collapse collapse" aria-labelledby="headingRow" data-bs-parent="#inspectorAccordion">
+                <div class="accordion-body">
+
+                    {# Sélecteur du mode de ligne #}
+{#                    <div class="mb-2">#}
+{#                        <label class="form-label form-label-sm d-block mb-1" for="row-mode">Mode de grille</label>#}
+{#                        <select class="form-select form-select-sm" id="row-mode"#}
+{#                                data-page-builder-target="rowModeSelect"#}
+{#                                data-action="change->page-builder#updateRowMode">#}
+{#                            <option value="fixed">Fixe (colonnes avec tailles fixes)</option>#}
+{#                            <option value="auto">Auto (colonnes avec tailles automatiques)</option>#}
+{#                        </select>#}
+{#                    </div>#}
+
+                    <div class="mb-2">
+                        <label class="form-label form-label-sm d-block mb-1" for="row-type">Type de grille</label>
+                        <select class="form-select form-select-sm" id="row-type"
+                                data-page-builder-target="rowTypeSelect"
+                                data-action="change->page-builder#updateRowType">
+                            <option value="default">Par défaut</option>
+                            <option value="icon-box">Grille d'icônes</option>
+                            <option value="ticketing">Grille de billeterie</option>
+                            <option value="collapse">Grille sans espacement</option>
+                        </select>
+                    </div>
+
+                    {# Paramètres pour le mode "fixed" #}
+                    <div data-page-builder-target="rowFixedParams">
+                        <div class="mb-2">
+                            <div class="mb-1">
+                                <label class="form-label form-label-sm mb-0">Nombre d'éléments maximum par ligne</label>
+                                <div class="d-flex justify-content-end gap-1 pb-breakpoint-selector">
+                                    <button type="button" class="pb-breakpoint-btn active" data-breakpoint="xl" data-action="click->page-builder#changeColumnBreakpoint" title="XL (Ecran)">
+                                        <i class="fas fa-desktop"></i>
+                                    </button>
+                                    <button type="button" class="pb-breakpoint-btn" data-breakpoint="l" data-action="click->page-builder#changeColumnBreakpoint" title="L (Ordinateur portable)">
+                                        <i class="fas fa-laptop"></i>
+                                    </button>
+                                    <button type="button" class="pb-breakpoint-btn" data-breakpoint="m" data-action="click->page-builder#changeColumnBreakpoint" title="M (Tablette)">
+                                        <i class="fas fa-tablet-alt"></i>
+                                    </button>
+                                    <button type="button" class="pb-breakpoint-btn" data-breakpoint="s" data-action="click->page-builder#changeColumnBreakpoint" title="S (Téléphone)">
+                                        <i class="fas fa-mobile-alt"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="pb-columns-editor d-flex gap-1" data-page-builder-target="sectionColumnsEditor">
+                                {# rempli en JS #}
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Paramètres pour le mode "auto" #}
+                    <div data-page-builder-target="rowAutoParams" class="d-none">
+                        <div class="mb-2">
+                            <label class="form-label form-label-sm d-block mb-1" for="row-img-width">Taille (px) des images de la grille</label>
+                            <input class="form-control form-control-sm"
+                                   placeholder="Ex : 60"
+                                   id="row-img-width"
+                                   type="number"
+                                   data-page-builder-target="rowImgWidthInput"
+                                   data-action="change->page-builder#updateRowImgWidth">
+                        </div>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label form-label-sm d-block mb-1">Activer le slider à partir de l'écran</label>
+                        <div class="d-flex gap-1 pb-breakpoint-slider-selector" data-page-builder-target="rowSliderSelector">
+                            <button type="button" class="pb-breakpoint-btn active" data-breakpoint="none" data-action="click->page-builder#changeRowSliderBreakpoint" title="Aucun">
+                                <i class="fas fa-ban"></i>
+                            </button>
+                            <button type="button" class="pb-breakpoint-btn" data-breakpoint="s" data-action="click->page-builder#changeRowSliderBreakpoint" title="S (Téléphone)">
+                                <i class="fas fa-mobile-alt"></i>
+                            </button>
+                            <button type="button" class="pb-breakpoint-btn" data-breakpoint="m" data-action="click->page-builder#changeRowSliderBreakpoint" title="M (Tablette)">
+                                <i class="fas fa-tablet-alt"></i>
+                            </button>
+                            <button type="button" class="pb-breakpoint-btn" data-breakpoint="l" data-action="click->page-builder#changeRowSliderBreakpoint" title="L (Ordinateur portable)">
+                                <i class="fas fa-laptop"></i>
+                            </button>
+                            <button type="button" class="pb-breakpoint-btn" data-breakpoint="xl" data-action="click->page-builder#changeRowSliderBreakpoint" title="XL (Ecran)">
+                                <i class="fas fa-desktop"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label form-label-sm d-block mb-1" for="row-align">Alignement vertical des colonnes</label>
+                        <select class="form-select form-select-sm" id="row-align" data-action="change->page-builder#updateRowColumnsAlignment">
+                            <option value="center" selected>Centré</option>
+                            <option value="top">Aligné en haut</option>
+                            <option value="bottom">Aligné en bas</option>
+                            <option value="stretch">Stretch</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label form-label-sm d-block mb-1" for="row-justify">Alignement horizontal des colonnes</label>
+                        <select class="form-select form-select-sm" id="row-justify" data-action="change->page-builder#updateRowColumnsJustify">
+                            <option value="center" selected>Centré</option>
+                            <option value="space-between">Etirés</option>
+                            <option value="space-around">Etirés avec de l'espace aux extrémités</option>
+                            <option value="flex-start">Alignés au début</option>
+                            <option value="flex-end">Alignés à la fin</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label form-label-sm d-block mb-1">Comportement mobile</label>
+                        <div class="d-flex flex-column gap-1">
+                            <label class="form-check mb-0">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       data-page-builder-target="rowReverseMobileInput"
+                                       data-action="change->page-builder#updateRowResponsive">
+                                <span class="form-check-label ts-normal">Inverser l'ordre des colonnes</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# --- 4. SECTION --- #}
+        <div class="accordion-item d-none" data-page-builder-target="inspectorPanelSection">
+            <h2 class="accordion-header" id="headingSection">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSection" aria-expanded="true" aria-controls="collapseSection">
+                    Section
+                </button>
+            </h2>
+            <div id="collapseSection" class="accordion-collapse collapse show" aria-labelledby="headingSection" data-bs-parent="#inspectorAccordion">
+                <div class="accordion-body">
+                    <div class="mb-2">
+                        <label class="form-label form-label-sm">Nom de la section</label>
+                        <input type="text"
+                               class="form-control form-control-sm"
+                               placeholder="Section sans titre"
+                               data-page-builder-target="sectionNameInput"
+                               data-action="input->page-builder#updateSectionName">
+                    </div>
+                    <div class="mb-2" data-page-builder-target="sectionLayoutContainer">
+                        <label class="form-label form-label-sm d-block mb-1" for="section-width">Largeur</label>
+                        <select class="form-select form-select-sm" id="section-width" data-action="change->page-builder#updateSectionLayout">
+                            <option value="container-xsmall">x-small</option>
+                            <option value="container-small">small</option>
+                            <option value="container">medium</option>
+                            <option value="container-large">large</option>
+                            <option value="container-xlarge">x-large</option>
+                            <option value="container-expand">pleine largeur</option>
+                        </select>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label form-label-sm d-block mb-1" for="section-background-type">Type de fond</label>
+                        <select class="form-select form-select-sm" id="section-background-type"
+                                data-page-builder-target="sectionBackgroundType"
+                                data-action="change->page-builder#updateSectionBackgroundType">
+                            <option value="">Aucun</option>
+                            <option value="color">Couleur</option>
+                            <option value="image">Image</option>
+                            <option value="class">Classe CSS</option>
+                        </select>
+                    </div>
+
+                    {# Input couleur #}
+                    <div class="mb-2 d-none" data-page-builder-target="sectionBackgroundColorInput">
+                        <label class="form-label form-label-sm d-block mb-1" for="section-bg-color">Couleur de fond</label>
+                        <input type="color"
+                               class="form-control form-control-lg form-control-color"
+                               id="section-bg-color"
+                               data-action="input->page-builder#updateSectionBackgroundValue">
+                    </div>
+
+                    <div class="mb-3 d-none" data-page-builder-target="sectionBackgroundImageInput">
+                        <div class="pb-section-background-image-content">
+                            {# Le contenu sera injecté dynamiquement #}
+                        </div>
+                    </div>
+
+                    {# Select classe CSS #}
+                    <div class="mb-2 d-none" data-page-builder-target="sectionBackgroundClassInput">
+                        <label class="form-label form-label-sm d-block mb-1" for="section-bg-class">Classe CSS</label>
+                        <select class="form-select form-select-sm" id="section-bg-class"
+                                data-action="change->page-builder#updateSectionBackgroundValue">
+                            <option value="">Sélectionner une classe</option>
+                            <option value="bkg-img-secondary">Fond jaune</option>
+                            <option value="bkg-paper-bottom-right">Fond jaune avec lettres</option>
+                            <option value="bkg-img-third paper-bottom-left">Fond vert avec lettres (gauche)</option>
+                            <option value="bkg-img-third paper-top-right">Fond vert avec lettres (droit)</option>
+                            <option value="bkg-primary-xdark-color bkg-warmup widget-lineup-list">Fond panthères</option>
+                        </select>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label form-label-sm d-block mb-1">Visibilité</label>
+                        <div class="d-flex flex-column gap-1">
+                            <label class="form-check mb-0">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       data-page-builder-target="sectionVisibleDesktopInput"
+                                       data-action="change->page-builder#updateSectionVisibility">
+                                <span class="form-check-label ts-normal">Afficher sur desktop</span>
+                            </label>
+                            <label class="form-check mb-0">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       data-page-builder-target="sectionVisibleMobileInput"
+                                       data-action="change->page-builder#updateSectionVisibility">
+                                <span class="form-check-label ts-normal">Afficher sur mobile</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    {# Inspecteur : Page (Conservé pour rétrocompatibilité ou usage futur) #}
+    <section class="pb-section d-none" data-page-builder-target="inspectorPanelPage">
+        <div class="pb-section-header">
+            <h2 class="pb-section-title" data-page-builder-target="blockTitle">Bloc texte</h2>
+        </div>
+        <div class="pb-section-body pb-inspector-block-content">
+            <div class="mb-2">
+                <label class="form-label form-label-sm">Contenu du texte</label>
+                <textarea
+                    class="form-control form-control-sm"
+                    rows="4"
+                    placeholder="Votre texte…"
+                    data-page-builder-target="blockContentInput"
+                    data-action="input->page-builder#updateBlockContent"
+                ></textarea>
+            </div>
+        </div>
+    </section>
+
+    <div class="mb-3 d-none" id="section-image">
+        <label class="form-label form-label-sm">Image</label>
+        <div class="d-flex gap-2 align-items-center">
+            <div class="panel-list im-manager form-group" data-im-type="image" data-im-entity-class="Aropixel\PageBundle\Entity\Page" data-im-attach-class="Aropixel\PageBundle\Entity\Field" data-im-attach-value="value" data-im-library="Aropixel\PageBundle\Form\Type\DefaultTranslatablePageType" data-im-route="aropixel_page_new">
+                <div class="image-widget">
+                    <div class="thumbnail" data-im-attach-path="/inch-circumstance-paradox/image/attach/image" data-im-attach-class="Aropixel\PageBundle\Entity\Field" data-im-attach-value="value" data-im-attach-id="" data-im-crop-path="" data-im-crops-slugs="" data-im-crops-labels="">
+                        <div class="thumb">
+                            <div class="preview" data-new="">
+                                <span class="thumb-attach no-img v-align-middle"><i class="fas fa-camera"></i></span>
+                                <input type="hidden" id="default_translatable_page_image_file_name" name="default_translatable_page[image][file_name]">
+                            </div>
+                            <div class="caption-overflow">
+                                <a data-im-library-trigger="modal" class="iconUpload"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

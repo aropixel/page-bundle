@@ -1,0 +1,126 @@
+{% extends '@AropixelAdmin/List/datatable.html.twig' %}
+
+{% block header_title %}{% trans %}pages.title.description{% endtrans %}{% endblock %}
+{% block header_breadcrumb %}
+    <ul class="breadcrumb breadcrumb-caret position-right">
+        <li class="breadcrumb-item"><a href="{{ url('_admin') }}">{% trans %}text.dashboard{% endtrans %}</a></li>
+        <li class="breadcrumb-item active">{% trans %}pages.title{% endtrans %}</li>
+    </ul>
+{% endblock %}
+
+
+{% block header_top_right %}
+    <button type="button" class="btn btn-small btn-primary ms-3"
+            data-bs-toggle="popover"
+            data-bs-html="true"
+            data-bs-placement="bottom"
+            data-bs-trigger="focus"
+            data-bs-custom-class="popover-large"
+            data-bs-content="
+                <div class='p-0'>
+                    <a href='{{ path('aropixel_default_page_new') }}' class='d-block text-decoration-none p-4 py-3'>
+                        <div class='fw-bold text-darker-primary'>{% trans %}pages.create.default.title{% endtrans %}</div>
+                        <div class='text-muted small'>{% trans %}pages.create.default.desc{% endtrans %}</div>
+                    </a>
+                    <hr class='m-0'>
+                    <a href='{{ path('aropixel_custom_page') }}' class='d-block text-decoration-none p-4 py-3'>
+                        <div class='fw-bold text-darker-primary'>{% trans %}pages.create.custom.title{% endtrans %}</div>
+                        <div class='text-muted small'>{% trans %}pages.create.custom.desc{% endtrans %}</div>
+                    </a>
+                </div>
+            ">
+        <i class="fas fa-plus me-2"></i> {% trans %}pages.create.button{% endtrans %}
+    </button>
+{% endblock %}
+
+
+{% block theme_stylesheets %}
+    {{ parent() }}
+    <style>
+        .popover-large {
+            --bs-popover-max-width: 350px;
+            --bs-popover-border-color: var(--main-bg-color, #0CABA8);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+        .popover-large .popover-body {
+            padding: 0;
+        }
+        .popover-large a:hover {
+            background-color: var(--light-grey, #f5f8fa);
+            border-radius: 0.25rem;
+        }
+    </style>
+{% endblock %}
+
+
+{% block theme_javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+            var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+                return new bootstrap.Popover(popoverTriggerEl)
+            })
+        });
+    </script>
+{% endblock %}
+
+
+{% block paneltitle %}{% trans %}page.text.list{% endtrans %}{% endblock %}
+
+
+{% block paneldatatable %}
+
+    <table class="table card-table table-vcenter text-nowrap datatable">
+        <thead>
+            <tr>
+                <th class="no-sort" style="width: 100px"></th>
+                <th>{% trans %}page.list.header.title{% endtrans %}</th>
+                <th>{% trans %}page.list.header.date{% endtrans %}</th>
+                <th class="no-sort" style="width:100px">{% trans %}text.actions{% endtrans %}</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for page in pages %}
+
+                <tr>
+                    <td>
+                        <a class="position-relative" href="{{ path('aropixel_default_page_edit', {'id': page.id}) }}">
+                            <img class="img-rounded rounded-3" src="{{ null | aropixel_imagine_filter('admin_thumbnail') }}" height="60" />
+                            <span class="state-icon img-state-icon state-icon--{{ page.status }}" title="{{ page.status == 'online' ? "status.published"|trans : "status.offline"|trans }}"></span>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="d-flex align-items-center" href="{{ path('aropixel_default_page_edit', {'id': page.id}) }}">
+                            {{ page.title }}
+                        </a>
+                    </td>
+                    <td>{{ page.createdAt|date('d/m/Y') }}</td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button type="button" class="badge badge-light badge-icon" data-bs-toggle="dropdown" data-boundary="viewport">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end" data-bs-popper="static">
+                                <a href="{{ path('aropixel_default_page_edit', {'id': page.id}) }}" class="dropdown-item has-icon"><i class="fas fa-edit"></i> {% trans %}text.edit{% endtrans %}</a>
+                                {% if page.isDeletable %}
+                                <div class="dropdown-divider"></div>
+                                <a data-confirm="{% trans %}pages.list.delete_warning{% endtrans %}" class="delete dropdown-item has-icon text-danger">
+                                    <i class="fas fa-trash"></i> {% trans %}form.delete{% endtrans %}
+                                </a>
+                                <form method="post" action="{{ path('aropixel_page_delete', {'id': page.id}) }}">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete__' ~ page.type ~ '_page' ~ page.id) }}">
+                                </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+            {% endfor %}
+
+        </tbody>
+    </table>
+
+{% endblock %}

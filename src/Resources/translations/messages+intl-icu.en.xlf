@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" target-language="en" datatype="plaintext" original="file.ext">
+    <header>
+      <tool tool-id="symfony" tool-name="Symfony"/>
+    </header>
+    <body>
+      <trans-unit id="xjqJYOJ" resname="pages.title">
+        <source>pages.title</source>
+        <target>Pages</target>
+      </trans-unit>
+      <trans-unit id="MEgEMng" resname="text.list">
+        <source>text.list</source>
+        <target>List</target>
+      </trans-unit>
+      <trans-unit id="7p1PCbD" resname="text.create">
+        <source>text.create</source>
+        <target>Create</target>
+      </trans-unit>
+      <trans-unit id="igmwK8E" resname="text.dashboard">
+        <source>text.dashboard</source>
+        <target>Dashboard</target>
+      </trans-unit>
+      <trans-unit id=".cJ8GU_" resname="text.edit">
+        <source>text.edit</source>
+        <target>Edit</target>
+      </trans-unit>
+      <trans-unit id="acrIEkB" resname="page.form.content">
+        <source>page.form.content</source>
+        <target>Content</target>
+      </trans-unit>
+      <trans-unit id="7rueTqP" resname="page.form.image">
+        <source>page.form.image</source>
+        <target>Images</target>
+      </trans-unit>
+      <trans-unit id="N7dPGEy" resname="page.form.seo">
+        <source>page.form.seo</source>
+        <target>SEO</target>
+      </trans-unit>
+      <trans-unit id="vkfsCdn" resname="pages.title.description">
+        <source>pages.title.description</source>
+        <target>Edit your website pages</target>
+      </trans-unit>
+      <trans-unit id="xHrbKiG" resname="text.reorder">
+        <source>text.reorder</source>
+        <target>Reorder</target>
+      </trans-unit>
+      <trans-unit id="FyoPdd9" resname="page.text.list">
+        <source>page.text.list</source>
+        <target>List of pages</target>
+      </trans-unit>
+      <trans-unit id="NNP31tP" resname="text.actions">
+        <source>text.actions</source>
+        <target>Actions</target>
+      </trans-unit>
+      <trans-unit id="uohJbCo" resname="status.published">
+        <source>status.published</source>
+        <target>Published</target>
+      </trans-unit>
+      <trans-unit id="sIWTG7_" resname="status.offline">
+        <source>status.offline</source>
+        <target>Offline</target>
+      </trans-unit>
+      <trans-unit id="M5Vtr_6" resname="pages.list.delete_warning">
+        <source>pages.list.delete_warning</source>
+        <target>Are you sure you want to delete this page ?</target>
+      </trans-unit>
+      <trans-unit id="NGuUr2n" resname="form.delete">
+        <source>form.delete</source>
+        <target>Delete</target>
+      </trans-unit>
+      <trans-unit id="5e4s9b1" resname="form.field.created_at">
+        <source>form.field.created_at</source>
+        <target>Created at</target>
+      </trans-unit>
+      <trans-unit id="UErOO7D" resname="form.field.publish_at">
+        <source>form.field.publish_at</source>
+        <target>Published at</target>
+      </trans-unit>
+      <trans-unit id="o5fIg51" resname="form.field.publish_until">
+        <source>form.field.publish_until</source>
+        <target>Published until</target>
+      </trans-unit>
+      <trans-unit id="pg_create_btn" resname="pages.create.button">
+        <source>pages.create.button</source>
+        <target>Create a page</target>
+      </trans-unit>
+      <trans-unit id="pg_create_def_t" resname="pages.create.default.title">
+        <source>pages.create.default.title</source>
+        <target>Default page</target>
+      </trans-unit>
+      <trans-unit id="pg_create_def_d" resname="pages.create.default.desc">
+        <source>pages.create.default.desc</source>
+        <target>Create a page with the default builder.</target>
+      </trans-unit>
+      <trans-unit id="pg_create_cus_t" resname="pages.create.custom.title">
+        <source>pages.create.custom.title</source>
+        <target>Custom page</target>
+      </trans-unit>
+      <trans-unit id="pg_create_cus_d" resname="pages.create.custom.desc">
+        <source>pages.create.custom.desc</source>
+        <target>Create a page with the block builder.</target>
+      </trans-unit>
+      <trans-unit id="pg_list_head_title" resname="page.list.header.title">
+        <source>page.list.header.title</source>
+        <target>Title</target>
+      </trans-unit>
+      <trans-unit id="pg_list_head_date" resname="page.list.header.date">
+        <source>page.list.header.date</source>
+        <target>Date</target>
+      </trans-unit>
+      <trans-unit id="pg_list_head_slug" resname="page.list.header.slug">
+        <source>page.list.header.slug</source>
+        <target>Slug</target>
+      </trans-unit>
+      <trans-unit id="pg_list_head_updated" resname="page.list.header.updated_at">
+        <source>page.list.header.updated_at</source>
+        <target>Last update</target>
+      </trans-unit>
+      <trans-unit id="pg_builder_title" resname="pages.builder">
+        <source>pages.builder</source>
+        <target>Page Builder</target>
+      </trans-unit>
+      <trans-unit id="pg_form_title" resname="page.form.title">
+        <source>page.form.title</source>
+        <target>Page title</target>
+      </trans-unit>
+      <trans-unit id="pg_form_title_ph" resname="page.form.title.placeholder">
+        <source>page.form.title.placeholder</source>
+        <target>e.g.: Legal notice</target>
+      </trans-unit>
+      <trans-unit id="pg_form_subtitle" resname="page.form.subtitle">
+        <source>page.form.subtitle</source>
+        <target>Subtitle</target>
+      </trans-unit>
+      <trans-unit id="pg_form_slug" resname="page.form.slug">
+        <source>page.form.slug</source>
+        <target>Slug (URL)</target>
+      </trans-unit>
+      <trans-unit id="pg_form_slug_ph" resname="page.form.slug.placeholder">
+        <source>page.form.slug.placeholder</source>
+        <target>Leave empty to generate automatically</target>
+      </trans-unit>
+      <trans-unit id="pg_form_slug_help" resname="page.form.slug.help">
+        <source>page.form.slug.help</source>
+        <target>Unique identifier in the URL.</target>
+      </trans-unit>
+      <trans-unit id="pg_form_meta_title" resname="page.form.meta_title">
+        <source>page.form.meta_title</source>
+        <target>Title (SEO)</target>
+      </trans-unit>
+      <trans-unit id="pg_form_meta_desc" resname="page.form.meta_description">
+        <source>page.form.meta_description</source>
+        <target>Description (SEO)</target>
+      </trans-unit>
+      <trans-unit id="pg_form_meta_keys" resname="page.form.meta_keywords">
+        <source>page.form.meta_keywords</source>
+        <target>Keywords (SEO)</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

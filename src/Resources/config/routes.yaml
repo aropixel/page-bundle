@@ -1,0 +1,33 @@
+aropixel_page_index:
+    path: /page/list
+    controller: Aropixel\PageBundle\Controller\ListAction
+
+aropixel_page_delete:
+    path: /page/{id}
+    controller: Aropixel\PageBundle\Controller\DeleteAction
+
+aropixel_page_status:
+    path: /page/{id}/status
+    controller: Aropixel\PageBundle\Controller\StatusAction
+
+aropixel_default_page_new:
+    path: /page/{type}/new
+    controller: Aropixel\PageBundle\Controller\Default\CreateAction
+    defaults:
+        type: default
+
+aropixel_default_page_edit:
+    path: /page/{id}/edit
+    controller: Aropixel\PageBundle\Controller\Default\EditAction
+
+aropixel_custom_page_json_list:
+    path: /page/custom/json/list
+    controller: Aropixel\PageBundle\Controller\Custom\JsonListAction
+
+aropixel_custom_page_save:
+    path: /page/custom/save
+    controller: Aropixel\PageBundle\Controller\Custom\SaveAction
+
+aropixel_custom_page:
+    path: /page/custom/{?id}
+    controller: Aropixel\PageBundle\Controller\Custom\BuilderAction

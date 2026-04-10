@@ -1,0 +1,135 @@
+/* Boutons */
+.pb-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    padding: 0.3rem 0.9rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.pb-button--primary {
+    background: #111827;
+    color: #ffffff;
+    border-color: #111827;
+}
+
+.pb-button--primary:hover {
+    background: #000000;
+}
+
+.pb-button--ghost {
+    background: #ffffff;
+    color: #111827;
+    border-color: #e5e7eb;
+}
+
+.pb-button--ghost:hover {
+    background: #f3f4f6;
+}
+
+/* Listes */
+.pb-list {
+    border-radius: 0.5rem;
+    border: 1px dashed #d1d5db;
+    padding: 0.5rem;
+}
+
+.pb-list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    padding: 0.35rem 0.4rem;
+}
+
+.pb-list-item--ghost {
+    color: #9ca3af;
+}
+
+.pb-list-item-label {
+    flex: 1;
+}
+
+/* Device Switch Toggle */
+.pb-device-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    background: transparent;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 2px;
+}
+
+.pb-device-switch-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    color: #9ca3af;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.pb-device-switch-btn i {
+    font-size: 14px;
+    transition: color 0.15s ease;
+}
+
+.pb-device-switch-btn:hover:not(.pb-device-switch-btn--active) {
+    background: #f9fafb;
+    color: #6b7280;
+}
+
+.pb-device-switch-btn--active {
+    background: #f3f4f6;
+    color: #111827;
+}
+
+.pb-device-switch-btn--active i {
+    color: #111827;
+}
+
+/* Nav Tabs Overrides */
+.nav-tabs-line .nav-link {
+    border: none;
+    color: #6c757d;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.nav-tabs-line .nav-link:hover {
+    color: #0caba8;
+    background-color: rgba(13, 110, 253, 0.05);
+}
+
+.nav-tabs-line .nav-link.active {
+    color: #0caba8;
+    background-color: transparent;
+    border-bottom: 2px solid #0caba8;
+}
+
+.nav-tabs-line .nav-link i {
+    opacity: 0.7;
+}
+
+.nav-tabs-line .nav-link:hover i,
+.nav-tabs-line .nav-link.active i {
+    opacity: 1;
+}
+
+.nav-tabs .nav-item .nav-link {
+    color: #0caba8;
+}

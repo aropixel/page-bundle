@@ -1,0 +1,8 @@
+.block-admin-tabs .form-group {
+    border: 1px solid lightcyan;
+    border-radius: 10px;
+    padding: 10px 20px;
+    margin-top: 10px;
+    flex: 0 0 50%;
+    max-width: 50%;
+}
