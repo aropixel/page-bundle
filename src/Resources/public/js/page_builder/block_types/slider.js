@@ -140,7 +140,7 @@ export const sliderBlockType = {
         addBtn.style.cursor = 'pointer';
         // addBtn.dataset.action = 'click->page-builder#updateBlockContent'; // Retiré car on gère manuellement le clic
         addBtn.dataset.op = 'add-item';
-        addBtn.innerHTML = '<i class="fas fa-plus me-2"></i>';
+        addBtn.innerHTML = '<i class="fas fa-plus"></i>';
         addBtn.addEventListener('click', (e) => {
             // 1. Sélectionner le bloc
             ctx.onBlockClick(ctx.sectionsManager.selectedSectionId, ctx.sectionsManager.selectedRowId, ctx.sectionsManager.selectedColumnId, block.id);

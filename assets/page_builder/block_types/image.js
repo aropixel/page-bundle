@@ -75,7 +75,6 @@ export const imageBlockType = {
     renderInspector: (block, ctx) => {
         const inspector = ctx.inspectorPanelBlockTarget;
         const contentContainer = inspector.querySelector('.pb-inspector-block-content');
-        const isInIconBox = ctx.sectionsManager.selectedRow?.type === 'icon-box';
 
         if (contentContainer) {
 
@@ -145,36 +144,6 @@ export const imageBlockType = {
                 }
 
                 initializeImageManager(block, ctx);
-            }
-
-            // Ajouter le widget pour l'image hover si on est dans un icon-box
-            if (isInIconBox) {
-                const hoverImageContent = sectionImage.cloneNode(true);
-                hoverImageContent.classList.remove('d-none');
-                hoverImageContent.removeAttribute('id');
-                hoverImageContent.querySelector('.form-label').innerHTML = 'Image au survol';
-                contentContainer.appendChild(hoverImageContent);
-
-                // Pré-remplir l'image hover si elle existe
-                if (block.hoverSrc) {
-                    const hoverPreview = hoverImageContent.querySelector('.im-manager .preview');
-                    if (hoverPreview) {
-                        const existingInput = hoverPreview.querySelector('input[type="hidden"]');
-                        hoverPreview.innerHTML = `<img src="${block.hoverSrc}" alt="${block.alt || ''}" />`;
-                        if (existingInput && block.hoverImageId) {
-                            existingInput.value = block.hoverImageId;
-                            hoverPreview.appendChild(existingInput);
-                        } else if (block.hoverImageId) {
-                            const input = document.createElement('input');
-                            input.type = 'hidden';
-                            input.value = block.hoverImageId;
-                            hoverPreview.appendChild(input);
-                        }
-                        hoverPreview.removeAttribute('data-new');
-                    }
-                }
-
-                initializeImageManager(block, ctx, 'hover', hoverImageContent);
             }
         }
 

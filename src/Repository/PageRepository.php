@@ -48,6 +48,19 @@ class PageRepository extends PublishableRepository
         ;
     }
 
+    /**
+     * @return Page[]
+     */
+    public function findOthers(Page $page): array
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.id != :id')
+            ->setParameter('id', $page->getId())
+            ->orderBy('p.title', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function add(Page $page, bool $flush = false): void
     {
         $this->getEntityManager()->persist($page);

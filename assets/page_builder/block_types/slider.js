@@ -116,9 +116,25 @@ export const sliderBlockType = {
         addBtn.style.height = '100px';
         addBtn.style.border = '1px solid #ddd';
         addBtn.style.cursor = 'pointer';
-        addBtn.dataset.action = 'click->page-builder#updateBlockContent';
-        addBtn.dataset.op = 'add-item';
         addBtn.innerHTML = '<i class="fas fa-plus me-2"></i>';
+        addBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            block.items.push({ id: Date.now(), src: '', imageId: null, alt: '' });
+            block.selectedIndex = block.items.length - 1;
+
+            const blockEl = addBtn.closest('[data-block-id]');
+            if (blockEl) {
+                ctx.sectionsManager.selectBlock(
+                    blockEl.dataset.sectionId,
+                    blockEl.dataset.rowId,
+                    blockEl.dataset.columnId,
+                    blockEl.dataset.blockId
+                );
+                ctx.tabs.activate('inspector');
+                ctx.showBlockInspector();
+            }
+            ctx.renderCanvas();
+        });
         content.appendChild(addBtn);
 
         container.appendChild(content);

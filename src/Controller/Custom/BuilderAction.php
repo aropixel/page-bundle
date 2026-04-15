@@ -26,9 +26,12 @@ class BuilderAction extends AbstractController
             $this->entityManager->refresh($page);
         }
 
+        $allPages = $page ? $this->entityManager->getRepository(Page::class)->findOthers($page) : $this->entityManager->getRepository(Page::class)->findAll();
+
         return $this->render('@AropixelPage/custom/index.html.twig', [
             'page' => $page,
             'page_builder_config' => $this->pageBuilderConfig,
+            'allPages' => $allPages,
         ]);
     }
 }
