@@ -113,6 +113,37 @@ The `staticCode` will be set to the key you provided (e.g., `homepage`), allowin
 $homepage = $pageRepository->findOneBy(['staticCode' => 'homepage']);
 ```
 
+## Page Builder Configuration
+
+When using the **Custom JSON Page** type with the built-in page builder, you can configure the available style options for certain blocks directly in your Symfony configuration.
+
+### Title block styles
+
+The title block can offer a dropdown of predefined CSS styles. Each style maps a `value` (used as a CSS class in your front-end) to a human-readable `label` displayed in the admin interface.
+
+### Button block colors
+
+Similarly, the button block can offer a list of predefined color options. Each entry maps a `value` (a CSS class) to a `label`.
+
+### Configuration
+
+In `config/packages/aropixel_page.yaml`:
+
+```yaml
+aropixel_page:
+    page_builder:
+        title_styles:
+            - { value: 'h1', label: 'Heading 1' }
+            - { value: 'h2', label: 'Heading 2' }
+            - { value: 'h2-highlight_32', label: 'Highlighted title' }
+        button_colors:
+            - { value: 'btn-primary', label: 'Primary' }
+            - { value: 'btn-secondary', label: 'Secondary' }
+            - { value: 'btn-outline-primary', label: 'Outline' }
+```
+
+> **Note:** When `title_styles` or `button_colors` is empty (the default), the corresponding selector is not shown in the page builder inspector. This means a fresh installation of the bundle ships with no project-specific styles — you define only what your project needs.
+
 ## Administrative Interface
 
 Once installed and configured, you'll have access to the page management in the Aropixel Admin interface.

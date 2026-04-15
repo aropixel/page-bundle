@@ -130,15 +130,18 @@ export const btnBlockType = {
                     </select>
                 </div>
 
-                <div class="mb-3">
+                ${(() => {
+                    const buttonColors = ctx.pageBuilderConfig?.button_colors || [];
+                    if (buttonColors.length === 0) return '';
+                    return `<div class="mb-3">
                     <label class="form-label form-label-sm">Couleur du bouton</label>
                     <select class="form-select form-select-sm" id="btn-color-select"
                         data-page-builder-target="blockColorInput"
                         data-action="change->page-builder#updateBlockContent">
-                        <option value="primary-xdark" ${block.class === 'primary-xdark' ? 'selected' : ''}>Violet foncé</option>
-                        <option value="secondary" ${block.class === 'secondary' ? 'selected' : ''}>Jaune</option>
+                        ${buttonColors.map(c => `<option value="${c.value}" ${block.class === c.value ? 'selected' : ''}>${c.label}</option>`).join('')}
                     </select>
-                </div>
+                </div>`;
+                })()}
             `;
         }
 

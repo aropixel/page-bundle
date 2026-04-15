@@ -15,6 +15,7 @@ class BuilderAction extends AbstractController
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
+        private readonly array $pageBuilderConfig = [],
     ) {
     }
 
@@ -27,6 +28,7 @@ class BuilderAction extends AbstractController
 
         return $this->render('@AropixelPage/custom/index.html.twig', [
             'page' => $page,
+            'page_builder_config' => $this->pageBuilderConfig,
         ]);
     }
 }

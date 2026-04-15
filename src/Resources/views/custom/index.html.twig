@@ -9,6 +9,9 @@
     <script type="application/json" id="page-json-list-url">
         {{ url('aropixel_custom_page_json_list')|json_encode(constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_HEX_TAG'))|raw }}
     </script>
+    <script type="application/json" id="page-builder-config">
+        {{ page_builder_config|json_encode(constant('JSON_HEX_TAG') b-or constant('JSON_UNESCAPED_UNICODE'))|raw }}
+    </script>
     {% if not aropixel_asset_mapper_enabled %}
         <script src="{{ asset('bundles/aropixelpage/js/page_builder_controller.js') }}" type="module"></script>
         <script src="{{ asset('bundles/aropixelpage/js/page_builder_saver_controller.js') }}" type="module"></script>

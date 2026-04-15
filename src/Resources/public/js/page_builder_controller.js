@@ -94,6 +94,9 @@ export default class extends Controller {
     };
 
     connect() {
+        const configEl = document.getElementById('page-builder-config');
+        this.pageBuilderConfig = configEl ? JSON.parse(configEl.textContent) : {};
+
         this.columnPresets = ['1-1', '1-2', '1-3', '1-4', '1-5', '1-6'];
 
         // Gestion Multilingue : Initialisation

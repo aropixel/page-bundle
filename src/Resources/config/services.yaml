@@ -26,6 +26,10 @@ services:
     resource: '../../Controller'
     tags: [ 'controller.service_arguments' ]
 
+  Aropixel\PageBundle\Controller\Custom\BuilderAction:
+    arguments:
+      $pageBuilderConfig: '%aropixel_page.page_builder%'
+
   aropixel.page.form.default:
     class: '%aropixel_page.form.default%'
     tags: ['aropixel.page.form']
