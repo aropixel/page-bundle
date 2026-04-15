@@ -5,7 +5,7 @@
 }
 
 .pb-accordion-inspector .accordion-header {
-    background: transparent;
+    background: transparent!important;
     padding: 0;
 }
 .pb-accordion-inspector .accordion-button {

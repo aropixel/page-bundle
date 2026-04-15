@@ -1,13 +1,5 @@
 {% extends '@AropixelAdmin/base.html.twig' %}
 
-{% block asset_manager %}
-    {% if aropixel_admin_entry_available %}
-        {{ importmap() }}
-    {% else %}
-        {{ parent() }}
-    {% endif %}
-{% endblock %}
-
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('bundles/aropixelpage/css/page-builder.css') }}">
@@ -17,7 +9,7 @@
     <script type="application/json" id="page-json-list-url">
         {{ url('aropixel_custom_page_json_list')|json_encode(constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_HEX_TAG'))|raw }}
     </script>
-    {% if not aropixel_admin_entry_available %}
+    {% if not aropixel_asset_mapper_enabled %}
         <script src="{{ asset('bundles/aropixelpage/js/page_builder_controller.js') }}" type="module"></script>
         <script src="{{ asset('bundles/aropixelpage/js/page_builder_saver_controller.js') }}" type="module"></script>
     {% endif %}

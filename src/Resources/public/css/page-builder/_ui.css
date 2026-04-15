@@ -131,5 +131,14 @@
 }
 
 .nav-tabs .nav-item .nav-link {
-    color: #0caba8;
+    border-bottom: 2px solid transparent;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--bs-heading-color, inherit) !important;
+    padding: 0 0.5rem 0.9rem;
+}
+
+.nav-tabs .nav-item .nav-link.active {
+    border-bottom: 2px solid var(--main-bg-color);
+    color: var(--main-bg-color);
 }

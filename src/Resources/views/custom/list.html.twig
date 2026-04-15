@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block header_top_right %}
-    <a href="{{ path('aropixel_custom_page_index') }}" class="btn btn-small btn-primary ms-3">
+    <a href="{{ path('aropixel_custom_page') }}" class="btn btn-small btn-primary ms-3">
         <i class="fas fa-plus me-2"></i>{% trans %}text.create{% endtrans %}
     </a>
 {% endblock %}
@@ -36,7 +36,7 @@
                     <tr>
                         <td>{{ page.id }}</td>
                         <td>
-                            <a href="{{ path('aropixel_custom_page_index', {id: page.id}) }}">{{ page.title }}</a>
+                            <a href="{{ path('aropixel_custom_page_edit', {id: page.id}) }}">{{ page.title }}</a>
                         </td>
                         <td>{{ page.slug }}</td>
                         <td>{{ page.updatedAt|date('d/m/Y H:i') }}</td>
@@ -46,7 +46,7 @@
                                     <i class="fas fa-ellipsis-h"></i>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-end" data-bs-popper="static">
-                                    <a href="{{ path('aropixel_custom_page_index', {id: page.id}) }}" class="dropdown-item has-icon">
+                                    <a href="{{ path('aropixel_custom_page_edit', {id: page.id}) }}" class="dropdown-item has-icon">
                                         <i class="fas fa-pen"></i> {% trans %}text.edit{% endtrans %}
                                     </a>
                                     <div class="dropdown-divider"></div>

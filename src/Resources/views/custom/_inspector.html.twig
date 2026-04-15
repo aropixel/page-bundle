@@ -81,7 +81,8 @@
                                 data-action="change->page-builder#updateColumnLinkType">
                             <option value="">Aucun</option>
                             <option value="url">Lien (URL)</option>
-                            <option value="page">Page du site</option>
+                            <option value="page">Page du site (CMS)</option>
+                            <option value="fixed">Page du site (fixe)</option>
                         </select>
                     </div>
                     <div class="mb-2 d-none" data-page-builder-target="columnUrlInputContainer">
@@ -94,9 +95,18 @@
                                data-action="input->page-builder#updateColumnUrl">
                     </div>
                     <div class="mb-2 d-none" data-page-builder-target="columnPagePathSelectContainer">
-                        <label class="form-label form-label-sm d-block mb-1" for="column-page-path">Lien vers une page du site</label>
+                        <label class="form-label form-label-sm d-block mb-1" for="column-page-path">Lien vers une page du site (CMS)</label>
                         <select class="form-select form-select-sm" id="column-page-path"
                                 data-page-builder-target="columnPagePathSelect"
+                                data-action="change->page-builder#updateColumnPagePath"
+                        >
+                            <option value="">-- Choisir --</option>
+                        </select>
+                    </div>
+                    <div class="mb-2 d-none" data-page-builder-target="columnFixedPageSelectContainer">
+                        <label class="form-label form-label-sm d-block mb-1" for="column-fixed-page">Lien vers une page fixe</label>
+                        <select class="form-select form-select-sm" id="column-fixed-page"
+                                data-page-builder-target="columnFixedPageSelect"
                                 data-action="change->page-builder#updateColumnPagePath"
                         >
                             <option value="">-- Choisir --</option>
@@ -115,6 +125,21 @@
                         </select>
                     </div>
                     <div class="mb-2">
+                        <label class="form-label form-label-sm d-block mb-1" for="column-border-radius">Arrondi des angles (px)</label>
+                        <div class="d-flex align-items-center gap-2">
+                            <input type="range"
+                                   class="form-range flex-fill"
+                                   id="column-border-radius"
+                                   min="0"
+                                   max="100"
+                                   step="1"
+                                   value="0"
+                                   data-page-builder-target="columnBorderRadiusInput"
+                                   data-action="input->page-builder#updateColumnBorderRadius change->page-builder#renderCanvas">
+                            <span class="badge bg-secondary" data-page-builder-target="columnBorderRadiusValue">0</span>
+                        </div>
+                    </div>
+                    <div class="mb-2">
                         <label class="form-label form-label-sm d-block mb-1" for="column-background-type">Type de fond</label>
                         <select class="form-select form-select-sm" id="column-background-type"
                                 data-page-builder-target="columnBackgroundTypeSelect"
@@ -129,15 +154,39 @@
                     {# Input couleur #}
                     <div class="mb-2 d-none" data-page-builder-target="columnBackgroundColorInput">
                         <label class="form-label form-label-sm d-block mb-1" for="column-bg-color">Couleur de fond</label>
+                        <div class="d-flex flex-wrap gap-1 mb-2">
+                            <button type="button" class="pb-color-preset" style="background-color: #ff007d;" data-color="#ff007d" data-action="click->page-builder#applyColumnColorPreset" title="Rose"></button>
+                            <button type="button" class="pb-color-preset" style="background-color: #d6ff00;" data-color="#d6ff00" data-action="click->page-builder#applyColumnColorPreset" title="Jaune"></button>
+                            <button type="button" class="pb-color-preset" style="background-color: #00ffae;" data-color="#00ffae" data-action="click->page-builder#applyColumnColorPreset" title="Vert"></button>
+                            <button type="button" class="pb-color-preset" style="background-color: #3c001e;" data-color="#3c001e" data-action="click->page-builder#applyColumnColorPreset" title="Rose Sombre"></button>
+                            <button type="button" class="pb-color-preset" style="background-color: #000000;" data-color="#000000" data-action="click->page-builder#applyColumnColorPreset" title="Noir"></button>
+                            <button type="button" class="pb-color-preset" style="background-color: #ffffff; border: 1px solid #ddd;" data-color="#ffffff" data-action="click->page-builder#applyColumnColorPreset" title="Blanc"></button>
+                        </div>
                         <input type="color"
                                class="form-control form-control-lg form-control-color"
                                id="column-bg-color"
+                               data-page-builder-target="columnBackgroundColorPicker"
                                data-action="input->page-builder#updateColumnBackgroundValue">
                     </div>
 
                     <div class="mb-3 d-none" data-page-builder-target="columnBackgroundImageInput">
                         <div class="pb-column-background-image-content">
                             {# Le contenu sera injecté dynamiquement #}
+                        </div>
+                    </div>
+
+                    <div class="mb-2 d-none" data-page-builder-target="columnBackgroundOverlayInput">
+                        <label class="form-label form-label-sm d-block mb-1" for="column-bg-overlay">Opacité de l'overlay</label>
+                        <div class="d-flex align-items-center gap-2">
+                            <input type="range"
+                                   class="form-range flex-fill"
+                                   id="column-bg-overlay"
+                                   min="0"
+                                   max="1"
+                                   step="0.1"
+                                   value="0"
+                                   data-action="input->page-builder#updateColumnBackgroundOverlay">
+                            <span class="badge bg-secondary" data-page-builder-target="columnBackgroundOverlayValue">0</span>
                         </div>
                     </div>
 
@@ -203,12 +252,14 @@
                                     <button type="button" class="pb-breakpoint-btn" data-breakpoint="l" data-action="click->page-builder#changeColumnBreakpoint" title="L (Ordinateur portable)">
                                         <i class="fas fa-laptop"></i>
                                     </button>
-                                    <button type="button" class="pb-breakpoint-btn" data-breakpoint="m" data-action="click->page-builder#changeColumnBreakpoint" title="M (Tablette)">
+                                {% if onlyDesktop is not defined or not onlyDesktop %}
+                                    <button type="button" class="pb-breakpoint-btn {% if application is defined and application %}active{% endif %}" data-breakpoint="m" data-action="click->page-builder#changeColumnBreakpoint" title="M (Tablette)">
                                         <i class="fas fa-tablet-alt"></i>
                                     </button>
                                     <button type="button" class="pb-breakpoint-btn" data-breakpoint="s" data-action="click->page-builder#changeColumnBreakpoint" title="S (Téléphone)">
                                         <i class="fas fa-mobile-alt"></i>
                                     </button>
+                                {% endif %}
                                 </div>
                             </div>
                             <div class="pb-columns-editor d-flex gap-1" data-page-builder-target="sectionColumnsEditor">
@@ -236,12 +287,14 @@
                             <button type="button" class="pb-breakpoint-btn active" data-breakpoint="none" data-action="click->page-builder#changeRowSliderBreakpoint" title="Aucun">
                                 <i class="fas fa-ban"></i>
                             </button>
-                            <button type="button" class="pb-breakpoint-btn" data-breakpoint="s" data-action="click->page-builder#changeRowSliderBreakpoint" title="S (Téléphone)">
-                                <i class="fas fa-mobile-alt"></i>
-                            </button>
-                            <button type="button" class="pb-breakpoint-btn" data-breakpoint="m" data-action="click->page-builder#changeRowSliderBreakpoint" title="M (Tablette)">
-                                <i class="fas fa-tablet-alt"></i>
-                            </button>
+                            {% if onlyDesktop is not defined or not onlyDesktop %}
+                                <button type="button" class="pb-breakpoint-btn" data-breakpoint="s" data-action="click->page-builder#changeRowSliderBreakpoint" title="S (Téléphone)">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </button>
+                                <button type="button" class="pb-breakpoint-btn" data-breakpoint="m" data-action="click->page-builder#changeRowSliderBreakpoint" title="M (Tablette)">
+                                    <i class="fas fa-tablet-alt"></i>
+                                </button>
+                            {% endif %}
                             <button type="button" class="pb-breakpoint-btn" data-breakpoint="l" data-action="click->page-builder#changeRowSliderBreakpoint" title="L (Ordinateur portable)">
                                 <i class="fas fa-laptop"></i>
                             </button>
@@ -271,19 +324,20 @@
                             <option value="flex-end">Alignés à la fin</option>
                         </select>
                     </div>
-
-                    <div class="mb-2">
-                        <label class="form-label form-label-sm d-block mb-1">Comportement mobile</label>
-                        <div class="d-flex flex-column gap-1">
-                            <label class="form-check mb-0">
-                                <input class="form-check-input"
-                                       type="checkbox"
-                                       data-page-builder-target="rowReverseMobileInput"
-                                       data-action="change->page-builder#updateRowResponsive">
-                                <span class="form-check-label ts-normal">Inverser l'ordre des colonnes</span>
-                            </label>
+                    {% if (onlyDesktop is not defined or not onlyDesktop) %}
+                        <div class="mb-2">
+                            <label class="form-label form-label-sm d-block mb-1">Comportement mobile</label>
+                            <div class="d-flex flex-column gap-1">
+                                <label class="form-check mb-0">
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           data-page-builder-target="rowReverseMobileInput"
+                                           data-action="change->page-builder#updateRowResponsive">
+                                    <span class="form-check-label ts-normal">Inverser l'ordre des colonnes</span>
+                                </label>
+                            </div>
                         </div>
-                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -304,6 +358,21 @@
                                placeholder="Section sans titre"
                                data-page-builder-target="sectionNameInput"
                                data-action="input->page-builder#updateSectionName">
+                    </div>
+                    <div class="mb-2 d-none" data-page-builder-target="sectionActiveContainer">
+                        <hr class="mt-3 mb-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <label class="form-label form-label-sm d-block mb-1">État de la section</label>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input mt-0"
+                                       type="checkbox"
+                                       role="switch"
+                                       id="section-active"
+                                       data-page-builder-target="sectionActiveInput"
+                                       data-action="change->page-builder#updateSectionActive">
+                            </div>
+                        </div>
+                        <hr class="mt-3 mb-3">
                     </div>
                     <div class="mb-2" data-page-builder-target="sectionLayoutContainer">
                         <label class="form-label form-label-sm d-block mb-1" for="section-width">Largeur</label>
@@ -331,9 +400,18 @@
                     {# Input couleur #}
                     <div class="mb-2 d-none" data-page-builder-target="sectionBackgroundColorInput">
                         <label class="form-label form-label-sm d-block mb-1" for="section-bg-color">Couleur de fond</label>
+                        <div class="d-flex flex-wrap gap-1 mb-2">
+                            <button type="button" class="pb-color-preset" style="background-color: #ff007d;" data-color="#ff007d" data-action="click->page-builder#applySectionColorPreset" title="Rose"></button>
+                            <button type="button" class="pb-color-preset" style="background-color: #d6ff00;" data-color="#d6ff00" data-action="click->page-builder#applySectionColorPreset" title="Jaune"></button>
+                            <button type="button" class="pb-color-preset" style="background-color: #00ffae;" data-color="#00ffae" data-action="click->page-builder#applySectionColorPreset" title="Vert"></button>
+                            <button type="button" class="pb-color-preset" style="background-color: #3c001e;" data-color="#3c001e" data-action="click->page-builder#applySectionColorPreset" title="Rose Sombre"></button>
+                            <button type="button" class="pb-color-preset" style="background-color: #000000;" data-color="#000000" data-action="click->page-builder#applySectionColorPreset" title="Noir"></button>
+                            <button type="button" class="pb-color-preset" style="background-color: #ffffff; border: 1px solid #ddd;" data-color="#ffffff" data-action="click->page-builder#applySectionColorPreset" title="Blanc"></button>
+                        </div>
                         <input type="color"
                                class="form-control form-control-lg form-control-color"
                                id="section-bg-color"
+                               data-page-builder-target="sectionBackgroundColorPicker"
                                data-action="input->page-builder#updateSectionBackgroundValue">
                     </div>
 
@@ -355,25 +433,6 @@
                             <option value="bkg-img-third paper-top-right">Fond vert avec lettres (droit)</option>
                             <option value="bkg-primary-xdark-color bkg-warmup widget-lineup-list">Fond panthères</option>
                         </select>
-                    </div>
-                    <div class="mb-2">
-                        <label class="form-label form-label-sm d-block mb-1">Visibilité</label>
-                        <div class="d-flex flex-column gap-1">
-                            <label class="form-check mb-0">
-                                <input class="form-check-input"
-                                       type="checkbox"
-                                       data-page-builder-target="sectionVisibleDesktopInput"
-                                       data-action="change->page-builder#updateSectionVisibility">
-                                <span class="form-check-label ts-normal">Afficher sur desktop</span>
-                            </label>
-                            <label class="form-check mb-0">
-                                <input class="form-check-input"
-                                       type="checkbox"
-                                       data-page-builder-target="sectionVisibleMobileInput"
-                                       data-action="change->page-builder#updateSectionVisibility">
-                                <span class="form-check-label ts-normal">Afficher sur mobile</span>
-                            </label>
-                        </div>
                     </div>
                 </div>
             </div>

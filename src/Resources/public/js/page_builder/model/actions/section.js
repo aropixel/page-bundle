@@ -21,6 +21,7 @@ export class SectionActions {
             rows: [defaultRow],
             visibleDesktop: true,
             visibleMobile: true,
+            active: true,
             background: { type: null, value: null }
         };
 
@@ -183,6 +184,7 @@ export class SectionActions {
             rows: [],
             visibleDesktop: true,
             visibleMobile: true,
+            active: true,
             background: { type: null, value: null }
         };
 
@@ -273,6 +275,7 @@ export class SectionActions {
             rows: [],
             visibleDesktop: section.visibleDesktop,
             visibleMobile: section.visibleMobile,
+            active: section.active !== undefined ? section.active : true,
             background: section.background
         };
 
@@ -341,6 +344,13 @@ export class SectionActions {
         section.visibleMobile = mobile;
     }
 
+    updateSectionActive(active) {
+        const section = this.manager.selectedSection;
+        if (!section) return;
+
+        section.active = active;
+    }
+
 
     updateSectionBackground(type, value, imageId = null) {
         const section = this.manager.selectedSection;
@@ -370,6 +380,7 @@ export class SectionActions {
             rows: [defaultRow],
             visibleDesktop: true,
             visibleMobile: true,
+            active: true,
             background: { type: null, value: null }
         };
     }

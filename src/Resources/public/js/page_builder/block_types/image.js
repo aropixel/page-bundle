@@ -15,6 +15,7 @@ export const imageBlockType = {
         width: 100, // Largeur par défaut en %
         maxWidth: 200,
         useOriginalSize: true,
+        horizontalAlignment: 'center'
     }),
 
     renderPreview: (block, ctx, rowId) => {
@@ -33,11 +34,19 @@ export const imageBlockType = {
 
         if (!block.useOriginalSize) {
             const row = ctx.sectionsManager.findRowById(rowId);
-            //const maxWidth = row ? row.imgWidth : block.maxWidth;
+            if (row && row.type === 'icon-box') {
+                const maxWidth = row ? row.imgWidth : block.maxWidth;
+                img.style.maxWidth = `${maxWidth}px`;
+            }
             content.style.width = `${block.width}%`;
-            //img.style.maxWidth = `${maxWidth}px`;
+            if (block.horizontalAlignment === 'right') {
+                content.style.marginLeft = 'auto';
+            } else if (block.horizontalAlignment === 'left') {
+                content.style.marginRight = 'auto';
+            } else {
+                content.style.margin = 'auto';
+            }
             img.style.maxHeight = `${block.maxHeight}px`;
-            img.style.margin = 'auto';
         } else {
             content.style.width = 'auto';
         }
@@ -89,6 +98,35 @@ export const imageBlockType = {
                 imageContent.removeAttribute('id'); // Éviter les doublons d'ID
 
                 contentContainer.innerHTML = `
+                    <div class="mb-2">
+                        <label class="form-label form-label-sm d-block mb-1">Alignement horizontal</label>
+                        <div class="d-flex gap-1">
+                            <button type="button"
+                                    class="pb-button pb-button--ghost flex-fill ${block.horizontalAlignment === 'left' ? 'active' : ''}"
+                                    data-alignment="left"
+                                    data-page-builder-target="blockAlignmentButton"
+                                    data-action="click->page-builder#updateBlockContent"
+                                    title="Aligné à gauche">
+                                <i class="fas fa-align-left"></i>
+                            </button>
+                            <button type="button"
+                                    class="pb-button pb-button--ghost flex-fill ${block.horizontalAlignment === 'center' ? 'active' : ''}"
+                                    data-alignment="center"
+                                    data-page-builder-target="blockAlignmentButton"
+                                    data-action="click->page-builder#updateBlockContent"
+                                    title="Centré">
+                                <i class="fas fa-align-center"></i>
+                            </button>
+                            <button type="button"
+                                    class="pb-button pb-button--ghost flex-fill ${block.horizontalAlignment === 'right' ? 'active' : ''}"
+                                    data-alignment="right"
+                                    data-page-builder-target="blockAlignmentButton"
+                                    data-action="click->page-builder#updateBlockContent"
+                                    title="Aligné à droite">
+                                <i class="fas fa-align-right"></i>
+                            </button>
+                        </div>
+                    </div>
                     <div class="mb-3">
                         <label class="form-label form-label-sm">Texte alternatif</label>
                         <input type="text"
@@ -202,6 +240,44 @@ export const imageBlockType = {
             if (sizeRangeContainer) {
                 sizeRangeContainer.style.display = event.target.checked ? 'none' : 'block';
             }
+
+            // Mettre à jour l'affichage dans le canvas si nécessaire
+            const blockEl = document.querySelector('.pb-block[data-block-id="' + block.id + '"]');
+            if (blockEl) {
+                const content = blockEl.querySelector('.pb-block-content-preview');
+                const img = content ? content.querySelector('.pb-image-preview') : null;
+                if (content && img) {
+                    if (block.useOriginalSize) {
+                        content.style.width = 'auto';
+                        img.style.margin = '';
+                    } else {
+                        content.style.width = `${block.width}%`;
+                        const alignment = block.horizontalAlignment || 'center';
+                        if (alignment === 'left') {
+                            img.style.marginLeft = '0';
+                            img.style.marginRight = 'auto';
+                        } else if (alignment === 'right') {
+                            img.style.marginLeft = 'auto';
+                            img.style.marginRight = '0';
+                        } else {
+                            img.style.margin = 'auto';
+                        }
+                    }
+                }
+            }
+        }
+        if (event.target.dataset.pageBuilderTarget === 'blockAlignmentButton' || event.target.closest('[data-page-builder-target="blockAlignmentButton"]')) {
+            const button = event.target.dataset.pageBuilderTarget === 'blockAlignmentButton' ? event.target : event.target.closest('[data-page-builder-target="blockAlignmentButton"]');
+            const alignment = button.dataset.alignment;
+            block.horizontalAlignment = alignment;
+
+            // Mettre à jour l'état actif des boutons dans l'inspecteur
+            const inspector = button.closest('.pb-inspector-block-content');
+            if (inspector) {
+                inspector.querySelectorAll('[data-page-builder-target="blockAlignmentButton"]').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.alignment === alignment);
+                });
+            }
         }
     },
 };
@@ -239,7 +315,7 @@ function initializeImageManager(block, ctx, imageType = 'main', containerElement
                 const imgElement = mutation.target.querySelector('img');
                 if (imgElement) {
                     const imgSrc = imgElement.getAttribute('src');
-                    const previewSrc = imgSrc.replace('/media/cache/admin_thumbnail/', '/media/cache/resolve/admin_preview/');
+                    const previewSrc = imgSrc.replace('/media/cache/admin_thumbnail/', '/media/cache/admin_preview/');
 
                     // Récupérer l'input depuis le bon conteneur
                     const inputId = containerElement

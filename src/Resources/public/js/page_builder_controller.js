@@ -10,6 +10,7 @@ import { initImageManager } from '/bundles/aropixeladmin/js/module/image-manager
 import { IM_Library } from '/bundles/aropixeladmin/js/module/image-manager/library.js';
 
 
+/* stimulusFetch: 'lazy' */
 export default class extends Controller {
     static targets = [
         'tabButton',
@@ -30,9 +31,12 @@ export default class extends Controller {
         'sectionColumnsCount',
         'sectionVisibleDesktopInput',
         'sectionVisibleMobileInput',
+        'sectionActiveContainer',
+        'sectionActiveInput',
         'sectionLayoutContainer',
         'sectionBackgroundType',
         'sectionBackgroundColorInput',
+        'sectionBackgroundColorPicker',
         'sectionBackgroundImageInput',
         'sectionBackgroundImageValue',
         'sectionBackgroundImageName',
@@ -41,6 +45,7 @@ export default class extends Controller {
         'blockContentInput',
         'blockUrlInput',
         'blockAlignmentButton',
+        'blockAdCampaignSelect',
         'nameDisplay',
         'nameText',
         'nameInput',
@@ -48,21 +53,31 @@ export default class extends Controller {
         'statusField',
         'columnLinkTypeSelect',
         'columnUrlInputContainer',
-        'columnPagePathSelectContainer',
         'columnUrlInput',
+        'columnPagePathSelectContainer',
         'columnPagePathSelect',
+        'columnFixedPageSelectContainer',
+        'columnFixedPageSelect',
         'columnHeightSelect',
+        'columnBorderRadiusInput',
+        'columnBorderRadiusValue',
         'columnBackgroundTypeSelect',
         'columnBackgroundColorInput',
+        'columnBackgroundColorPicker',
         'columnBackgroundImageInput',
         'columnBackgroundImageValue',
         'columnBackgroundImageName',
         'columnBackgroundClassInput',
+        'columnBackgroundOverlayInput',
+        'columnBackgroundOverlayValue',
         'columnAlignmentButton',
         'blockLinkTypeSelect',
         'blockUrlInputContainer',
+        'blockUrlInput',
         'blockPagePathSelectContainer',
         'blockPagePathSelect',
+        'blockFixedPageSelectContainer',
+        'blockFixedPageSelect',
         'rowReverseMobileInput',
         'rowTypeSelect',
         'rowModeSelect',
@@ -75,6 +90,7 @@ export default class extends Controller {
     static values = {
         initialContent: String,
         device: { type: String, default: 'desktop' },
+        pageSlug: String,
     };
 
     connect() {
@@ -121,8 +137,10 @@ export default class extends Controller {
                                         col.background = colData.background;
                                         col.url = colData.url;
                                         col.pagePath = colData.pagePath;
+                                        col.parentSlug = colData.parentSlug || null;
                                         col.linkType = colData.linkType;
                                         col.height = colData.height;
+                                        col.borderRadius = colData.borderRadius || 0;
                                         return col;
                                     });
                                 }
@@ -484,6 +502,43 @@ export default class extends Controller {
             return;
         }
 
+        // Si c'est une grille, on ajoute une row avec 6 colonnes
+        if (type === "grid") {
+            let sectionId = this.sectionsManager.selectedSectionId;
+            if (!sectionId) {
+                this.addSection();
+                sectionId = this.sectionsManager.selectedSectionId;
+            }
+
+            const section = this.sectionsManager.sections.find(s => s.id === sectionId);
+            if (section) {
+                const newRow = new Row();
+                for (let i = 0; i < 6; i++) {
+                    newRow.addColumn(new Column('1-6'));
+                }
+                section.rows.push(newRow);
+                this.sectionsManager.selectRow(sectionId, newRow.id);
+
+                // SYNCHRO GRID
+                if (this.shouldSyncToEn()) {
+                    const enManagerExisted = !!this.managers['en'];
+                    const enManager = this.getEnManagerForSync();
+                    if (enManagerExisted) {
+                        const targetSection = enManager.sections.find(s => s.id === sectionId);
+                        if (targetSection) {
+                            const rowCopy = newRow.clone();
+                            targetSection.rows.push(rowCopy);
+                        }
+                    }
+                }
+
+                this.renderCanvas();
+                this.tabs.activate('inspector');
+                this.showSectionInspector();
+                return;
+            }
+        }
+
         // Si c'est un template, créer une nouvelle section
         if (type === "template") {
             const templateType = event.currentTarget.dataset.templateType;
@@ -748,6 +803,12 @@ export default class extends Controller {
         this.showSectionInspector();
     }
 
+    updateSectionActive() {
+        this.sectionsManager.updateSectionActive(this.sectionActiveInputTarget.checked);
+        this.renderCanvas();
+        this.showSectionInspector();
+    }
+
 
     updateRowColumnsAlignment(event) {
         this.sectionsManager.updateRowAlignment(event.target.value);
@@ -867,12 +928,17 @@ export default class extends Controller {
             if (this.hasBlockPagePathSelectContainerTarget) {
                 this.blockPagePathSelectContainerTarget.classList.add('d-none');
             }
+            if (this.hasBlockFixedPageSelectContainerTarget) {
+                this.blockFixedPageSelectContainerTarget.classList.add('d-none');
+            }
 
             // Afficher l'input correspondant
             if (type === 'url' && this.hasBlockUrlInputContainerTarget) {
                 this.blockUrlInputContainerTarget.classList.remove('d-none');
             } else if (type === 'page' && this.hasBlockPagePathSelectContainerTarget) {
                 this.blockPagePathSelectContainerTarget.classList.remove('d-none');
+            } else if (type === 'fixed' && this.hasBlockFixedPageSelectContainerTarget) {
+                this.blockFixedPageSelectContainerTarget.classList.remove('d-none');
             }
         }
     }
@@ -880,7 +946,10 @@ export default class extends Controller {
     updateBlockPagePath(event) {
         const block = this.sectionsManager.selectedBlock;
         if (block) {
-            block.pagePath = event.target.value;
+            const select = event.target;
+            const selectedOption = select.options[select.selectedIndex];
+            block.pagePath = select.value;
+            block.parentSlug = selectedOption.dataset.parentSlug || null;
             this.renderCanvas(true);
         }
     }
@@ -895,12 +964,17 @@ export default class extends Controller {
         if (this.hasColumnPagePathSelectContainerTarget) {
             this.columnPagePathSelectContainerTarget.classList.add('d-none');
         }
+        if (this.hasColumnFixedPageSelectContainerTarget) {
+            this.columnFixedPageSelectContainerTarget.classList.add('d-none');
+        }
 
         // Afficher l'input correspondant
         if (type === 'url' && this.hasColumnUrlInputContainerTarget) {
             this.columnUrlInputContainerTarget.classList.remove('d-none');
         } else if (type === 'page' && this.hasColumnPagePathSelectContainerTarget) {
             this.columnPagePathSelectContainerTarget.classList.remove('d-none');
+        } else if (type === 'fixed' && this.hasColumnFixedPageSelectContainerTarget) {
+            this.columnFixedPageSelectContainerTarget.classList.remove('d-none');
         }
 
         // On pourrait aussi vouloir sauvegarder le type dans le modèle si on veut qu'il persiste à la réouverture de l'inspecteur
@@ -910,13 +984,40 @@ export default class extends Controller {
     }
 
     updateColumnPagePath(event) {
-        this.sectionsManager.updateColumnPagePath(event.target.value);
+        const select = event.target;
+        const selectedOption = select.options[select.selectedIndex];
+        this.sectionsManager.updateColumnPagePath(select.value, selectedOption.dataset.parentSlug || null);
         this.renderCanvas(true);
     }
 
     updateColumnHeight(event) {
         this.sectionsManager.updateColumnHeight(event.target.value);
         this.renderCanvas(true);
+    }
+
+    updateColumnBorderRadius(event) {
+        const value = event.target.value;
+        this.sectionsManager.updateColumnBorderRadius(value);
+
+        if (this.hasColumnBorderRadiusValueTarget) {
+            this.columnBorderRadiusValueTarget.textContent = value;
+        }
+
+        // Mise à jour en direct du canvas sans re-rendu complet
+        const selectedColumnId = this.sectionsManager.selectedColumnId;
+        if (selectedColumnId) {
+            const columnEl = this.canvasTarget.querySelector(`[data-column-id="${selectedColumnId}"]`);
+            if (columnEl) {
+                columnEl.style.borderRadius = `${value}px`;
+                columnEl.style.overflow = value > 0 ? 'hidden' : '';
+
+                // Mettre à jour aussi l'overlay s'il existe
+                const overlay = columnEl.querySelector('.pb-column-overlay');
+                if (overlay) {
+                    overlay.style.borderRadius = `${value}px`;
+                }
+            }
+        }
     }
 
     updateBlockHorizontalAlignment(event) {
@@ -945,12 +1046,18 @@ export default class extends Controller {
         if (this.hasColumnBackgroundClassInputTarget) {
             this.columnBackgroundClassInputTarget.classList.add('d-none');
         }
+        if (this.hasColumnBackgroundOverlayInputTarget) {
+            this.columnBackgroundOverlayInputTarget.classList.add('d-none');
+        }
 
         // Afficher l'input correspondant
         if (type === 'color' && this.hasColumnBackgroundColorInputTarget) {
             this.columnBackgroundColorInputTarget.classList.remove('d-none');
         } else if (type === 'image' && this.hasColumnBackgroundImageInputTarget) {
             this.columnBackgroundImageInputTarget.classList.remove('d-none');
+            if (this.hasColumnBackgroundOverlayInputTarget) {
+                this.columnBackgroundOverlayInputTarget.classList.remove('d-none');
+            }
 
             const sectionImage = document.getElementById('section-image');
             if (sectionImage) {
@@ -1034,7 +1141,7 @@ export default class extends Controller {
                         const imgSrc = imgElement.getAttribute('src');
 
                         // Remplacer admin_thumbnail par admin_preview pour avoir l'image originale
-                        const previewSrc = imgSrc.replace('/media/cache/admin_thumbnail/', '/media/cache/resolve/admin_preview/');
+                        const previewSrc = imgSrc.replace('/media/cache/admin_thumbnail/', '/media/cache/admin_preview/');
 
                         // Récupérer l'ID de l'image depuis l'input caché
                         const inputId = document.querySelector('.pb-column-background-image-content .im-manager input[type="hidden"]');
@@ -1064,7 +1171,17 @@ export default class extends Controller {
         const type = this.columnBackgroundTypeSelectTarget.value;
         const value = event.target.value;
 
-        this.sectionsManager.updateColumnBackground(type, value);
+        const overlayOpacity = column.background?.overlayOpacity || 0;
+        this.sectionsManager.updateColumnBackground(type, value, null, overlayOpacity);
+        this.renderCanvas();
+    }
+
+    updateColumnBackgroundOverlay(event) {
+        const opacity = event.target.value;
+        if (this.hasColumnBackgroundOverlayValueTarget) {
+            this.columnBackgroundOverlayValueTarget.textContent = opacity;
+        }
+        this.sectionsManager.updateColumnBackgroundOverlay(opacity);
         this.renderCanvas();
     }
 
@@ -1157,6 +1274,24 @@ export default class extends Controller {
         if (!type) {
             this.sectionsManager.updateSectionBackground(null, null);
             this.renderCanvas();
+        }
+    }
+
+    applySectionColorPreset(event) {
+        const color = event.currentTarget.dataset.color;
+        if (this.hasSectionBackgroundColorPickerTarget) {
+            this.sectionBackgroundColorPickerTarget.value = color;
+            // Déclencher manuellement l'événement input pour mettre à jour le modèle
+            this.sectionBackgroundColorPickerTarget.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+    }
+
+    applyColumnColorPreset(event) {
+        const color = event.currentTarget.dataset.color;
+        if (this.hasColumnBackgroundColorPickerTarget) {
+            this.columnBackgroundColorPickerTarget.value = color;
+            // Déclencher manuellement l'événement input pour mettre à jour le modèle
+            this.columnBackgroundColorPickerTarget.dispatchEvent(new Event('input', { bubbles: true }));
         }
     }
 
@@ -1256,7 +1391,7 @@ export default class extends Controller {
                         const imgSrc = imgElement.getAttribute('src');
 
                         // Remplacer admin_thumbnail par admin_preview pour avoir l'image originale
-                        const previewSrc = imgSrc.replace('/media/cache/admin_thumbnail/', '/media/cache/resolve/admin_preview/');
+                        const previewSrc = imgSrc.replace('/media/cache/admin_thumbnail/', '/media/cache/admin_preview/');
 
                         // Récupérer l'ID de l'image depuis l'input caché
                         const inputId = document.querySelector('.pb-section-background-image-content .im-manager input[type="hidden"]');

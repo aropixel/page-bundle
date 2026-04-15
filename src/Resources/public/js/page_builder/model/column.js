@@ -18,12 +18,15 @@ export class Column {
         this.blocks = [];
         this.url = null;
         this.pagePath = null;
+        this.parentSlug = null;
         this.linkType = null;
         this.height = 'auto';
         this.horizontalAlignment = 'left';
+        this.borderRadius = 0;
         this.background = {
             type: null, // 'color', 'image', 'class'
-            value: null
+            value: null,
+            overlayOpacity: 0
         };
     }
 
@@ -40,9 +43,11 @@ export class Column {
         const cloned = new Column(this.width);
         cloned.url = this.url;
         cloned.pagePath = this.pagePath;
+        cloned.parentSlug = this.parentSlug;
         cloned.linkType = this.linkType;
         cloned.height = this.height;
         cloned.horizontalAlignment = this.horizontalAlignment;
+        cloned.borderRadius = this.borderRadius;
         cloned.background = JSON.parse(JSON.stringify(this.background));
         cloned.blocks = this.blocks.map(block => {
             const clonedBlock = JSON.parse(JSON.stringify(block));
