@@ -113,6 +113,14 @@ The `staticCode` will be set to the key you provided (e.g., `homepage`), allowin
 $homepage = $pageRepository->findOneBy(['staticCode' => 'homepage']);
 ```
 
+## Custom Block Types
+
+The page builder can be extended with custom blocks defined by the application. See the dedicated guide:
+
+- [Adding Custom Block Types](custom-blocks.md)
+
+---
+
 ## Page Builder Configuration
 
 When using the **Custom JSON Page** type with the built-in page builder, you can configure the available style options for certain blocks directly in your Symfony configuration.

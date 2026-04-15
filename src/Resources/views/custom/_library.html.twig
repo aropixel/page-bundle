@@ -1,3 +1,6 @@
+{% set pb_custom_blocks = page_builder_config.custom_blocks ?? [] %}
+{% set pb_has_custom_tab = pb_custom_blocks|filter(b => b.category == 'custom')|length > 0 %}
+
 <div class="card mb-3">
 
     <div class="px-3 py-2">
@@ -35,6 +38,19 @@
                     <span style="font-size: 0.875rem;">Modules</span>
                 </a>
             </li>
+            {% if pb_has_custom_tab %}
+            <li class="nav-item">
+                <a class="nav-link px-3 py-2 d-flex align-items-center"
+                   role="tab"
+                   data-bs-toggle="tab"
+                   aria-controls="nav-custom"
+                   aria-selected="false"
+                   href="#nav-custom"
+                   id="nav-custom-tab">
+                    <span style="font-size: 0.875rem;">Personnalisé</span>
+                </a>
+            </li>
+            {% endif %}
         </ul>
     </div>
 
@@ -108,6 +124,16 @@
                             <span class="pb-block-card-label">CTA</span>
                         </button>
                     </div>
+                    {% for pb_block in pb_custom_blocks|filter(b => b.category == 'blocs') %}
+                    <div class="col-4">
+                        <button type="button" class="pb-block-card"
+                                data-block-type="{{ pb_block.type }}"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon"><i class="{{ pb_block.icon }}"></i></div>
+                            <span class="pb-block-card-label">{{ pb_block.label }}</span>
+                        </button>
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
 
@@ -146,6 +172,16 @@
                             <span class="pb-block-card-label">Slider</span>
                         </button>
                     </div>
+                    {% for pb_block in pb_custom_blocks|filter(b => b.category == 'medias') %}
+                    <div class="col-4">
+                        <button type="button" class="pb-block-card"
+                                data-block-type="{{ pb_block.type }}"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon"><i class="{{ pb_block.icon }}"></i></div>
+                            <span class="pb-block-card-label">{{ pb_block.label }}</span>
+                        </button>
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
 
@@ -216,8 +252,35 @@
                             <span class="pb-block-card-label">Countdown</span>
                         </button>
                     </div>
+                    {% for pb_block in pb_custom_blocks|filter(b => b.category == 'modules') %}
+                    <div class="col-4">
+                        <button type="button" class="pb-block-card"
+                                data-block-type="{{ pb_block.type }}"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon"><i class="{{ pb_block.icon }}"></i></div>
+                            <span class="pb-block-card-label">{{ pb_block.label }}</span>
+                        </button>
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
+
+            {% if pb_has_custom_tab %}
+            <div class="tab-pane fade" id="nav-custom" role="tabpanel" aria-labelledby="nav-custom-tab">
+                <div class="row g-2">
+                    {% for pb_block in pb_custom_blocks|filter(b => b.category == 'custom') %}
+                    <div class="col-4">
+                        <button type="button" class="pb-block-card"
+                                data-block-type="{{ pb_block.type }}"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon"><i class="{{ pb_block.icon }}"></i></div>
+                            <span class="pb-block-card-label">{{ pb_block.label }}</span>
+                        </button>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
 
         </div>
 

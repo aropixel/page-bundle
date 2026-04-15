@@ -3,6 +3,9 @@
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('bundles/aropixelpage/css/page-builder.css') }}">
+    {% if page_builder_config.custom_css is defined and page_builder_config.custom_css %}
+        <link rel="stylesheet" href="{{ asset(page_builder_config.custom_css) }}">
+    {% endif %}
 {% endblock %}
 
 {% block theme_javascripts %}
