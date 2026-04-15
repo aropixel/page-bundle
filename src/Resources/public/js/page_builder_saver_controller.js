@@ -78,7 +78,7 @@ export default class extends Controller {
         const ogImage = this.hasParamOgImageTarget ? this.paramOgImageTarget.value : "";
 
         // On récupère la locale depuis le contrôleur principal
-        const locale = pageBuilderController.currentLocale || 'fr';
+        const locale = pageBuilderController.currentLocale || pageBuilderController.primaryLocale || 'fr';
 
         // 4. Construction du payload
         const payload = {

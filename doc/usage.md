@@ -142,6 +142,12 @@ aropixel_page:
             - { value: 'btn-outline-primary', label: 'Outline' }
 ```
 
+### Multilingual support
+
+The page builder locale switcher is driven by the `aropixel_admin.translations.locales` setting in `AdminBundle` — there is no separate locale config in `PageBundle`. See the [AdminBundle i18n documentation](../../admin-bundle/doc/i18n.md) for details.
+
+When two or more locales are configured, the page builder displays a locale switcher and a **"Synchronise other languages with [primary locale]"** checkbox. Structural changes (sections, rows, blocks) are automatically propagated to all secondary locales when sync is enabled; textual content must be translated manually.
+
 > **Note:** When `title_styles` or `button_colors` is empty (the default), the corresponding selector is not shown in the page builder inspector. This means a fresh installation of the bundle ships with no project-specific styles — you define only what your project needs.
 
 ## Administrative Interface

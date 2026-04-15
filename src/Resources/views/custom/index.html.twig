@@ -85,15 +85,19 @@
                                     role="switch">
                             </div>
 
+                                {% set pb_locales = page_builder_config.locales ?? [] %}
+                                {% if pb_locales|length > 1 %}
                                 <div class="btn-group">
-                                    <button class="btn btn-primary btn-small ms-3" id="btnCurrentLocale">FR</button>
+                                    <button class="btn btn-primary btn-small ms-3" id="btnCurrentLocale">{{ pb_locales[0]|upper }}</button>
                                     <button class="btn btn-primary btn-small dropdown-toggle dropdown-toggle-split" type="button" data-bs-toggle="dropdown"></button>
                                     <div class="dropdown-menu" style="width:80px; min-width: 80px;">
-                                        <a class="dropdown-item" href="#" data-action="click->page-builder-saver#switchLocale" data-locale="fr">FR</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#" data-action="click->page-builder-saver#switchLocale" data-locale="en">EN</a>
+                                        {% for locale in pb_locales %}
+                                            <a class="dropdown-item" href="#" data-action="click->page-builder-saver#switchLocale" data-locale="{{ locale }}">{{ locale|upper }}</a>
+                                            {% if not loop.last %}<div class="dropdown-divider"></div>{% endif %}
+                                        {% endfor %}
                                     </div>
                                 </div>
+                                {% endif %}
 
                                 <div class="btn-group" role="group">
                                     {# MODIFICATION ICI : L'action pointe vers page-builder-saver #}
@@ -148,14 +152,16 @@
                                 <a class="nav-link active" role="tab" data-bs-toggle="tab" href="#nav-library" id="nav-library-tab">Contenu</a>
                             </li>
                         </ul>
+                        {% if pb_locales|length > 1 %}
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="syncLocales" checked
                                    data-page-builder-target="syncLocaleInput"
-                                   data-action="change->page-builder#shouldSyncToEn">
+                                   data-action="change->page-builder#toggleSync">
                             <label class="form-check-label ts-normal" for="syncLocales">
-                                Synchroniser version "en" avec "fr"
+                                Synchroniser les autres langues avec "{{ pb_locales[0]|upper }}"
                             </label>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
 

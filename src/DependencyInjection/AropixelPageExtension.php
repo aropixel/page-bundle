@@ -43,7 +43,10 @@ class AropixelPageExtension extends Extension implements PrependExtensionInterfa
         $container->setParameter('aropixel_page.form.default_translatable', $forms['default_translatable'] ?? null);
         $container->setParameter('aropixel_page.fixed_pages', $config['fixed_pages']);
         $container->setParameter('aropixel_page.forms', $forms);
-        $container->setParameter('aropixel_page.page_builder', $config['page_builder']);
+        $locales = $container->hasParameter('aropixel_admin.locales')
+            ? $container->getParameter('aropixel_admin.locales')
+            : [];
+        $container->setParameter('aropixel_page.page_builder', array_merge($config['page_builder'], ['locales' => $locales]));
     }
 
     public function prepend(ContainerBuilder $container): void
