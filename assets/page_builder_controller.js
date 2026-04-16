@@ -78,6 +78,12 @@ export default class extends Controller {
     };
 
     connect() {
+        const configEl = document.getElementById('page-builder-config');
+        if (configEl) {
+            const config = JSON.parse(configEl.textContent);
+            window.__pbTranslations = config.translations || {};
+        }
+
         this.columnPresets = ['1-1', '1-2', '1-3', '1-4', '1-5', '1-6'];
 
         // Gestion Multilingue : Initialisation

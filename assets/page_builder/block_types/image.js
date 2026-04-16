@@ -1,5 +1,6 @@
 import { initImageManager } from '/bundles/aropixeladmin/js/module/image-manager/launcher.js';
 import { IM_Library } from '/bundles/aropixeladmin/js/module/image-manager/library.js';
+import { t } from '../i18n.js';
 
 export const imageBlockType = {
     type: 'image',
@@ -89,17 +90,17 @@ export const imageBlockType = {
 
                 contentContainer.innerHTML = `
                     <div class="mb-3">
-                        <label class="form-label form-label-sm">Texte alternatif</label>
+                        <label class="form-label form-label-sm">${t('page.builder.block.image.alt')}</label>
                         <input type="text"
                                class="form-control form-control-sm"
-                               placeholder="Description de l'image"
+                               placeholder="${t('page.builder.block.image.alt_placeholder')}"
                                value="${block.alt || ''}"
                                data-page-builder-target="blockAltInput"
                                data-action="input->page-builder#updateBlockContent" />
                     </div>
                     <div class="mb-3">
                         <div class="form-check form-switch d-flex justify-content-between">
-                            <label class="form-label mb-0 form-label-sm" for="use-original-size">Utiliser la taille originale</label>
+                            <label class="form-label mb-0 form-label-sm" for="use-original-size">${t('page.builder.block.image.original_size')}</label>
                             <input class="form-check-input mt-1"
                                    type="checkbox"
                                    id="use-original-size"
@@ -108,7 +109,7 @@ export const imageBlockType = {
                         </div>
                     </div>
                     <div class="mb-2" id="size-range-container" ${block.useOriginalSize ? 'style="display:none"' : ''}>
-                        <label class="form-label form-label-sm" for="image-size">Taille de l'image (%)</label>
+                        <label class="form-label form-label-sm" for="image-size">${t('page.builder.block.image.size')}</label>
                         <div class="d-flex align-items-center gap-2">
                           <input type="range" min="1" max="100" value="${block.width || 100}"
                                  class="form-range" id="image-size" style="width:100%"
@@ -147,7 +148,7 @@ export const imageBlockType = {
             }
         }
 
-        ctx.blockTitleTarget.textContent = 'Bloc image';
+        ctx.blockTitleTarget.textContent = t('page.builder.block_title.image');
     },
 
     handleInspectorInput: (block, event) => {

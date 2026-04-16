@@ -3,7 +3,7 @@
     <div class="card-body">
 
         <div class="mb-2 form-group">
-            <label for="page_title" class="col-form-label required">Titre de la page</label>
+            <label for="page_title" class="col-form-label required">{% trans %}page.form.title{% endtrans %}</label>
             <input type="text"
                    id="page_title"
                    name="page[title]"
@@ -12,11 +12,11 @@
                    value="{{ page ? page.title : '' }}"
                    data-page-builder-target="titleField"
                    data-page-builder-saver-target="paramTitle"
-                   placeholder="ex: Mentions légales"/>
+                   placeholder="{{ 'page.form.title.placeholder'|trans }}"/>
         </div>
 
         <div class="mb-2 form-group">
-            <label for="page_subtitle" class="col-form-label">Sous-titre</label>
+            <label for="page_subtitle" class="col-form-label">{% trans %}page.form.subtitle{% endtrans %}</label>
             <input type="text"
                    id="page_subtitle"
                    name="page[subtitle]"
@@ -26,21 +26,21 @@
         </div>
 
         <div class="mb-2 form-group">
-            <label for="page_slug" class="col-form-label">Slug (URL)</label>
+            <label for="page_slug" class="col-form-label">{% trans %}page.form.slug{% endtrans %}</label>
             <input type="text"
                    id="page_slug"
                    class="form-control"
                    value="{{ page ? page.slug : '' }}"
                    data-page-builder-saver-target="paramSlug"
-                   placeholder="Laisser vide pour générer automatiquement">
-            <small class="text-muted">Identifiant unique dans l'URL.</small>
+                   placeholder="{{ 'page.form.slug.placeholder'|trans }}">
+            <small class="text-muted">{% trans %}page.form.slug.help{% endtrans %}</small>
         </div>
 
         <div class="mb-2 form-group">
-            <label for="page_parent" class="col-form-label">Page parente</label>
+            <label for="page_parent" class="col-form-label">{% trans %}page.form.parent{% endtrans %}</label>
             <select class="form-select form-select-sm" id="page_parent"
                     data-page-builder-saver-target="paramParent">
-                <option value="">-- Choisir --</option>
+                <option value="">{{ 'form.choose'|trans }}</option>
                 {% for p in allPages %}
                     <option value="{{ p.id }}" {{ page and page.parent and page.parent.id == p.id ? 'selected' : '' }}>{{ p.parent ? p.title ~ ' [' ~ p.parent.title ~ ']' : p.title }}</option>
                 {% endfor %}
@@ -48,7 +48,7 @@
         </div>
 
         <div class="mb-2 form-group">
-            <label for="page_meta_title" class="col-form-label">Titre (SEO)</label>
+            <label for="page_meta_title" class="col-form-label">{% trans %}page.form.meta_title{% endtrans %}</label>
             <textarea id="page_meta_title"
                       class="form-control"
                       data-page-builder-saver-target="paramMetaTitle"
@@ -56,7 +56,7 @@
         </div>
 
         <div class="mb-2 form-group">
-            <label for="page_description" class="col-form-label">Description (SEO)</label>
+            <label for="page_description" class="col-form-label">{% trans %}page.form.meta_description{% endtrans %}</label>
             <textarea id="page_description"
                       class="form-control"
                       data-page-builder-saver-target="paramDescription"

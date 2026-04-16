@@ -1,3 +1,5 @@
+import { t } from '../i18n.js';
+
 export const textBlockType = {
     type: 'text',
 
@@ -121,15 +123,15 @@ export const textBlockType = {
         toolbar.style.display = 'none';
 
         const tools = [
-            { cmd: 'bold', icon: 'B', title: 'Gras' },
-            { cmd: 'italic', icon: 'I', title: 'Italique' },
-            { cmd: 'underline', icon: 'U', title: 'Souligné' },
-            { cmd: 'createLink', icon: '🔗', title: 'Lien', prompt: true },
-            { cmd: 'insertUnorderedList', icon: '•', title: 'Liste à puces' },
-            { cmd: 'insertOrderedList', icon: '1.', title: 'Liste numérotée' },
-            { cmd: 'justifyLeft', icon: '⬅', title: 'Aligner à gauche' },
-            { cmd: 'justifyCenter', icon: '⬌', title: 'Centrer' },
-            { cmd: 'justifyRight', icon: '➡', title: 'Aligner à droite' },
+            { cmd: 'bold', icon: 'B', title: t('page.builder.text.toolbar.bold') },
+            { cmd: 'italic', icon: 'I', title: t('page.builder.text.toolbar.italic') },
+            { cmd: 'underline', icon: 'U', title: t('page.builder.text.toolbar.underline') },
+            { cmd: 'createLink', icon: '🔗', title: t('page.builder.text.toolbar.link'), prompt: true },
+            { cmd: 'insertUnorderedList', icon: '•', title: t('page.builder.text.toolbar.list_unordered') },
+            { cmd: 'insertOrderedList', icon: '1.', title: t('page.builder.text.toolbar.list_ordered') },
+            { cmd: 'justifyLeft', icon: '⬅', title: t('page.builder.text.toolbar.align_left') },
+            { cmd: 'justifyCenter', icon: '⬌', title: t('page.builder.text.toolbar.align_center') },
+            { cmd: 'justifyRight', icon: '➡', title: t('page.builder.text.toolbar.align_right') },
         ];
 
         tools.forEach(({ cmd, icon, title, value, prompt }) => {
@@ -156,7 +158,7 @@ export const textBlockType = {
                 content.focus();
 
                 if (prompt && cmd === 'createLink') {
-                    const url = window.prompt('URL du lien:', 'https://');
+                    const url = window.prompt(t('page.builder.text.toolbar.link_prompt'), 'https://');
                     if (url && url !== 'https://') {
                         document.execCommand(cmd, false, url);
                     }

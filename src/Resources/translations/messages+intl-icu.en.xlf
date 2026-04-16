@@ -157,6 +157,574 @@
         <source>page.form.meta_keywords</source>
         <target>Keywords (SEO)</target>
       </trans-unit>
+      <trans-unit id="pg_form_parent" resname="page.form.parent">
+        <source>page.form.parent</source>
+        <target>Parent page</target>
+      </trans-unit>
+      <trans-unit id="form_choose" resname="form.choose">
+        <source>form.choose</source>
+        <target>-- Choose --</target>
+      </trans-unit>
+      <trans-unit id="form_none" resname="form.none">
+        <source>form.none</source>
+        <target>None</target>
+      </trans-unit>
+      <trans-unit id="form_default" resname="form.default">
+        <source>form.default</source>
+        <target>Default</target>
+      </trans-unit>
+      <trans-unit id="form_center" resname="form.center">
+        <source>form.center</source>
+        <target>Centered</target>
+      </trans-unit>
+      <trans-unit id="form_save" resname="form.save">
+        <source>form.save</source>
+        <target>Save</target>
+      </trans-unit>
+      <trans-unit id="pb_new_page" resname="page.builder.new_page">
+        <source>page.builder.new_page</source>
+        <target>New page</target>
+      </trans-unit>
+      <trans-unit id="pb_published" resname="page.builder.published">
+        <source>page.builder.published</source>
+        <target>Published</target>
+      </trans-unit>
+      <trans-unit id="pb_back_to_list" resname="page.builder.back_to_list">
+        <source>page.builder.back_to_list</source>
+        <target>Back to list</target>
+      </trans-unit>
+      <trans-unit id="pb_view_page" resname="page.builder.view_page">
+        <source>page.builder.view_page</source>
+        <target>View page</target>
+      </trans-unit>
+      <trans-unit id="pb_tab_settings" resname="page.builder.tab.settings">
+        <source>page.builder.tab.settings</source>
+        <target>Page settings</target>
+      </trans-unit>
+      <trans-unit id="pb_tab_inspector" resname="page.builder.tab.inspector">
+        <source>page.builder.tab.inspector</source>
+        <target>Inspector</target>
+      </trans-unit>
+      <trans-unit id="pb_tab_content" resname="page.builder.tab.content">
+        <source>page.builder.tab.content</source>
+        <target>Content</target>
+      </trans-unit>
+      <trans-unit id="pb_sync_locales" resname="page.builder.sync_locales">
+        <source>page.builder.sync_locales</source>
+        <target>Sync other languages with "{locale}"</target>
+      </trans-unit>
+      <trans-unit id="pb_preview" resname="page.builder.preview">
+        <source>page.builder.preview</source>
+        <target>Preview</target>
+      </trans-unit>
+      <trans-unit id="pb_view_desktop" resname="page.builder.view_desktop">
+        <source>page.builder.view_desktop</source>
+        <target>Desktop view</target>
+      </trans-unit>
+      <trans-unit id="pb_view_mobile" resname="page.builder.view_mobile">
+        <source>page.builder.view_mobile</source>
+        <target>Mobile view</target>
+      </trans-unit>
+      <trans-unit id="pb_canvas_placeholder" resname="page.builder.canvas_placeholder">
+        <source>page.builder.canvas_placeholder</source>
+        <target>Add a section or a template to start building the page.</target>
+      </trans-unit>
+      <trans-unit id="pb_add_section" resname="page.builder.add_section">
+        <source>page.builder.add_section</source>
+        <target>+ Add a section</target>
+      </trans-unit>
+      <trans-unit id="pb_lib_tab_blocks" resname="page.builder.library.tab.blocks">
+        <source>page.builder.library.tab.blocks</source>
+        <target>Blocks</target>
+      </trans-unit>
+      <trans-unit id="pb_lib_tab_media" resname="page.builder.library.tab.media">
+        <source>page.builder.library.tab.media</source>
+        <target>Media</target>
+      </trans-unit>
+      <trans-unit id="pb_lib_tab_modules" resname="page.builder.library.tab.modules">
+        <source>page.builder.library.tab.modules</source>
+        <target>Modules</target>
+      </trans-unit>
+      <trans-unit id="pb_lib_tab_custom" resname="page.builder.library.tab.custom">
+        <source>page.builder.library.tab.custom</source>
+        <target>Custom</target>
+      </trans-unit>
+      <trans-unit id="pb_block_title" resname="page.builder.block.title">
+        <source>page.builder.block.title</source>
+        <target>Title</target>
+      </trans-unit>
+      <trans-unit id="pb_block_text" resname="page.builder.block.text">
+        <source>page.builder.block.text</source>
+        <target>Text</target>
+      </trans-unit>
+      <trans-unit id="pb_block_button" resname="page.builder.block.button">
+        <source>page.builder.block.button</source>
+        <target>Button</target>
+      </trans-unit>
+      <trans-unit id="pb_block_spacer" resname="page.builder.block.spacer">
+        <source>page.builder.block.spacer</source>
+        <target>Spacer</target>
+      </trans-unit>
+      <trans-unit id="pb_block_divider" resname="page.builder.block.divider">
+        <source>page.builder.block.divider</source>
+        <target>Divider</target>
+      </trans-unit>
+      <trans-unit id="pb_block_image" resname="page.builder.block.image">
+        <source>page.builder.block.image</source>
+        <target>Image</target>
+      </trans-unit>
+      <trans-unit id="pb_block_accordion" resname="page.builder.block.accordion">
+        <source>page.builder.block.accordion</source>
+        <target>Accordion</target>
+      </trans-unit>
+      <trans-unit id="pb_block_banner" resname="page.builder.block.banner">
+        <source>page.builder.block.banner</source>
+        <target>Scrolling banner</target>
+      </trans-unit>
+      <trans-unit id="pb_block_grid" resname="page.builder.block.grid">
+        <source>page.builder.block.grid</source>
+        <target>Grid</target>
+      </trans-unit>
+      <trans-unit id="pb_block_blog" resname="page.builder.block.blog">
+        <source>page.builder.block.blog</source>
+        <target>News</target>
+      </trans-unit>
+      <trans-unit id="pb_tpl_hero" resname="page.builder.template.hero">
+        <source>page.builder.template.hero</source>
+        <target>Title, text and button</target>
+      </trans-unit>
+      <trans-unit id="pb_tpl_split" resname="page.builder.template.split">
+        <source>page.builder.template.split</source>
+        <target>Image and text</target>
+      </trans-unit>
+      <trans-unit id="pb_tpl_slider" resname="page.builder.template.slider">
+        <source>page.builder.template.slider</source>
+        <target>Slider and text</target>
+      </trans-unit>
+      <trans-unit id="pb_tpl_iconbox" resname="page.builder.template.iconbox">
+        <source>page.builder.template.iconbox</source>
+        <target>Icon grid</target>
+      </trans-unit>
+      <trans-unit id="pb_tpl_ticketing" resname="page.builder.template.ticketing">
+        <source>page.builder.template.ticketing</source>
+        <target>Ticketing grid</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_placeholder" resname="page.builder.inspector.placeholder">
+        <source>page.builder.inspector.placeholder</source>
+        <target>Select an element on the page to edit its settings.</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_block" resname="page.builder.inspector.block">
+        <source>page.builder.inspector.block</source>
+        <target>Block</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_block_content" resname="page.builder.inspector.block.content">
+        <source>page.builder.inspector.block.content</source>
+        <target>Text content</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_block_content_ph" resname="page.builder.inspector.block.content_placeholder">
+        <source>page.builder.inspector.block.content_placeholder</source>
+        <target>Your text…</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_column" resname="page.builder.inspector.column">
+        <source>page.builder.inspector.column</source>
+        <target>Column</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_col_halign" resname="page.builder.inspector.column.horizontal_alignment">
+        <source>page.builder.inspector.column.horizontal_alignment</source>
+        <target>Horizontal alignment</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_col_link_type" resname="page.builder.inspector.column.link_type">
+        <source>page.builder.inspector.column.link_type</source>
+        <target>Link type</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_col_link_url" resname="page.builder.inspector.column.link_url">
+        <source>page.builder.inspector.column.link_url</source>
+        <target>Link (URL)</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_col_link_cms" resname="page.builder.inspector.column.link_page_cms">
+        <source>page.builder.inspector.column.link_page_cms</source>
+        <target>Website page (CMS)</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_col_link_fixed" resname="page.builder.inspector.column.link_page_fixed">
+        <source>page.builder.inspector.column.link_page_fixed</source>
+        <target>Website page (fixed)</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_col_link_cms_label" resname="page.builder.inspector.column.link_page_cms_label">
+        <source>page.builder.inspector.column.link_page_cms_label</source>
+        <target>Link to a website page (CMS)</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_col_link_fixed_label" resname="page.builder.inspector.column.link_page_fixed_label">
+        <source>page.builder.inspector.column.link_page_fixed_label</source>
+        <target>Link to a fixed page</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_col_height" resname="page.builder.inspector.column.height">
+        <source>page.builder.inspector.column.height</source>
+        <target>Height</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_col_height_auto" resname="page.builder.inspector.column.height.auto">
+        <source>page.builder.inspector.column.height.auto</source>
+        <target>Automatic</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_col_height_s" resname="page.builder.inspector.column.height.small">
+        <source>page.builder.inspector.column.height.small</source>
+        <target>Small (150px)</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_col_height_m" resname="page.builder.inspector.column.height.medium">
+        <source>page.builder.inspector.column.height.medium</source>
+        <target>Medium (300px)</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_col_height_l" resname="page.builder.inspector.column.height.large">
+        <source>page.builder.inspector.column.height.large</source>
+        <target>Large (450px)</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_col_border_radius" resname="page.builder.inspector.column.border_radius">
+        <source>page.builder.inspector.column.border_radius</source>
+        <target>Corner radius (px)</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_bg_type" resname="page.builder.inspector.background_type">
+        <source>page.builder.inspector.background_type</source>
+        <target>Background type</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_bg_color" resname="page.builder.inspector.background.color">
+        <source>page.builder.inspector.background.color</source>
+        <target>Color</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_bg_image" resname="page.builder.inspector.background.image">
+        <source>page.builder.inspector.background.image</source>
+        <target>Image</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_bg_class" resname="page.builder.inspector.background.class">
+        <source>page.builder.inspector.background.class</source>
+        <target>CSS class</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_bg_color_label" resname="page.builder.inspector.background.color_label">
+        <source>page.builder.inspector.background.color_label</source>
+        <target>Background color</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_bg_overlay" resname="page.builder.inspector.background.overlay_opacity">
+        <source>page.builder.inspector.background.overlay_opacity</source>
+        <target>Overlay opacity</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_bg_select_class" resname="page.builder.inspector.background.select_class">
+        <source>page.builder.inspector.background.select_class</source>
+        <target>Select a class</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_row" resname="page.builder.inspector.row">
+        <source>page.builder.inspector.row</source>
+        <target>Row</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_row_grid_type" resname="page.builder.inspector.row.grid_type">
+        <source>page.builder.inspector.row.grid_type</source>
+        <target>Grid type</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_row_grid_icon" resname="page.builder.inspector.row.grid_icon">
+        <source>page.builder.inspector.row.grid_icon</source>
+        <target>Icon grid</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_row_grid_ticketing" resname="page.builder.inspector.row.grid_ticketing">
+        <source>page.builder.inspector.row.grid_ticketing</source>
+        <target>Ticketing grid</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_row_grid_collapse" resname="page.builder.inspector.row.grid_collapse">
+        <source>page.builder.inspector.row.grid_collapse</source>
+        <target>Grid without spacing</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_row_max" resname="page.builder.inspector.row.max_per_row">
+        <source>page.builder.inspector.row.max_per_row</source>
+        <target>Maximum items per row</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_row_slider_bp" resname="page.builder.inspector.row.slider_breakpoint">
+        <source>page.builder.inspector.row.slider_breakpoint</source>
+        <target>Enable slider from screen size</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_row_img_width" resname="page.builder.inspector.row.img_width">
+        <source>page.builder.inspector.row.img_width</source>
+        <target>Grid image size (px)</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_row_valign" resname="page.builder.inspector.row.vertical_align">
+        <source>page.builder.inspector.row.vertical_align</source>
+        <target>Vertical column alignment</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_row_align_top" resname="page.builder.inspector.row.align_top">
+        <source>page.builder.inspector.row.align_top</source>
+        <target>Aligned to top</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_row_align_bottom" resname="page.builder.inspector.row.align_bottom">
+        <source>page.builder.inspector.row.align_bottom</source>
+        <target>Aligned to bottom</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_row_halign" resname="page.builder.inspector.row.horizontal_align">
+        <source>page.builder.inspector.row.horizontal_align</source>
+        <target>Horizontal column alignment</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_row_space_between" resname="page.builder.inspector.row.space_between">
+        <source>page.builder.inspector.row.space_between</source>
+        <target>Spread</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_row_space_around" resname="page.builder.inspector.row.space_around">
+        <source>page.builder.inspector.row.space_around</source>
+        <target>Spread with space at edges</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_row_flex_start" resname="page.builder.inspector.row.flex_start">
+        <source>page.builder.inspector.row.flex_start</source>
+        <target>Aligned to start</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_row_flex_end" resname="page.builder.inspector.row.flex_end">
+        <source>page.builder.inspector.row.flex_end</source>
+        <target>Aligned to end</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_row_mobile" resname="page.builder.inspector.row.mobile_behavior">
+        <source>page.builder.inspector.row.mobile_behavior</source>
+        <target>Mobile behavior</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_row_reverse" resname="page.builder.inspector.row.reverse_mobile">
+        <source>page.builder.inspector.row.reverse_mobile</source>
+        <target>Reverse column order</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_section" resname="page.builder.inspector.section">
+        <source>page.builder.inspector.section</source>
+        <target>Section</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_section_name" resname="page.builder.inspector.section.name">
+        <source>page.builder.inspector.section.name</source>
+        <target>Section name</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_section_name_ph" resname="page.builder.inspector.section.name_placeholder">
+        <source>page.builder.inspector.section.name_placeholder</source>
+        <target>Untitled section</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_section_status" resname="page.builder.inspector.section.status">
+        <source>page.builder.inspector.section.status</source>
+        <target>Section status</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_section_width" resname="page.builder.inspector.section.width">
+        <source>page.builder.inspector.section.width</source>
+        <target>Width</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_section_width_full" resname="page.builder.inspector.section.width.full">
+        <source>page.builder.inspector.section.width.full</source>
+        <target>full width</target>
+      </trans-unit>
+      <trans-unit id="pb_block_title_image" resname="page.builder.block_title.image">
+        <source>page.builder.block_title.image</source>
+        <target>Image block</target>
+      </trans-unit>
+      <trans-unit id="pb_block_title_button" resname="page.builder.block_title.button">
+        <source>page.builder.block_title.button</source>
+        <target>Button block</target>
+      </trans-unit>
+      <trans-unit id="pb_block_title_banner" resname="page.builder.block_title.banner">
+        <source>page.builder.block_title.banner</source>
+        <target>Scrolling banner block</target>
+      </trans-unit>
+      <trans-unit id="pb_block_title_blog" resname="page.builder.block_title.blog">
+        <source>page.builder.block_title.blog</source>
+        <target>Latest news block</target>
+      </trans-unit>
+      <trans-unit id="pb_block_title_divider" resname="page.builder.block_title.divider">
+        <source>page.builder.block_title.divider</source>
+        <target>Divider block</target>
+      </trans-unit>
+      <trans-unit id="pb_block_title_nested" resname="page.builder.block_title.nested_row">
+        <source>page.builder.block_title.nested_row</source>
+        <target>Nested block</target>
+      </trans-unit>
+      <trans-unit id="pb_img_alt" resname="page.builder.block.image.alt">
+        <source>page.builder.block.image.alt</source>
+        <target>Alternative text</target>
+      </trans-unit>
+      <trans-unit id="pb_img_alt_ph" resname="page.builder.block.image.alt_placeholder">
+        <source>page.builder.block.image.alt_placeholder</source>
+        <target>Image description</target>
+      </trans-unit>
+      <trans-unit id="pb_img_original_size" resname="page.builder.block.image.original_size">
+        <source>page.builder.block.image.original_size</source>
+        <target>Use original size</target>
+      </trans-unit>
+      <trans-unit id="pb_img_size" resname="page.builder.block.image.size">
+        <source>page.builder.block.image.size</source>
+        <target>Image size (%)</target>
+      </trans-unit>
+      <trans-unit id="pb_btn_label_field" resname="page.builder.block.button.label_field">
+        <source>page.builder.block.button.label_field</source>
+        <target>Button text</target>
+      </trans-unit>
+      <trans-unit id="pb_btn_link_page" resname="page.builder.block.button.link_page">
+        <source>page.builder.block.button.link_page</source>
+        <target>Website page</target>
+      </trans-unit>
+      <trans-unit id="pb_btn_link_page_label" resname="page.builder.block.button.link_page_label">
+        <source>page.builder.block.button.link_page_label</source>
+        <target>Link to a website page</target>
+      </trans-unit>
+      <trans-unit id="pb_btn_color" resname="page.builder.block.button.color">
+        <source>page.builder.block.button.color</source>
+        <target>Button color</target>
+      </trans-unit>
+      <trans-unit id="pb_btn_default_label" resname="page.builder.block.button.default_label">
+        <source>page.builder.block.button.default_label</source>
+        <target>Learn more</target>
+      </trans-unit>
+      <trans-unit id="pb_text_bold" resname="page.builder.text.toolbar.bold">
+        <source>page.builder.text.toolbar.bold</source>
+        <target>Bold</target>
+      </trans-unit>
+      <trans-unit id="pb_text_italic" resname="page.builder.text.toolbar.italic">
+        <source>page.builder.text.toolbar.italic</source>
+        <target>Italic</target>
+      </trans-unit>
+      <trans-unit id="pb_text_underline" resname="page.builder.text.toolbar.underline">
+        <source>page.builder.text.toolbar.underline</source>
+        <target>Underline</target>
+      </trans-unit>
+      <trans-unit id="pb_text_link" resname="page.builder.text.toolbar.link">
+        <source>page.builder.text.toolbar.link</source>
+        <target>Link</target>
+      </trans-unit>
+      <trans-unit id="pb_text_link_prompt" resname="page.builder.text.toolbar.link_prompt">
+        <source>page.builder.text.toolbar.link_prompt</source>
+        <target>Link URL:</target>
+      </trans-unit>
+      <trans-unit id="pb_text_list_ul" resname="page.builder.text.toolbar.list_unordered">
+        <source>page.builder.text.toolbar.list_unordered</source>
+        <target>Bullet list</target>
+      </trans-unit>
+      <trans-unit id="pb_text_list_ol" resname="page.builder.text.toolbar.list_ordered">
+        <source>page.builder.text.toolbar.list_ordered</source>
+        <target>Numbered list</target>
+      </trans-unit>
+      <trans-unit id="pb_text_align_left" resname="page.builder.text.toolbar.align_left">
+        <source>page.builder.text.toolbar.align_left</source>
+        <target>Align left</target>
+      </trans-unit>
+      <trans-unit id="pb_text_align_center" resname="page.builder.text.toolbar.align_center">
+        <source>page.builder.text.toolbar.align_center</source>
+        <target>Center</target>
+      </trans-unit>
+      <trans-unit id="pb_text_align_right" resname="page.builder.text.toolbar.align_right">
+        <source>page.builder.text.toolbar.align_right</source>
+        <target>Align right</target>
+      </trans-unit>
+      <trans-unit id="pb_slider_delete" resname="page.builder.block.slider.delete_confirm">
+        <source>page.builder.block.slider.delete_confirm</source>
+        <target>Delete this image?</target>
+      </trans-unit>
+      <trans-unit id="pb_slider_empty" resname="page.builder.block.slider.empty">
+        <source>page.builder.block.slider.empty</source>
+        <target>No images. Click the block to add some.</target>
+      </trans-unit>
+      <trans-unit id="pb_banner_default" resname="page.builder.block.banner.default_label">
+        <source>page.builder.block.banner.default_label</source>
+        <target>Scrolling banner</target>
+      </trans-unit>
+      <trans-unit id="pb_blog_default" resname="page.builder.block.blog.default_label">
+        <source>page.builder.block.blog.default_label</source>
+        <target>Latest news</target>
+      </trans-unit>
+      <trans-unit id="pb_divider_margin_top" resname="page.builder.block.divider.margin_top">
+        <source>page.builder.block.divider.margin_top</source>
+        <target>Top margin (px)</target>
+      </trans-unit>
+      <trans-unit id="pb_divider_margin_bottom" resname="page.builder.block.divider.margin_bottom">
+        <source>page.builder.block.divider.margin_bottom</source>
+        <target>Bottom margin (px)</target>
+      </trans-unit>
+      <trans-unit id="pb_canvas_insert_before" resname="page.builder.canvas.section.insert_before">
+        <source>page.builder.canvas.section.insert_before</source>
+        <target>Insert section above</target>
+      </trans-unit>
+      <trans-unit id="pb_canvas_insert_after" resname="page.builder.canvas.section.insert_after">
+        <source>page.builder.canvas.section.insert_after</source>
+        <target>Insert section below</target>
+      </trans-unit>
+      <trans-unit id="pb_canvas_move_up" resname="page.builder.canvas.move_up">
+        <source>page.builder.canvas.move_up</source>
+        <target>Move up</target>
+      </trans-unit>
+      <trans-unit id="pb_canvas_move_down" resname="page.builder.canvas.move_down">
+        <source>page.builder.canvas.move_down</source>
+        <target>Move down</target>
+      </trans-unit>
+      <trans-unit id="pb_canvas_move_left" resname="page.builder.canvas.move_left">
+        <source>page.builder.canvas.move_left</source>
+        <target>Move left</target>
+      </trans-unit>
+      <trans-unit id="pb_canvas_move_right" resname="page.builder.canvas.move_right">
+        <source>page.builder.canvas.move_right</source>
+        <target>Move right</target>
+      </trans-unit>
+      <trans-unit id="pb_canvas_section_dup" resname="page.builder.canvas.section.duplicate">
+        <source>page.builder.canvas.section.duplicate</source>
+        <target>Duplicate section</target>
+      </trans-unit>
+      <trans-unit id="pb_canvas_section_del" resname="page.builder.canvas.section.delete">
+        <source>page.builder.canvas.section.delete</source>
+        <target>Delete section</target>
+      </trans-unit>
+      <trans-unit id="pb_canvas_section_del_confirm" resname="page.builder.canvas.section.delete_confirm">
+        <source>page.builder.canvas.section.delete_confirm</source>
+        <target>Are you sure you want to delete this section?</target>
+      </trans-unit>
+      <trans-unit id="pb_canvas_row_dup" resname="page.builder.canvas.row.duplicate">
+        <source>page.builder.canvas.row.duplicate</source>
+        <target>Duplicate row</target>
+      </trans-unit>
+      <trans-unit id="pb_canvas_row_del" resname="page.builder.canvas.row.delete">
+        <source>page.builder.canvas.row.delete</source>
+        <target>Delete row</target>
+      </trans-unit>
+      <trans-unit id="pb_canvas_row_del_confirm" resname="page.builder.canvas.row.delete_confirm">
+        <source>page.builder.canvas.row.delete_confirm</source>
+        <target>Are you sure you want to delete this row?</target>
+      </trans-unit>
+      <trans-unit id="pb_canvas_col_dup" resname="page.builder.canvas.column.duplicate">
+        <source>page.builder.canvas.column.duplicate</source>
+        <target>Duplicate column</target>
+      </trans-unit>
+      <trans-unit id="pb_canvas_col_del" resname="page.builder.canvas.column.delete">
+        <source>page.builder.canvas.column.delete</source>
+        <target>Delete column</target>
+      </trans-unit>
+      <trans-unit id="pb_canvas_col_del_confirm" resname="page.builder.canvas.column.delete_confirm">
+        <source>page.builder.canvas.column.delete_confirm</source>
+        <target>Are you sure you want to delete this column?</target>
+      </trans-unit>
+      <trans-unit id="pb_canvas_block_dup" resname="page.builder.canvas.block.duplicate">
+        <source>page.builder.canvas.block.duplicate</source>
+        <target>Duplicate block</target>
+      </trans-unit>
+      <trans-unit id="pb_canvas_block_del" resname="page.builder.canvas.block.delete">
+        <source>page.builder.canvas.block.delete</source>
+        <target>Delete block</target>
+      </trans-unit>
+      <trans-unit id="pb_canvas_block_del_confirm" resname="page.builder.canvas.block.delete_confirm">
+        <source>page.builder.canvas.block.delete_confirm</source>
+        <target>Are you sure you want to delete this block?</target>
+      </trans-unit>
+      <trans-unit id="pb_canvas_col_icon_box" resname="page.builder.canvas.column.quick_add_icon_box">
+        <source>page.builder.canvas.column.quick_add_icon_box</source>
+        <target>Icon box</target>
+      </trans-unit>
+      <trans-unit id="pb_notif_close" resname="page.builder.notification.close">
+        <source>page.builder.notification.close</source>
+        <target>Close</target>
+      </trans-unit>
+      <trans-unit id="pb_saver_title_req" resname="page.builder.saver.title_required">
+        <source>page.builder.saver.title_required</source>
+        <target>Page title is required (Settings tab).</target>
+      </trans-unit>
+      <trans-unit id="pb_saver_success" resname="page.builder.saver.success">
+        <source>page.builder.saver.success</source>
+        <target>Page saved successfully!</target>
+      </trans-unit>
+      <trans-unit id="pb_saver_error" resname="page.builder.saver.error">
+        <source>page.builder.saver.error</source>
+        <target>Error while saving: </target>
+      </trans-unit>
+      <trans-unit id="pb_saver_error_network" resname="page.builder.saver.error_network">
+        <source>page.builder.saver.error_network</source>
+        <target>Communication error with the server.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

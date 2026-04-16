@@ -5,7 +5,7 @@
     <section class="pb-section" data-page-builder-target="inspectorPanelDefault">
         <div class="pb-section-body pb-section-body--muted">
             <p class="pb-empty-state">
-                Sélectionnez un élément dans la page pour modifier ses paramètres.
+                {% trans %}page.builder.inspector.placeholder{% endtrans %}
             </p>
         </div>
     </section>
@@ -17,17 +17,17 @@
         <div class="accordion-item d-none" data-page-builder-target="inspectorPanelBlock">
             <h2 class="accordion-header" id="headingBlock">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBlock" aria-expanded="false" aria-controls="collapseBlock">
-                    <span data-page-builder-target="blockTitle">Bloc</span>
+                    <span data-page-builder-target="blockTitle">{% trans %}page.builder.inspector.block{% endtrans %}</span>
                 </button>
             </h2>
             <div id="collapseBlock" class="accordion-collapse collapse" aria-labelledby="headingBlock" data-bs-parent="#inspectorAccordion">
                 <div class="accordion-body pb-inspector-block-content">
                     <div class="mb-2">
-                        <label class="form-label form-label-sm">Contenu du texte</label>
+                        <label class="form-label form-label-sm">{% trans %}page.builder.inspector.block.content{% endtrans %}</label>
                         <textarea
                             class="form-control form-control-sm"
                             rows="4"
-                            placeholder="Votre texte…"
+                            placeholder="{{ 'page.builder.inspector.block.content_placeholder'|trans }}"
                             data-page-builder-target="blockContentInput"
                             data-action="input->page-builder#updateBlockContent"
                         ></textarea>
@@ -40,13 +40,13 @@
         <div class="accordion-item d-none" data-page-builder-target="inspectorPanelColumn">
             <h2 class="accordion-header" id="headingColumn">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseColumn" aria-expanded="true" aria-controls="collapseColumn">
-                    Colonne
+                    {% trans %}page.builder.inspector.column{% endtrans %}
                 </button>
             </h2>
             <div id="collapseColumn" class="accordion-collapse collapse show" aria-labelledby="headingColumn" data-bs-parent="#inspectorAccordion">
                 <div class="accordion-body">
                     <div class="mb-2">
-                        <label class="form-label form-label-sm d-block mb-1" for="column-horizontal-alignment">Alignement horizontal</label>
+                        <label class="form-label form-label-sm d-block mb-1" for="column-horizontal-alignment">{% trans %}page.builder.inspector.column.horizontal_alignment{% endtrans %}</label>
                         <div class="d-flex gap-1">
                             <button type="button"
                                     class="pb-button pb-button--ghost flex-fill"
@@ -75,18 +75,18 @@
                         </div>
                     </div>
                     <div class="mb-2">
-                        <label class="form-label form-label-sm d-block mb-1" for="column-link-type">Type de lien</label>
+                        <label class="form-label form-label-sm d-block mb-1" for="column-link-type">{% trans %}page.builder.inspector.column.link_type{% endtrans %}</label>
                         <select class="form-select form-select-sm" id="column-link-type"
                                 data-page-builder-target="columnLinkTypeSelect"
                                 data-action="change->page-builder#updateColumnLinkType">
-                            <option value="">Aucun</option>
-                            <option value="url">Lien (URL)</option>
-                            <option value="page">Page du site (CMS)</option>
-                            <option value="fixed">Page du site (fixe)</option>
+                            <option value="">{% trans %}form.none{% endtrans %}</option>
+                            <option value="url">{% trans %}page.builder.inspector.column.link_url{% endtrans %}</option>
+                            <option value="page">{% trans %}page.builder.inspector.column.link_page_cms{% endtrans %}</option>
+                            <option value="fixed">{% trans %}page.builder.inspector.column.link_page_fixed{% endtrans %}</option>
                         </select>
                     </div>
                     <div class="mb-2 d-none" data-page-builder-target="columnUrlInputContainer">
-                        <label class="form-label form-label-sm d-block mb-1" for="column-url">Lien (URL)</label>
+                        <label class="form-label form-label-sm d-block mb-1" for="column-url">{% trans %}page.builder.inspector.column.link_url{% endtrans %}</label>
                         <input type="text"
                                class="form-control form-control-sm"
                                id="column-url"
@@ -95,37 +95,37 @@
                                data-action="input->page-builder#updateColumnUrl">
                     </div>
                     <div class="mb-2 d-none" data-page-builder-target="columnPagePathSelectContainer">
-                        <label class="form-label form-label-sm d-block mb-1" for="column-page-path">Lien vers une page du site (CMS)</label>
+                        <label class="form-label form-label-sm d-block mb-1" for="column-page-path">{% trans %}page.builder.inspector.column.link_page_cms_label{% endtrans %}</label>
                         <select class="form-select form-select-sm" id="column-page-path"
                                 data-page-builder-target="columnPagePathSelect"
                                 data-action="change->page-builder#updateColumnPagePath"
                         >
-                            <option value="">-- Choisir --</option>
+                            <option value="">{{ 'form.choose'|trans }}</option>
                         </select>
                     </div>
                     <div class="mb-2 d-none" data-page-builder-target="columnFixedPageSelectContainer">
-                        <label class="form-label form-label-sm d-block mb-1" for="column-fixed-page">Lien vers une page fixe</label>
+                        <label class="form-label form-label-sm d-block mb-1" for="column-fixed-page">{% trans %}page.builder.inspector.column.link_page_fixed_label{% endtrans %}</label>
                         <select class="form-select form-select-sm" id="column-fixed-page"
                                 data-page-builder-target="columnFixedPageSelect"
                                 data-action="change->page-builder#updateColumnPagePath"
                         >
-                            <option value="">-- Choisir --</option>
+                            <option value="">{{ 'form.choose'|trans }}</option>
                         </select>
                     </div>
                     <div class="mb-2">
-                        <label class="form-label form-label-sm d-block mb-1" for="column-height">Hauteur</label>
+                        <label class="form-label form-label-sm d-block mb-1" for="column-height">{% trans %}page.builder.inspector.column.height{% endtrans %}</label>
                         <select class="form-select form-select-sm" id="column-height"
                                 data-page-builder-target="columnHeightSelect"
                                 data-action="change->page-builder#updateColumnHeight"
                         >
-                            <option value="auto">Automatique</option>
-                            <option value="small">Petite (150px)</option>
-                            <option value="medium">Moyenne (300px)</option>
-                            <option value="large">Large (450px)</option>
+                            <option value="auto">{% trans %}page.builder.inspector.column.height.auto{% endtrans %}</option>
+                            <option value="small">{% trans %}page.builder.inspector.column.height.small{% endtrans %}</option>
+                            <option value="medium">{% trans %}page.builder.inspector.column.height.medium{% endtrans %}</option>
+                            <option value="large">{% trans %}page.builder.inspector.column.height.large{% endtrans %}</option>
                         </select>
                     </div>
                     <div class="mb-2">
-                        <label class="form-label form-label-sm d-block mb-1" for="column-border-radius">Arrondi des angles (px)</label>
+                        <label class="form-label form-label-sm d-block mb-1" for="column-border-radius">{% trans %}page.builder.inspector.column.border_radius{% endtrans %}</label>
                         <div class="d-flex align-items-center gap-2">
                             <input type="range"
                                    class="form-range flex-fill"
@@ -140,20 +140,20 @@
                         </div>
                     </div>
                     <div class="mb-2">
-                        <label class="form-label form-label-sm d-block mb-1" for="column-background-type">Type de fond</label>
+                        <label class="form-label form-label-sm d-block mb-1" for="column-background-type">{% trans %}page.builder.inspector.background_type{% endtrans %}</label>
                         <select class="form-select form-select-sm" id="column-background-type"
                                 data-page-builder-target="columnBackgroundTypeSelect"
                                 data-action="change->page-builder#updateColumnBackgroundType">
-                            <option value="">Aucun</option>
-                            <option value="color">Couleur</option>
-                            <option value="image">Image</option>
-                            <option value="class">Classe CSS</option>
+                            <option value="">{% trans %}form.none{% endtrans %}</option>
+                            <option value="color">{% trans %}page.builder.inspector.background.color{% endtrans %}</option>
+                            <option value="image">{% trans %}page.builder.inspector.background.image{% endtrans %}</option>
+                            <option value="class">{% trans %}page.builder.inspector.background.class{% endtrans %}</option>
                         </select>
                     </div>
 
                     {# Input couleur #}
                     <div class="mb-2 d-none" data-page-builder-target="columnBackgroundColorInput">
-                        <label class="form-label form-label-sm d-block mb-1" for="column-bg-color">Couleur de fond</label>
+                        <label class="form-label form-label-sm d-block mb-1" for="column-bg-color">{% trans %}page.builder.inspector.background.color_label{% endtrans %}</label>
                         <div class="d-flex flex-wrap gap-1 mb-2">
                             <button type="button" class="pb-color-preset" style="background-color: #ff007d;" data-color="#ff007d" data-action="click->page-builder#applyColumnColorPreset" title="Rose"></button>
                             <button type="button" class="pb-color-preset" style="background-color: #d6ff00;" data-color="#d6ff00" data-action="click->page-builder#applyColumnColorPreset" title="Jaune"></button>
@@ -176,7 +176,7 @@
                     </div>
 
                     <div class="mb-2 d-none" data-page-builder-target="columnBackgroundOverlayInput">
-                        <label class="form-label form-label-sm d-block mb-1" for="column-bg-overlay">Opacité de l'overlay</label>
+                        <label class="form-label form-label-sm d-block mb-1" for="column-bg-overlay">{% trans %}page.builder.inspector.background.overlay_opacity{% endtrans %}</label>
                         <div class="d-flex align-items-center gap-2">
                             <input type="range"
                                    class="form-range flex-fill"
@@ -192,10 +192,10 @@
 
                     {# Select classe CSS #}
                     <div class="mb-2 d-none" data-page-builder-target="columnBackgroundClassInput">
-                        <label class="form-label form-label-sm d-block mb-1" for="column-bg-class">Classe CSS</label>
+                        <label class="form-label form-label-sm d-block mb-1" for="column-bg-class">{% trans %}page.builder.inspector.background.class{% endtrans %}</label>
                         <select class="form-select form-select-sm" id="column-bg-class"
                                 data-action="change->page-builder#updateColumnBackgroundValue">
-                            <option value="">Sélectionner une classe</option>
+                            <option value="">{% trans %}page.builder.inspector.background.select_class{% endtrans %}</option>
                             <option value="bg-primary">Fond primaire</option>
                             <option value="bg-secondary">Fond secondaire</option>
                             <option value="bg-light">Fond clair</option>
@@ -211,32 +211,21 @@
         <div class="accordion-item d-none" data-page-builder-target="inspectorPanelRow">
             <h2 class="accordion-header" id="headingRow">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRow" aria-expanded="false" aria-controls="collapseRow">
-                    Ligne
+                    {% trans %}page.builder.inspector.row{% endtrans %}
                 </button>
             </h2>
             <div id="collapseRow" class="accordion-collapse collapse" aria-labelledby="headingRow" data-bs-parent="#inspectorAccordion">
                 <div class="accordion-body">
 
-                    {# Sélecteur du mode de ligne #}
-{#                    <div class="mb-2">#}
-{#                        <label class="form-label form-label-sm d-block mb-1" for="row-mode">Mode de grille</label>#}
-{#                        <select class="form-select form-select-sm" id="row-mode"#}
-{#                                data-page-builder-target="rowModeSelect"#}
-{#                                data-action="change->page-builder#updateRowMode">#}
-{#                            <option value="fixed">Fixe (colonnes avec tailles fixes)</option>#}
-{#                            <option value="auto">Auto (colonnes avec tailles automatiques)</option>#}
-{#                        </select>#}
-{#                    </div>#}
-
                     <div class="mb-2">
-                        <label class="form-label form-label-sm d-block mb-1" for="row-type">Type de grille</label>
+                        <label class="form-label form-label-sm d-block mb-1" for="row-type">{% trans %}page.builder.inspector.row.grid_type{% endtrans %}</label>
                         <select class="form-select form-select-sm" id="row-type"
                                 data-page-builder-target="rowTypeSelect"
                                 data-action="change->page-builder#updateRowType">
-                            <option value="default">Par défaut</option>
-                            <option value="icon-box">Grille d'icônes</option>
-                            <option value="ticketing">Grille de billeterie</option>
-                            <option value="collapse">Grille sans espacement</option>
+                            <option value="default">{% trans %}form.default{% endtrans %}</option>
+                            <option value="icon-box">{% trans %}page.builder.inspector.row.grid_icon{% endtrans %}</option>
+                            <option value="ticketing">{% trans %}page.builder.inspector.row.grid_ticketing{% endtrans %}</option>
+                            <option value="collapse">{% trans %}page.builder.inspector.row.grid_collapse{% endtrans %}</option>
                         </select>
                     </div>
 
@@ -244,7 +233,7 @@
                     <div data-page-builder-target="rowFixedParams">
                         <div class="mb-2">
                             <div class="mb-1">
-                                <label class="form-label form-label-sm mb-0">Nombre d'éléments maximum par ligne</label>
+                                <label class="form-label form-label-sm mb-0">{% trans %}page.builder.inspector.row.max_per_row{% endtrans %}</label>
                                 <div class="d-flex justify-content-end gap-1 pb-breakpoint-selector">
                                     <button type="button" class="pb-breakpoint-btn active" data-breakpoint="xl" data-action="click->page-builder#changeColumnBreakpoint" title="XL (Ecran)">
                                         <i class="fas fa-desktop"></i>
@@ -271,7 +260,7 @@
                     {# Paramètres pour le mode "auto" #}
                     <div data-page-builder-target="rowAutoParams" class="d-none">
                         <div class="mb-2">
-                            <label class="form-label form-label-sm d-block mb-1" for="row-img-width">Taille (px) des images de la grille</label>
+                            <label class="form-label form-label-sm d-block mb-1" for="row-img-width">{% trans %}page.builder.inspector.row.img_width{% endtrans %}</label>
                             <input class="form-control form-control-sm"
                                    placeholder="Ex : 60"
                                    id="row-img-width"
@@ -282,7 +271,7 @@
                     </div>
 
                     <div class="mb-2">
-                        <label class="form-label form-label-sm d-block mb-1">Activer le slider à partir de l'écran</label>
+                        <label class="form-label form-label-sm d-block mb-1">{% trans %}page.builder.inspector.row.slider_breakpoint{% endtrans %}</label>
                         <div class="d-flex gap-1 pb-breakpoint-slider-selector" data-page-builder-target="rowSliderSelector">
                             <button type="button" class="pb-breakpoint-btn active" data-breakpoint="none" data-action="click->page-builder#changeRowSliderBreakpoint" title="Aucun">
                                 <i class="fas fa-ban"></i>
@@ -305,35 +294,35 @@
                     </div>
 
                     <div class="mb-2">
-                        <label class="form-label form-label-sm d-block mb-1" for="row-align">Alignement vertical des colonnes</label>
+                        <label class="form-label form-label-sm d-block mb-1" for="row-align">{% trans %}page.builder.inspector.row.vertical_align{% endtrans %}</label>
                         <select class="form-select form-select-sm" id="row-align" data-action="change->page-builder#updateRowColumnsAlignment">
-                            <option value="center" selected>Centré</option>
-                            <option value="top">Aligné en haut</option>
-                            <option value="bottom">Aligné en bas</option>
+                            <option value="center" selected>{% trans %}form.center{% endtrans %}</option>
+                            <option value="top">{% trans %}page.builder.inspector.row.align_top{% endtrans %}</option>
+                            <option value="bottom">{% trans %}page.builder.inspector.row.align_bottom{% endtrans %}</option>
                             <option value="stretch">Stretch</option>
                         </select>
                     </div>
 
                     <div class="mb-2">
-                        <label class="form-label form-label-sm d-block mb-1" for="row-justify">Alignement horizontal des colonnes</label>
+                        <label class="form-label form-label-sm d-block mb-1" for="row-justify">{% trans %}page.builder.inspector.row.horizontal_align{% endtrans %}</label>
                         <select class="form-select form-select-sm" id="row-justify" data-action="change->page-builder#updateRowColumnsJustify">
-                            <option value="center" selected>Centré</option>
-                            <option value="space-between">Etirés</option>
-                            <option value="space-around">Etirés avec de l'espace aux extrémités</option>
-                            <option value="flex-start">Alignés au début</option>
-                            <option value="flex-end">Alignés à la fin</option>
+                            <option value="center" selected>{% trans %}form.center{% endtrans %}</option>
+                            <option value="space-between">{% trans %}page.builder.inspector.row.space_between{% endtrans %}</option>
+                            <option value="space-around">{% trans %}page.builder.inspector.row.space_around{% endtrans %}</option>
+                            <option value="flex-start">{% trans %}page.builder.inspector.row.flex_start{% endtrans %}</option>
+                            <option value="flex-end">{% trans %}page.builder.inspector.row.flex_end{% endtrans %}</option>
                         </select>
                     </div>
                     {% if (onlyDesktop is not defined or not onlyDesktop) %}
                         <div class="mb-2">
-                            <label class="form-label form-label-sm d-block mb-1">Comportement mobile</label>
+                            <label class="form-label form-label-sm d-block mb-1">{% trans %}page.builder.inspector.row.mobile_behavior{% endtrans %}</label>
                             <div class="d-flex flex-column gap-1">
                                 <label class="form-check mb-0">
                                     <input class="form-check-input"
                                            type="checkbox"
                                            data-page-builder-target="rowReverseMobileInput"
                                            data-action="change->page-builder#updateRowResponsive">
-                                    <span class="form-check-label ts-normal">Inverser l'ordre des colonnes</span>
+                                    <span class="form-check-label ts-normal">{% trans %}page.builder.inspector.row.reverse_mobile{% endtrans %}</span>
                                 </label>
                             </div>
                         </div>
@@ -346,23 +335,23 @@
         <div class="accordion-item d-none" data-page-builder-target="inspectorPanelSection">
             <h2 class="accordion-header" id="headingSection">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSection" aria-expanded="true" aria-controls="collapseSection">
-                    Section
+                    {% trans %}page.builder.inspector.section{% endtrans %}
                 </button>
             </h2>
             <div id="collapseSection" class="accordion-collapse collapse show" aria-labelledby="headingSection" data-bs-parent="#inspectorAccordion">
                 <div class="accordion-body">
                     <div class="mb-2">
-                        <label class="form-label form-label-sm">Nom de la section</label>
+                        <label class="form-label form-label-sm">{% trans %}page.builder.inspector.section.name{% endtrans %}</label>
                         <input type="text"
                                class="form-control form-control-sm"
-                               placeholder="Section sans titre"
+                               placeholder="{{ 'page.builder.inspector.section.name_placeholder'|trans }}"
                                data-page-builder-target="sectionNameInput"
                                data-action="input->page-builder#updateSectionName">
                     </div>
                     <div class="mb-2 d-none" data-page-builder-target="sectionActiveContainer">
                         <hr class="mt-3 mb-3">
                         <div class="d-flex justify-content-between align-items-center">
-                            <label class="form-label form-label-sm d-block mb-1">État de la section</label>
+                            <label class="form-label form-label-sm d-block mb-1">{% trans %}page.builder.inspector.section.status{% endtrans %}</label>
                             <div class="form-check form-switch">
                                 <input class="form-check-input mt-0"
                                        type="checkbox"
@@ -375,31 +364,31 @@
                         <hr class="mt-3 mb-3">
                     </div>
                     <div class="mb-2" data-page-builder-target="sectionLayoutContainer">
-                        <label class="form-label form-label-sm d-block mb-1" for="section-width">Largeur</label>
+                        <label class="form-label form-label-sm d-block mb-1" for="section-width">{% trans %}page.builder.inspector.section.width{% endtrans %}</label>
                         <select class="form-select form-select-sm" id="section-width" data-action="change->page-builder#updateSectionLayout">
                             <option value="container-xsmall">x-small</option>
                             <option value="container-small">small</option>
                             <option value="container">medium</option>
                             <option value="container-large">large</option>
                             <option value="container-xlarge">x-large</option>
-                            <option value="container-expand">pleine largeur</option>
+                            <option value="container-expand">{% trans %}page.builder.inspector.section.width.full{% endtrans %}</option>
                         </select>
                     </div>
                     <div class="mb-2">
-                        <label class="form-label form-label-sm d-block mb-1" for="section-background-type">Type de fond</label>
+                        <label class="form-label form-label-sm d-block mb-1" for="section-background-type">{% trans %}page.builder.inspector.background_type{% endtrans %}</label>
                         <select class="form-select form-select-sm" id="section-background-type"
                                 data-page-builder-target="sectionBackgroundType"
                                 data-action="change->page-builder#updateSectionBackgroundType">
-                            <option value="">Aucun</option>
-                            <option value="color">Couleur</option>
-                            <option value="image">Image</option>
-                            <option value="class">Classe CSS</option>
+                            <option value="">{% trans %}form.none{% endtrans %}</option>
+                            <option value="color">{% trans %}page.builder.inspector.background.color{% endtrans %}</option>
+                            <option value="image">{% trans %}page.builder.inspector.background.image{% endtrans %}</option>
+                            <option value="class">{% trans %}page.builder.inspector.background.class{% endtrans %}</option>
                         </select>
                     </div>
 
                     {# Input couleur #}
                     <div class="mb-2 d-none" data-page-builder-target="sectionBackgroundColorInput">
-                        <label class="form-label form-label-sm d-block mb-1" for="section-bg-color">Couleur de fond</label>
+                        <label class="form-label form-label-sm d-block mb-1" for="section-bg-color">{% trans %}page.builder.inspector.background.color_label{% endtrans %}</label>
                         <div class="d-flex flex-wrap gap-1 mb-2">
                             <button type="button" class="pb-color-preset" style="background-color: #ff007d;" data-color="#ff007d" data-action="click->page-builder#applySectionColorPreset" title="Rose"></button>
                             <button type="button" class="pb-color-preset" style="background-color: #d6ff00;" data-color="#d6ff00" data-action="click->page-builder#applySectionColorPreset" title="Jaune"></button>
@@ -423,10 +412,10 @@
 
                     {# Select classe CSS #}
                     <div class="mb-2 d-none" data-page-builder-target="sectionBackgroundClassInput">
-                        <label class="form-label form-label-sm d-block mb-1" for="section-bg-class">Classe CSS</label>
+                        <label class="form-label form-label-sm d-block mb-1" for="section-bg-class">{% trans %}page.builder.inspector.background.class{% endtrans %}</label>
                         <select class="form-select form-select-sm" id="section-bg-class"
                                 data-action="change->page-builder#updateSectionBackgroundValue">
-                            <option value="">Sélectionner une classe</option>
+                            <option value="">{% trans %}page.builder.inspector.background.select_class{% endtrans %}</option>
                             <option value="bkg-img-secondary">Fond jaune</option>
                             <option value="bkg-paper-bottom-right">Fond jaune avec lettres</option>
                             <option value="bkg-img-third paper-bottom-left">Fond vert avec lettres (gauche)</option>
@@ -443,15 +432,15 @@
     {# Inspecteur : Page (Conservé pour rétrocompatibilité ou usage futur) #}
     <section class="pb-section d-none" data-page-builder-target="inspectorPanelPage">
         <div class="pb-section-header">
-            <h2 class="pb-section-title" data-page-builder-target="blockTitle">Bloc texte</h2>
+            <h2 class="pb-section-title" data-page-builder-target="blockTitle">{% trans %}page.builder.inspector.block{% endtrans %}</h2>
         </div>
         <div class="pb-section-body pb-inspector-block-content">
             <div class="mb-2">
-                <label class="form-label form-label-sm">Contenu du texte</label>
+                <label class="form-label form-label-sm">{% trans %}page.builder.inspector.block.content{% endtrans %}</label>
                 <textarea
                     class="form-control form-control-sm"
                     rows="4"
-                    placeholder="Votre texte…"
+                    placeholder="{{ 'page.builder.inspector.block.content_placeholder'|trans }}"
                     data-page-builder-target="blockContentInput"
                     data-action="input->page-builder#updateBlockContent"
                 ></textarea>
@@ -460,7 +449,7 @@
     </section>
 
     <div class="mb-3 d-none" id="section-image">
-        <label class="form-label form-label-sm">Image</label>
+        <label class="form-label form-label-sm">{% trans %}page.builder.inspector.background.image{% endtrans %}</label>
         <div class="d-flex gap-2 align-items-center">
             <div class="panel-list im-manager form-group" data-im-type="image" data-im-entity-class="Aropixel\PageBundle\Entity\Page" data-im-attach-class="Aropixel\PageBundle\Entity\PageBlockImageData" data-im-attach-value="value" data-im-library="Aropixel\PageBundle\Form\Type\DefaultTranslatablePageType" data-im-route="aropixel_page_new">
                 <div class="image-widget">

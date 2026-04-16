@@ -1,3 +1,5 @@
+import { t } from '../i18n.js';
+
 export const bannerBlockType = {
     type: 'banner',
 
@@ -5,7 +7,7 @@ export const bannerBlockType = {
         return {
             id: generateId(),
             type: 'banner',
-            content: 'Bandeau défilant',
+            content: t('page.builder.block.banner.default_label'),
         };
     },
 
@@ -121,7 +123,7 @@ export const bannerBlockType = {
             `;
         }
 
-        ctx.blockTitleTarget.textContent = 'Bloc bandeau défilant';
+        ctx.blockTitleTarget.textContent = t('page.builder.block_title.banner');
         ctx.blockContentInputTarget.value = block.content || '';
     },
 

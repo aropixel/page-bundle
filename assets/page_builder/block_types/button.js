@@ -1,3 +1,5 @@
+import { t } from '../i18n.js';
+
 export const btnBlockType = {
     type: 'button',
 
@@ -5,7 +7,7 @@ export const btnBlockType = {
         return {
             id: generateId(),
             type: 'button',
-            label: 'En savoir plus',
+            label: t('page.builder.block.button.default_label'),
             class: 'primary-xdark',
             url: '#',
             pagePath: null,
@@ -52,7 +54,7 @@ export const btnBlockType = {
         if (contentContainer) {
             contentContainer.innerHTML = `
                 <div class="mb-2">
-                    <label class="form-label form-label-sm d-block mb-1">Alignement horizontal</label>
+                    <label class="form-label form-label-sm d-block mb-1">${t('page.builder.inspector.column.horizontal_alignment')}</label>
                     <div class="d-flex gap-1">
                         <button type="button"
                                 class="pb-button pb-button--ghost flex-fill"
@@ -81,27 +83,27 @@ export const btnBlockType = {
                     </div>
                 </div>
                 <div class="mb-2">
-                    <label class="form-label form-label-sm">Texte du bouton</label>
+                    <label class="form-label form-label-sm">${t('page.builder.block.button.label_field')}</label>
                     <textarea
                         class="form-control form-control-sm"
                         rows="1"
-                        placeholder="Votre texte…"
+                        placeholder="${t('page.builder.inspector.block.content_placeholder')}"
                         data-page-builder-target="blockContentInput"
                         data-action="input->page-builder#updateBlockContent"
                     ></textarea>
                 </div>
 
                 <div class="mb-2">
-                    <label class="form-label form-label-sm d-block mb-1" for="button-link-type">Type de lien</label>
+                    <label class="form-label form-label-sm d-block mb-1" for="button-link-type">${t('page.builder.inspector.column.link_type')}</label>
                     <select class="form-select form-select-sm" id="button-link-type"
                             data-page-builder-target="blockLinkTypeSelect"
                             data-action="change->page-builder#updateBlockLinkType">
-                        <option value="url">Lien (URL)</option>
-                        <option value="page">Page du site</option>
+                        <option value="url">${t('page.builder.inspector.column.link_url')}</option>
+                        <option value="page">${t('page.builder.block.button.link_page')}</option>
                     </select>
                 </div>
                 <div class="mb-2" data-page-builder-target="blockUrlInputContainer">
-                    <label class="form-label form-label-sm d-block mb-1" for="button-url">Lien (URL)</label>
+                    <label class="form-label form-label-sm d-block mb-1" for="button-url">${t('page.builder.inspector.column.link_url')}</label>
                     <input type="text"
                            class="form-control form-control-sm"
                            id="button-url"
@@ -110,17 +112,17 @@ export const btnBlockType = {
                            data-action="input->page-builder#updateBlockUrl">
                 </div>
                 <div class="mb-2 d-none" data-page-builder-target="blockPagePathSelectContainer">
-                    <label class="form-label form-label-sm d-block mb-1" for="button-page-path">Lien vers une page du site</label>
+                    <label class="form-label form-label-sm d-block mb-1" for="button-page-path">${t('page.builder.block.button.link_page_label')}</label>
                     <select class="form-select form-select-sm" id="button-page-path"
                             data-page-builder-target="blockPagePathSelect"
                             data-action="change->page-builder#updateBlockPagePath"
                     >
-                        <option value="">-- Choisir --</option>
+                        <option value="">${t('form.choose')}</option>
                     </select>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label form-label-sm">Couleur du bouton</label>
+                    <label class="form-label form-label-sm">${t('page.builder.block.button.color')}</label>
                     <select class="form-select form-select-sm" id="btn-color-select"
                         data-page-builder-target="blockColorInput"
                         data-action="change->page-builder#updateBlockContent">
@@ -131,7 +133,7 @@ export const btnBlockType = {
             `;
         }
 
-        ctx.blockTitleTarget.textContent = 'Bloc bouton';
+        ctx.blockTitleTarget.textContent = t('page.builder.block_title.button');
         ctx.blockContentInputTarget.value = block.label || '';
 
         // Initialisation du type de lien et chargement des pages

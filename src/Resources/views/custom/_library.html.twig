@@ -13,7 +13,7 @@
                    aria-selected="true"
                    href="#nav-bloc"
                    id="nav-bloc-tab">
-                    <span style="font-size: 0.875rem;">Blocs</span>
+                    <span style="font-size: 0.875rem;">{% trans %}page.builder.library.tab.blocks{% endtrans %}</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -24,7 +24,7 @@
                    aria-selected="false"
                    href="#nav-media"
                    id="nav-media-tab">
-                    <span style="font-size: 0.875rem;">Médias</span>
+                    <span style="font-size: 0.875rem;">{% trans %}page.builder.library.tab.media{% endtrans %}</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -35,7 +35,7 @@
                    aria-selected="false"
                    href="#nav-module"
                    id="nav-module-tab">
-                    <span style="font-size: 0.875rem;">Modules</span>
+                    <span style="font-size: 0.875rem;">{% trans %}page.builder.library.tab.modules{% endtrans %}</span>
                 </a>
             </li>
             {% if pb_has_custom_tab %}
@@ -47,7 +47,7 @@
                    aria-selected="false"
                    href="#nav-custom"
                    id="nav-custom-tab">
-                    <span style="font-size: 0.875rem;">Personnalisé</span>
+                    <span style="font-size: 0.875rem;">{% trans %}page.builder.library.tab.custom{% endtrans %}</span>
                 </a>
             </li>
             {% endif %}
@@ -67,7 +67,7 @@
                             <div class="pb-block-card-icon">
                                 <i class="fas fa-heading"></i>
                             </div>
-                            <span class="pb-block-card-label">Titre</span>
+                            <span class="pb-block-card-label">{% trans %}page.builder.block.title{% endtrans %}</span>
                         </button>
                     </div>
                     <div class="col-4">
@@ -78,7 +78,7 @@
                             <div class="pb-block-card-icon">
                                 <i class="fas fa-align-left"></i>
                             </div>
-                            <span class="pb-block-card-label">Texte</span>
+                            <span class="pb-block-card-label">{% trans %}page.builder.block.text{% endtrans %}</span>
                         </button>
                     </div>
                     <div class="col-4">
@@ -89,7 +89,7 @@
                             <div class="pb-block-card-icon">
                                 <i class="fas fa-hand-pointer"></i>
                             </div>
-                            <span class="pb-block-card-label">Bouton</span>
+                            <span class="pb-block-card-label">{% trans %}page.builder.block.button{% endtrans %}</span>
                         </button>
                     </div>
                     <div class="col-4">
@@ -100,7 +100,7 @@
                             <div class="pb-block-card-icon">
                                 <i class="fas fa-arrows-alt-v"></i>
                             </div>
-                            <span class="pb-block-card-label">Espacement</span>
+                            <span class="pb-block-card-label">{% trans %}page.builder.block.spacer{% endtrans %}</span>
                         </button>
                     </div>
                     <div class="col-4">
@@ -111,7 +111,7 @@
                             <div class="pb-block-card-icon">
                                 <i class="fas fa-minus"></i>
                             </div>
-                            <span class="pb-block-card-label">Séparateur</span>
+                            <span class="pb-block-card-label">{% trans %}page.builder.block.divider{% endtrans %}</span>
                         </button>
                     </div>
                     <div class="col-4">
@@ -147,7 +147,7 @@
                             <div class="pb-block-card-icon">
                                 <i class="fas fa-image"></i>
                             </div>
-                            <span class="pb-block-card-label">Image</span>
+                            <span class="pb-block-card-label">{% trans %}page.builder.block.image{% endtrans %}</span>
                         </button>
                     </div>
                     <div class="col-4">
@@ -195,7 +195,7 @@
                             <div class="pb-block-card-icon">
                                 <i class="fas fa-align-justify"></i>
                             </div>
-                            <span class="pb-block-card-label">Accordéon</span>
+                            <span class="pb-block-card-label">{% trans %}page.builder.block.accordion{% endtrans %}</span>
                         </button>
                     </div>
                     <div class="col-4">
@@ -206,7 +206,7 @@
                             <div class="pb-block-card-icon">
                                 <i class="fas fa-bullhorn"></i>
                             </div>
-                            <span class="pb-block-card-label">Bandeau défilant</span>
+                            <span class="pb-block-card-label">{% trans %}page.builder.block.banner{% endtrans %}</span>
                         </button>
                     </div>
 {#                    <div class="col-4">#}
@@ -227,7 +227,7 @@
                             <div class="pb-block-card-icon">
                                 <i class="fas fa-th-large"></i>
                             </div>
-                            <span class="pb-block-card-label">Grille</span>
+                            <span class="pb-block-card-label">{% trans %}page.builder.block.grid{% endtrans %}</span>
                         </button>
                     </div>
                     <div class="col-4">
@@ -238,7 +238,7 @@
                             <div class="pb-block-card-icon">
                                 <i class="fas fa-newspaper"></i>
                             </div>
-                            <span class="pb-block-card-label">Actus</span>
+                            <span class="pb-block-card-label">{% trans %}page.builder.block.blog{% endtrans %}</span>
                         </button>
                     </div>
                     <div class="col-4">
@@ -289,7 +289,7 @@
 </div>
 
 <button type="button" class="btn btn-primary w-100 mb-3" data-action="click->page-builder#addSection">
-    + Ajouter une section
+    {% trans %}page.builder.add_section{% endtrans %}
 </button>
 
 <div class="card card-template">
