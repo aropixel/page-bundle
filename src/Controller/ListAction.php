@@ -4,6 +4,7 @@ namespace Aropixel\PageBundle\Controller;
 
 use Aropixel\PageBundle\Repository\PageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -13,6 +14,8 @@ class ListAction extends AbstractController
 {
     public function __construct(
         private readonly PageRepository $pageRepository,
+        #[Autowire('%aropixel_page.page_builder.enabled%')]
+        private readonly bool $pageBuilderEnabled,
     ) {
     }
 
@@ -22,6 +25,7 @@ class ListAction extends AbstractController
 
         return $this->render('@AropixelPage/index.html.twig', [
             'pages' => $pages,
+            'page_builder_enabled' => $this->pageBuilderEnabled,
         ]);
     }
 }

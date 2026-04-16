@@ -10,32 +10,39 @@
 
 
 {% block header_top_right %}
-    <button type="button" class="btn btn-small btn-primary ms-3"
-            data-bs-toggle="popover"
-            data-bs-html="true"
-            data-bs-placement="bottom"
-            data-bs-trigger="focus"
-            data-bs-custom-class="popover-large"
-            data-bs-content="
-                <div class='p-0'>
-                    <a href='{{ path('aropixel_default_page_new') }}' class='d-block text-decoration-none p-4 py-3'>
-                        <div class='fw-bold text-darker-primary'>{% trans %}pages.create.default.title{% endtrans %}</div>
-                        <div class='text-muted small'>{% trans %}pages.create.default.desc{% endtrans %}</div>
-                    </a>
-                    <hr class='m-0'>
-                    <a href='{{ path('aropixel_custom_page') }}' class='d-block text-decoration-none p-4 py-3'>
-                        <div class='fw-bold text-darker-primary'>{% trans %}pages.create.custom.title{% endtrans %}</div>
-                        <div class='text-muted small'>{% trans %}pages.create.custom.desc{% endtrans %}</div>
-                    </a>
-                </div>
-            ">
-        <i class="fas fa-plus me-2"></i> {% trans %}pages.create.button{% endtrans %}
-    </button>
+    {% if page_builder_enabled %}
+        <button type="button" class="btn btn-small btn-primary ms-3"
+                data-bs-toggle="popover"
+                data-bs-html="true"
+                data-bs-placement="bottom"
+                data-bs-trigger="click"
+                data-bs-custom-class="popover-large"
+                data-bs-content="
+                    <div class='p-0'>
+                        <a href='{{ path('aropixel_default_page_new') }}' class='d-block text-decoration-none p-4 py-3'>
+                            <div class='fw-bold text-darker-primary'>{% trans %}pages.create.default.title{% endtrans %}</div>
+                            <div class='text-muted small'>{% trans %}pages.create.default.desc{% endtrans %}</div>
+                        </a>
+                        <hr class='m-0'>
+                        <a href='{{ path('aropixel_custom_page') }}' class='d-block text-decoration-none p-4 py-3'>
+                            <div class='fw-bold text-darker-primary'>{% trans %}pages.create.custom.title{% endtrans %}</div>
+                            <div class='text-muted small'>{% trans %}pages.create.custom.desc{% endtrans %}</div>
+                        </a>
+                    </div>
+                ">
+            <i class="fas fa-plus me-2"></i> {% trans %}pages.create.button{% endtrans %}
+        </button>
+    {% else %}
+        <a href="{{ path('aropixel_default_page_new') }}" class="btn btn-small btn-primary ms-3">
+            <i class="fas fa-plus me-2"></i> {% trans %}pages.create.button{% endtrans %}
+        </a>
+    {% endif %}
 {% endblock %}
 
 
 {% block theme_stylesheets %}
     {{ parent() }}
+    {% if page_builder_enabled %}
     <style>
         .popover-large {
             --bs-popover-max-width: 350px;
@@ -50,19 +57,32 @@
             border-radius: 0.25rem;
         }
     </style>
+    {% endif %}
 {% endblock %}
 
 
 {% block theme_javascripts %}
     {{ parent() }}
+    {% if page_builder_enabled %}
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
             var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
                 return new bootstrap.Popover(popoverTriggerEl)
             })
+
+            document.addEventListener('click', function (e) {
+                popoverList.forEach(function (popover) {
+                    var trigger = popover._element
+                    var tip = popover.tip
+                    if (!trigger.contains(e.target) && !(tip && tip.contains(e.target))) {
+                        popover.hide()
+                    }
+                })
+            })
         });
     </script>
+    {% endif %}
 {% endblock %}
 
 

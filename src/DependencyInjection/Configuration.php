@@ -60,6 +60,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('page_builder')
                     ->addDefaultsIfNotSet()
                     ->children()
+                        ->booleanNode('enabled')->defaultTrue()->end()
                         ->arrayNode('title_styles')
                             ->arrayPrototype()
                                 ->children()

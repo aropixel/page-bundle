@@ -5,6 +5,7 @@ namespace Aropixel\PageBundle\Controller\Custom;
 use Aropixel\PageBundle\Entity\Page;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -18,11 +19,17 @@ class BuilderAction extends AbstractController
         private readonly EntityManagerInterface $entityManager,
         private readonly TranslatorInterface $translator,
         private readonly array $pageBuilderConfig = [],
+        #[Autowire('%aropixel_page.page_builder.enabled%')]
+        private readonly bool $pageBuilderEnabled = true,
     ) {
     }
 
     public function __invoke(Request $request, ?Page $page = null): Response
     {
+        if (!$this->pageBuilderEnabled) {
+            throw $this->createNotFoundException();
+        }
+
         if ($page && method_exists($page, 'setTranslatableLocale')) {
             $page->setTranslatableLocale($request->getLocale());
             $this->entityManager->refresh($page);
