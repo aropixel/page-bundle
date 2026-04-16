@@ -173,6 +173,7 @@ If your application is configured to be multi-language:
 - You'll see a tab for each configured locale in the page edit form.
 - Each field can be translated independently.
 - The `slug` can also be translated to provide localized URLs.
+- `htmlContent` is rendered and stored per locale each time the page builder is saved for that locale.
 
 ## Front-end Rendering
 
@@ -213,9 +214,11 @@ In your Twig template:
 <h1>{{ page.title }}</h1>
 <div>
     {% if page.type == 'default' %}
+        {# HTML stored via CKEditor #}
         {{ page.htmlContent|raw }}
     {% elseif page.type == 'custom' %}
-        {# Render JSON content for custom builder #}
+        {# HTML pre-rendered by the page builder at save time #}
+        {{ page.htmlContent|raw }}
     {% else %}
         {# Render structured JSON content (e.g., for type 'contact') #}
         {% set data = page.jsonContent|json_decode %}
@@ -223,4 +226,66 @@ In your Twig template:
         <p>Address: {{ data.address }}</p>
     {% endif %}
 </div>
+```
+
+For **custom pages**, `htmlContent` is automatically populated when the page is saved via the page builder admin. The JSON payload is rendered to HTML at save time by the configured `PageBuilderRendererInterface` implementation — so front-end display requires no rendering work at all.
+
+If you prefer on-the-fly rendering (e.g. when a full-page HTTP cache like Varnish is in front), you can inject `PageBuilderRendererInterface` directly into your controller and call `$renderer->render($page->getJsonContent())` instead.
+
+---
+
+## Events
+
+### `PageSavedEvent` (`aropixel.page.saved`)
+
+Dispatched by `SaveAction` after every successful page builder save. Carries:
+
+| Method | Type | Description |
+|---|---|---|
+| `getPage()` | `Page` | The saved page entity |
+| `getLocale()` | `string` | The locale that was saved |
+| `getRenderedHtml()` | `string` | The HTML rendered from the JSON payload |
+
+The bundle dispatches the event but provides **no built-in listener** — this is intentional. You decide how to react to a page save.
+
+#### Example: invalidate a Varnish cache
+
+```php
+// src/EventListener/PageSavedListener.php
+namespace App\EventListener;
+
+use Aropixel\PageBundle\Event\PageSavedEvent;
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+
+#[AsEventListener(event: PageSavedEvent::NAME)]
+class PageSavedListener
+{
+    public function __construct(private readonly \Symfony\Contracts\HttpClient\HttpClientInterface $httpClient)
+    {
+    }
+
+    public function __invoke(PageSavedEvent $event): void
+    {
+        $slug = $event->getPage()->getSlug();
+
+        $this->httpClient->request('PURGE', 'https://your-varnish-host/' . $slug);
+    }
+}
+```
+
+#### Example: invalidate a Symfony Cache pool
+
+```php
+#[AsEventListener(event: PageSavedEvent::NAME)]
+class PageSavedListener
+{
+    public function __construct(private readonly \Symfony\Contracts\Cache\TagAwareCacheInterface $cache)
+    {
+    }
+
+    public function __invoke(PageSavedEvent $event): void
+    {
+        $this->cache->invalidateTags(['page_' . $event->getPage()->getId()]);
+    }
+}
 ```

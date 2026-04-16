@@ -3,11 +3,14 @@
 namespace Aropixel\PageBundle\Controller\Custom;
 
 use Aropixel\AdminBundle\Entity\Publishable;
+use Aropixel\PageBundle\Component\Builder\PageBuilderRendererInterface;
 use Aropixel\PageBundle\Entity\Page;
 use Aropixel\PageBundle\Entity\PageTranslation;
+use Aropixel\PageBundle\Event\PageSavedEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,6 +22,8 @@ class SaveAction extends AbstractController
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
+        private readonly PageBuilderRendererInterface $renderer,
+        private readonly EventDispatcherInterface $eventDispatcher,
         #[Autowire('%aropixel_page.page_builder.enabled%')]
         private readonly bool $pageBuilderEnabled = true,
     ) {
@@ -114,7 +119,33 @@ class SaveAction extends AbstractController
                 }
             }
 
+            // Rend le JSON → HTML et le stocke dans htmlContent (même pattern que jsonContent)
+            $renderedHtml = '';
+            if (isset($data['content'])) {
+                $jsonContent = is_array($data['content']) ? json_encode($data['content']) : $data['content'];
+                $renderedHtml = $this->renderer->render($jsonContent);
+
+                $htmlTranslation = $translationRepo->findOneBy([
+                    'object' => $page,
+                    'locale' => $locale,
+                    'field'  => 'htmlContent',
+                ]);
+
+                if ($htmlTranslation) {
+                    $htmlTranslation->setContent($renderedHtml);
+                } else {
+                    $htmlTranslation = new PageTranslation($locale, 'htmlContent', $renderedHtml);
+                    $page->addTranslation($htmlTranslation);
+                    $this->entityManager->persist($htmlTranslation);
+                }
+            }
+
             $this->entityManager->flush();
+
+            $this->eventDispatcher->dispatch(
+                new PageSavedEvent($page, $locale, $renderedHtml),
+                PageSavedEvent::NAME
+            );
 
             return new JsonResponse([
                 'success' => true,
