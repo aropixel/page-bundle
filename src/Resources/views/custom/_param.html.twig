@@ -21,7 +21,7 @@
                    id="page_subtitle"
                    name="page[subtitle]"
                    class="form-control"
-                   value="{{ page ? page.subtitle : '' }}"
+                   value=""
                    data-page-builder-saver-target="paramSubtitle">
         </div>
 
@@ -60,7 +60,7 @@
             <textarea id="page_description"
                       class="form-control"
                       data-page-builder-saver-target="paramDescription"
-                      rows="3">{{ page ? page.description : '' }}</textarea>
+                      rows="3">{{ page ? page.metaDescription : '' }}</textarea>
         </div>
 
 {#        <div class="mb-2 form-group">#}

@@ -84,15 +84,17 @@
 
             {% for page in pages %}
 
+                {% set edit_route = page.type == 'custom' ? 'aropixel_custom_page_edit' : 'aropixel_default_page_edit' %}
+
                 <tr>
                     <td>
-                        <a class="position-relative" href="{{ path('aropixel_default_page_edit', {'id': page.id}) }}">
+                        <a class="position-relative" href="{{ path(edit_route, {'id': page.id}) }}">
                             <img class="img-rounded rounded-3" src="{{ null | aropixel_imagine_filter('admin_thumbnail') }}" height="60" />
                             <span class="state-icon img-state-icon state-icon--{{ page.status }}" title="{{ page.status == 'online' ? "status.published"|trans : "status.offline"|trans }}"></span>
                         </a>
                     </td>
                     <td>
-                        <a class="d-flex align-items-center" href="{{ path('aropixel_default_page_edit', {'id': page.id}) }}">
+                        <a class="d-flex align-items-center" href="{{ path(edit_route, {'id': page.id}) }}">
                             {{ page.title }}
                         </a>
                     </td>
@@ -103,7 +105,7 @@
                                 <i class="fas fa-ellipsis-h"></i>
                             </button>
                             <div class="dropdown-menu dropdown-menu-end" data-bs-popper="static">
-                                <a href="{{ path('aropixel_default_page_edit', {'id': page.id}) }}" class="dropdown-item has-icon"><i class="fas fa-edit"></i> {% trans %}text.edit{% endtrans %}</a>
+                                <a href="{{ path(edit_route, {'id': page.id}) }}" class="dropdown-item has-icon"><i class="fas fa-edit"></i> {% trans %}text.edit{% endtrans %}</a>
                                 {% if page.isDeletable %}
                                 <div class="dropdown-divider"></div>
                                 <a data-confirm="{% trans %}pages.list.delete_warning{% endtrans %}" class="delete dropdown-item has-icon text-danger">

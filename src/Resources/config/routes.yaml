@@ -17,6 +17,14 @@ aropixel_custom_page:
 aropixel_custom_page_edit:
     path: /page/custom/{id}
     controller: Aropixel\PageBundle\Controller\Custom\BuilderAction
+    requirements:
+        id: '\d+'
+
+aropixel_custom_page_preview:
+    path: /page/custom/{id}/preview
+    controller: Aropixel\PageBundle\Controller\Custom\PreviewAction
+    requirements:
+        id: '\d+'
 
 aropixel_page_delete:
     path: /page/{id}

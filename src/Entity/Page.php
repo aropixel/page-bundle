@@ -63,6 +63,13 @@ class Page implements PageInterface, Translatable
     protected ?string $title = null;
 
     /**
+     * Page subtitle (translatable).
+     */
+    #[ORM\Column(type: 'string', nullable: true)]
+    #[Gedmo\Translatable]
+    protected ?string $subTitle = null;
+
+    /**
      * Unique identifier for system pages.
      */
     #[ORM\Column(type: 'string', length: 50, nullable: true, unique: true)]
@@ -239,6 +246,18 @@ class Page implements PageInterface, Translatable
     public function setTitle(string $title): self
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    public function getSubTitle(): ?string
+    {
+        return $this->getTranslation('subTitle');
+    }
+
+    public function setSubTitle(string $subTitle): self
+    {
+        $this->subTitle = $subTitle;
 
         return $this;
     }

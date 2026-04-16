@@ -2,6 +2,7 @@
 
 namespace Aropixel\PageBundle\Controller\Custom;
 
+use Aropixel\AdminBundle\Entity\Publishable;
 use Aropixel\PageBundle\Entity\Page;
 use Aropixel\PageBundle\Entity\PageTranslation;
 use Doctrine\ORM\EntityManagerInterface;
@@ -9,7 +10,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Save custom page data via API.
@@ -21,7 +21,6 @@ class SaveAction extends AbstractController
     ) {
     }
 
-    #[Route('/page-builder/save', name: 'aropixel_custom_page_save', methods: ['POST'])]
     public function __invoke(Request $request): JsonResponse
     {
         try {
@@ -34,7 +33,7 @@ class SaveAction extends AbstractController
             $id = $data['id'] ?? null;
             $locale = $data['locale'] ?? 'fr';
 
-            // Récupération ou Création
+            // Récupération ou création
             if ($id) {
                 $page = $this->entityManager->getRepository(Page::class)->find($id);
                 if (!$page) {
@@ -43,87 +42,84 @@ class SaveAction extends AbstractController
             } else {
                 $page = new Page();
                 $page->setType(Page::TYPE_CUSTOM);
-                if (method_exists($page, 'setStatus')) {
-                    $page->setStatus('published');
-                }
+                $page->setStatus(Publishable::STATUS_OFFLINE);
+                $this->entityManager->persist($page);
+                // Premier flush pour obtenir l'ID, nécessaire aux lookups de traduction
+                $this->entityManager->flush();
             }
 
-            if (method_exists($page, 'setTranslatableLocale')) {
-                $page->setTranslatableLocale($locale);
-            }
-
-            $repository = $this->entityManager->getRepository(PageTranslation::class);
-
-            // Liste des champs traduisibles
-            $translatableFields = ['title', 'slug', 'description', 'ogImage', 'content'];
-
-            foreach ($translatableFields as $field) {
-                if (isset($data[$field])) {
-                    $valueToSave = $data[$field];
-
-                    if ('content' === $field && \is_array($valueToSave)) {
-                        $valueToSave = json_encode($valueToSave);
-                    }
-
-                    $translation = $repository->findOneBy([
-                        'object' => $page,
-                        'locale' => $locale,
-                        'field' => $field,
-                    ]);
-
-                    if (!$translation) {
-                        $translation = new PageTranslation($locale, $field, $valueToSave);
-                        $translation->setObject($page);
-                        $this->entityManager->persist($translation);
-                        $page->addTranslation($translation);
-                    } else {
-                        $translation->setContent($valueToSave);
-                    }
-                }
-            }
-
-            // Hydratation des champs
+            // Champs directs (colonne principale = fallback quand pas de traduction)
             if (isset($data['title'])) {
                 $page->setTitle($data['title']);
             }
-            if (isset($data['subtitle'])) {
-                $page->setSubtitle($data['subtitle']);
-            }
-            if (isset($data['metaTitle'])) {
-                $page->setMetaTitle($data['metaTitle']);
+            if (isset($data['slug']) && $data['slug'] !== '') {
+                $page->setSlug($data['slug']);
             }
             if (isset($data['status'])) {
                 $page->setStatus($data['status']);
             }
-            if (!empty($data['slug'])) {
-                $page->setSlug($data['slug']);
+            if (isset($data['metaTitle'])) {
+                $page->setMetaTitle($data['metaTitle']);
             }
             if (isset($data['description'])) {
-                $page->setDescription($data['description']);
-            }
-            if (isset($data['ogImage'])) {
-                $page->setOgImage($data['ogImage']);
+                $page->setMetaDescription($data['description']);
             }
             if (isset($data['content'])) {
-                $contentToSave = \is_array($data['content']) ? $data['content'] : json_decode($data['content'], true);
+                $contentToSave = is_array($data['content']) ? $data['content'] : json_decode($data['content'], true);
                 $page->setJsonContent(json_encode($contentToSave));
             }
 
-            // Enregistrement
-            $this->entityManager->persist($page);
+            // Traductions : alimente aropixel_page_translation avec les bons noms de propriété
+            // que getTranslation() recherche dans la collection.
+            // Mapping clé JS → nom de propriété PHP (= valeur de PageTranslation.field)
+            $translatableMap = [
+                'title'       => 'title',
+                'slug'        => 'slug',
+                'metaTitle'   => 'metaTitle',
+                'description' => 'metaDescription',
+                'content'     => 'jsonContent',
+            ];
+
+            $translationRepo = $this->entityManager->getRepository(PageTranslation::class);
+
+            foreach ($translatableMap as $jsKey => $entityField) {
+                if (!isset($data[$jsKey])) {
+                    continue;
+                }
+
+                $value = $data[$jsKey];
+                if ($jsKey === 'content') {
+                    $value = is_array($value) ? json_encode($value) : $value;
+                }
+
+                $translation = $translationRepo->findOneBy([
+                    'object' => $page,
+                    'locale' => $locale,
+                    'field'  => $entityField,
+                ]);
+
+                if ($translation) {
+                    $translation->setContent($value);
+                } else {
+                    $translation = new PageTranslation($locale, $entityField, $value);
+                    $page->addTranslation($translation);
+                    $this->entityManager->persist($translation);
+                }
+            }
+
             $this->entityManager->flush();
 
             return new JsonResponse([
                 'success' => true,
-                'id' => $page->getId(),
-                'slug' => $page->getSlug(),
-                'status' => $page->getStatus(),
+                'id'      => $page->getId(),
+                'slug'    => $page->getSlug(),
+                'status'  => $page->getStatus(),
                 'message' => 'Page enregistrée avec succès.',
             ]);
         } catch (\Exception $e) {
             return new JsonResponse([
                 'success' => false,
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

@@ -30,6 +30,10 @@ services:
     arguments:
       $pageBuilderConfig: '%aropixel_page.page_builder%'
 
+  Aropixel\PageBundle\Controller\Custom\PreviewAction:
+    arguments:
+      $pageBuilderConfig: '%aropixel_page.page_builder%'
+
   aropixel.page.form.default:
     class: '%aropixel_page.form.default%'
     tags: ['aropixel.page.form']

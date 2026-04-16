@@ -4,7 +4,6 @@ namespace Aropixel\PageBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
-use Gedmo\Translatable\Entity\Repository\TranslationRepository;
 
 /**
  * Entity for storing page translations (Gedmo Personal Log).
@@ -12,7 +11,7 @@ use Gedmo\Translatable\Entity\Repository\TranslationRepository;
 #[ORM\MappedSuperclass]
 #[ORM\Table(name: 'aropixel_page_translation')]
 #[ORM\Index(name: 'page_translation_idx', columns: ['locale', 'object_id', 'field'])]
-#[ORM\Entity(repositoryClass: TranslationRepository::class)]
+#[ORM\Entity]
 class PageTranslation extends AbstractPersonalTranslation implements PageTranslationInterface
 {
     /**

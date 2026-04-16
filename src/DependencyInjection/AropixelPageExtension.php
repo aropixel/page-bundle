@@ -2,8 +2,12 @@
 
 namespace Aropixel\PageBundle\DependencyInjection;
 
+use Aropixel\PageBundle\Component\Builder\BootstrapPageBuilderRenderer;
+use Aropixel\PageBundle\Component\Builder\UiKitPageBuilderRenderer;
+use Aropixel\PageBundle\Component\Builder\PageBuilderRendererInterface;
 use Aropixel\PageBundle\Entity\PageInterface;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader;
@@ -25,6 +29,12 @@ class AropixelPageExtension extends Extension implements PrependExtensionInterfa
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yaml');
+
+        $rendererKey = $config['page_builder']['renderer'] ?? 'uikit';
+        $concreteClass = $rendererKey === 'bootstrap'
+            ? BootstrapPageBuilderRenderer::class
+            : UiKitPageBuilderRenderer::class;
+        $container->setAlias(PageBuilderRendererInterface::class, new Alias($concreteClass, true));
     }
 
     /**
@@ -75,6 +85,21 @@ class AropixelPageExtension extends Extension implements PrependExtensionInterfa
             $container->prependExtensionConfig('stimulus', [
                 'controller_paths' => [
                     __DIR__ . '/../../assets',
+                ],
+            ]);
+        }
+
+        if (isset($bundles['LiipImagineBundle'])) {
+            $container->prependExtensionConfig('liip_imagine', [
+                'filter_sets' => [
+                    'page' => [
+                        'jpeg_quality' => 85,
+                        'png_compression_level' => 8,
+                        'filters' => [
+                            'strip' => null,
+                            'relative_resize' => ['widen' => 800],
+                        ],
+                    ],
                 ],
             ]);
         }
