@@ -44,7 +44,7 @@
             <strong>Aperçu</strong>{% if page.title %} — {{ page.title }}{% endif %}
             <span style="margin-left:12px;opacity:.6;font-size:11px;">{{ renderer|upper }}</span>
         </span>
-        <a href="{{ path('aropixel_custom_page_edit', {'id': page.id}) }}">← Retour à l'éditeur</a>
+        <a href="{{ path('aropixel_builder_page_edit', {'id': page.id}) }}">← Retour à l'éditeur</a>
     </div>
 
     {{ rendered_content|raw }}

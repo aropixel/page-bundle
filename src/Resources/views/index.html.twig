@@ -24,9 +24,9 @@
                             <div class='text-muted small'>{% trans %}pages.create.default.desc{% endtrans %}</div>
                         </a>
                         <hr class='m-0'>
-                        <a href='{{ path('aropixel_custom_page') }}' class='d-block text-decoration-none p-4 py-3'>
-                            <div class='fw-bold text-darker-primary'>{% trans %}pages.create.custom.title{% endtrans %}</div>
-                            <div class='text-muted small'>{% trans %}pages.create.custom.desc{% endtrans %}</div>
+                        <a href='{{ path('aropixel_builder_page') }}' class='d-block text-decoration-none p-4 py-3'>
+                            <div class='fw-bold text-darker-primary'>{% trans %}pages.create.builder.title{% endtrans %}</div>
+                            <div class='text-muted small'>{% trans %}pages.create.builder.desc{% endtrans %}</div>
                         </a>
                     </div>
                 ">
@@ -104,7 +104,7 @@
 
             {% for page in pages %}
 
-                {% set edit_route = page.type == 'custom' ? 'aropixel_custom_page_edit' : 'aropixel_default_page_edit' %}
+                {% set edit_route = page.type == 'builder' ? 'aropixel_builder_page_edit' : 'aropixel_default_page_edit' %}
 
                 <tr>
                     <td>

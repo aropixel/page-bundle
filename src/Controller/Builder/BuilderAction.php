@@ -1,6 +1,6 @@
 <?php
 
-namespace Aropixel\PageBundle\Controller\Custom;
+namespace Aropixel\PageBundle\Controller\Builder;
 
 use Aropixel\PageBundle\Entity\Page;
 use Doctrine\ORM\EntityManagerInterface;
@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Custom page builder editor.
+ * Page builder editor.
  */
 class BuilderAction extends AbstractController
 {
@@ -41,7 +41,7 @@ class BuilderAction extends AbstractController
             'translations' => $this->buildTranslations(),
         ]);
 
-        return $this->render('@AropixelPage/custom/index.html.twig', [
+        return $this->render('@AropixelPage/builder/index.html.twig', [
             'page' => $page,
             'page_builder_config' => $config,
             'allPages' => $allPages,

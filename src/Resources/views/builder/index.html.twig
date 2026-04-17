@@ -10,7 +10,7 @@
 
 {% block theme_javascripts %}
     <script type="application/json" id="page-json-list-url">
-        {{ url('aropixel_custom_page_json_list')|json_encode(constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_HEX_TAG'))|raw }}
+        {{ url('aropixel_builder_page_json_list')|json_encode(constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_HEX_TAG'))|raw }}
     </script>
     <script type="application/json" id="page-builder-config">
         {{ page_builder_config|json_encode(constant('JSON_HEX_TAG') b-or constant('JSON_UNESCAPED_UNICODE'))|raw }}
@@ -43,7 +43,7 @@
                     description: page.metaDescription
                 }|json_encode|e('html_attr') : '{}' }}"
 
-                data-page-builder-saver-save-url-value="{{ path('aropixel_custom_page_save') }}"
+                data-page-builder-saver-save-url-value="{{ path('aropixel_builder_page_save') }}"
                 data-page-builder-saver-page-id-value="{{ page ? page.id : '' }}"
             >
 
@@ -118,7 +118,7 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item d-flex align-items-center" href="{{ path('aropixel_custom_page') }}">
+                                            <a class="dropdown-item d-flex align-items-center" href="{{ path('aropixel_builder_page') }}">
                                                 <i class="fas fa-file me-1"></i> {% trans %}page.builder.new_page{% endtrans %}
                                             </a>
                                         </li>
@@ -132,7 +132,7 @@
                                                 <hr class="dropdown-divider">
                                             </li>
                                             <li>
-                                                <a class="dropdown-item d-flex align-items-center" target="_blank" href="{{ path('aropixel_custom_page_preview', {'id': page.id}) }}">
+                                                <a class="dropdown-item d-flex align-items-center" target="_blank" href="{{ path('aropixel_builder_page_preview', {'id': page.id}) }}">
                                                     <i class="fas fa-eye me-1"></i> {% trans %}page.builder.view_page{% endtrans %}
                                                 </a>
                                             </li>
@@ -173,13 +173,13 @@
                         <aside class="position-sticky" style="width: 320px; top: 135px; align-self: start;">
                             <div class="tab-content">
                                 <div class="tab-pane pt-0 fade" id="nav-param" role="tabpanel" aria-labelledby="nav-param-tab">
-                                    {% include '@AropixelPage/custom/_param.html.twig' %}
+                                    {% include '@AropixelPage/builder/_param.html.twig' %}
                                 </div>
                                 <div class="tab-pane pt-0 fade" id="nav-structure" role="tabpanel" aria-labelledby="nav-structure-tab">
-                                    {% include '@AropixelPage/custom/_structure.html.twig' %}
+                                    {% include '@AropixelPage/builder/_structure.html.twig' %}
                                 </div>
                                 <div class="tab-pane pt-0 fade show active" id="nav-library" role="tabpanel" aria-labelledby="nav-library-tab">
-                                    {% include '@AropixelPage/custom/_library.html.twig' %}
+                                    {% include '@AropixelPage/builder/_library.html.twig' %}
                                 </div>
                             </div>
                         </aside>

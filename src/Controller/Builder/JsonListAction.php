@@ -1,6 +1,6 @@
 <?php
 
-namespace Aropixel\PageBundle\Controller\Custom;
+namespace Aropixel\PageBundle\Controller\Builder;
 
 use Aropixel\PageBundle\Entity\Page;
 use Doctrine\ORM\EntityManagerInterface;
@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * Get custom pages as JSON.
+ * Get builder pages as JSON.
  */
 class JsonListAction extends AbstractController
 {
@@ -20,14 +20,13 @@ class JsonListAction extends AbstractController
     ) {
     }
 
-    #[Route('/page-builder/json/list', name: 'aropixel_custom_page_json_list', methods: ['GET'])]
     public function __invoke(): JsonResponse
     {
         if (!$this->pageBuilderEnabled) {
             throw $this->createNotFoundException();
         }
 
-        $pages = $this->entityManager->getRepository(Page::class)->findCustomPages();
+        $pages = $this->entityManager->getRepository(Page::class)->findBuilderPages();
 
         $data = array_map(fn (Page $page) => [
             'slug' => $page->getSlug(),

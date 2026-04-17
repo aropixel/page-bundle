@@ -34,9 +34,9 @@ class Page implements PageInterface, Translatable
     public const TYPE_DEFAULT = 'default';
 
     /**
-     * Custom page type with JSON content (e.g., for page builders).
+     * Page builder page type with JSON content (drag-and-drop visual editor).
      */
-    public const TYPE_CUSTOM = 'custom';
+    public const TYPE_BUILDER = 'builder';
 
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]

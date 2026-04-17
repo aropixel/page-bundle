@@ -93,12 +93,12 @@
         <source>pages.create.default.desc</source>
         <target>Créer une page avec le constructeur par défaut.</target>
       </trans-unit>
-      <trans-unit id="pg_create_cus_t" resname="pages.create.custom.title">
-        <source>pages.create.custom.title</source>
-        <target>Page personnalisée</target>
+      <trans-unit id="pg_create_bld_t" resname="pages.create.builder.title">
+        <source>pages.create.builder.title</source>
+        <target>Page builder</target>
       </trans-unit>
-      <trans-unit id="pg_create_cus_d" resname="pages.create.custom.desc">
-        <source>pages.create.custom.desc</source>
+      <trans-unit id="pg_create_bld_d" resname="pages.create.builder.desc">
+        <source>pages.create.builder.desc</source>
         <target>Créer une page avec le constructeur de blocs.</target>
       </trans-unit>
       <trans-unit id="pg_list_head_title" resname="page.list.header.title">

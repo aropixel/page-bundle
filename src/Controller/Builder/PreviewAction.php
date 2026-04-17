@@ -1,6 +1,6 @@
 <?php
 
-namespace Aropixel\PageBundle\Controller\Custom;
+namespace Aropixel\PageBundle\Controller\Builder;
 
 use Aropixel\PageBundle\Component\Builder\PageBuilderRendererInterface;
 use Aropixel\PageBundle\Entity\Page;
@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Renders a standalone preview of a custom page using the configured renderer.
+ * Renders a standalone preview of a builder page using the configured renderer.
  */
 class PreviewAction extends AbstractController
 {
@@ -37,7 +37,7 @@ class PreviewAction extends AbstractController
 
         $renderedContent = $this->renderer->render($page->getJsonContent());
 
-        return $this->render('@AropixelPage/custom/preview.html.twig', [
+        return $this->render('@AropixelPage/builder/preview.html.twig', [
             'page' => $page,
             'rendered_content' => $renderedContent,
             'renderer' => $this->pageBuilderConfig['renderer'] ?? 'uikit',

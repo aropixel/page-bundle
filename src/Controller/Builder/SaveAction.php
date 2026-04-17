@@ -1,6 +1,6 @@
 <?php
 
-namespace Aropixel\PageBundle\Controller\Custom;
+namespace Aropixel\PageBundle\Controller\Builder;
 
 use Aropixel\AdminBundle\Entity\Publishable;
 use Aropixel\PageBundle\Component\Builder\PageBuilderRendererInterface;
@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Save custom page data via API.
+ * Save builder page data via API.
  */
 class SaveAction extends AbstractController
 {
@@ -53,7 +53,7 @@ class SaveAction extends AbstractController
                 }
             } else {
                 $page = new Page();
-                $page->setType(Page::TYPE_CUSTOM);
+                $page->setType(Page::TYPE_BUILDER);
                 $page->setStatus(Publishable::STATUS_OFFLINE);
                 $this->entityManager->persist($page);
                 // Premier flush pour obtenir l'ID, nécessaire aux lookups de traduction

@@ -38,11 +38,11 @@ class PageRepository extends PublishableRepository
     /**
      * @return Page[]
      */
-    public function findCustomPages(): array
+    public function findBuilderPages(): array
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.type = :type')
-            ->setParameter('type', Page::TYPE_CUSTOM)
+            ->setParameter('type', Page::TYPE_BUILDER)
             ->getQuery()
             ->getResult()
         ;

@@ -26,11 +26,11 @@ services:
     resource: '../../Controller'
     tags: [ 'controller.service_arguments' ]
 
-  Aropixel\PageBundle\Controller\Custom\BuilderAction:
+  Aropixel\PageBundle\Controller\Builder\BuilderAction:
     arguments:
       $pageBuilderConfig: '%aropixel_page.page_builder%'
 
-  Aropixel\PageBundle\Controller\Custom\PreviewAction:
+  Aropixel\PageBundle\Controller\Builder\PreviewAction:
     arguments:
       $pageBuilderConfig: '%aropixel_page.page_builder%'
 

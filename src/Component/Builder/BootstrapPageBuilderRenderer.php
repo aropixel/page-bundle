@@ -525,7 +525,7 @@ class BootstrapPageBuilderRenderer implements PageBuilderRendererInterface
         }
 
         try {
-            $html = $this->twig->render('@AropixelPage/custom/modules/_slider_bootstrap.html.twig', [
+            $html = $this->twig->render('@AropixelPage/builder/modules/_slider_bootstrap.html.twig', [
                 'items' => $items,
                 'carouselId' => 'carousel-' . substr(md5(uniqid('', true)), 0, 8),
             ]);

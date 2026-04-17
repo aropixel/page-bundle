@@ -557,7 +557,7 @@ class UiKitPageBuilderRenderer implements PageBuilderRendererInterface
         }
 
         try {
-            $html = $this->twig->render('@AropixelPage/custom/modules/_slider.html.twig', [
+            $html = $this->twig->render('@AropixelPage/builder/modules/_slider.html.twig', [
                 'items' => $items
             ]);
             return $html ?: '';
