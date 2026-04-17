@@ -6,8 +6,6 @@ use Aropixel\PageBundle\Entity\Page;
 use Aropixel\PageBundle\Entity\PageInterface;
 use Aropixel\PageBundle\Entity\PageTranslation;
 use Aropixel\PageBundle\Entity\PageTranslationInterface;
-use Aropixel\PageBundle\Form\Type\DefaultPageType;
-use Aropixel\PageBundle\Form\Type\DefaultTranslatablePageType;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -29,22 +27,6 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         ->scalarNode(PageInterface::class)->defaultValue(Page::class)->end()
                         ->scalarNode(PageTranslationInterface::class)->defaultValue(PageTranslation::class)->end()
-                    ->end()
-                ->end()
-                ->arrayNode('forms')
-                    ->defaultValue([
-                        'default' => ['class' => DefaultPageType::class],
-                        'default_translatable' => ['class' => DefaultTranslatablePageType::class],
-                    ])
-                    ->useAttributeAsKey('type')
-                    ->arrayPrototype()
-                        ->beforeNormalization()
-                            ->ifString()
-                            ->then(function ($v) { return ['class' => $v]; })
-                        ->end()
-                        ->children()
-                            ->scalarNode('class')->isRequired()->end()
-                        ->end()
                     ->end()
                 ->end()
                 ->arrayNode('fixed_pages')

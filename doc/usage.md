@@ -8,12 +8,14 @@ The `AropixelPageBundle` supports two main page types:
 This is the standard page where content is stored as HTML. It's best suited for simple pages with a main text area using a WYSIWYG editor like CKEditor.
 The property used for this type is `htmlContent`.
 
-### Custom Page (`TYPE_CUSTOM`)
-This type is designed for more complex layouts where content is stored as JSON. This is often used with a page builder or a blocks-based editor.
-The property used for this type is `jsonContent`.
+### Builder Page (`TYPE_BUILDER`)
+This type is designed for complex layouts where content is stored as JSON and edited through the visual drag-and-drop page builder.
+The properties used for this type are `jsonContent` (source) and `htmlContent` (pre-rendered at save time).
 
 ### Custom JSON Page Type
-This type allows you to create structured forms whose data is stored as a JSON object in the `jsonContent` field. This is ideal for pages with specific fields (e.g., a "Contact" page with address and phone fields) without needing a full page builder.
+This type allows you to create structured forms whose data is stored as a JSON object in the `jsonContent` field. Ideal for pages with specific fields (e.g., a "Contact" page with address and phone fields) without needing a full page builder.
+
+**No YAML configuration required.** Any class that extends `AbstractJsonPageType` is automatically discovered by the bundle via Symfony's service autoconfiguration.
 
 To create a custom JSON page type:
 
@@ -22,8 +24,8 @@ To create a custom JSON page type:
    namespace App\Form\Type;
 
    use Aropixel\PageBundle\Form\Type\AbstractJsonPageType;
-   use Symfony\Component\Form\FormBuilderInterface;
    use Symfony\Component\Form\Extension\Core\Type\TextType;
+   use Symfony\Component\Form\FormBuilderInterface;
 
    class ContactPageType extends AbstractJsonPageType
    {
@@ -34,53 +36,56 @@ To create a custom JSON page type:
                ->add('address', TextType::class, ['label' => 'Address'])
            ;
        }
+
        public function getType(): string
        {
            return 'contact';
        }
-
-       /**
-        * Optional: define a custom template for the form rendering.
-        * By default, it looks for '@AropixelPage/contact/form.html.twig'.
-        */
-       public function getTemplate(): string
-       {
-           return '@App/admin/page/contact_form.html.twig';
-       }
    }
    ```
+   That's it — the class is automatically registered as the `contact` page type.
 
 2. **Create the form template**:
-   By default, the bundle will look for a template in `@AropixelPage/{type}/form.html.twig`.
-   You can provide it by creating a file in `templates/bundles/AropixelPageBundle/contact/form.html.twig`.
+   The bundle resolves the template via `@AropixelPage/{type}/form.html.twig`.
+   Override it for your app by creating `templates/bundles/AropixelPageBundle/contact/form.html.twig`:
 
-   Example of a custom form template:
    ```twig
    {# templates/bundles/AropixelPageBundle/contact/form.html.twig #}
-   {% extends '@AropixelPage/default/form.html.twig' %}
+   {% extends '@AropixelPage/base.html.twig' %}
+
+   {% block tabbable %}
+       <li class="nav-item"><a href="#panel-tab1" data-bs-toggle="pill" class="nav-link active"><span>Contact</span></a></li>
+       <li class="nav-item"><a href="#panel-tab2" data-bs-toggle="pill" class="nav-link"><span>{% trans %}page.form.seo{% endtrans %}</span></a></li>
+   {% endblock %}
 
    {% block mainPanel %}
        <div class="tab-pane active" id="panel-tab1">
            <div class="card card-centered-large">
                <div class="card-body">
                    {{ form_row(form.title) }}
-                   <hr>
-                   <div class="row">
-                       <div class="col-md-6">{{ form_row(form.phone) }}</div>
-                       <div class="col-md-6">{{ form_row(form.address) }}</div>
-                   </div>
+                   {{ form_row(form.phone) }}
+                   {{ form_row(form.address) }}
                </div>
            </div>
        </div>
-       {{ parent() }}
+       <div class="tab-pane" id="panel-tab2">
+           <div class="card card-centered-large">
+               <div class="card-body">
+                   {{ form_row(form.metaTitle) }}
+                   {{ form_row(form.metaDescription) }}
+                   {{ form_row(form.metaKeywords) }}
+               </div>
+           </div>
+       </div>
    {% endblock %}
    ```
 
-3. **Register it in your configuration**:
-   ```yaml
-   aropixel_page:
-       forms:
-           contact: App\Form\Type\ContactPageType
+   You can also override `getTemplate()` in your form class to point to any Twig path:
+   ```php
+   public function getTemplate(): string
+   {
+       return '@App/admin/page/contact_form.html.twig';
+   }
    ```
 
 ## Fixed and Protected Pages
@@ -216,7 +221,7 @@ In your Twig template:
     {% if page.type == 'default' %}
         {# HTML stored via CKEditor #}
         {{ page.htmlContent|raw }}
-    {% elseif page.type == 'custom' %}
+    {% elseif page.type == 'builder' %}
         {# HTML pre-rendered by the page builder at save time #}
         {{ page.htmlContent|raw }}
     {% else %}

@@ -6,6 +6,8 @@ use Aropixel\PageBundle\Component\Builder\BootstrapPageBuilderRenderer;
 use Aropixel\PageBundle\Component\Builder\UiKitPageBuilderRenderer;
 use Aropixel\PageBundle\Component\Builder\PageBuilderRendererInterface;
 use Aropixel\PageBundle\Entity\PageInterface;
+use Aropixel\PageBundle\Form\Type\DefaultPageType;
+use Aropixel\PageBundle\Form\Type\DefaultTranslatablePageType;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -42,17 +44,16 @@ class AropixelPageExtension extends Extension implements PrependExtensionInterfa
      */
     private function registerParameters(ContainerBuilder $container, array $config): void
     {
-        $forms = [];
-        foreach ($config['forms'] as $type => $formConfig) {
-            $forms[$type] = $formConfig['class'];
-        }
-
         $container->setParameter('aropixel_page.entities', $config['entities']);
         $container->setParameter('aropixel_page.entities.page', $config['entities'][PageInterface::class]);
-        $container->setParameter('aropixel_page.form.default', $forms['default'] ?? null);
-        $container->setParameter('aropixel_page.form.default_translatable', $forms['default_translatable'] ?? null);
+        $container->setParameter('aropixel_page.form.default', DefaultPageType::class);
+        $container->setParameter('aropixel_page.form.default_translatable', DefaultTranslatablePageType::class);
         $container->setParameter('aropixel_page.fixed_pages', $config['fixed_pages']);
-        $container->setParameter('aropixel_page.forms', $forms);
+        // Built-in types are hardcoded; RegisterPageFormTypesPass adds application types.
+        $container->setParameter('aropixel_page.forms', [
+            'default' => DefaultPageType::class,
+            'default_translatable' => DefaultTranslatablePageType::class,
+        ]);
         $locales = $container->hasParameter('aropixel_admin.locales')
             ? $container->getParameter('aropixel_admin.locales')
             : [];
