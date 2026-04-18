@@ -1,5 +1,6 @@
 import { initImageManager } from '/bundles/aropixeladmin/js/module/image-manager/launcher.js';
 import { IM_Library } from '/bundles/aropixeladmin/js/module/image-manager/library.js';
+import { t } from '../i18n.js';
 
 export const sliderBlockType = {
     type: 'slider',
@@ -91,7 +92,7 @@ export const sliderBlockType = {
                 delBtn.style.zIndex = '10';
                 delBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    if (confirm('Supprimer cette image ?')) {
+                    if (confirm(t('page.builder.block.slider.delete_confirm'))) {
                         block.items.splice(index, 1);
                         block.selectedIndex = null;
                         ctx.renderCanvas();
@@ -108,7 +109,7 @@ export const sliderBlockType = {
                 content.appendChild(imgWrapper);
             });
         } else {
-            content.innerHTML = '<div class="p-3 text-muted small w-100 text-center">Aucune image. Cliquez sur le bloc pour en ajouter.</div>';
+            content.innerHTML = `<div class="p-3 text-muted small w-100 text-center">${t('page.builder.block.slider.empty')}</div>`;
         }
 
         const addBtn = document.createElement('button');
@@ -116,9 +117,25 @@ export const sliderBlockType = {
         addBtn.style.height = '100px';
         addBtn.style.border = '1px solid #ddd';
         addBtn.style.cursor = 'pointer';
-        addBtn.dataset.action = 'click->page-builder#updateBlockContent';
-        addBtn.dataset.op = 'add-item';
         addBtn.innerHTML = '<i class="fas fa-plus me-2"></i>';
+        addBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            block.items.push({ id: Date.now(), src: '', imageId: null, alt: '' });
+            block.selectedIndex = block.items.length - 1;
+
+            const blockEl = addBtn.closest('[data-block-id]');
+            if (blockEl) {
+                ctx.sectionsManager.selectBlock(
+                    blockEl.dataset.sectionId,
+                    blockEl.dataset.rowId,
+                    blockEl.dataset.columnId,
+                    blockEl.dataset.blockId
+                );
+                ctx.tabs.activate('inspector');
+                ctx.showBlockInspector();
+            }
+            ctx.renderCanvas();
+        });
         content.appendChild(addBtn);
 
         container.appendChild(content);

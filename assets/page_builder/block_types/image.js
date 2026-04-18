@@ -1,5 +1,6 @@
 import { initImageManager } from '/bundles/aropixeladmin/js/module/image-manager/launcher.js';
 import { IM_Library } from '/bundles/aropixeladmin/js/module/image-manager/library.js';
+import { t } from '../i18n.js';
 
 export const imageBlockType = {
     type: 'image',
@@ -75,7 +76,6 @@ export const imageBlockType = {
     renderInspector: (block, ctx) => {
         const inspector = ctx.inspectorPanelBlockTarget;
         const contentContainer = inspector.querySelector('.pb-inspector-block-content');
-        const isInIconBox = ctx.sectionsManager.selectedRow?.type === 'icon-box';
 
         if (contentContainer) {
 
@@ -90,17 +90,17 @@ export const imageBlockType = {
 
                 contentContainer.innerHTML = `
                     <div class="mb-3">
-                        <label class="form-label form-label-sm">Texte alternatif</label>
+                        <label class="form-label form-label-sm">${t('page.builder.block.image.alt')}</label>
                         <input type="text"
                                class="form-control form-control-sm"
-                               placeholder="Description de l'image"
+                               placeholder="${t('page.builder.block.image.alt_placeholder')}"
                                value="${block.alt || ''}"
                                data-page-builder-target="blockAltInput"
                                data-action="input->page-builder#updateBlockContent" />
                     </div>
                     <div class="mb-3">
                         <div class="form-check form-switch d-flex justify-content-between">
-                            <label class="form-label mb-0 form-label-sm" for="use-original-size">Utiliser la taille originale</label>
+                            <label class="form-label mb-0 form-label-sm" for="use-original-size">${t('page.builder.block.image.original_size')}</label>
                             <input class="form-check-input mt-1"
                                    type="checkbox"
                                    id="use-original-size"
@@ -109,7 +109,7 @@ export const imageBlockType = {
                         </div>
                     </div>
                     <div class="mb-2" id="size-range-container" ${block.useOriginalSize ? 'style="display:none"' : ''}>
-                        <label class="form-label form-label-sm" for="image-size">Taille de l'image (%)</label>
+                        <label class="form-label form-label-sm" for="image-size">${t('page.builder.block.image.size')}</label>
                         <div class="d-flex align-items-center gap-2">
                           <input type="range" min="1" max="100" value="${block.width || 100}"
                                  class="form-range" id="image-size" style="width:100%"
@@ -146,39 +146,9 @@ export const imageBlockType = {
 
                 initializeImageManager(block, ctx);
             }
-
-            // Ajouter le widget pour l'image hover si on est dans un icon-box
-            if (isInIconBox) {
-                const hoverImageContent = sectionImage.cloneNode(true);
-                hoverImageContent.classList.remove('d-none');
-                hoverImageContent.removeAttribute('id');
-                hoverImageContent.querySelector('.form-label').innerHTML = 'Image au survol';
-                contentContainer.appendChild(hoverImageContent);
-
-                // Pré-remplir l'image hover si elle existe
-                if (block.hoverSrc) {
-                    const hoverPreview = hoverImageContent.querySelector('.im-manager .preview');
-                    if (hoverPreview) {
-                        const existingInput = hoverPreview.querySelector('input[type="hidden"]');
-                        hoverPreview.innerHTML = `<img src="${block.hoverSrc}" alt="${block.alt || ''}" />`;
-                        if (existingInput && block.hoverImageId) {
-                            existingInput.value = block.hoverImageId;
-                            hoverPreview.appendChild(existingInput);
-                        } else if (block.hoverImageId) {
-                            const input = document.createElement('input');
-                            input.type = 'hidden';
-                            input.value = block.hoverImageId;
-                            hoverPreview.appendChild(input);
-                        }
-                        hoverPreview.removeAttribute('data-new');
-                    }
-                }
-
-                initializeImageManager(block, ctx, 'hover', hoverImageContent);
-            }
         }
 
-        ctx.blockTitleTarget.textContent = 'Bloc image';
+        ctx.blockTitleTarget.textContent = t('page.builder.block_title.image');
     },
 
     handleInspectorInput: (block, event) => {

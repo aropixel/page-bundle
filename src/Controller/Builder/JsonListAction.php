@@ -1,26 +1,32 @@
 <?php
 
-namespace Aropixel\PageBundle\Controller\Custom;
+namespace Aropixel\PageBundle\Controller\Builder;
 
 use Aropixel\PageBundle\Entity\Page;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * Get custom pages as JSON.
+ * Get builder pages as JSON.
  */
 class JsonListAction extends AbstractController
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
+        #[Autowire('%aropixel_page.page_builder.enabled%')]
+        private readonly bool $pageBuilderEnabled = true,
     ) {
     }
 
-    #[Route('/page-builder/json/list', name: 'aropixel_custom_page_json_list', methods: ['GET'])]
     public function __invoke(): JsonResponse
     {
-        $pages = $this->entityManager->getRepository(Page::class)->findCustomPages();
+        if (!$this->pageBuilderEnabled) {
+            throw $this->createNotFoundException();
+        }
+
+        $pages = $this->entityManager->getRepository(Page::class)->findBuilderPages();
 
         $data = array_map(fn (Page $page) => [
             'slug' => $page->getSlug(),

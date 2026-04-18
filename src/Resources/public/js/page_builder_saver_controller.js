@@ -1,5 +1,7 @@
+/* stimulusFetch: 'lazy' */
+
 import { Controller } from '@hotwired/stimulus';
-import { showNotification } from './utils/notification.js';
+import { showNotification } from '../utils/notification.js';
 
 /*
  * Ce contrôleur gère l'enregistrement de la page ET relaie les actions globales
@@ -10,6 +12,7 @@ export default class extends Controller {
         "paramTitle",
         "paramSubtitle",
         "paramSlug",
+        "paramParent",
         "paramStatus",
         "paramMetaTitle",
         "paramDescription",
@@ -67,6 +70,7 @@ export default class extends Controller {
         }
 
         const slug = this.hasParamSlugTarget ? this.paramSlugTarget.value : "";
+        const parent = this.hasParamParentTarget ? this.paramParentTarget.value : "";
         const status = this.hasParamStatusTarget ? (this.paramStatusTarget.checked ? 'online' : 'offline') : "";
         const description = this.hasParamDescriptionTarget ? this.paramDescriptionTarget.value : "";
         const metaTitle = this.hasParamMetaTitleTarget ? this.paramMetaTitleTarget.value : "";
@@ -74,7 +78,7 @@ export default class extends Controller {
         const ogImage = this.hasParamOgImageTarget ? this.paramOgImageTarget.value : "";
 
         // On récupère la locale depuis le contrôleur principal
-        const locale = pageBuilderController.currentLocale || 'fr';
+        const locale = pageBuilderController.currentLocale || pageBuilderController.primaryLocale || 'fr';
 
         // 4. Construction du payload
         const payload = {
@@ -83,6 +87,7 @@ export default class extends Controller {
             title: title,
             subtitle: subtitle,
             slug: slug,
+            parent: parent,
             status: status,
             description: description,
             metaTitle: metaTitle,

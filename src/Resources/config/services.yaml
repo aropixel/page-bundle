@@ -26,6 +26,14 @@ services:
     resource: '../../Controller'
     tags: [ 'controller.service_arguments' ]
 
+  Aropixel\PageBundle\Controller\Builder\BuilderAction:
+    arguments:
+      $pageBuilderConfig: '%aropixel_page.page_builder%'
+
+  Aropixel\PageBundle\Controller\Builder\PreviewAction:
+    arguments:
+      $pageBuilderConfig: '%aropixel_page.page_builder%'
+
   aropixel.page.form.default:
     class: '%aropixel_page.form.default%'
     tags: ['aropixel.page.form']

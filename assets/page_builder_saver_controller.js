@@ -1,5 +1,6 @@
 import { Controller } from '@hotwired/stimulus';
 import { showNotification } from './utils/notification.js';
+import { t } from './page_builder/i18n.js';
 
 /*
  * Ce contrôleur gère l'enregistrement de la page ET relaie les actions globales
@@ -62,7 +63,7 @@ export default class extends Controller {
         // 3. Récupération des métadonnées du formulaire
         const title = this.hasParamTitleTarget ? this.paramTitleTarget.value : "";
         if (!title.trim()) {
-            showNotification("Le titre de la page est obligatoire (Onglet Paramètres).", "warning");
+            showNotification(t('page.builder.saver.title_required'), "warning");
             return;
         }
 
@@ -128,17 +129,17 @@ export default class extends Controller {
                     this.paramStatusTarget.checked = (data.status === 'online');
                 }
 
-                showNotification(data.message || "Page enregistrée avec succès !", "success");
+                showNotification(data.message || t('page.builder.saver.success'), "success");
             } else {
-                showNotification("Erreur lors de l'enregistrement : " + (data.error || "Inconnue"), "error");
+                showNotification(t('page.builder.saver.error') + (data.error || ""), "error");
             }
 
         } catch (error) {
             console.error(error);
-            showNotification("Erreur de communication avec le serveur.", "error");
+            showNotification(t('page.builder.saver.error_network'), "error");
             if(event.currentTarget) {
                 event.currentTarget.disabled = false;
-                event.currentTarget.innerHTML = 'Enregistrer';
+                event.currentTarget.innerHTML = t('form.save');
             }
         }
     }

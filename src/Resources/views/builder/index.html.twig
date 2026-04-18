@@ -1,23 +1,21 @@
 {% extends '@AropixelAdmin/base.html.twig' %}
 
-{% block asset_manager %}
-    {% if aropixel_admin_entry_available %}
-        {{ importmap() }}
-    {% else %}
-        {{ parent() }}
-    {% endif %}
-{% endblock %}
-
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('bundles/aropixelpage/css/page-builder.css') }}">
+    {% if page_builder_config.custom_css is defined and page_builder_config.custom_css %}
+        <link rel="stylesheet" href="{{ asset(page_builder_config.custom_css) }}">
+    {% endif %}
 {% endblock %}
 
 {% block theme_javascripts %}
     <script type="application/json" id="page-json-list-url">
-        {{ url('aropixel_custom_page_json_list')|json_encode(constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_HEX_TAG'))|raw }}
+        {{ url('aropixel_builder_page_json_list')|json_encode(constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_HEX_TAG'))|raw }}
     </script>
-    {% if not aropixel_admin_entry_available %}
+    <script type="application/json" id="page-builder-config">
+        {{ page_builder_config|json_encode(constant('JSON_HEX_TAG') b-or constant('JSON_UNESCAPED_UNICODE'))|raw }}
+    </script>
+    {% if not aropixel_asset_mapper_enabled %}
         <script src="{{ asset('bundles/aropixelpage/js/page_builder_controller.js') }}" type="module"></script>
         <script src="{{ asset('bundles/aropixelpage/js/page_builder_saver_controller.js') }}" type="module"></script>
     {% endif %}
@@ -38,15 +36,14 @@
                 class="pb-root"
                 data-controller="page-builder page-builder-saver"
 
-                data-page-builder-initial-content-value="{{ page ? page.content|json_encode|e('html_attr') : '{}' }}"
+                data-page-builder-initial-content-value="{{ page ? page.jsonContent|e('html_attr') : '{}' }}"
                 data-page-builder-initial-meta-value="{{ page ? {
                     title: page.title,
                     slug: page.slug,
-                    description: page.description,
-                    ogImage: page.ogImage
+                    description: page.metaDescription
                 }|json_encode|e('html_attr') : '{}' }}"
 
-                data-page-builder-saver-save-url-value="{{ path('aropixel_custom_page_save') }}"
+                data-page-builder-saver-save-url-value="{{ path('aropixel_builder_page_save') }}"
                 data-page-builder-saver-page-id-value="{{ page ? page.id : '' }}"
             >
 
@@ -65,7 +62,7 @@
                               data-page-builder-target="nameDisplay"
                               data-action="click->page-builder#startEditName">
                                 <span data-page-builder-target="nameText">
-                                    Nouvelle page
+                                    {% trans %}page.builder.new_page{% endtrans %}
                                 </span>
                                 <i class="fas fa-pen ms-2"></i>
                             </span>
@@ -78,7 +75,7 @@
                         <div class="ms-auto d-none d-md-flex align-items-center gap-2 form-action-btns">
 
                             <div class="form-switch form-status-switch" style="flex:1">
-                                <label class="form-check-label" for="flexSwitchCheckDefault">Publiée</label>
+                                <label class="form-check-label" for="flexSwitchCheckDefault">{% trans %}page.builder.published{% endtrans %}</label>
                                 <input
                                     class="form-check-input"
                                     type="checkbox"
@@ -90,21 +87,25 @@
                                     role="switch">
                             </div>
 
+                                {% set pb_locales = page_builder_config.locales ?? [] %}
+                                {% if pb_locales|length > 1 %}
                                 <div class="btn-group">
-                                    <button class="btn btn-primary btn-small ms-3" id="btnCurrentLocale">FR</button>
+                                    <button class="btn btn-primary btn-small ms-3" id="btnCurrentLocale">{{ pb_locales[0]|upper }}</button>
                                     <button class="btn btn-primary btn-small dropdown-toggle dropdown-toggle-split" type="button" data-bs-toggle="dropdown"></button>
                                     <div class="dropdown-menu" style="width:80px; min-width: 80px;">
-                                        <a class="dropdown-item" href="#" data-action="click->page-builder-saver#switchLocale" data-locale="fr">FR</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#" data-action="click->page-builder-saver#switchLocale" data-locale="en">EN</a>
+                                        {% for locale in pb_locales %}
+                                            <a class="dropdown-item" href="#" data-action="click->page-builder-saver#switchLocale" data-locale="{{ locale }}">{{ locale|upper }}</a>
+                                            {% if not loop.last %}<div class="dropdown-divider"></div>{% endif %}
+                                        {% endfor %}
                                     </div>
                                 </div>
+                                {% endif %}
 
                                 <div class="btn-group" role="group">
                                     {# MODIFICATION ICI : L'action pointe vers page-builder-saver #}
                                     <button type="button" class="btn btn-small btn-secondary"
                                             data-action="click->page-builder-saver#save">
-                                        <i class="far fa-save me-1"></i> Enregistrer
+                                        <i class="far fa-save me-1"></i> {% trans %}form.save{% endtrans %}
                                     </button>
                                     <button type="button" class="btn btn-small btn-secondary dropdown-toggle dropdown-toggle-split"
                                             data-bs-toggle="dropdown" aria-expanded="false">
@@ -113,26 +114,26 @@
                                     <ul class="dropdown-menu dropdown-menu-end">
                                         <li>
                                             <a class="dropdown-item d-flex align-items-center" href="#" data-action="click->page-builder-saver#save">
-                                                <i class="fa fa-copy me-1"></i> Enregistrer
+                                                <i class="fa fa-copy me-1"></i> {% trans %}form.save{% endtrans %}
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item d-flex align-items-center" href="{{ path('aropixel_custom_page') }}">
-                                                <i class="fas fa-file me-1"></i> Nouvelle page
+                                            <a class="dropdown-item d-flex align-items-center" href="{{ path('aropixel_builder_page') }}">
+                                                <i class="fas fa-file me-1"></i> {% trans %}page.builder.new_page{% endtrans %}
                                             </a>
                                         </li>
                                         <li>
                                             <a class="dropdown-item d-flex align-items-center" href="{{ path('aropixel_page_index') }}">
-                                                <i class="fas fa-list me-1"></i> Retour à la liste
+                                                <i class="fas fa-list me-1"></i> {% trans %}page.builder.back_to_list{% endtrans %}
                                             </a>
                                         </li>
-                                        {% if page and page.slug %}
+                                        {% if page and page.id %}
                                             <li>
                                                 <hr class="dropdown-divider">
                                             </li>
                                             <li>
-                                                <a class="dropdown-item d-flex align-items-center" target="_blank" href="{{ path('admin_page_preview', {'slug': page.slug}) }}">
-                                                    <i class="fas fa-eye me-1"></i> Accès à la page
+                                                <a class="dropdown-item d-flex align-items-center" target="_blank" href="{{ path('aropixel_builder_page_preview', {'id': page.id}) }}">
+                                                    <i class="fas fa-eye me-1"></i> {% trans %}page.builder.view_page{% endtrans %}
                                                 </a>
                                             </li>
                                         {% endif %}
@@ -144,23 +145,25 @@
                     <div class="main-content main-content-fullscreen d-flex justify-content-between align-items-center">
                         <ul class="nav nav-tabs tab-underlined" id="myTab" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link" role="tab" data-bs-toggle="tab" href="#nav-param" id="nav-param-tab">Paramètres de la page</a>
+                                <a class="nav-link" role="tab" data-bs-toggle="tab" href="#nav-param" id="nav-param-tab">{% trans %}page.builder.tab.settings{% endtrans %}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" role="tab" data-bs-toggle="tab" href="#nav-structure" id="nav-structure-tab">Inspecteur</a>
+                                <a class="nav-link" role="tab" data-bs-toggle="tab" href="#nav-structure" id="nav-structure-tab">{% trans %}page.builder.tab.inspector{% endtrans %}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active" role="tab" data-bs-toggle="tab" href="#nav-library" id="nav-library-tab">Contenu</a>
+                                <a class="nav-link active" role="tab" data-bs-toggle="tab" href="#nav-library" id="nav-library-tab">{% trans %}page.builder.tab.content{% endtrans %}</a>
                             </li>
                         </ul>
+                        {% if pb_locales|length > 1 %}
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="syncLocales" checked
                                    data-page-builder-target="syncLocaleInput"
-                                   data-action="change->page-builder#shouldSyncToEn">
+                                   data-action="change->page-builder#toggleSync">
                             <label class="form-check-label ts-normal" for="syncLocales">
-                                Synchroniser version "en" avec "fr"
+                                {{ 'page.builder.sync_locales'|trans({locale: pb_locales[0]|upper}) }}
                             </label>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
 
@@ -170,13 +173,13 @@
                         <aside class="position-sticky" style="width: 320px; top: 135px; align-self: start;">
                             <div class="tab-content">
                                 <div class="tab-pane pt-0 fade" id="nav-param" role="tabpanel" aria-labelledby="nav-param-tab">
-                                    {% include '@AropixelPage/custom/_param.html.twig' %}
+                                    {% include '@AropixelPage/builder/_param.html.twig' %}
                                 </div>
                                 <div class="tab-pane pt-0 fade" id="nav-structure" role="tabpanel" aria-labelledby="nav-structure-tab">
-                                    {% include '@AropixelPage/custom/_structure.html.twig' %}
+                                    {% include '@AropixelPage/builder/_structure.html.twig' %}
                                 </div>
                                 <div class="tab-pane pt-0 fade show active" id="nav-library" role="tabpanel" aria-labelledby="nav-library-tab">
-                                    {% include '@AropixelPage/custom/_library.html.twig' %}
+                                    {% include '@AropixelPage/builder/_library.html.twig' %}
                                 </div>
                             </div>
                         </aside>
@@ -185,16 +188,16 @@
                         <main class="col overflow-hidden">
                             <div class="card">
                                 <div class="card-header d-flex align-items-center justify-content-between">
-                                    <div class="fw-semibold">Prévisualisation</div>
+                                    <div class="fw-semibold">{% trans %}page.builder.preview{% endtrans %}</div>
                                     <div class="pb-device-switch">
                                         <button type="button" class="pb-device-switch-btn pb-device-switch-btn--active"
                                                 data-page-builder-target="deviceButton" data-device="desktop"
-                                                data-action="click->page-builder#switchDevice" title="Vue desktop">
+                                                data-action="click->page-builder#switchDevice" title="{% trans %}page.builder.view_desktop{% endtrans %}">
                                             <i class="fas fa-desktop"></i>
                                         </button>
                                         <button type="button" class="pb-device-switch-btn"
                                                 data-page-builder-target="deviceButton" data-device="mobile"
-                                                data-action="click->page-builder#switchDevice" title="Vue mobile">
+                                                data-action="click->page-builder#switchDevice" title="{% trans %}page.builder.view_mobile{% endtrans %}">
                                             <i class="fas fa-mobile-alt"></i>
                                         </button>
                                     </div>
@@ -204,7 +207,7 @@
                                         <div class="pb-canvas" data-page-builder-target="canvas">
                                             <div class="pb-canvas-placeholder" data-page-builder-target="canvasPlaceholder">
                                                 <p class="pb-empty-state">
-                                                    Ajoutez une section ou un template pour commencer à construire la page.
+                                                    {% trans %}page.builder.canvas_placeholder{% endtrans %}
                                                 </p>
                                             </div>
                                         </div>

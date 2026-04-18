@@ -14,9 +14,17 @@ export class BlockTypesRegistry {
     constructor() {
         this.types = {};
 
-        // on enregistre chaque type
+        // on enregistre chaque type intégré
         [titleBlockType, textBlockType, btnBlockType, spacerBlockType, dividerBlockType, imageBlockType, sliderBlockType, blogBlockType, nestedRowBlockType, ctaBlockType, bannerBlockType].forEach((def) => {
             this.types[def.type] = def;
+        });
+
+        // Enregistrement des blocs personnalisés fournis par l'application
+        const customBlocks = window.__pageBuilderCustomBlocks || [];
+        customBlocks.forEach((def) => {
+            if (def && def.type) {
+                this.types[def.type] = def;
+            }
         });
     }
 

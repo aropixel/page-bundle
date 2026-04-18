@@ -2,8 +2,16 @@
 
 namespace Aropixel\PageBundle\DependencyInjection;
 
+use Aropixel\PageBundle\Attribute\AsFixedPage;
+use Aropixel\PageBundle\Component\Builder\BootstrapPageBuilderRenderer;
+use Aropixel\PageBundle\Component\Builder\UiKitPageBuilderRenderer;
+use Aropixel\PageBundle\Component\Builder\PageBuilderRendererInterface;
 use Aropixel\PageBundle\Entity\PageInterface;
+use Aropixel\PageBundle\Form\Type\DefaultPageType;
+use Aropixel\PageBundle\Form\Type\DefaultTranslatablePageType;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Alias;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader;
@@ -23,8 +31,26 @@ class AropixelPageExtension extends Extension implements PrependExtensionInterfa
 
         $this->registerParameters($container, $config);
 
+        $container->registerAttributeForAutoconfiguration(
+            AsFixedPage::class,
+            static function (ChildDefinition $definition, AsFixedPage $attribute): void {
+                $definition->addTag('aropixel_page.fixed_page', [
+                    'code'      => $attribute->code,
+                    'title'     => $attribute->title,
+                    'type'      => $attribute->type,
+                    'deletable' => $attribute->deletable,
+                ]);
+            }
+        );
+
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yaml');
+
+        $rendererKey = $config['page_builder']['renderer'] ?? 'uikit';
+        $concreteClass = $rendererKey === 'bootstrap'
+            ? BootstrapPageBuilderRenderer::class
+            : UiKitPageBuilderRenderer::class;
+        $container->setAlias(PageBuilderRendererInterface::class, new Alias($concreteClass, true));
     }
 
     /**
@@ -32,17 +58,20 @@ class AropixelPageExtension extends Extension implements PrependExtensionInterfa
      */
     private function registerParameters(ContainerBuilder $container, array $config): void
     {
-        $forms = [];
-        foreach ($config['forms'] as $type => $formConfig) {
-            $forms[$type] = $formConfig['class'];
-        }
-
         $container->setParameter('aropixel_page.entities', $config['entities']);
         $container->setParameter('aropixel_page.entities.page', $config['entities'][PageInterface::class]);
-        $container->setParameter('aropixel_page.form.default', $forms['default'] ?? null);
-        $container->setParameter('aropixel_page.form.default_translatable', $forms['default_translatable'] ?? null);
-        $container->setParameter('aropixel_page.fixed_pages', $config['fixed_pages']);
-        $container->setParameter('aropixel_page.forms', $forms);
+        $container->setParameter('aropixel_page.form.default', DefaultPageType::class);
+        $container->setParameter('aropixel_page.form.default_translatable', DefaultTranslatablePageType::class);
+        // Built-in types are hardcoded; RegisterPageFormTypesPass adds application types.
+        $container->setParameter('aropixel_page.forms', [
+            'default' => DefaultPageType::class,
+            'default_translatable' => DefaultTranslatablePageType::class,
+        ]);
+        $locales = $container->hasParameter('aropixel_admin.locales')
+            ? $container->getParameter('aropixel_admin.locales')
+            : [];
+        $container->setParameter('aropixel_page.page_builder', array_merge($config['page_builder'], ['locales' => $locales]));
+        $container->setParameter('aropixel_page.page_builder.enabled', $config['page_builder']['enabled']);
     }
 
     public function prepend(ContainerBuilder $container): void
@@ -71,6 +100,21 @@ class AropixelPageExtension extends Extension implements PrependExtensionInterfa
             $container->prependExtensionConfig('stimulus', [
                 'controller_paths' => [
                     __DIR__ . '/../../assets',
+                ],
+            ]);
+        }
+
+        if (isset($bundles['LiipImagineBundle'])) {
+            $container->prependExtensionConfig('liip_imagine', [
+                'filter_sets' => [
+                    'page' => [
+                        'jpeg_quality' => 85,
+                        'png_compression_level' => 8,
+                        'filters' => [
+                            'strip' => null,
+                            'relative_resize' => ['widen' => 800],
+                        ],
+                    ],
                 ],
             ]);
         }

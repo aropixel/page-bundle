@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale|default('fr') }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if page.title %}{{ page.title }} — Aperçu{% else %}Aperçu de la page{% endif %}</title>
+
+    {% if renderer == 'bootstrap' %}
+        <link rel="stylesheet"
+              href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+              integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+              crossorigin="anonymous">
+    {% else %}
+        <link rel="stylesheet"
+              href="https://cdn.jsdelivr.net/npm/uikit@3.21.5/dist/css/uikit.min.css"/>
+    {% endif %}
+
+    {% if custom_css %}
+        <link rel="stylesheet" href="{{ asset(custom_css) }}">
+    {% endif %}
+
+    <style>
+        body { margin: 0; padding: 0; }
+        .pb-preview-bar {
+            background: #1a1a2e;
+            color: #fff;
+            padding: 8px 16px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 9999;
+        }
+        .pb-preview-bar a { color: #a8b2d8; text-decoration: none; font-size: 12px; }
+        .pb-preview-bar a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <div class="pb-preview-bar">
+        <span>
+            <strong>Aperçu</strong>{% if page.title %} — {{ page.title }}{% endif %}
+            <span style="margin-left:12px;opacity:.6;font-size:11px;">{{ renderer|upper }}</span>
+        </span>
+        <a href="{{ path('aropixel_builder_page_edit', {'id': page.id}) }}">← Retour à l'éditeur</a>
+    </div>
+
+    {{ rendered_content|raw }}
+
+    {% if renderer == 'bootstrap' %}
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-YvpcrYf0tY3lHB60NNkmXc4s9bIOgUxi8T/jzmU2UiBAWi2FaJ1fQjKOu2SZLQB"
+                crossorigin="anonymous"></script>
+    {% else %}
+        <script src="https://cdn.jsdelivr.net/npm/uikit@3.21.5/dist/js/uikit.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/uikit@3.21.5/dist/js/uikit-icons.min.js"></script>
+    {% endif %}
+
+</body>
+</html>

@@ -152,6 +152,13 @@ export class CanvasRenderer {
 
         wrapper.classList.add(section.layout);
 
+        if (section.active === false) {
+            wrapper.classList.add('pb-page-section--inactive');
+            const inactiveOverlay = document.createElement('div');
+            inactiveOverlay.classList.add('pb-section-inactive-overlay');
+            wrapper.appendChild(inactiveOverlay);
+        }
+
         this.#applyBackground(wrapper, section.background);
 
         const inner = document.createElement('div');
@@ -191,7 +198,14 @@ export class CanvasRenderer {
     #applyBackground(element, background) {
         element.style.backgroundColor = '';
         element.style.backgroundImage = '';
+        element.style.position = 'relative';
         element.className = element.className.replace(/\bbg-\S+/g, '');
+
+        // Supprimer l'overlay existant s'il y en a un
+        const existingOverlay = element.querySelector('.pb-column-overlay');
+        if (existingOverlay) {
+            existingOverlay.remove();
+        }
 
         if (background && background.type && background.value) {
             if (background.type === 'color') {
@@ -201,6 +215,20 @@ export class CanvasRenderer {
                 element.style.backgroundSize = 'cover';
                 element.style.backgroundPosition = 'center';
                 element.style.backgroundRepeat = 'no-repeat';
+
+                // Ajouter l'overlay si l'opacité est > 0
+                if (background.overlayOpacity && background.overlayOpacity > 0) {
+                    const overlay = document.createElement('div');
+                    overlay.classList.add('pb-column-overlay');
+                    overlay.style.position = 'absolute';
+                    overlay.style.top = '0';
+                    overlay.style.left = '0';
+                    overlay.style.width = '100%';
+                    overlay.style.height = '100%';
+                    overlay.style.backgroundColor = `rgba(34, 34, 34, ${background.overlayOpacity})`;
+                    overlay.style.borderRadius = element.style.borderRadius; // S'assurer que l'overlay respecte aussi l'arrondi
+                    element.appendChild(overlay);
+                }
             } else if (background.type === 'class') {
                 const classes = background.value.split(' ').filter(cls => cls.trim() !== '');
                 classes.forEach(cls => element.classList.add(cls));
@@ -341,6 +369,10 @@ export class CanvasRenderer {
         if (colData.url) {
             col.dataset.hasUrl = "true";
             col.title = `Lien: ${colData.url}`;
+        }
+
+        if (colData.borderRadius) {
+            col.style.borderRadius = `${colData.borderRadius}px`;
         }
 
         this.#applyBackground(col, colData.background);
@@ -650,7 +682,6 @@ export class CanvasRenderer {
             toolbar.appendChild(makeButton('Texte', 'text', true));
             toolbar.appendChild(makeButton('Bouton', 'button', false));
             toolbar.appendChild(makeButton('Image', 'image', false));
-            toolbar.appendChild(makeButton('Icône box', 'icon-box', true));
 
             container.appendChild(toolbar);
         }

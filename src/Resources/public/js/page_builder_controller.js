@@ -10,6 +10,7 @@ import { initImageManager } from '/bundles/aropixeladmin/js/module/image-manager
 import { IM_Library } from '/bundles/aropixeladmin/js/module/image-manager/library.js';
 
 
+/* stimulusFetch: 'lazy' */
 export default class extends Controller {
     static targets = [
         'tabButton',
@@ -30,9 +31,12 @@ export default class extends Controller {
         'sectionColumnsCount',
         'sectionVisibleDesktopInput',
         'sectionVisibleMobileInput',
+        'sectionActiveContainer',
+        'sectionActiveInput',
         'sectionLayoutContainer',
         'sectionBackgroundType',
         'sectionBackgroundColorInput',
+        'sectionBackgroundColorPicker',
         'sectionBackgroundImageInput',
         'sectionBackgroundImageValue',
         'sectionBackgroundImageName',
@@ -41,6 +45,7 @@ export default class extends Controller {
         'blockContentInput',
         'blockUrlInput',
         'blockAlignmentButton',
+        'blockAdCampaignSelect',
         'nameDisplay',
         'nameText',
         'nameInput',
@@ -48,21 +53,31 @@ export default class extends Controller {
         'statusField',
         'columnLinkTypeSelect',
         'columnUrlInputContainer',
-        'columnPagePathSelectContainer',
         'columnUrlInput',
+        'columnPagePathSelectContainer',
         'columnPagePathSelect',
+        'columnFixedPageSelectContainer',
+        'columnFixedPageSelect',
         'columnHeightSelect',
+        'columnBorderRadiusInput',
+        'columnBorderRadiusValue',
         'columnBackgroundTypeSelect',
         'columnBackgroundColorInput',
+        'columnBackgroundColorPicker',
         'columnBackgroundImageInput',
         'columnBackgroundImageValue',
         'columnBackgroundImageName',
         'columnBackgroundClassInput',
+        'columnBackgroundOverlayInput',
+        'columnBackgroundOverlayValue',
         'columnAlignmentButton',
         'blockLinkTypeSelect',
         'blockUrlInputContainer',
+        'blockUrlInput',
         'blockPagePathSelectContainer',
         'blockPagePathSelect',
+        'blockFixedPageSelectContainer',
+        'blockFixedPageSelect',
         'rowReverseMobileInput',
         'rowTypeSelect',
         'rowModeSelect',
@@ -75,14 +90,20 @@ export default class extends Controller {
     static values = {
         initialContent: String,
         device: { type: String, default: 'desktop' },
+        pageSlug: String,
     };
 
     connect() {
+        const configEl = document.getElementById('page-builder-config');
+        this.pageBuilderConfig = configEl ? JSON.parse(configEl.textContent) : {};
+
         this.columnPresets = ['1-1', '1-2', '1-3', '1-4', '1-5', '1-6'];
 
         // Gestion Multilingue : Initialisation
         this.managers = {};
-        this.currentLocale = 'fr';
+        this.locales = this.pageBuilderConfig?.locales || [];
+        this.primaryLocale = this.locales[0] || 'fr';
+        this.currentLocale = this.primaryLocale;
 
         // On initialise le manager pour la langue courante
         this.sectionsManager = new SectionsManager(this.columnPresets);
@@ -121,8 +142,10 @@ export default class extends Controller {
                                         col.background = colData.background;
                                         col.url = colData.url;
                                         col.pagePath = colData.pagePath;
+                                        col.parentSlug = colData.parentSlug || null;
                                         col.linkType = colData.linkType;
                                         col.height = colData.height;
+                                        col.borderRadius = colData.borderRadius || 0;
                                         return col;
                                     });
                                 }
@@ -250,32 +273,41 @@ export default class extends Controller {
     // --- Utilitaires de synchro ---
 
     /**
-     * Vérifie si on doit synchroniser l'action vers l'anglais
+     * Vérifie si on doit synchroniser vers les autres langues.
+     * Condition : être sur la langue primaire, avoir plusieurs langues configurées,
+     * et la case "Synchroniser" doit être cochée.
      */
-    shouldSyncToEn() {
-        // On ne synchronise que si on est en train d'éditer le FR
-        // et que la case est cochée
-        const isFr = this.currentLocale === 'fr';
-        const isSyncChecked = this.syncLocaleInputTarget && this.syncLocaleInputTarget.checked;
-        return isFr && isSyncChecked;
+    shouldSyncToOthers() {
+        const isPrimary = this.currentLocale === this.primaryLocale;
+        const hasMultipleLocales = this.locales.length > 1;
+        const isSyncChecked = this.hasSyncLocaleInputTarget && this.syncLocaleInputTarget.checked;
+        return isPrimary && hasMultipleLocales && isSyncChecked;
+    }
+
+    /** Action Stimulus branchée sur la checkbox de sync (data-action="change->page-builder#toggleSync") */
+    toggleSync() {
+        // Pas d'action directe — la checkbox est lue par shouldSyncToOthers() à chaque opération.
     }
 
     /**
-     * Récupère ou initialise le manager EN pour la synchro
+     * Retourne les locales secondaires (toutes sauf la primaire).
      */
-    getEnManagerForSync() {
-        // Si le manager EN n'existe pas encore, on le crée comme une copie du FR actuel
-        if (!this.managers['en']) {
+    getSecondaryLocales() {
+        return this.locales.slice(1);
+    }
+
+    /**
+     * Récupère ou initialise le manager pour une locale donnée (pour la synchro).
+     * Si le manager n'existe pas encore, il est créé comme une copie profonde de la locale primaire.
+     */
+    getOrCreateManagerForSync(locale) {
+        if (!this.managers[locale]) {
             const newManager = new SectionsManager(this.columnPresets);
             if (this.sectionsManager.sections) {
-                // On clone les données brutes
                 const rawSections = JSON.parse(JSON.stringify(this.sectionsManager.sections));
-
-                // On réhydrate les instances de Row et Column
                 newManager.sections = rawSections.map(section => {
                     if (section.rows) {
                         section.rows = section.rows.map(rowData => {
-                            // ← RÉHYDRATER la Row
                             const row = new Row();
                             row.id = rowData.id;
                             row.align = rowData.align || 'center';
@@ -299,9 +331,9 @@ export default class extends Controller {
                     return section;
                 });
             }
-            this.managers['en'] = newManager;
+            this.managers[locale] = newManager;
         }
-        return this.managers['en'];
+        return this.managers[locale];
     }
 
     // --- Multilingue ---
@@ -372,7 +404,8 @@ export default class extends Controller {
         this.inspector = new InspectorView(this, this.sectionsManager);
 
         // 4. Rafraîchissement de l'interface
-        document.getElementById('btnCurrentLocale').textContent = newLocale.toUpperCase();
+        const localeBtn = document.getElementById('btnCurrentLocale');
+        if (localeBtn) localeBtn.textContent = newLocale.toUpperCase();
         this.showInspectorDefault(); // Retour à l'inspecteur par défaut pour éviter les conflits d'ID de blocs
         this.renderCanvas();
     }
@@ -439,16 +472,13 @@ export default class extends Controller {
         this.showSectionInspector();
 
         // SYNCHRO
-        if (this.shouldSyncToEn()) {
-            const enManagerExisted = !!this.managers['en'];
-            const enManager = this.getEnManagerForSync();
-
-            if (enManagerExisted) {
-                const lastSectionFr = this.sectionsManager.sections[this.sectionsManager.sections.length - 1];
-                if (lastSectionFr) {
+        if (this.shouldSyncToOthers()) {
+            const lastSectionFr = this.sectionsManager.sections[this.sectionsManager.sections.length - 1];
+            this.getSecondaryLocales().forEach(locale => {
+                const existed = !!this.managers[locale];
+                const manager = this.getOrCreateManagerForSync(locale);
+                if (existed && lastSectionFr) {
                     const sectionCopy = JSON.parse(JSON.stringify(lastSectionFr));
-
-                    // Réhydrater les rows et colonnes
                     if (sectionCopy.rows) {
                         sectionCopy.rows = sectionCopy.rows.map(rowData => {
                             const row = new Row();
@@ -456,7 +486,6 @@ export default class extends Controller {
                             row.align = rowData.align || 'center';
                             row.justify = rowData.justify || 'center';
                             row.reverseMobile = rowData.reverseMobile || false;
-
                             if (rowData.columns) {
                                 row.columns = rowData.columns.map(colData => {
                                     const col = new Column(colData.width);
@@ -467,14 +496,12 @@ export default class extends Controller {
                                     return col;
                                 });
                             }
-
                             return row;
                         });
                     }
-
-                    enManager.sections.push(sectionCopy);
+                    manager.sections.push(sectionCopy);
                 }
-            }
+            });
         }
     }
 
@@ -484,22 +511,57 @@ export default class extends Controller {
             return;
         }
 
+        // Si c'est une grille, on ajoute une row avec 6 colonnes
+        if (type === "grid") {
+            let sectionId = this.sectionsManager.selectedSectionId;
+            if (!sectionId) {
+                this.addSection();
+                sectionId = this.sectionsManager.selectedSectionId;
+            }
+
+            const section = this.sectionsManager.sections.find(s => s.id === sectionId);
+            if (section) {
+                const newRow = new Row();
+                for (let i = 0; i < 6; i++) {
+                    newRow.addColumn(new Column('1-6'));
+                }
+                section.rows.push(newRow);
+                this.sectionsManager.selectRow(sectionId, newRow.id);
+
+                // SYNCHRO GRID
+                if (this.shouldSyncToOthers()) {
+                    this.getSecondaryLocales().forEach(locale => {
+                        const existed = !!this.managers[locale];
+                        const manager = this.getOrCreateManagerForSync(locale);
+                        if (existed) {
+                            const targetSection = manager.sections.find(s => s.id === sectionId);
+                            if (targetSection) {
+                                targetSection.rows.push(newRow.clone());
+                            }
+                        }
+                    });
+                }
+
+                this.renderCanvas();
+                this.tabs.activate('inspector');
+                this.showSectionInspector();
+                return;
+            }
+        }
+
         // Si c'est un template, créer une nouvelle section
         if (type === "template") {
             const templateType = event.currentTarget.dataset.templateType;
             this.sectionsManager.addSectionFromTemplate(templateType);
 
             // SYNCHRO TEMPLATE
-            if (this.shouldSyncToEn()) {
-                const enManagerExisted = !!this.managers['en'];
-                const enManager = this.getEnManagerForSync();
-
-                if (enManagerExisted) {
-                    const lastSectionFr = this.sectionsManager.sections[this.sectionsManager.sections.length - 1];
-                    if (lastSectionFr) {
+            if (this.shouldSyncToOthers()) {
+                const lastSectionFr = this.sectionsManager.sections[this.sectionsManager.sections.length - 1];
+                this.getSecondaryLocales().forEach(locale => {
+                    const existed = !!this.managers[locale];
+                    const manager = this.getOrCreateManagerForSync(locale);
+                    if (existed && lastSectionFr) {
                         const sectionCopy = JSON.parse(JSON.stringify(lastSectionFr));
-
-                        // Réhydrater les rows et colonnes
                         if (sectionCopy.rows) {
                             sectionCopy.rows = sectionCopy.rows.map(rowData => {
                                 const row = new Row();
@@ -507,7 +569,6 @@ export default class extends Controller {
                                 row.align = rowData.align || 'center';
                                 row.justify = rowData.justify || 'center';
                                 row.reverseMobile = rowData.reverseMobile || false;
-
                                 if (rowData.columns) {
                                     row.columns = rowData.columns.map(colData => {
                                         const col = new Column(colData.width);
@@ -518,14 +579,12 @@ export default class extends Controller {
                                         return col;
                                     });
                                 }
-
                                 return row;
                             });
                         }
-
-                        enManager.sections.push(sectionCopy);
+                        manager.sections.push(sectionCopy);
                     }
-                }
+                });
             }
 
             this.renderCanvas();
@@ -601,18 +660,19 @@ export default class extends Controller {
         this.sectionsManager.addBlock(sectionId, rowId, columnId, type);
 
         // SYNCHRO BLOC
-        if (this.shouldSyncToEn()) {
-            const enManagerExisted = !!this.managers['en'];
-            const enManager = this.getEnManagerForSync();
-
-            // Correction doublon : on n'ajoute le bloc que si le manager existait déjà.
-            // Sinon, le clone contient déjà le nouveau bloc.
-            if (enManagerExisted) {
-                const targetSection = enManager.sections.find(s => s.id === sectionId);
-                if (targetSection) {
-                    enManager.addBlock(sectionId, rowId, columnId, type);
+        if (this.shouldSyncToOthers()) {
+            this.getSecondaryLocales().forEach(locale => {
+                const existed = !!this.managers[locale];
+                const manager = this.getOrCreateManagerForSync(locale);
+                // On n'ajoute le bloc que si le manager existait déjà.
+                // Sinon, le clone contient déjà le nouveau bloc.
+                if (existed) {
+                    const targetSection = manager.sections.find(s => s.id === sectionId);
+                    if (targetSection) {
+                        manager.addBlock(sectionId, rowId, columnId, type);
+                    }
                 }
-            }
+            });
         }
 
         this.renderCanvas();
@@ -748,6 +808,12 @@ export default class extends Controller {
         this.showSectionInspector();
     }
 
+    updateSectionActive() {
+        this.sectionsManager.updateSectionActive(this.sectionActiveInputTarget.checked);
+        this.renderCanvas();
+        this.showSectionInspector();
+    }
+
 
     updateRowColumnsAlignment(event) {
         this.sectionsManager.updateRowAlignment(event.target.value);
@@ -867,12 +933,17 @@ export default class extends Controller {
             if (this.hasBlockPagePathSelectContainerTarget) {
                 this.blockPagePathSelectContainerTarget.classList.add('d-none');
             }
+            if (this.hasBlockFixedPageSelectContainerTarget) {
+                this.blockFixedPageSelectContainerTarget.classList.add('d-none');
+            }
 
             // Afficher l'input correspondant
             if (type === 'url' && this.hasBlockUrlInputContainerTarget) {
                 this.blockUrlInputContainerTarget.classList.remove('d-none');
             } else if (type === 'page' && this.hasBlockPagePathSelectContainerTarget) {
                 this.blockPagePathSelectContainerTarget.classList.remove('d-none');
+            } else if (type === 'fixed' && this.hasBlockFixedPageSelectContainerTarget) {
+                this.blockFixedPageSelectContainerTarget.classList.remove('d-none');
             }
         }
     }
@@ -880,7 +951,10 @@ export default class extends Controller {
     updateBlockPagePath(event) {
         const block = this.sectionsManager.selectedBlock;
         if (block) {
-            block.pagePath = event.target.value;
+            const select = event.target;
+            const selectedOption = select.options[select.selectedIndex];
+            block.pagePath = select.value;
+            block.parentSlug = selectedOption.dataset.parentSlug || null;
             this.renderCanvas(true);
         }
     }
@@ -895,12 +969,17 @@ export default class extends Controller {
         if (this.hasColumnPagePathSelectContainerTarget) {
             this.columnPagePathSelectContainerTarget.classList.add('d-none');
         }
+        if (this.hasColumnFixedPageSelectContainerTarget) {
+            this.columnFixedPageSelectContainerTarget.classList.add('d-none');
+        }
 
         // Afficher l'input correspondant
         if (type === 'url' && this.hasColumnUrlInputContainerTarget) {
             this.columnUrlInputContainerTarget.classList.remove('d-none');
         } else if (type === 'page' && this.hasColumnPagePathSelectContainerTarget) {
             this.columnPagePathSelectContainerTarget.classList.remove('d-none');
+        } else if (type === 'fixed' && this.hasColumnFixedPageSelectContainerTarget) {
+            this.columnFixedPageSelectContainerTarget.classList.remove('d-none');
         }
 
         // On pourrait aussi vouloir sauvegarder le type dans le modèle si on veut qu'il persiste à la réouverture de l'inspecteur
@@ -910,13 +989,40 @@ export default class extends Controller {
     }
 
     updateColumnPagePath(event) {
-        this.sectionsManager.updateColumnPagePath(event.target.value);
+        const select = event.target;
+        const selectedOption = select.options[select.selectedIndex];
+        this.sectionsManager.updateColumnPagePath(select.value, selectedOption.dataset.parentSlug || null);
         this.renderCanvas(true);
     }
 
     updateColumnHeight(event) {
         this.sectionsManager.updateColumnHeight(event.target.value);
         this.renderCanvas(true);
+    }
+
+    updateColumnBorderRadius(event) {
+        const value = event.target.value;
+        this.sectionsManager.updateColumnBorderRadius(value);
+
+        if (this.hasColumnBorderRadiusValueTarget) {
+            this.columnBorderRadiusValueTarget.textContent = value;
+        }
+
+        // Mise à jour en direct du canvas sans re-rendu complet
+        const selectedColumnId = this.sectionsManager.selectedColumnId;
+        if (selectedColumnId) {
+            const columnEl = this.canvasTarget.querySelector(`[data-column-id="${selectedColumnId}"]`);
+            if (columnEl) {
+                columnEl.style.borderRadius = `${value}px`;
+                columnEl.style.overflow = value > 0 ? 'hidden' : '';
+
+                // Mettre à jour aussi l'overlay s'il existe
+                const overlay = columnEl.querySelector('.pb-column-overlay');
+                if (overlay) {
+                    overlay.style.borderRadius = `${value}px`;
+                }
+            }
+        }
     }
 
     updateBlockHorizontalAlignment(event) {
@@ -945,12 +1051,18 @@ export default class extends Controller {
         if (this.hasColumnBackgroundClassInputTarget) {
             this.columnBackgroundClassInputTarget.classList.add('d-none');
         }
+        if (this.hasColumnBackgroundOverlayInputTarget) {
+            this.columnBackgroundOverlayInputTarget.classList.add('d-none');
+        }
 
         // Afficher l'input correspondant
         if (type === 'color' && this.hasColumnBackgroundColorInputTarget) {
             this.columnBackgroundColorInputTarget.classList.remove('d-none');
         } else if (type === 'image' && this.hasColumnBackgroundImageInputTarget) {
             this.columnBackgroundImageInputTarget.classList.remove('d-none');
+            if (this.hasColumnBackgroundOverlayInputTarget) {
+                this.columnBackgroundOverlayInputTarget.classList.remove('d-none');
+            }
 
             const sectionImage = document.getElementById('section-image');
             if (sectionImage) {
@@ -1034,7 +1146,7 @@ export default class extends Controller {
                         const imgSrc = imgElement.getAttribute('src');
 
                         // Remplacer admin_thumbnail par admin_preview pour avoir l'image originale
-                        const previewSrc = imgSrc.replace('/media/cache/admin_thumbnail/', '/media/cache/resolve/admin_preview/');
+                        const previewSrc = imgSrc.replace('/media/cache/admin_thumbnail/', '/media/cache/admin_preview/');
 
                         // Récupérer l'ID de l'image depuis l'input caché
                         const inputId = document.querySelector('.pb-column-background-image-content .im-manager input[type="hidden"]');
@@ -1064,7 +1176,17 @@ export default class extends Controller {
         const type = this.columnBackgroundTypeSelectTarget.value;
         const value = event.target.value;
 
-        this.sectionsManager.updateColumnBackground(type, value);
+        const overlayOpacity = column.background?.overlayOpacity || 0;
+        this.sectionsManager.updateColumnBackground(type, value, null, overlayOpacity);
+        this.renderCanvas();
+    }
+
+    updateColumnBackgroundOverlay(event) {
+        const opacity = event.target.value;
+        if (this.hasColumnBackgroundOverlayValueTarget) {
+            this.columnBackgroundOverlayValueTarget.textContent = opacity;
+        }
+        this.sectionsManager.updateColumnBackgroundOverlay(opacity);
         this.renderCanvas();
     }
 
@@ -1157,6 +1279,24 @@ export default class extends Controller {
         if (!type) {
             this.sectionsManager.updateSectionBackground(null, null);
             this.renderCanvas();
+        }
+    }
+
+    applySectionColorPreset(event) {
+        const color = event.currentTarget.dataset.color;
+        if (this.hasSectionBackgroundColorPickerTarget) {
+            this.sectionBackgroundColorPickerTarget.value = color;
+            // Déclencher manuellement l'événement input pour mettre à jour le modèle
+            this.sectionBackgroundColorPickerTarget.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+    }
+
+    applyColumnColorPreset(event) {
+        const color = event.currentTarget.dataset.color;
+        if (this.hasColumnBackgroundColorPickerTarget) {
+            this.columnBackgroundColorPickerTarget.value = color;
+            // Déclencher manuellement l'événement input pour mettre à jour le modèle
+            this.columnBackgroundColorPickerTarget.dispatchEvent(new Event('input', { bubbles: true }));
         }
     }
 
@@ -1256,7 +1396,7 @@ export default class extends Controller {
                         const imgSrc = imgElement.getAttribute('src');
 
                         // Remplacer admin_thumbnail par admin_preview pour avoir l'image originale
-                        const previewSrc = imgSrc.replace('/media/cache/admin_thumbnail/', '/media/cache/resolve/admin_preview/');
+                        const previewSrc = imgSrc.replace('/media/cache/admin_thumbnail/', '/media/cache/admin_preview/');
 
                         // Récupérer l'ID de l'image depuis l'input caché
                         const inputId = document.querySelector('.pb-section-background-image-content .im-manager input[type="hidden"]');

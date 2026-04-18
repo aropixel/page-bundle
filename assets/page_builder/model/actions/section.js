@@ -99,17 +99,6 @@ export class SectionActions {
                         ]},
                 ]
             },
-            'ticketing': {
-                name: 'Billetterie',
-                rows: [
-                    { columns: ['1-1'], blocks: [{ columnIndex: 0, type: 'title' }] },
-                    { columns: ['1-4', '1-4', '1-4'], blocks: [
-                            { columnIndex: 0, type: 'ticket' },
-                            { columnIndex: 1, type: 'ticket' },
-                            { columnIndex: 2, type: 'ticket' },
-                        ]},
-                ]
-            },
             'sidebar': {
                 name: 'Titre + Image/Contenu',
                 rows: [

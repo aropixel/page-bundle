@@ -1,3 +1,6 @@
+{% set pb_custom_blocks = page_builder_config.custom_blocks ?? [] %}
+{% set pb_has_custom_tab = pb_custom_blocks|filter(b => b.category == 'custom')|length > 0 %}
+
 <div class="card mb-3">
 
     <div class="px-3 py-2">
@@ -10,7 +13,7 @@
                    aria-selected="true"
                    href="#nav-bloc"
                    id="nav-bloc-tab">
-                    <span style="font-size: 0.875rem;">Blocs</span>
+                    <span style="font-size: 0.875rem;">{% trans %}page.builder.library.tab.blocks{% endtrans %}</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -21,7 +24,7 @@
                    aria-selected="false"
                    href="#nav-media"
                    id="nav-media-tab">
-                    <span style="font-size: 0.875rem;">Médias</span>
+                    <span style="font-size: 0.875rem;">{% trans %}page.builder.library.tab.media{% endtrans %}</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -32,9 +35,22 @@
                    aria-selected="false"
                    href="#nav-module"
                    id="nav-module-tab">
-                    <span style="font-size: 0.875rem;">Modules</span>
+                    <span style="font-size: 0.875rem;">{% trans %}page.builder.library.tab.modules{% endtrans %}</span>
                 </a>
             </li>
+            {% if pb_has_custom_tab %}
+            <li class="nav-item">
+                <a class="nav-link px-3 py-2 d-flex align-items-center"
+                   role="tab"
+                   data-bs-toggle="tab"
+                   aria-controls="nav-custom"
+                   aria-selected="false"
+                   href="#nav-custom"
+                   id="nav-custom-tab">
+                    <span style="font-size: 0.875rem;">{% trans %}page.builder.library.tab.custom{% endtrans %}</span>
+                </a>
+            </li>
+            {% endif %}
         </ul>
     </div>
 
@@ -51,7 +67,7 @@
                             <div class="pb-block-card-icon">
                                 <i class="fas fa-heading"></i>
                             </div>
-                            <span class="pb-block-card-label">Titre</span>
+                            <span class="pb-block-card-label">{% trans %}page.builder.block.title{% endtrans %}</span>
                         </button>
                     </div>
                     <div class="col-4">
@@ -62,7 +78,7 @@
                             <div class="pb-block-card-icon">
                                 <i class="fas fa-align-left"></i>
                             </div>
-                            <span class="pb-block-card-label">Texte</span>
+                            <span class="pb-block-card-label">{% trans %}page.builder.block.text{% endtrans %}</span>
                         </button>
                     </div>
                     <div class="col-4">
@@ -73,7 +89,7 @@
                             <div class="pb-block-card-icon">
                                 <i class="fas fa-hand-pointer"></i>
                             </div>
-                            <span class="pb-block-card-label">Bouton</span>
+                            <span class="pb-block-card-label">{% trans %}page.builder.block.button{% endtrans %}</span>
                         </button>
                     </div>
                     <div class="col-4">
@@ -84,7 +100,7 @@
                             <div class="pb-block-card-icon">
                                 <i class="fas fa-arrows-alt-v"></i>
                             </div>
-                            <span class="pb-block-card-label">Espacement</span>
+                            <span class="pb-block-card-label">{% trans %}page.builder.block.spacer{% endtrans %}</span>
                         </button>
                     </div>
                     <div class="col-4">
@@ -95,7 +111,7 @@
                             <div class="pb-block-card-icon">
                                 <i class="fas fa-minus"></i>
                             </div>
-                            <span class="pb-block-card-label">Séparateur</span>
+                            <span class="pb-block-card-label">{% trans %}page.builder.block.divider{% endtrans %}</span>
                         </button>
                     </div>
                     <div class="col-4">
@@ -108,6 +124,16 @@
                             <span class="pb-block-card-label">CTA</span>
                         </button>
                     </div>
+                    {% for pb_block in pb_custom_blocks|filter(b => b.category == 'blocs') %}
+                    <div class="col-4">
+                        <button type="button" class="pb-block-card"
+                                data-block-type="{{ pb_block.type }}"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon"><i class="{{ pb_block.icon }}"></i></div>
+                            <span class="pb-block-card-label">{{ pb_block.label }}</span>
+                        </button>
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
 
@@ -121,18 +147,18 @@
                             <div class="pb-block-card-icon">
                                 <i class="fas fa-image"></i>
                             </div>
-                            <span class="pb-block-card-label">Image</span>
+                            <span class="pb-block-card-label">{% trans %}page.builder.block.image{% endtrans %}</span>
                         </button>
                     </div>
                     <div class="col-4">
                         <button type="button"
                                 class="pb-block-card"
-                                data-block-type="video"
+                                data-block-type="iframe"
                                 data-action="click->page-builder#addBlockFromLibrary">
                             <div class="pb-block-card-icon">
                                 <i class="fas fa-video"></i>
                             </div>
-                            <span class="pb-block-card-label">Vidéo</span>
+                            <span class="pb-block-card-label">iFrame</span>
                         </button>
                     </div>
                     <div class="col-4">
@@ -146,6 +172,16 @@
                             <span class="pb-block-card-label">Slider</span>
                         </button>
                     </div>
+                    {% for pb_block in pb_custom_blocks|filter(b => b.category == 'medias') %}
+                    <div class="col-4">
+                        <button type="button" class="pb-block-card"
+                                data-block-type="{{ pb_block.type }}"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon"><i class="{{ pb_block.icon }}"></i></div>
+                            <span class="pb-block-card-label">{{ pb_block.label }}</span>
+                        </button>
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
 
@@ -159,18 +195,7 @@
                             <div class="pb-block-card-icon">
                                 <i class="fas fa-align-justify"></i>
                             </div>
-                            <span class="pb-block-card-label">Accordéon</span>
-                        </button>
-                    </div>
-                    <div class="col-4">
-                        <button type="button"
-                                class="pb-block-card"
-                                data-block-type="lineup"
-                                data-action="click->page-builder#addBlockFromLibrary">
-                            <div class="pb-block-card-icon">
-                                <i class="fas fa-align-center"></i>
-                            </div>
-                            <span class="pb-block-card-label">Line Up</span>
+                            <span class="pb-block-card-label">{% trans %}page.builder.block.accordion{% endtrans %}</span>
                         </button>
                     </div>
                     <div class="col-4">
@@ -181,39 +206,28 @@
                             <div class="pb-block-card-icon">
                                 <i class="fas fa-bullhorn"></i>
                             </div>
-                            <span class="pb-block-card-label">Bandeau défilant</span>
+                            <span class="pb-block-card-label">{% trans %}page.builder.block.banner{% endtrans %}</span>
                         </button>
                     </div>
+{#                    <div class="col-4">#}
+{#                        <button class="pb-block-card"#}
+{#                                data-action="click->page-builder#addBlockFromLibrary"#}
+{#                                data-block-type="nested-row">#}
+{#                            <div class="pb-block-card-icon">#}
+{#                                <i class="fas fa-th-large"></i>#}
+{#                            </div>#}
+{#                            <span class="pb-block-card-label">Grille</span>#}
+{#                        </button>#}
+{#                    </div>#}
                     <div class="col-4">
-                        <button class="pb-block-card"
+                        <button type="button"
+                                class="pb-block-card"
                                 data-action="click->page-builder#addBlockFromLibrary"
-                                data-block-type="nested-row">
+                                data-block-type="grid">
                             <div class="pb-block-card-icon">
                                 <i class="fas fa-th-large"></i>
                             </div>
-                            <span class="pb-block-card-label">Grille</span>
-                        </button>
-                    </div>
-                    <div class="col-4">
-                        <button type="button"
-                                class="pb-block-card"
-                                data-block-type="ticket"
-                                data-action="click->page-builder#addBlockFromLibrary">
-                            <div class="pb-block-card-icon">
-                                <i class="fas fa-ticket-alt"></i>
-                            </div>
-                            <span class="pb-block-card-label">Billetterie</span>
-                        </button>
-                    </div>
-                    <div class="col-4">
-                        <button type="button"
-                                class="pb-block-card"
-                                data-block-type="contact-form"
-                                data-action="click->page-builder#addBlockFromLibrary">
-                            <div class="pb-block-card-icon">
-                                <i class="fas fa-address-card"></i>
-                            </div>
-                            <span class="pb-block-card-label">Formulaire de contact</span>
+                            <span class="pb-block-card-label">{% trans %}page.builder.block.grid{% endtrans %}</span>
                         </button>
                     </div>
                     <div class="col-4">
@@ -224,22 +238,49 @@
                             <div class="pb-block-card-icon">
                                 <i class="fas fa-newspaper"></i>
                             </div>
-                            <span class="pb-block-card-label">Actus</span>
+                            <span class="pb-block-card-label">{% trans %}page.builder.block.blog{% endtrans %}</span>
                         </button>
                     </div>
                     <div class="col-4">
                         <button type="button"
                                 class="pb-block-card"
-                                data-block-type="deezer"
+                                data-block-type="countdown"
                                 data-action="click->page-builder#addBlockFromLibrary">
                             <div class="pb-block-card-icon">
-                                <i class="fas fa-music"></i>
+                                <i class="fas fa-clock"></i>
                             </div>
-                            <span class="pb-block-card-label">Deezer</span>
+                            <span class="pb-block-card-label">Countdown</span>
                         </button>
                     </div>
+                    {% for pb_block in pb_custom_blocks|filter(b => b.category == 'modules') %}
+                    <div class="col-4">
+                        <button type="button" class="pb-block-card"
+                                data-block-type="{{ pb_block.type }}"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon"><i class="{{ pb_block.icon }}"></i></div>
+                            <span class="pb-block-card-label">{{ pb_block.label }}</span>
+                        </button>
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
+
+            {% if pb_has_custom_tab %}
+            <div class="tab-pane fade" id="nav-custom" role="tabpanel" aria-labelledby="nav-custom-tab">
+                <div class="row g-2">
+                    {% for pb_block in pb_custom_blocks|filter(b => b.category == 'custom') %}
+                    <div class="col-4">
+                        <button type="button" class="pb-block-card"
+                                data-block-type="{{ pb_block.type }}"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon"><i class="{{ pb_block.icon }}"></i></div>
+                            <span class="pb-block-card-label">{{ pb_block.label }}</span>
+                        </button>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
 
         </div>
 
@@ -248,7 +289,7 @@
 </div>
 
 <button type="button" class="btn btn-primary w-100 mb-3" data-action="click->page-builder#addSection">
-    + Ajouter une section
+    {% trans %}page.builder.add_section{% endtrans %}
 </button>
 
 <div class="card card-template">
@@ -273,7 +314,7 @@
 
         <div class="tab-content">
 
-            {% include '@AropixelPage/custom/_template.html.twig' %}
+            {% include '@AropixelPage/builder/_template.html.twig' %}
 
         </div>
 

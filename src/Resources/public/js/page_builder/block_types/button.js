@@ -9,6 +9,7 @@ export const btnBlockType = {
             class: 'primary-xdark',
             url: '#',
             pagePath: null,
+            parentSlug: null,
             linkType: 'url',
             variant: 'primary',
             horizontalAlignment: 'center'
@@ -97,7 +98,8 @@ export const btnBlockType = {
                             data-page-builder-target="blockLinkTypeSelect"
                             data-action="change->page-builder#updateBlockLinkType">
                         <option value="url">Lien (URL)</option>
-                        <option value="page">Page du site</option>
+                        <option value="page">Page du site (CMS)</option>
+                        <option value="fixed">Page du site (fixe)</option>
                     </select>
                 </div>
                 <div class="mb-2" data-page-builder-target="blockUrlInputContainer">
@@ -110,7 +112,7 @@ export const btnBlockType = {
                            data-action="input->page-builder#updateBlockUrl">
                 </div>
                 <div class="mb-2 d-none" data-page-builder-target="blockPagePathSelectContainer">
-                    <label class="form-label form-label-sm d-block mb-1" for="button-page-path">Lien vers une page du site</label>
+                    <label class="form-label form-label-sm d-block mb-1" for="button-page-path">Lien vers une page du site (CMS)</label>
                     <select class="form-select form-select-sm" id="button-page-path"
                             data-page-builder-target="blockPagePathSelect"
                             data-action="change->page-builder#updateBlockPagePath"
@@ -118,16 +120,28 @@ export const btnBlockType = {
                         <option value="">-- Choisir --</option>
                     </select>
                 </div>
+                <div class="mb-2 d-none" data-page-builder-target="blockFixedPageSelectContainer">
+                    <label class="form-label form-label-sm d-block mb-1" for="button-fixed-page">Lien vers une page fixe</label>
+                    <select class="form-select form-select-sm" id="button-fixed-page"
+                            data-page-builder-target="blockFixedPageSelect"
+                            data-action="change->page-builder#updateBlockPagePath"
+                    >
+                        <option value="">-- Choisir --</option>
+                    </select>
+                </div>
 
-                <div class="mb-3">
+                ${(() => {
+                    const buttonColors = ctx.pageBuilderConfig?.button_colors || [];
+                    if (buttonColors.length === 0) return '';
+                    return `<div class="mb-3">
                     <label class="form-label form-label-sm">Couleur du bouton</label>
                     <select class="form-select form-select-sm" id="btn-color-select"
                         data-page-builder-target="blockColorInput"
                         data-action="change->page-builder#updateBlockContent">
-                        <option value="primary-xdark" ${block.class === 'primary-xdark' ? 'selected' : ''}>Violet foncé</option>
-                        <option value="secondary" ${block.class === 'secondary' ? 'selected' : ''}>Jaune</option>
+                        ${buttonColors.map(c => `<option value="${c.value}" ${block.class === c.value ? 'selected' : ''}>${c.label}</option>`).join('')}
                     </select>
-                </div>
+                </div>`;
+                })()}
             `;
         }
 
@@ -146,28 +160,53 @@ export const btnBlockType = {
             ctx.blockUrlInputTarget.value = block.url || '';
         }
 
-        if (ctx.hasBlockPagePathSelectTarget) {
+        if (ctx.hasBlockPagePathSelectTarget || ctx.hasBlockFixedPageSelectTarget) {
             const pageSelect = ctx.blockPagePathSelectTarget;
+            const fixedSelect = ctx.blockFixedPageSelectTarget;
             const pagePathJsonListUrl = JSON.parse(document.getElementById('page-json-list-url').textContent);
 
-            if (pageSelect.options.length <= 1) {
+            if (pageSelect && pageSelect.options.length <= 1) {
                 fetch(pagePathJsonListUrl)
                     .then(r => r.json())
                     .then(data => {
                         data.forEach(item => {
                             const option = document.createElement('option');
                             option.value = item.slug;
+                            option.dataset.parentSlug = item.parentSlug || '';
                             option.textContent = item.title;
-                            if (block.pagePath === item.slug) {
-                                option.selected = true;
+
+                            const isFixed = item.id.toString().startsWith('fixed:');
+
+                            if (isFixed) {
+                                if (fixedSelect) {
+                                    const fixedOption = option.cloneNode(true);
+                                    if (block.pagePath === item.slug) {
+                                        fixedOption.selected = true;
+                                    }
+                                    fixedSelect.appendChild(fixedOption);
+                                }
+                            } else {
+                                if (block.pagePath === item.slug) {
+                                    option.selected = true;
+                                    if (!block.parentSlug) {
+                                        block.parentSlug = item.parentSlug;
+                                    }
+                                }
+                                pageSelect.appendChild(option);
                             }
-                            pageSelect.appendChild(option);
                         });
                     });
             } else {
-                Array.from(pageSelect.options).forEach(option => {
-                    option.selected = option.value === (block.pagePath || '');
-                });
+                if (pageSelect) {
+                    Array.from(pageSelect.options).forEach(option => {
+                        option.selected = option.value === block.pagePath;
+                    });
+                }
+                if (fixedSelect) {
+                    Array.from(fixedSelect.options).forEach(option => {
+                        option.selected = option.value === block.pagePath;
+                    });
+                }
             }
         }
 
@@ -177,6 +216,9 @@ export const btnBlockType = {
         }
         if (ctx.hasBlockPagePathSelectContainerTarget) {
             ctx.blockPagePathSelectContainerTarget.classList.toggle('d-none', linkType !== 'page');
+        }
+        if (ctx.hasBlockFixedPageSelectContainerTarget) {
+            ctx.blockFixedPageSelectContainerTarget.classList.toggle('d-none', linkType !== 'fixed');
         }
     },
 

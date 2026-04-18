@@ -8,12 +8,14 @@ The `AropixelPageBundle` supports two main page types:
 This is the standard page where content is stored as HTML. It's best suited for simple pages with a main text area using a WYSIWYG editor like CKEditor.
 The property used for this type is `htmlContent`.
 
-### Custom Page (`TYPE_CUSTOM`)
-This type is designed for more complex layouts where content is stored as JSON. This is often used with a page builder or a blocks-based editor.
-The property used for this type is `jsonContent`.
+### Builder Page (`TYPE_BUILDER`)
+This type is designed for complex layouts where content is stored as JSON and edited through the visual drag-and-drop page builder.
+The properties used for this type are `jsonContent` (source) and `htmlContent` (pre-rendered at save time).
 
 ### Custom JSON Page Type
-This type allows you to create structured forms whose data is stored as a JSON object in the `jsonContent` field. This is ideal for pages with specific fields (e.g., a "Contact" page with address and phone fields) without needing a full page builder.
+This type allows you to create structured forms whose data is stored as a JSON object in the `jsonContent` field. Ideal for pages with specific fields (e.g., a "Contact" page with address and phone fields) without needing a full page builder.
+
+**No YAML configuration required.** Any class that extends `AbstractJsonPageType` is automatically discovered by the bundle via Symfony's service autoconfiguration.
 
 To create a custom JSON page type:
 
@@ -22,8 +24,8 @@ To create a custom JSON page type:
    namespace App\Form\Type;
 
    use Aropixel\PageBundle\Form\Type\AbstractJsonPageType;
-   use Symfony\Component\Form\FormBuilderInterface;
    use Symfony\Component\Form\Extension\Core\Type\TextType;
+   use Symfony\Component\Form\FormBuilderInterface;
 
    class ContactPageType extends AbstractJsonPageType
    {
@@ -34,84 +36,155 @@ To create a custom JSON page type:
                ->add('address', TextType::class, ['label' => 'Address'])
            ;
        }
+
        public function getType(): string
        {
            return 'contact';
        }
-
-       /**
-        * Optional: define a custom template for the form rendering.
-        * By default, it looks for '@AropixelPage/contact/form.html.twig'.
-        */
-       public function getTemplate(): string
-       {
-           return '@App/admin/page/contact_form.html.twig';
-       }
    }
    ```
+   That's it — the class is automatically registered as the `contact` page type.
 
 2. **Create the form template**:
-   By default, the bundle will look for a template in `@AropixelPage/{type}/form.html.twig`.
-   You can provide it by creating a file in `templates/bundles/AropixelPageBundle/contact/form.html.twig`.
+   The bundle resolves the template via `@AropixelPage/{type}/form.html.twig`.
+   Override it for your app by creating `templates/bundles/AropixelPageBundle/contact/form.html.twig`:
 
-   Example of a custom form template:
    ```twig
    {# templates/bundles/AropixelPageBundle/contact/form.html.twig #}
-   {% extends '@AropixelPage/default/form.html.twig' %}
+   {% extends '@AropixelPage/base.html.twig' %}
+
+   {% block tabbable %}
+       <li class="nav-item"><a href="#panel-tab1" data-bs-toggle="pill" class="nav-link active"><span>Contact</span></a></li>
+       <li class="nav-item"><a href="#panel-tab2" data-bs-toggle="pill" class="nav-link"><span>{% trans %}page.form.seo{% endtrans %}</span></a></li>
+   {% endblock %}
 
    {% block mainPanel %}
        <div class="tab-pane active" id="panel-tab1">
            <div class="card card-centered-large">
                <div class="card-body">
                    {{ form_row(form.title) }}
-                   <hr>
-                   <div class="row">
-                       <div class="col-md-6">{{ form_row(form.phone) }}</div>
-                       <div class="col-md-6">{{ form_row(form.address) }}</div>
-                   </div>
+                   {{ form_row(form.phone) }}
+                   {{ form_row(form.address) }}
                </div>
            </div>
        </div>
-       {{ parent() }}
+       <div class="tab-pane" id="panel-tab2">
+           <div class="card card-centered-large">
+               <div class="card-body">
+                   {{ form_row(form.metaTitle) }}
+                   {{ form_row(form.metaDescription) }}
+                   {{ form_row(form.metaKeywords) }}
+               </div>
+           </div>
+       </div>
    {% endblock %}
    ```
 
-3. **Register it in your configuration**:
-   ```yaml
-   aropixel_page:
-       forms:
-           contact: App\Form\Type\ContactPageType
+   You can also override `getTemplate()` in your form class to point to any Twig path:
+   ```php
+   public function getTemplate(): string
+   {
+       return '@App/admin/page/contact_form.html.twig';
+   }
    ```
 
 ## Fixed and Protected Pages
 
 You can define "system" pages that should always be present and cannot be accidentally deleted by users.
 
-### 1. Configure fixed pages
-In `config/packages/aropixel_page.yaml`:
-```yaml
-aropixel_page:
-    fixed_pages:
-        homepage:
-            title: "Home"
-            type: "default"
-            deletable: false
-        contact:
-            title: "Contact"
-            type: "contact"
-            deletable: false
+### 1. Declare a fixed page with `#[AsFixedPage]`
+
+Create one class per fixed page, annotated with the `#[AsFixedPage]` attribute:
+
+```php
+// src/FixedPage/HomepageFixedPage.php
+namespace App\FixedPage;
+
+use Aropixel\PageBundle\Attribute\AsFixedPage;
+
+#[AsFixedPage(code: 'homepage', title: 'Home')]
+class HomepageFixedPage {}
 ```
 
+```php
+// src/FixedPage/ContactFixedPage.php
+namespace App\FixedPage;
+
+use Aropixel\PageBundle\Attribute\AsFixedPage;
+
+#[AsFixedPage(code: 'contact', title: 'Contact', type: 'contact')]
+class ContactFixedPage {}
+```
+
+**Attribute parameters:**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `code` | `string` | required | Unique identifier stored as `staticCode` in the database |
+| `title` | `string` | required | Initial page title created on first sync |
+| `type` | `string` | `'default'` | Page type (must match a registered form type) |
+| `deletable` | `bool` | `false` | Whether users can delete this page from the admin |
+
+As long as the class lives in a directory covered by Symfony's service autodiscovery (typically `src/`), no additional configuration is needed — the bundle detects the attribute automatically via `autoconfigure: true`.
+
 ### 2. Synchronize with the database
+
 Run the following command to create or update the fixed pages:
+
 ```bash
 php bin/console aropixel:page:sync-fixed
 ```
 
-The `staticCode` will be set to the key you provided (e.g., `homepage`), allowing you to safely fetch the page in your code:
+The `staticCode` is set to the `code` value, allowing you to safely fetch the page in your code:
+
 ```php
 $homepage = $pageRepository->findOneBy(['staticCode' => 'homepage']);
 ```
+
+## Custom Block Types
+
+The page builder can be extended with custom blocks defined by the application. See the dedicated guide:
+
+- [Adding Custom Block Types](custom-blocks.md)
+
+---
+
+## Page Builder Configuration
+
+When using the **Custom JSON Page** type with the built-in page builder, you can configure the available style options for certain blocks directly in your Symfony configuration.
+
+### Title block styles
+
+The title block can offer a dropdown of predefined CSS styles. Each style maps a `value` (used as a CSS class in your front-end) to a human-readable `label` displayed in the admin interface.
+
+### Button block colors
+
+Similarly, the button block can offer a list of predefined color options. Each entry maps a `value` (a CSS class) to a `label`.
+
+### Configuration
+
+In `config/packages/aropixel_page.yaml`:
+
+```yaml
+aropixel_page:
+    page_builder:
+        title_styles:
+            - { value: 'h1', label: 'Heading 1' }
+            - { value: 'h2', label: 'Heading 2' }
+            - { value: 'h2-highlight_32', label: 'Highlighted title' }
+        button_colors:
+            - { value: 'btn-primary', label: 'Primary' }
+            - { value: 'btn-secondary', label: 'Secondary' }
+            - { value: 'btn-outline-primary', label: 'Outline' }
+```
+
+### Multilingual support
+
+The page builder locale switcher is driven by the `aropixel_admin.translations.locales` setting in `AdminBundle` — there is no separate locale config in `PageBundle`. See the [AdminBundle i18n documentation](../../admin-bundle/doc/i18n.md) for details.
+
+When two or more locales are configured, the page builder displays a locale switcher and a **"Synchronise other languages with [primary locale]"** checkbox. Structural changes (sections, rows, blocks) are automatically propagated to all secondary locales when sync is enabled; textual content must be translated manually.
+
+> **Note:** When `title_styles` or `button_colors` is empty (the default), the corresponding selector is not shown in the page builder inspector. This means a fresh installation of the bundle ships with no project-specific styles — you define only what your project needs.
 
 ## Administrative Interface
 
@@ -128,6 +201,7 @@ If your application is configured to be multi-language:
 - You'll see a tab for each configured locale in the page edit form.
 - Each field can be translated independently.
 - The `slug` can also be translated to provide localized URLs.
+- `htmlContent` is rendered and stored per locale each time the page builder is saved for that locale.
 
 ## Front-end Rendering
 
@@ -168,9 +242,11 @@ In your Twig template:
 <h1>{{ page.title }}</h1>
 <div>
     {% if page.type == 'default' %}
+        {# HTML stored via CKEditor #}
         {{ page.htmlContent|raw }}
-    {% elseif page.type == 'custom' %}
-        {# Render JSON content for custom builder #}
+    {% elseif page.type == 'builder' %}
+        {# HTML pre-rendered by the page builder at save time #}
+        {{ page.htmlContent|raw }}
     {% else %}
         {# Render structured JSON content (e.g., for type 'contact') #}
         {% set data = page.jsonContent|json_decode %}
@@ -178,4 +254,66 @@ In your Twig template:
         <p>Address: {{ data.address }}</p>
     {% endif %}
 </div>
+```
+
+For **custom pages**, `htmlContent` is automatically populated when the page is saved via the page builder admin. The JSON payload is rendered to HTML at save time by the configured `PageBuilderRendererInterface` implementation — so front-end display requires no rendering work at all.
+
+If you prefer on-the-fly rendering (e.g. when a full-page HTTP cache like Varnish is in front), you can inject `PageBuilderRendererInterface` directly into your controller and call `$renderer->render($page->getJsonContent())` instead.
+
+---
+
+## Events
+
+### `PageSavedEvent` (`aropixel.page.saved`)
+
+Dispatched by `SaveAction` after every successful page builder save. Carries:
+
+| Method | Type | Description |
+|---|---|---|
+| `getPage()` | `Page` | The saved page entity |
+| `getLocale()` | `string` | The locale that was saved |
+| `getRenderedHtml()` | `string` | The HTML rendered from the JSON payload |
+
+The bundle dispatches the event but provides **no built-in listener** — this is intentional. You decide how to react to a page save.
+
+#### Example: invalidate a Varnish cache
+
+```php
+// src/EventListener/PageSavedListener.php
+namespace App\EventListener;
+
+use Aropixel\PageBundle\Event\PageSavedEvent;
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+
+#[AsEventListener(event: PageSavedEvent::NAME)]
+class PageSavedListener
+{
+    public function __construct(private readonly \Symfony\Contracts\HttpClient\HttpClientInterface $httpClient)
+    {
+    }
+
+    public function __invoke(PageSavedEvent $event): void
+    {
+        $slug = $event->getPage()->getSlug();
+
+        $this->httpClient->request('PURGE', 'https://your-varnish-host/' . $slug);
+    }
+}
+```
+
+#### Example: invalidate a Symfony Cache pool
+
+```php
+#[AsEventListener(event: PageSavedEvent::NAME)]
+class PageSavedListener
+{
+    public function __construct(private readonly \Symfony\Contracts\Cache\TagAwareCacheInterface $cache)
+    {
+    }
+
+    public function __invoke(PageSavedEvent $event): void
+    {
+        $this->cache->invalidateTags(['page_' . $event->getPage()->getId()]);
+    }
+}
 ```

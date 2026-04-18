@@ -219,6 +219,16 @@ export class InspectorView {
         if (this.ctx.hasSectionVisibleMobileInputTarget) {
             this.ctx.sectionVisibleMobileInputTarget.checked = section.visibleMobile;
         }
+
+        if (this.ctx.hasSectionActiveContainerTarget && this.ctx.hasSectionActiveInputTarget) {
+            const pageSlug = this.ctx.element.dataset.pageBuilderPageSlugValue;
+            if (pageSlug === 'homepage-app') {
+                this.ctx.sectionActiveContainerTarget.classList.remove('d-none');
+                this.ctx.sectionActiveInputTarget.checked = section.active !== false; // true par défaut
+            } else {
+                this.ctx.sectionActiveContainerTarget.classList.add('d-none');
+            }
+        }
     }
 
     #updateRowFields(section) {
@@ -249,7 +259,7 @@ export class InspectorView {
                 },
                 'color': {
                     target: 'sectionBackgroundColorInputTarget',
-                    selector: '#section-bg-color',
+                    selector: 'input[type="color"]',
                     value: section.background.value
                 },
                 'image': {
@@ -264,15 +274,10 @@ export class InspectorView {
             if (config && this.ctx[`has${config.target.charAt(0).toUpperCase() + config.target.slice(1)}`]) {
                 const targetElement = this.ctx[config.target];
                 targetElement.classList.remove('d-none');
-                // Pour la couleur, mettre à jour directement l'input
-                if (backgroundType === 'color') {
-                    const colorInput = targetElement.querySelector('input[type="color"]');
-                    if (colorInput && config.value) {
-                        colorInput.value = config.value;
-                    }
-                } else {
-                    // Pour les autres types (select), utiliser la méthode existante
-                    this.#updateSelectOptions(config.selector, config.value);
+                // Pour la couleur et autres, mettre à jour directement l'input ou select dans le target
+                const input = targetElement.querySelector(config.selector);
+                if (input && config.value) {
+                    input.value = config.value;
                 }
             }
         } else {
@@ -378,35 +383,71 @@ export class InspectorView {
             this.ctx.columnHeightSelectTarget.value = column.height || '';
         }
 
-        if (this.ctx.hasColumnPagePathSelectTarget) {
-            this.ctx.columnPagePathSelectTarget.value = column.pagePath || '';
+        if (this.ctx.hasColumnBorderRadiusInputTarget) {
+            this.ctx.columnBorderRadiusInputTarget.value = column.borderRadius || 0;
+        }
+
+        if (this.ctx.hasColumnBorderRadiusValueTarget) {
+            this.ctx.columnBorderRadiusValueTarget.textContent = column.borderRadius || 0;
+        }
+
+        if (this.ctx.hasColumnPagePathSelectTarget || this.ctx.hasColumnFixedPageSelectTarget) {
             const pageSelect = this.ctx.columnPagePathSelectTarget;
+            const fixedSelect = this.ctx.columnFixedPageSelectTarget;
             const getPagePathJsonListUrl = JSON.parse(document.getElementById('page-json-list-url').textContent);
             // Charger la liste des pages seulement si elle est vide (pour éviter les doublons au fetch successif)
-            if (pageSelect.options.length <= 1) {
+            if (pageSelect && pageSelect.options.length <= 1) {
                 fetch(getPagePathJsonListUrl)
                     .then(r => r.json())
                     .then(data => {
                         data.forEach(item => {
                             const option = document.createElement('option');
                             option.value = item.slug;
+                            option.dataset.parentSlug = item.parentSlug || '';
                             option.textContent = item.title;
-                            if (column.pagePath === item.slug) {
-                                option.selected = true;
+
+                            const isFixed = item.id.toString().startsWith('fixed:');
+
+                            if (isFixed) {
+                                if (fixedSelect) {
+                                    const fixedOption = option.cloneNode(true);
+                                    if (column.pagePath === item.slug) {
+                                        fixedOption.selected = true;
+                                    }
+                                    fixedSelect.appendChild(fixedOption);
+                                }
+                            } else {
+                                if (column.pagePath === item.slug && (!column.parentSlug || column.parentSlug === item.parentSlug)) {
+                                    option.selected = true;
+                                    if (!column.parentSlug) {
+                                        column.parentSlug = item.parentSlug;
+                                    }
+                                }
+                                pageSelect.appendChild(option);
                             }
-                            pageSelect.appendChild(option);
                         });
                     })
                     .catch(err => {
                         const errOpt = document.createElement('option');
                         errOpt.textContent = "Erreur de chargement";
-                        pageSelect.appendChild(errOpt);
+                        if (pageSelect) pageSelect.appendChild(errOpt);
                     });
             } else {
                 // S'assurer que la bonne option est sélectionnée
-                Array.from(pageSelect.options).forEach(option => {
-                    option.selected = option.value === (column.pagePath || '');
-                });
+                if (pageSelect) {
+                    Array.from(pageSelect.options).forEach(option => {
+                        if (column.pagePath === option.value && (!column.parentSlug || column.parentSlug === option.dataset.parentSlug)) {
+                            option.selected = true;
+                        }
+                    });
+                }
+                if (fixedSelect) {
+                    Array.from(fixedSelect.options).forEach(option => {
+                        if (column.pagePath === option.value) {
+                            option.selected = true;
+                        }
+                    });
+                }
             }
         }
 
@@ -449,9 +490,18 @@ export class InspectorView {
                     colorInput.value = column.background.value;
                 }
             } else if (bgType === 'class' && this.ctx.hasColumnBackgroundClassInputTarget) {
-                const classInput = this.ctx.columnBackgroundClassInputTarget.querySelector('input[type="text"]');
-                if (classInput && column.background?.value) {
-                    classInput.value = column.background.value;
+                const classSelect = this.ctx.columnBackgroundClassInputTarget.querySelector('select');
+                if (classSelect && column.background?.value) {
+                    classSelect.value = column.background.value;
+                }
+            } else if (bgType === 'image' && this.ctx.hasColumnBackgroundOverlayInputTarget) {
+                const overlayInput = this.ctx.columnBackgroundOverlayInputTarget.querySelector('input[type="range"]');
+                if (overlayInput) {
+                    const opacity = column.background?.overlayOpacity || 0;
+                    overlayInput.value = opacity;
+                    if (this.ctx.hasColumnBackgroundOverlayValueTarget) {
+                        this.ctx.columnBackgroundOverlayValueTarget.textContent = opacity;
+                    }
                 }
             }
         }

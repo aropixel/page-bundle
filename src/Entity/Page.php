@@ -34,9 +34,9 @@ class Page implements PageInterface, Translatable
     public const TYPE_DEFAULT = 'default';
 
     /**
-     * Custom page type with JSON content (e.g., for page builders).
+     * Page builder page type with JSON content (drag-and-drop visual editor).
      */
-    public const TYPE_CUSTOM = 'custom';
+    public const TYPE_BUILDER = 'builder';
 
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
@@ -61,6 +61,13 @@ class Page implements PageInterface, Translatable
     #[ORM\Column(type: 'string', nullable: true)]
     #[Gedmo\Translatable]
     protected ?string $title = null;
+
+    /**
+     * Page subtitle (translatable).
+     */
+    #[ORM\Column(type: 'string', nullable: true)]
+    #[Gedmo\Translatable]
+    protected ?string $subTitle = null;
 
     /**
      * Unique identifier for system pages.
@@ -123,6 +130,13 @@ class Page implements PageInterface, Translatable
     #[ORM\Column(type: 'string', nullable: true)]
     #[Gedmo\Translatable]
     protected ?string $metaKeywords = null;
+
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    private ?self $parent = null;
+
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
+    private Collection $children;
 
     #[ORM\Column(type: 'datetime')]
     #[Gedmo\Timestampable(on: 'create')]
@@ -236,6 +250,18 @@ class Page implements PageInterface, Translatable
         return $this;
     }
 
+    public function getSubTitle(): ?string
+    {
+        return $this->getTranslation('subTitle');
+    }
+
+    public function setSubTitle(string $subTitle): self
+    {
+        $this->subTitle = $subTitle;
+
+        return $this;
+    }
+
     public function getSlug(): ?string
     {
         return $this->getTranslation('slug');
@@ -316,6 +342,47 @@ class Page implements PageInterface, Translatable
     public function setMetaKeywords(?string $metaKeywords): self
     {
         $this->metaKeywords = $metaKeywords;
+
+        return $this;
+    }
+
+    public function getParent(): ?self
+    {
+        return $this->parent;
+    }
+
+    public function setParent(?self $parent): static
+    {
+        $this->parent = $parent;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getChildren(): Collection
+    {
+        return $this->children;
+    }
+
+    public function addChild(self $child): static
+    {
+        if (!$this->children->contains($child)) {
+            $this->children[] = $child;
+            $child->setParent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChild(self $child): static
+    {
+        if ($this->children->removeElement($child)) {
+            // set the owning side to null (unless already changed)
+            if ($child->getParent() === $this) {
+                $child->setParent(null);
+            }
+        }
 
         return $this;
     }
