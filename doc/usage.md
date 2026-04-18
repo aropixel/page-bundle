@@ -92,28 +92,51 @@ To create a custom JSON page type:
 
 You can define "system" pages that should always be present and cannot be accidentally deleted by users.
 
-### 1. Configure fixed pages
-In `config/packages/aropixel_page.yaml`:
-```yaml
-aropixel_page:
-    fixed_pages:
-        homepage:
-            title: "Home"
-            type: "default"
-            deletable: false
-        contact:
-            title: "Contact"
-            type: "contact"
-            deletable: false
+### 1. Declare a fixed page with `#[AsFixedPage]`
+
+Create one class per fixed page, annotated with the `#[AsFixedPage]` attribute:
+
+```php
+// src/FixedPage/HomepageFixedPage.php
+namespace App\FixedPage;
+
+use Aropixel\PageBundle\Attribute\AsFixedPage;
+
+#[AsFixedPage(code: 'homepage', title: 'Home')]
+class HomepageFixedPage {}
 ```
 
+```php
+// src/FixedPage/ContactFixedPage.php
+namespace App\FixedPage;
+
+use Aropixel\PageBundle\Attribute\AsFixedPage;
+
+#[AsFixedPage(code: 'contact', title: 'Contact', type: 'contact')]
+class ContactFixedPage {}
+```
+
+**Attribute parameters:**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `code` | `string` | required | Unique identifier stored as `staticCode` in the database |
+| `title` | `string` | required | Initial page title created on first sync |
+| `type` | `string` | `'default'` | Page type (must match a registered form type) |
+| `deletable` | `bool` | `false` | Whether users can delete this page from the admin |
+
+As long as the class lives in a directory covered by Symfony's service autodiscovery (typically `src/`), no additional configuration is needed — the bundle detects the attribute automatically via `autoconfigure: true`.
+
 ### 2. Synchronize with the database
+
 Run the following command to create or update the fixed pages:
+
 ```bash
 php bin/console aropixel:page:sync-fixed
 ```
 
-The `staticCode` will be set to the key you provided (e.g., `homepage`), allowing you to safely fetch the page in your code:
+The `staticCode` is set to the `code` value, allowing you to safely fetch the page in your code:
+
 ```php
 $homepage = $pageRepository->findOneBy(['staticCode' => 'homepage']);
 ```

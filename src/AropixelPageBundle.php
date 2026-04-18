@@ -2,6 +2,7 @@
 
 namespace Aropixel\PageBundle;
 
+use Aropixel\PageBundle\DependencyInjection\Compiler\CollectFixedPagesPass;
 use Aropixel\PageBundle\DependencyInjection\Compiler\DoctrineTargetEntitiesResolverPass;
 use Aropixel\PageBundle\DependencyInjection\Compiler\RegisterPageFormTypesPass;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
@@ -15,5 +16,6 @@ class AropixelPageBundle extends Bundle
         parent::build($container);
         $container->addCompilerPass(new DoctrineTargetEntitiesResolverPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 1);
         $container->addCompilerPass(new RegisterPageFormTypesPass());
+        $container->addCompilerPass(new CollectFixedPagesPass());
     }
 }

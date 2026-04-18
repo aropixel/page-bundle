@@ -2,6 +2,7 @@
 
 namespace Aropixel\PageBundle\DependencyInjection;
 
+use Aropixel\PageBundle\Attribute\AsFixedPage;
 use Aropixel\PageBundle\Component\Builder\BootstrapPageBuilderRenderer;
 use Aropixel\PageBundle\Component\Builder\UiKitPageBuilderRenderer;
 use Aropixel\PageBundle\Component\Builder\PageBuilderRendererInterface;
@@ -10,6 +11,7 @@ use Aropixel\PageBundle\Form\Type\DefaultPageType;
 use Aropixel\PageBundle\Form\Type\DefaultTranslatablePageType;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Alias;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader;
@@ -28,6 +30,18 @@ class AropixelPageExtension extends Extension implements PrependExtensionInterfa
         $config = $this->processConfiguration($configuration, $configs);
 
         $this->registerParameters($container, $config);
+
+        $container->registerAttributeForAutoconfiguration(
+            AsFixedPage::class,
+            static function (ChildDefinition $definition, AsFixedPage $attribute): void {
+                $definition->addTag('aropixel_page.fixed_page', [
+                    'code'      => $attribute->code,
+                    'title'     => $attribute->title,
+                    'type'      => $attribute->type,
+                    'deletable' => $attribute->deletable,
+                ]);
+            }
+        );
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yaml');
@@ -48,7 +62,6 @@ class AropixelPageExtension extends Extension implements PrependExtensionInterfa
         $container->setParameter('aropixel_page.entities.page', $config['entities'][PageInterface::class]);
         $container->setParameter('aropixel_page.form.default', DefaultPageType::class);
         $container->setParameter('aropixel_page.form.default_translatable', DefaultTranslatablePageType::class);
-        $container->setParameter('aropixel_page.fixed_pages', $config['fixed_pages']);
         // Built-in types are hardcoded; RegisterPageFormTypesPass adds application types.
         $container->setParameter('aropixel_page.forms', [
             'default' => DefaultPageType::class,
