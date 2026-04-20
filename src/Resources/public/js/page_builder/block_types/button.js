@@ -1,3 +1,5 @@
+import { t } from '../i18n.js';
+
 export const btnBlockType = {
     type: 'button',
 
@@ -5,11 +7,10 @@ export const btnBlockType = {
         return {
             id: generateId(),
             type: 'button',
-            label: 'En savoir plus',
+            label: t('page.builder.block.button.default_label'),
             class: 'primary-xdark',
             url: '#',
             pagePath: null,
-            parentSlug: null,
             linkType: 'url',
             variant: 'primary',
             horizontalAlignment: 'center'
@@ -53,7 +54,7 @@ export const btnBlockType = {
         if (contentContainer) {
             contentContainer.innerHTML = `
                 <div class="mb-2">
-                    <label class="form-label form-label-sm d-block mb-1">Alignement horizontal</label>
+                    <label class="form-label form-label-sm d-block mb-1">${t('page.builder.inspector.column.horizontal_alignment')}</label>
                     <div class="d-flex gap-1">
                         <button type="button"
                                 class="pb-button pb-button--ghost flex-fill"
@@ -82,28 +83,27 @@ export const btnBlockType = {
                     </div>
                 </div>
                 <div class="mb-2">
-                    <label class="form-label form-label-sm">Texte du bouton</label>
+                    <label class="form-label form-label-sm">${t('page.builder.block.button.label_field')}</label>
                     <textarea
                         class="form-control form-control-sm"
                         rows="1"
-                        placeholder="Votre texte…"
+                        placeholder="${t('page.builder.inspector.block.content_placeholder')}"
                         data-page-builder-target="blockContentInput"
                         data-action="input->page-builder#updateBlockContent"
                     ></textarea>
                 </div>
 
                 <div class="mb-2">
-                    <label class="form-label form-label-sm d-block mb-1" for="button-link-type">Type de lien</label>
+                    <label class="form-label form-label-sm d-block mb-1" for="button-link-type">${t('page.builder.inspector.column.link_type')}</label>
                     <select class="form-select form-select-sm" id="button-link-type"
                             data-page-builder-target="blockLinkTypeSelect"
                             data-action="change->page-builder#updateBlockLinkType">
-                        <option value="url">Lien (URL)</option>
-                        <option value="page">Page du site (CMS)</option>
-                        <option value="fixed">Page du site (fixe)</option>
+                        <option value="url">${t('page.builder.inspector.column.link_url')}</option>
+                        <option value="page">${t('page.builder.block.button.link_page')}</option>
                     </select>
                 </div>
                 <div class="mb-2" data-page-builder-target="blockUrlInputContainer">
-                    <label class="form-label form-label-sm d-block mb-1" for="button-url">Lien (URL)</label>
+                    <label class="form-label form-label-sm d-block mb-1" for="button-url">${t('page.builder.inspector.column.link_url')}</label>
                     <input type="text"
                            class="form-control form-control-sm"
                            id="button-url"
@@ -112,40 +112,28 @@ export const btnBlockType = {
                            data-action="input->page-builder#updateBlockUrl">
                 </div>
                 <div class="mb-2 d-none" data-page-builder-target="blockPagePathSelectContainer">
-                    <label class="form-label form-label-sm d-block mb-1" for="button-page-path">Lien vers une page du site (CMS)</label>
+                    <label class="form-label form-label-sm d-block mb-1" for="button-page-path">${t('page.builder.block.button.link_page_label')}</label>
                     <select class="form-select form-select-sm" id="button-page-path"
                             data-page-builder-target="blockPagePathSelect"
                             data-action="change->page-builder#updateBlockPagePath"
                     >
-                        <option value="">-- Choisir --</option>
-                    </select>
-                </div>
-                <div class="mb-2 d-none" data-page-builder-target="blockFixedPageSelectContainer">
-                    <label class="form-label form-label-sm d-block mb-1" for="button-fixed-page">Lien vers une page fixe</label>
-                    <select class="form-select form-select-sm" id="button-fixed-page"
-                            data-page-builder-target="blockFixedPageSelect"
-                            data-action="change->page-builder#updateBlockPagePath"
-                    >
-                        <option value="">-- Choisir --</option>
+                        <option value="">${t('form.choose')}</option>
                     </select>
                 </div>
 
-                ${(() => {
-                    const buttonColors = ctx.pageBuilderConfig?.button_colors || [];
-                    if (buttonColors.length === 0) return '';
-                    return `<div class="mb-3">
-                    <label class="form-label form-label-sm">Couleur du bouton</label>
+                <div class="mb-3">
+                    <label class="form-label form-label-sm">${t('page.builder.block.button.color')}</label>
                     <select class="form-select form-select-sm" id="btn-color-select"
                         data-page-builder-target="blockColorInput"
                         data-action="change->page-builder#updateBlockContent">
-                        ${buttonColors.map(c => `<option value="${c.value}" ${block.class === c.value ? 'selected' : ''}>${c.label}</option>`).join('')}
+                        <option value="primary-xdark" ${block.class === 'primary-xdark' ? 'selected' : ''}>Violet foncé</option>
+                        <option value="secondary" ${block.class === 'secondary' ? 'selected' : ''}>Jaune</option>
                     </select>
-                </div>`;
-                })()}
+                </div>
             `;
         }
 
-        ctx.blockTitleTarget.textContent = 'Bloc bouton';
+        ctx.blockTitleTarget.textContent = t('page.builder.block_title.button');
         ctx.blockContentInputTarget.value = block.label || '';
 
         // Initialisation du type de lien et chargement des pages
@@ -160,53 +148,28 @@ export const btnBlockType = {
             ctx.blockUrlInputTarget.value = block.url || '';
         }
 
-        if (ctx.hasBlockPagePathSelectTarget || ctx.hasBlockFixedPageSelectTarget) {
+        if (ctx.hasBlockPagePathSelectTarget) {
             const pageSelect = ctx.blockPagePathSelectTarget;
-            const fixedSelect = ctx.blockFixedPageSelectTarget;
             const pagePathJsonListUrl = JSON.parse(document.getElementById('page-json-list-url').textContent);
 
-            if (pageSelect && pageSelect.options.length <= 1) {
+            if (pageSelect.options.length <= 1) {
                 fetch(pagePathJsonListUrl)
                     .then(r => r.json())
                     .then(data => {
                         data.forEach(item => {
                             const option = document.createElement('option');
                             option.value = item.slug;
-                            option.dataset.parentSlug = item.parentSlug || '';
                             option.textContent = item.title;
-
-                            const isFixed = item.id.toString().startsWith('fixed:');
-
-                            if (isFixed) {
-                                if (fixedSelect) {
-                                    const fixedOption = option.cloneNode(true);
-                                    if (block.pagePath === item.slug) {
-                                        fixedOption.selected = true;
-                                    }
-                                    fixedSelect.appendChild(fixedOption);
-                                }
-                            } else {
-                                if (block.pagePath === item.slug) {
-                                    option.selected = true;
-                                    if (!block.parentSlug) {
-                                        block.parentSlug = item.parentSlug;
-                                    }
-                                }
-                                pageSelect.appendChild(option);
+                            if (block.pagePath === item.slug) {
+                                option.selected = true;
                             }
+                            pageSelect.appendChild(option);
                         });
                     });
             } else {
-                if (pageSelect) {
-                    Array.from(pageSelect.options).forEach(option => {
-                        option.selected = option.value === block.pagePath;
-                    });
-                }
-                if (fixedSelect) {
-                    Array.from(fixedSelect.options).forEach(option => {
-                        option.selected = option.value === block.pagePath;
-                    });
-                }
+                Array.from(pageSelect.options).forEach(option => {
+                    option.selected = option.value === (block.pagePath || '');
+                });
             }
         }
 
@@ -216,9 +179,6 @@ export const btnBlockType = {
         }
         if (ctx.hasBlockPagePathSelectContainerTarget) {
             ctx.blockPagePathSelectContainerTarget.classList.toggle('d-none', linkType !== 'page');
-        }
-        if (ctx.hasBlockFixedPageSelectContainerTarget) {
-            ctx.blockFixedPageSelectContainerTarget.classList.toggle('d-none', linkType !== 'fixed');
         }
     },
 

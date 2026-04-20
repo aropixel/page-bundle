@@ -241,7 +241,6 @@ export class SectionsManager {
     updateSectionName(name) { this.sectionActions.updateSectionName(name); }
     updateSectionLayout(layout) { this.sectionActions.updateSectionLayout(layout); }
     updateSectionVisibility(options) { this.sectionActions.updateSectionVisibility(options); }
-    updateSectionActive(active) { this.sectionActions.updateSectionActive(active); }
     updateSectionBackground(type, value) { this.sectionActions.updateSectionBackground(type, value); }
 
 
@@ -267,11 +266,9 @@ export class SectionsManager {
     moveColumnRight(context) { this.columnActions.moveColumnRight(context); }
     updateColumnHorizontalAlignment(alignment) { this.columnActions.updateColumnHorizontalAlignment(alignment); }
     updateColumnBackground(type, value) { this.columnActions.updateColumnBackground(type, value); }
-    updateColumnBackgroundOverlay(opacity) { this.columnActions.updateColumnBackgroundOverlay(opacity); }
     updateColumnUrl(url) { this.columnActions.updateColumnUrl(url); }
-    updateColumnPagePath(slug, parentSlug) { this.columnActions.updateColumnPagePath(slug, parentSlug); }
+    updateColumnPagePath(slug) { this.columnActions.updateColumnPagePath(slug); }
     updateColumnHeight(height) { this.columnActions.updateColumnHeight(height); }
-    updateColumnBorderRadius(borderRadius) { this.columnActions.updateColumnBorderRadius(borderRadius); }
 
     // Blocks
     addBlock(sectionId, rowId, columnId, type) { return this.blockActions.addBlock(sectionId, rowId, columnId, type); }

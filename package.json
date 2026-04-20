@@ -3,5 +3,8 @@
     "version": "1.0.0",
     "symfony": {
         "controllers": "assets/controllers.json"
+    },
+    "scripts": {
+        "build": "cp -r assets/. src/Resources/public/js/ && rm -f src/Resources/public/js/controllers.json"
     }
 }

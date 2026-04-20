@@ -5,33 +5,27 @@ import { spacerBlockType } from '../block_types/spacer.js';
 import { dividerBlockType } from '../block_types/divider.js';
 import { imageBlockType } from '../block_types/image.js';
 import { sliderBlockType } from '../block_types/slider.js';
-import { accordionBlockType } from '../block_types/accordion.js';
-import { contactFormBlockType } from '../block_types/contact-form.js';
-import { experienceVipFormBlockType } from '../block_types/experience-vip-form.js';
 import { blogBlockType } from '../block_types/blog.js';
-import { deezerBlockType } from '../block_types/deezer.js';
-import { artistBlockType } from '../block_types/artist.js';
-import { ticketBlockType } from '../block_types/ticket.js';
-import { lineupBlockType } from '../block_types/lineup.js';
 import { nestedRowBlockType } from '../block_types/nested-row.js';
 import { ctaBlockType } from '../block_types/cta.js';
 import { bannerBlockType } from '../block_types/banner.js';
-import { appBannerBlockType } from '../block_types/app-banner.js';
-import { campaignBlockType } from '../block_types/campaign.js';
-import { countdownBlockType } from '../block_types/countdown.js';
-import { modalBlockType } from '../block_types/modal.js';
-import { historyBlockType } from '../block_types/history.js';
-import { iframeBlockType } from "../block_types/iframe.js";
+import { iframeBlockType } from '../block_types/iframe.js';
 
 export class BlockTypesRegistry {
     constructor() {
         this.types = {};
 
-        // on enregistre chaque type
-        [titleBlockType, textBlockType, btnBlockType, spacerBlockType, dividerBlockType, imageBlockType, sliderBlockType,
-            accordionBlockType, contactFormBlockType, experienceVipFormBlockType, blogBlockType, deezerBlockType, artistBlockType, ticketBlockType, lineupBlockType,
-            nestedRowBlockType, ctaBlockType, bannerBlockType, appBannerBlockType, campaignBlockType, countdownBlockType, modalBlockType, historyBlockType, iframeBlockType].forEach((def) => {
+        // on enregistre chaque type intégré
+        [titleBlockType, textBlockType, btnBlockType, spacerBlockType, dividerBlockType, imageBlockType, sliderBlockType, blogBlockType, nestedRowBlockType, ctaBlockType, bannerBlockType, iframeBlockType].forEach((def) => {
             this.types[def.type] = def;
+        });
+
+        // Enregistrement des blocs personnalisés fournis par l'application
+        const customBlocks = window.__pageBuilderCustomBlocks || [];
+        customBlocks.forEach((def) => {
+            if (def && def.type) {
+                this.types[def.type] = def;
+            }
         });
     }
 

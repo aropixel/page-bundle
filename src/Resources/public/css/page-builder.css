@@ -6,9 +6,9 @@
 @import url('./page-builder/_ui.css');
 @import url('./page-builder/_canvas.css');
 @import url('./page-builder/_blocks.css');
-@import url('./page-builder/_lineup.css');
-@import url('./page-builder/_ticketing.css');
 @import url('./page-builder/_inspector.css');
+@import url('./page-builder/_toast.css');
+@import url('./page-builder/_quill.css');
 
 
 .page-name-editable {

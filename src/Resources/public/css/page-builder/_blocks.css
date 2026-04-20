@@ -29,18 +29,17 @@
 
 .pb-block--button { border-left: 3px solid #2563eb; }
 .pb-block--image { border-left: 3px solid #10b981; }
+.pb-block--app-banner { border-left: 3px solid #10b981; }
+.pb-block--countdown { border-left: 3px solid #6366f1; }
 .pb-block--template { border-left: 3px solid #f97316; }
 
 /* Block Content Previews */
 .pb-block-content-preview {
     font-size: 1rem;
     color: #000;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
     width: 100%;
     max-width: 100%;
+    position: relative;
 }
 
 .pb-block-content-preview[contenteditable="true"] {
@@ -85,9 +84,19 @@
     /*margin: 0 0 20px 0;*/
 }
 
+.pb-countdown-preview {
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 1.2rem;
+    padding: 10px;
+    background-color: #f3f4f6;
+    border-radius: 4px;
+    text-align: center;
+}
+
 .pb-block-banner-container {
-    --tw: 1990px;
-    --ad: 13000ms;
+    --tw: 940px;
+    --ad: 7000ms;
     background-color: var(--primary-color);
     overflow: hidden;
     backface-visibility: hidden;
@@ -103,10 +112,20 @@
     text-transform: uppercase;
     display: inline-block;
     white-space: nowrap;
+    text-shadow:
+            var(--tw) 0 currentColor,
+            calc(var(--tw) * 2) 0 currentColor,
+            calc(var(--tw) * 3) 0 currentColor;
     will-change: transform;
     transform: translate3d(0, 0, 0);
     animation: marquee var(--ad) linear infinite;
     animation-play-state: running;
+    overflow: visible;
+    width: auto;
+}
+
+.pb-block-banner-container .pb-block-content-preview.pb-banner-preview span {
+    color: var(--third-color);
 }
 
 @keyframes marquee {

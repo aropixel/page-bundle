@@ -2,6 +2,8 @@
 
 {% block stylesheets %}
     {{ parent() }}
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.bubble.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('bundles/aropixelpage/css/page-builder.css') }}">
     {% if page_builder_config.custom_css is defined and page_builder_config.custom_css %}
         <link rel="stylesheet" href="{{ asset(page_builder_config.custom_css) }}">

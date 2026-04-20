@@ -1,3 +1,5 @@
+import { t } from '../page_builder/i18n.js';
+
 /**
  * Affiche une notification toast
  * @param {string} message
@@ -23,7 +25,7 @@ export function showNotification(message, type = 'info') {
         <div class="toast-content">
             ${escapeHtml(message)}
         </div>
-        <button type="button" class="toast-close" aria-label="Fermer">
+        <button type="button" class="toast-close" aria-label="${t('page.builder.notification.close')}">
             <i class="fas fa-times"></i>
         </button>
     `;

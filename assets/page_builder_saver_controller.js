@@ -14,7 +14,8 @@ export default class extends Controller {
         "paramStatus",
         "paramMetaTitle",
         "paramDescription",
-        "paramOgImage"
+        "paramOgImage",
+        "paramParent"
     ];
 
     static values = {
@@ -73,9 +74,10 @@ export default class extends Controller {
         const metaTitle = this.hasParamMetaTitleTarget ? this.paramMetaTitleTarget.value : "";
         const subtitle = this.hasParamSubtitleTarget ? this.paramSubtitleTarget.value : "";
         const ogImage = this.hasParamOgImageTarget ? this.paramOgImageTarget.value : "";
+        const parent = this.hasParamParentTarget ? this.paramParentTarget.value : "";
 
         // On récupère la locale depuis le contrôleur principal
-        const locale = pageBuilderController.currentLocale || 'fr';
+        const locale = pageBuilderController.currentLocale || pageBuilderController.primaryLocale || 'fr';
 
         // 4. Construction du payload
         const payload = {
@@ -88,6 +90,7 @@ export default class extends Controller {
             description: description,
             metaTitle: metaTitle,
             ogImage: ogImage,
+            parent: parent,
             content: {
                 sections: sections
             }

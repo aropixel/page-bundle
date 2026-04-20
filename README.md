@@ -85,6 +85,22 @@ For `TYPE_CUSTOM`, the page builder JSON payload is rendered to HTML at **save t
 
 ---
 
+## Contributing
+
+### JavaScript assets
+
+The JavaScript source lives in `assets/`. The `src/Resources/public/js/` directory is generated from it for Webpack Encore compatibility and must be kept in sync.
+
+After any change to files in `assets/`, run:
+
+```bash
+npm run build
+```
+
+Then commit both `assets/` and `src/Resources/public/js/` together. Pull requests that modify `assets/` without rebuilding will be rejected by CI.
+
+---
+
 ## License
 
 Aropixel Page Bundle is released under the [MIT License](LICENSE).
