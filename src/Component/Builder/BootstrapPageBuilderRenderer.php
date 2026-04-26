@@ -196,7 +196,7 @@ class BootstrapPageBuilderRenderer implements PageBuilderRendererInterface
                     $colsHtml .= '<div class="' . implode(' ', array_filter(array_unique($colClasses))) . '"><div' . ($style ? ' style="' . $style . '"' : '') . '>' . $blocksHtml . '</div></div>';
                 }
 
-                if (null !== $slider) {
+                if ($slider) {
                     // Bootstrap Carousel for row-level slider
                     $carouselId = 'carousel-row-' . substr(md5(uniqid('', true)), 0, 8);
                     $inner .= sprintf(
@@ -231,7 +231,7 @@ class BootstrapPageBuilderRenderer implements PageBuilderRendererInterface
         return $html;
     }
 
-    private function mapJustifyContent(?string $justify): string
+    protected function mapJustifyContent(?string $justify): string
     {
         return match ($justify) {
             'center' => 'justify-content-center',
@@ -243,7 +243,7 @@ class BootstrapPageBuilderRenderer implements PageBuilderRendererInterface
         };
     }
 
-    private function mapVerticalAlign(?string $align): string
+    protected function mapVerticalAlign(?string $align): string
     {
         return match ($align) {
             'top' => 'align-items-start',
@@ -254,7 +254,7 @@ class BootstrapPageBuilderRenderer implements PageBuilderRendererInterface
         };
     }
 
-    private function mapHorizontalAlign(?string $align): string
+    protected function mapHorizontalAlign(?string $align): string
     {
         $align = is_string($align) ? strtolower($align) : '';
         return match ($align) {
@@ -265,10 +265,10 @@ class BootstrapPageBuilderRenderer implements PageBuilderRendererInterface
         };
     }
 
-    private function mapWidthToBootstrap(array $widths): string
+    protected function mapWidthToBootstrap(array $widths): string
     {
         $breakpoints = [
-            's'  => '',
+            's'  => '-',
             'm'  => '-sm-',
             'l'  => '-md-',
             'xl' => '-lg-',
@@ -448,7 +448,7 @@ class BootstrapPageBuilderRenderer implements PageBuilderRendererInterface
         return sprintf('<div class="scrolling-content">%s</div>', $text);
     }
 
-    private function isExternalUrl(string $url): bool
+    protected function isExternalUrl(string $url): bool
     {
         $request = $this->requestStack->getCurrentRequest();
         if (!$request) {
