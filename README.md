@@ -24,7 +24,7 @@
 - **Visual page builder** — block-based drag-and-drop editor with sections, rows, columns, text, images, buttons, titles, and more; HTML is pre-rendered at save time so front-end display is zero-cost
 - **Custom block types** — extend the page builder with your own blocks via a simple JS + YAML registration
 - **Fixed / protected pages** — declare non-deletable system pages (homepage, contact…) with a static code for reliable lookups
-- **Multilingual** — full i18n support via Gedmo Translatable; per-locale slugs, content, and pre-rendered HTML
+- **Multilingual** — full i18n support via Gedmo Translatable; per-locale slugs, content, and pre-rendered HTML. Interface available in French, English, German, Spanish, Italian and Czech.
 - **SEO fields** — meta title, meta description, and slug per locale
 - **Publication scheduling** — online/offline status with optional date range
 - **`PageSavedEvent`** — dispatched after every page builder save; use it to invalidate Varnish, CDN, Redis, or any cache layer
