@@ -26,7 +26,7 @@
     "aropixel/admin-bundle": "dev-main"
   },
   "require-dev" : {
-    "doctrine/data-fixtures": "^2.0"
+    "doctrine/doctrine-fixtures-bundle": "^4.0"
   },
   "scripts": {
     "auto-scripts": {
