@@ -97,7 +97,7 @@ export class ColumnActions {
         column.horizontalAlignment = alignment;
     }
 
-    updateColumnBackground(type, value, imageId = null, overlayOpacity = 0) {
+    updateColumnBackground(type, value, imageId = null) {
         const column = this.manager.selectedColumn;
         if (!column) return;
 
@@ -108,16 +108,8 @@ export class ColumnActions {
                 type: type,
                 value: value,
                 imageId: imageId,
-                overlayOpacity: overlayOpacity,
             };
         }
-    }
-
-    updateColumnBackgroundOverlay(opacity) {
-        const column = this.manager.selectedColumn;
-        if (!column || !column.background) return;
-
-        column.background.overlayOpacity = opacity;
     }
 
     updateColumnUrl(url) {
@@ -127,11 +119,11 @@ export class ColumnActions {
         column.url = url;
     }
 
-    updateColumnPagePath(slug, parentSlug = null) {
+    updateColumnPagePath(slug) {
         const column = this.manager.selectedColumn;
         if (!column) return;
+
         column.pagePath = slug;
-        column.parentSlug = parentSlug;
     }
 
     updateColumnHeight(height) {
@@ -139,12 +131,5 @@ export class ColumnActions {
         if (!column) return;
 
         column.height = height;
-    }
-
-    updateColumnBorderRadius(borderRadius) {
-        const column = this.manager.selectedColumn;
-        if (!column) return;
-
-        column.borderRadius = borderRadius;
     }
 }

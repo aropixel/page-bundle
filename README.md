@@ -24,7 +24,7 @@
 - **Visual page builder** — block-based drag-and-drop editor with sections, rows, columns, text, images, buttons, titles, and more; HTML is pre-rendered at save time so front-end display is zero-cost
 - **Custom block types** — extend the page builder with your own blocks via a simple JS + YAML registration
 - **Fixed / protected pages** — declare non-deletable system pages (homepage, contact…) with a static code for reliable lookups
-- **Multilingual** — full i18n support via Gedmo Translatable; per-locale slugs, content, and pre-rendered HTML
+- **Multilingual** — full i18n support via Gedmo Translatable; per-locale slugs, content, and pre-rendered HTML. Interface available in French, English, German, Spanish, Italian and Czech.
 - **SEO fields** — meta title, meta description, and slug per locale
 - **Publication scheduling** — online/offline status with optional date range
 - **`PageSavedEvent`** — dispatched after every page builder save; use it to invalidate Varnish, CDN, Redis, or any cache layer
@@ -82,6 +82,22 @@ For `TYPE_CUSTOM`, the page builder JSON payload is rendered to HTML at **save t
 - [Usage and page types](doc/usage.md) — page builder config, fixed pages, front-end rendering, events
 - [Custom block types](doc/custom-blocks.md)
 - [Entity customization](doc/entities.md)
+
+---
+
+## Contributing
+
+### JavaScript assets
+
+The JavaScript source lives in `assets/`. The `src/Resources/public/js/` directory is generated from it for Webpack Encore compatibility and must be kept in sync.
+
+After any change to files in `assets/`, run:
+
+```bash
+npm run build
+```
+
+Then commit both `assets/` and `src/Resources/public/js/` together. Pull requests that modify `assets/` without rebuilding will be rejected by CI.
 
 ---
 

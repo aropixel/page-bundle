@@ -21,7 +21,6 @@ export class SectionActions {
             rows: [defaultRow],
             visibleDesktop: true,
             visibleMobile: true,
-            active: true,
             background: { type: null, value: null }
         };
 
@@ -100,17 +99,6 @@ export class SectionActions {
                         ]},
                 ]
             },
-            'ticketing': {
-                name: 'Billetterie',
-                rows: [
-                    { columns: ['1-1'], blocks: [{ columnIndex: 0, type: 'title' }] },
-                    { columns: ['1-4', '1-4', '1-4'], blocks: [
-                            { columnIndex: 0, type: 'ticket' },
-                            { columnIndex: 1, type: 'ticket' },
-                            { columnIndex: 2, type: 'ticket' },
-                        ]},
-                ]
-            },
             'sidebar': {
                 name: 'Titre + Image/Contenu',
                 rows: [
@@ -184,7 +172,6 @@ export class SectionActions {
             rows: [],
             visibleDesktop: true,
             visibleMobile: true,
-            active: true,
             background: { type: null, value: null }
         };
 
@@ -275,7 +262,6 @@ export class SectionActions {
             rows: [],
             visibleDesktop: section.visibleDesktop,
             visibleMobile: section.visibleMobile,
-            active: section.active !== undefined ? section.active : true,
             background: section.background
         };
 
@@ -344,13 +330,6 @@ export class SectionActions {
         section.visibleMobile = mobile;
     }
 
-    updateSectionActive(active) {
-        const section = this.manager.selectedSection;
-        if (!section) return;
-
-        section.active = active;
-    }
-
 
     updateSectionBackground(type, value, imageId = null) {
         const section = this.manager.selectedSection;
@@ -380,7 +359,6 @@ export class SectionActions {
             rows: [defaultRow],
             visibleDesktop: true,
             visibleMobile: true,
-            active: true,
             background: { type: null, value: null }
         };
     }

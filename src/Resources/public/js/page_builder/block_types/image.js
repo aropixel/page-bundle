@@ -1,5 +1,6 @@
 import { initImageManager } from '/bundles/aropixeladmin/js/module/image-manager/launcher.js';
 import { IM_Library } from '/bundles/aropixeladmin/js/module/image-manager/library.js';
+import { t } from '../i18n.js';
 
 export const imageBlockType = {
     type: 'image',
@@ -15,7 +16,6 @@ export const imageBlockType = {
         width: 100, // Largeur par défaut en %
         maxWidth: 200,
         useOriginalSize: true,
-        horizontalAlignment: 'center'
     }),
 
     renderPreview: (block, ctx, rowId) => {
@@ -34,19 +34,11 @@ export const imageBlockType = {
 
         if (!block.useOriginalSize) {
             const row = ctx.sectionsManager.findRowById(rowId);
-            if (row && row.type === 'icon-box') {
-                const maxWidth = row ? row.imgWidth : block.maxWidth;
-                img.style.maxWidth = `${maxWidth}px`;
-            }
+            //const maxWidth = row ? row.imgWidth : block.maxWidth;
             content.style.width = `${block.width}%`;
-            if (block.horizontalAlignment === 'right') {
-                content.style.marginLeft = 'auto';
-            } else if (block.horizontalAlignment === 'left') {
-                content.style.marginRight = 'auto';
-            } else {
-                content.style.margin = 'auto';
-            }
+            //img.style.maxWidth = `${maxWidth}px`;
             img.style.maxHeight = `${block.maxHeight}px`;
+            img.style.margin = 'auto';
         } else {
             content.style.width = 'auto';
         }
@@ -84,7 +76,6 @@ export const imageBlockType = {
     renderInspector: (block, ctx) => {
         const inspector = ctx.inspectorPanelBlockTarget;
         const contentContainer = inspector.querySelector('.pb-inspector-block-content');
-        const isInIconBox = ctx.sectionsManager.selectedRow?.type === 'icon-box';
 
         if (contentContainer) {
 
@@ -98,47 +89,18 @@ export const imageBlockType = {
                 imageContent.removeAttribute('id'); // Éviter les doublons d'ID
 
                 contentContainer.innerHTML = `
-                    <div class="mb-2">
-                        <label class="form-label form-label-sm d-block mb-1">Alignement horizontal</label>
-                        <div class="d-flex gap-1">
-                            <button type="button"
-                                    class="pb-button pb-button--ghost flex-fill ${block.horizontalAlignment === 'left' ? 'active' : ''}"
-                                    data-alignment="left"
-                                    data-page-builder-target="blockAlignmentButton"
-                                    data-action="click->page-builder#updateBlockContent"
-                                    title="Aligné à gauche">
-                                <i class="fas fa-align-left"></i>
-                            </button>
-                            <button type="button"
-                                    class="pb-button pb-button--ghost flex-fill ${block.horizontalAlignment === 'center' ? 'active' : ''}"
-                                    data-alignment="center"
-                                    data-page-builder-target="blockAlignmentButton"
-                                    data-action="click->page-builder#updateBlockContent"
-                                    title="Centré">
-                                <i class="fas fa-align-center"></i>
-                            </button>
-                            <button type="button"
-                                    class="pb-button pb-button--ghost flex-fill ${block.horizontalAlignment === 'right' ? 'active' : ''}"
-                                    data-alignment="right"
-                                    data-page-builder-target="blockAlignmentButton"
-                                    data-action="click->page-builder#updateBlockContent"
-                                    title="Aligné à droite">
-                                <i class="fas fa-align-right"></i>
-                            </button>
-                        </div>
-                    </div>
                     <div class="mb-3">
-                        <label class="form-label form-label-sm">Texte alternatif</label>
+                        <label class="form-label form-label-sm">${t('page.builder.block.image.alt')}</label>
                         <input type="text"
                                class="form-control form-control-sm"
-                               placeholder="Description de l'image"
+                               placeholder="${t('page.builder.block.image.alt_placeholder')}"
                                value="${block.alt || ''}"
                                data-page-builder-target="blockAltInput"
                                data-action="input->page-builder#updateBlockContent" />
                     </div>
                     <div class="mb-3">
                         <div class="form-check form-switch d-flex justify-content-between">
-                            <label class="form-label mb-0 form-label-sm" for="use-original-size">Utiliser la taille originale</label>
+                            <label class="form-label mb-0 form-label-sm" for="use-original-size">${t('page.builder.block.image.original_size')}</label>
                             <input class="form-check-input mt-1"
                                    type="checkbox"
                                    id="use-original-size"
@@ -147,7 +109,7 @@ export const imageBlockType = {
                         </div>
                     </div>
                     <div class="mb-2" id="size-range-container" ${block.useOriginalSize ? 'style="display:none"' : ''}>
-                        <label class="form-label form-label-sm" for="image-size">Taille de l'image (%)</label>
+                        <label class="form-label form-label-sm" for="image-size">${t('page.builder.block.image.size')}</label>
                         <div class="d-flex align-items-center gap-2">
                           <input type="range" min="1" max="100" value="${block.width || 100}"
                                  class="form-range" id="image-size" style="width:100%"
@@ -184,39 +146,9 @@ export const imageBlockType = {
 
                 initializeImageManager(block, ctx);
             }
-
-            // Ajouter le widget pour l'image hover si on est dans un icon-box
-            if (isInIconBox) {
-                const hoverImageContent = sectionImage.cloneNode(true);
-                hoverImageContent.classList.remove('d-none');
-                hoverImageContent.removeAttribute('id');
-                hoverImageContent.querySelector('.form-label').innerHTML = 'Image au survol';
-                contentContainer.appendChild(hoverImageContent);
-
-                // Pré-remplir l'image hover si elle existe
-                if (block.hoverSrc) {
-                    const hoverPreview = hoverImageContent.querySelector('.im-manager .preview');
-                    if (hoverPreview) {
-                        const existingInput = hoverPreview.querySelector('input[type="hidden"]');
-                        hoverPreview.innerHTML = `<img src="${block.hoverSrc}" alt="${block.alt || ''}" />`;
-                        if (existingInput && block.hoverImageId) {
-                            existingInput.value = block.hoverImageId;
-                            hoverPreview.appendChild(existingInput);
-                        } else if (block.hoverImageId) {
-                            const input = document.createElement('input');
-                            input.type = 'hidden';
-                            input.value = block.hoverImageId;
-                            hoverPreview.appendChild(input);
-                        }
-                        hoverPreview.removeAttribute('data-new');
-                    }
-                }
-
-                initializeImageManager(block, ctx, 'hover', hoverImageContent);
-            }
         }
 
-        ctx.blockTitleTarget.textContent = 'Bloc image';
+        ctx.blockTitleTarget.textContent = t('page.builder.block_title.image');
     },
 
     handleInspectorInput: (block, event) => {
@@ -239,44 +171,6 @@ export const imageBlockType = {
             const sizeRangeContainer = document.getElementById('size-range-container');
             if (sizeRangeContainer) {
                 sizeRangeContainer.style.display = event.target.checked ? 'none' : 'block';
-            }
-
-            // Mettre à jour l'affichage dans le canvas si nécessaire
-            const blockEl = document.querySelector('.pb-block[data-block-id="' + block.id + '"]');
-            if (blockEl) {
-                const content = blockEl.querySelector('.pb-block-content-preview');
-                const img = content ? content.querySelector('.pb-image-preview') : null;
-                if (content && img) {
-                    if (block.useOriginalSize) {
-                        content.style.width = 'auto';
-                        img.style.margin = '';
-                    } else {
-                        content.style.width = `${block.width}%`;
-                        const alignment = block.horizontalAlignment || 'center';
-                        if (alignment === 'left') {
-                            img.style.marginLeft = '0';
-                            img.style.marginRight = 'auto';
-                        } else if (alignment === 'right') {
-                            img.style.marginLeft = 'auto';
-                            img.style.marginRight = '0';
-                        } else {
-                            img.style.margin = 'auto';
-                        }
-                    }
-                }
-            }
-        }
-        if (event.target.dataset.pageBuilderTarget === 'blockAlignmentButton' || event.target.closest('[data-page-builder-target="blockAlignmentButton"]')) {
-            const button = event.target.dataset.pageBuilderTarget === 'blockAlignmentButton' ? event.target : event.target.closest('[data-page-builder-target="blockAlignmentButton"]');
-            const alignment = button.dataset.alignment;
-            block.horizontalAlignment = alignment;
-
-            // Mettre à jour l'état actif des boutons dans l'inspecteur
-            const inspector = button.closest('.pb-inspector-block-content');
-            if (inspector) {
-                inspector.querySelectorAll('[data-page-builder-target="blockAlignmentButton"]').forEach(btn => {
-                    btn.classList.toggle('active', btn.dataset.alignment === alignment);
-                });
             }
         }
     },
@@ -315,7 +209,7 @@ function initializeImageManager(block, ctx, imageType = 'main', containerElement
                 const imgElement = mutation.target.querySelector('img');
                 if (imgElement) {
                     const imgSrc = imgElement.getAttribute('src');
-                    const previewSrc = imgSrc.replace('/media/cache/admin_thumbnail/', '/media/cache/admin_preview/');
+                    const previewSrc = imgSrc.replace('/media/cache/admin_thumbnail/', '/media/cache/resolve/admin_preview/');
 
                     // Récupérer l'input depuis le bon conteneur
                     const inputId = containerElement

@@ -1,3 +1,5 @@
+import { t } from '../i18n.js';
+
 export const dividerBlockType = {
     type: 'divider',
 
@@ -27,7 +29,7 @@ export const dividerBlockType = {
     },
 
     renderInspector(block, ctx) {
-        ctx.blockTitleTarget.textContent = 'Bloc séparateur';
+        ctx.blockTitleTarget.textContent = t('page.builder.block_title.divider');
 
         // Créer les champs pour marginTop et marginBottom
         const inspector = ctx.inspectorPanelBlockTarget;
@@ -36,13 +38,13 @@ export const dividerBlockType = {
         if (contentContainer) {
             contentContainer.innerHTML = `
                 <div class="mb-2 form-group" data-page-builder-target="blockContentInput">
-                    <label class="form-label form-label-sm">Marge supérieure (px)</label>
+                    <label class="form-label form-label-sm">${t('page.builder.block.divider.margin_top')}</label>
                     <input type="number" class="form-control form-control-sm" id="divider-margin-top"
                            value="${block.marginTop || 20}" min="0" max="200"
                            data-action="input->page-builder#updateBlockContent">
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Marge inférieure (px)</label>
+                    <label class="form-label">${t('page.builder.block.divider.margin_bottom')}</label>
                     <input type="number" class="form-control" id="divider-margin-bottom"
                            value="${block.marginBottom || 20}" min="0" max="200"
                            data-action="input->page-builder#updateBlockContent">

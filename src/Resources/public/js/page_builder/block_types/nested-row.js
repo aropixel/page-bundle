@@ -1,5 +1,6 @@
 import { Row } from '../model/row.js';
 import { Column } from '../model/column.js';
+import { t } from '../i18n.js';
 
 export const nestedRowBlockType = {
     type: 'nested-row',
@@ -48,7 +49,7 @@ export const nestedRowBlockType = {
             if (col) {
                 const nestedBlock = col.blocks.find(b => b.id === block.selectedBlockId);
                 if (nestedBlock) {
-                    ctx.blockTitleTarget.textContent = `Bloc imbriqué`;
+                    ctx.blockTitleTarget.textContent = t('page.builder.block_title.nested_row');
                     ctx.sectionsManager.blockTypes.renderInspector(nestedBlock, ctx);
                     return;
                 }

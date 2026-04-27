@@ -1,3 +1,5 @@
+import { t } from '../i18n.js';
+
 export class CanvasRenderer {
     constructor(controllerContext) {
         this.ctx = controllerContext;
@@ -152,13 +154,6 @@ export class CanvasRenderer {
 
         wrapper.classList.add(section.layout);
 
-        if (section.active === false) {
-            wrapper.classList.add('pb-page-section--inactive');
-            const inactiveOverlay = document.createElement('div');
-            inactiveOverlay.classList.add('pb-section-inactive-overlay');
-            wrapper.appendChild(inactiveOverlay);
-        }
-
         this.#applyBackground(wrapper, section.background);
 
         const inner = document.createElement('div');
@@ -198,14 +193,7 @@ export class CanvasRenderer {
     #applyBackground(element, background) {
         element.style.backgroundColor = '';
         element.style.backgroundImage = '';
-        element.style.position = 'relative';
         element.className = element.className.replace(/\bbg-\S+/g, '');
-
-        // Supprimer l'overlay existant s'il y en a un
-        const existingOverlay = element.querySelector('.pb-column-overlay');
-        if (existingOverlay) {
-            existingOverlay.remove();
-        }
 
         if (background && background.type && background.value) {
             if (background.type === 'color') {
@@ -215,20 +203,6 @@ export class CanvasRenderer {
                 element.style.backgroundSize = 'cover';
                 element.style.backgroundPosition = 'center';
                 element.style.backgroundRepeat = 'no-repeat';
-
-                // Ajouter l'overlay si l'opacité est > 0
-                if (background.overlayOpacity && background.overlayOpacity > 0) {
-                    const overlay = document.createElement('div');
-                    overlay.classList.add('pb-column-overlay');
-                    overlay.style.position = 'absolute';
-                    overlay.style.top = '0';
-                    overlay.style.left = '0';
-                    overlay.style.width = '100%';
-                    overlay.style.height = '100%';
-                    overlay.style.backgroundColor = `rgba(34, 34, 34, ${background.overlayOpacity})`;
-                    overlay.style.borderRadius = element.style.borderRadius; // S'assurer que l'overlay respecte aussi l'arrondi
-                    element.appendChild(overlay);
-                }
             } else if (background.type === 'class') {
                 const classes = background.value.split(' ').filter(cls => cls.trim() !== '');
                 classes.forEach(cls => element.classList.add(cls));
@@ -369,10 +343,6 @@ export class CanvasRenderer {
         if (colData.url) {
             col.dataset.hasUrl = "true";
             col.title = `Lien: ${colData.url}`;
-        }
-
-        if (colData.borderRadius) {
-            col.style.borderRadius = `${colData.borderRadius}px`;
         }
 
         this.#applyBackground(col, colData.background);
@@ -539,7 +509,7 @@ export class CanvasRenderer {
         btnBefore.type = 'button';
         btnBefore.classList.add('pb-section-insert-btn', 'pb-section-insert-btn--before');
         btnBefore.innerHTML = '+';
-        btnBefore.title = 'Insérer une section au-dessus';
+        btnBefore.title = t('page.builder.canvas.section.insert_before');
         btnBefore.addEventListener('click', (event) => {
             event.preventDefault();
             event.stopPropagation();
@@ -552,7 +522,7 @@ export class CanvasRenderer {
         btnAfter.type = 'button';
         btnAfter.classList.add('pb-section-insert-btn', 'pb-section-insert-btn--after');
         btnAfter.innerHTML = '+';
-        btnAfter.title = 'Insérer une section en-dessous';
+        btnAfter.title = t('page.builder.canvas.section.insert_after');
         btnAfter.addEventListener('click', (event) => {
             event.preventDefault();
             event.stopPropagation();
@@ -568,11 +538,11 @@ export class CanvasRenderer {
 
     #renderSectionToolbar(wrapper, sectionId) {
         const toolbar = this.#createToolbar([
-            { icon: '↑', title: 'Déplacer vers le haut', action: () => this.ctx.sectionsManager.moveSectionUp(sectionId) },
-            { icon: '↓', title: 'Déplacer vers le bas', action: () => this.ctx.sectionsManager.moveSectionDown(sectionId) },
-            { icon: '⎘', title: 'Dupliquer la section', action: () => this.ctx.sectionsManager.duplicateSection(sectionId) },
-            { icon: '×', title: 'Supprimer la section', action: () => {
-                    if (confirm('Voulez-vous vraiment supprimer cette section ?')) {
+            { icon: '↑', title: t('page.builder.canvas.move_up'), action: () => this.ctx.sectionsManager.moveSectionUp(sectionId) },
+            { icon: '↓', title: t('page.builder.canvas.move_down'), action: () => this.ctx.sectionsManager.moveSectionDown(sectionId) },
+            { icon: '⎘', title: t('page.builder.canvas.section.duplicate'), action: () => this.ctx.sectionsManager.duplicateSection(sectionId) },
+            { icon: '×', title: t('page.builder.canvas.section.delete'), action: () => {
+                    if (confirm(t('page.builder.canvas.section.delete_confirm'))) {
                         this.ctx.sectionsManager.deleteSection(sectionId);
                     }
                 }, className: 'pb-toolbar-btn--danger' }
@@ -583,11 +553,11 @@ export class CanvasRenderer {
 
     #renderRowToolbar(rowEl, sectionId, rowId) {
         const toolbar = this.#createToolbar([
-            { icon: '↑', title: 'Déplacer vers le haut', action: () => this.ctx.sectionsManager.moveRowUp(sectionId, rowId) },
-            { icon: '↓', title: 'Déplacer vers le bas', action: () => this.ctx.sectionsManager.moveRowDown(sectionId, rowId) },
-            { icon: '⎘', title: 'Dupliquer la ligne', action: () => this.ctx.sectionsManager.duplicateRow(sectionId, rowId) },
-            { icon: '×', title: 'Supprimer la ligne', action: () => {
-                    if (confirm('Voulez-vous vraiment supprimer cette ligne ?')) {
+            { icon: '↑', title: t('page.builder.canvas.move_up'), action: () => this.ctx.sectionsManager.moveRowUp(sectionId, rowId) },
+            { icon: '↓', title: t('page.builder.canvas.move_down'), action: () => this.ctx.sectionsManager.moveRowDown(sectionId, rowId) },
+            { icon: '⎘', title: t('page.builder.canvas.row.duplicate'), action: () => this.ctx.sectionsManager.duplicateRow(sectionId, rowId) },
+            { icon: '×', title: t('page.builder.canvas.row.delete'), action: () => {
+                    if (confirm(t('page.builder.canvas.row.delete_confirm'))) {
                         this.ctx.sectionsManager.deleteRow(sectionId, rowId);
                     }
                 }, className: 'pb-toolbar-btn--danger' }
@@ -598,11 +568,11 @@ export class CanvasRenderer {
 
     #renderColumnToolbar(col, context) {
         const toolbar = this.#createToolbar([
-            { icon: '←', title: 'Déplacer vers la gauche', action: () => this.ctx.sectionsManager.moveColumnLeft(context) },
-            { icon: '→', title: 'Déplacer vers la droite', action: () => this.ctx.sectionsManager.moveColumnRight(context) },
-            { icon: '⎘', title: 'Dupliquer la colonne', action: () => this.ctx.sectionsManager.duplicateColumn(context) },
-            { icon: '×', title: 'Supprimer la colonne', action: () => {
-                    if (confirm('Voulez-vous vraiment supprimer cette colonne ?')) {
+            { icon: '←', title: t('page.builder.canvas.move_left'), action: () => this.ctx.sectionsManager.moveColumnLeft(context) },
+            { icon: '→', title: t('page.builder.canvas.move_right'), action: () => this.ctx.sectionsManager.moveColumnRight(context) },
+            { icon: '⎘', title: t('page.builder.canvas.column.duplicate'), action: () => this.ctx.sectionsManager.duplicateColumn(context) },
+            { icon: '×', title: t('page.builder.canvas.column.delete'), action: () => {
+                    if (confirm(t('page.builder.canvas.column.delete_confirm'))) {
                         this.ctx.sectionsManager.deleteColumn(context);
                     }
                 }, className: 'pb-toolbar-btn--danger' }
@@ -613,11 +583,11 @@ export class CanvasRenderer {
 
     #renderBlockToolbar(blockEl, context) {
         const toolbar = this.#createToolbar([
-            { icon: '↑', title: 'Déplacer vers le haut', action: () => this.ctx.sectionsManager.moveBlockUp(context) },
-            { icon: '↓', title: 'Déplacer vers le bas', action: () => this.ctx.sectionsManager.moveBlockDown(context) },
-            { icon: '⎘', title: 'Dupliquer le bloc', action: () => this.ctx.sectionsManager.duplicateBlock(context) },
-            { icon: '×', title: 'Supprimer le bloc', action: () => {
-                    if (confirm('Voulez-vous vraiment supprimer ce bloc ?')) {
+            { icon: '↑', title: t('page.builder.canvas.move_up'), action: () => this.ctx.sectionsManager.moveBlockUp(context) },
+            { icon: '↓', title: t('page.builder.canvas.move_down'), action: () => this.ctx.sectionsManager.moveBlockDown(context) },
+            { icon: '⎘', title: t('page.builder.canvas.block.duplicate'), action: () => this.ctx.sectionsManager.duplicateBlock(context) },
+            { icon: '×', title: t('page.builder.canvas.block.delete'), action: () => {
+                    if (confirm(t('page.builder.canvas.block.delete_confirm'))) {
                         this.ctx.sectionsManager.deleteBlock(context);
                     }
                 }, className: 'pb-toolbar-btn--danger' }
@@ -678,10 +648,11 @@ export class CanvasRenderer {
         if (withToolbar) {
             const toolbar = document.createElement('div');
             toolbar.className = 'pb-column-add-toolbar';
-            toolbar.appendChild(makeButton('Titre', 'title', true));
-            toolbar.appendChild(makeButton('Texte', 'text', true));
-            toolbar.appendChild(makeButton('Bouton', 'button', false));
-            toolbar.appendChild(makeButton('Image', 'image', false));
+            toolbar.appendChild(makeButton(t('page.builder.block.title'), 'title', true));
+            toolbar.appendChild(makeButton(t('page.builder.block.text'), 'text', true));
+            toolbar.appendChild(makeButton(t('page.builder.block.button'), 'button', false));
+            toolbar.appendChild(makeButton(t('page.builder.block.image'), 'image', false));
+            toolbar.appendChild(makeButton(t('page.builder.canvas.column.quick_add_icon_box'), 'icon-box', true));
 
             container.appendChild(toolbar);
         }

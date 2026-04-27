@@ -17,7 +17,6 @@ export const textBlockType = {
 
         content.innerHTML = block.content || '';
 
-        // Variable pour gérer le debounce de sauvegarde
         let saveTimeout = null;
         let isEditing = false;
         let quill = null;
@@ -25,36 +24,28 @@ export const textBlockType = {
         const initQuill = () => {
             if (quill) return;
 
-            // Intercepter le paste AVANT Quill (phase de capture)
             content.addEventListener('paste', () => {
                 setPasting(true);
                 setTimeout(() => { setPasting(false); }, 0);
-            }, true); // <-- capture phase
+            }, true);
 
             quill = new Quill(content, getQuillConfig('bubble'));
 
-            // (Optionnel) Afficher le tooltip natif sur le bouton
             const mailtoBtn = content.querySelector('.ql-mailto');
             if (mailtoBtn) mailtoBtn.title = 'Ajouter un lien e-mail (mailto)';
 
-            // Gérer les changements
             quill.on('text-change', () => {
                 if (saveTimeout) {
                     clearTimeout(saveTimeout);
                 }
 
                 saveTimeout = setTimeout(() => {
-                    // Mise à jour silencieuse du contenu SANS re-render
-                    // On récupère le HTML de Quill
                     const html = cleanHTML(quill.root.innerHTML);
                     block.content = html;
-
-                    // Mise à jour via le manager pour s'assurer de la synchro si nécessaire
                     ctx.sectionsManager.updateTextBlockContent(block.id, html);
                 }, 1000);
             });
 
-            // Gérer le focus pour l'inspecteur
             const editor = content.querySelector('.ql-editor');
             if (editor) {
                 const lastChild = editor.lastElementChild;
@@ -66,22 +57,17 @@ export const textBlockType = {
                 isEditing = true;
                 content.dataset.editing = 'true';
 
-                ctx.sectionsManager.resetSelection()
+                ctx.sectionsManager.resetSelection();
 
-                // Sélectionner le bloc actuel
-                let blockEl = document.querySelector('.pb-block[data-block-id="' + block.id + '"]');
+                const blockEl = document.querySelector('.pb-block[data-block-id="' + block.id + '"]');
                 if (blockEl) {
                     blockEl.classList.add('pb-block--selected');
 
-                    // Récupérer les informations de la section/row/column
                     const sectionId = blockEl.dataset.sectionId;
                     const rowId = blockEl.dataset.rowId;
                     const columnId = blockEl.dataset.columnId;
 
-                    // Sélectionner dans le gestionnaire
                     ctx.sectionsManager.selectBlock(sectionId, rowId, columnId, block.id);
-
-                    // Ouvrir l'onglet structure et afficher l'inspecteur de bloc
                     ctx.activateTab('nav-structure');
                     ctx.showBlockInspector();
                 }
@@ -91,25 +77,19 @@ export const textBlockType = {
                 isEditing = false;
                 delete content.dataset.editing;
 
-                // Sauvegarder immédiatement au blur
                 if (saveTimeout) {
                     clearTimeout(saveTimeout);
                 }
                 const html = cleanHTML(quill.root.innerHTML);
                 block.content = html;
-
-                // Mise à jour via le manager pour s'assurer de la synchro si nécessaire
                 ctx.sectionsManager.updateTextBlockContent(block.id, html);
             });
 
-            // Empêcher la propagation des clics pour ne pas sélectionner le bloc par le Page Builder
-            // mais laisser Quill gérer ses propres clics
             editor.addEventListener('click', (e) => {
                 e.stopPropagation();
             });
         };
 
-        // Initialiser Quill après un court délai pour s'assurer que l'élément est dans le DOM
         setTimeout(initQuill, 0);
 
         const container = document.createElement('div');

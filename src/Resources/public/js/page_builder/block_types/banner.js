@@ -1,3 +1,5 @@
+import { t } from '../i18n.js';
+
 export const bannerBlockType = {
     type: 'banner',
 
@@ -5,20 +7,8 @@ export const bannerBlockType = {
         return {
             id: generateId(),
             type: 'banner',
-            content: 'Bandeau défilant',
+            content: t('page.builder.block.banner.default_label'),
         };
-    },
-
-    initScrollingText(el) {
-        const content = el.querySelector('.pb-banner-preview');
-        if (!content) return;
-
-        const textWidth = content.scrollWidth + 10;
-        const speed = 130;
-        const duration = (textWidth / speed) * 1000;
-
-        el.style.setProperty('--tw', `${textWidth}px`);
-        el.style.setProperty('--ad', `${duration}ms`);
     },
 
     renderPreview(block, ctx) {
@@ -27,15 +17,7 @@ export const bannerBlockType = {
         content.className = 'pb-banner-preview';
         content.classList.add('pb-block-content-preview');
         content.setAttribute('contenteditable', 'true');
-        content.innerHTML = block.content || '';
-
-        document.fonts.ready.then(() => {
-            // Attendre un peu plus pour que le DOM soit stable
-            setTimeout(() => {
-                document.querySelectorAll('.pb-block-banner-container')
-                    .forEach(el => this.initScrollingText(el));
-            }, 100);
-        });
+        content.textContent = block.content || '';
 
         let saveTimeout = null;
         let isEditing = false;
@@ -76,7 +58,7 @@ export const bannerBlockType = {
                 clearTimeout(saveTimeout);
             }
             // Mise à jour silencieuse sans re-render
-            block.content = content.innerHTML;
+            block.content = content.textContent;
         });
 
         // Mettre à jour le textarea lors de la saisie
@@ -89,7 +71,7 @@ export const bannerBlockType = {
             // Sauvegarder après 1 seconde d'inactivité
             saveTimeout = setTimeout(() => {
                 // Mise à jour du contenu du bloc
-                block.content = e.target.innerHTML;
+                block.content = e.target.textContent;
 
                 // Mise à jour du textarea de l'inspecteur
                 if (ctx.blockContentInputTarget) {
@@ -102,7 +84,7 @@ export const bannerBlockType = {
                     const sectionId = blockEl.dataset.sectionId;
                     const bannerEl = document.querySelector('.pb-section-banner[data-section-id="' + sectionId + '"]');
                     if (bannerEl) {
-                        bannerEl.innerHTML = block.content;
+                        bannerEl.textContent = block.content;
                     }
                 }
             }, 1000);
@@ -129,12 +111,7 @@ export const bannerBlockType = {
             contentContainer.innerHTML = `
 
                 <div class="mb-2">
-                    <label class="form-label form-label-sm d-flex justify-content-between align-items-center">
-                        Contenu du texte
-                        <button type="button" class="btn btn-xs btn-outline-secondary pb-wrap-span" title="Sélectionnez le contenu pour changer sa couleur">
-                            <span>2ème couleur</span>
-                        </button>
-                    </label>
+                    <label class="form-label form-label-sm">Contenu du texte</label>
                     <textarea
                         class="form-control form-control-sm"
                         rows="4"
@@ -144,29 +121,9 @@ export const bannerBlockType = {
                     ></textarea>
                 </div>
             `;
-
-            const wrapBtn = contentContainer.querySelector('.pb-wrap-span');
-            if (wrapBtn) {
-                wrapBtn.addEventListener('click', () => {
-                    const textarea = contentContainer.querySelector('textarea');
-                    const start = textarea.selectionStart;
-                    const end = textarea.selectionEnd;
-                    const text = textarea.value;
-                    const selectedText = text.substring(start, end);
-                    const before = text.substring(0, start);
-                    const after = text.substring(end);
-
-                    if (selectedText.length > 0) {
-                        textarea.value = before + '<span>' + selectedText + '</span>' + after;
-                        textarea.dispatchEvent(new Event('input', { bubbles: true }));
-                        textarea.focus();
-                        textarea.setSelectionRange(start, end + 13); // 13 is the length of <span></span>
-                    }
-                });
-            }
         }
 
-        ctx.blockTitleTarget.textContent = 'Bloc bandeau défilant';
+        ctx.blockTitleTarget.textContent = t('page.builder.block_title.banner');
         ctx.blockContentInputTarget.value = block.content || '';
     },
 
@@ -180,8 +137,8 @@ export const bannerBlockType = {
         // On cherche spécifiquement le bloc par son ID pour éviter de mettre à jour d'autres blocs identiques
         const contentElements = document.querySelectorAll('.pb-block[data-block-id="' + block.id + '"] .pb-banner-preview');
         contentElements.forEach(el => {
-            if (el.innerHTML !== block.content) {
-                el.innerHTML = block.content;
+            if (el.textContent !== block.content) {
+                el.textContent = block.content;
             }
         });
     },

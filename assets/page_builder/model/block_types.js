@@ -9,13 +9,14 @@ import { blogBlockType } from '../block_types/blog.js';
 import { nestedRowBlockType } from '../block_types/nested-row.js';
 import { ctaBlockType } from '../block_types/cta.js';
 import { bannerBlockType } from '../block_types/banner.js';
+import { iframeBlockType } from '../block_types/iframe.js';
 
 export class BlockTypesRegistry {
     constructor() {
         this.types = {};
 
         // on enregistre chaque type intégré
-        [titleBlockType, textBlockType, btnBlockType, spacerBlockType, dividerBlockType, imageBlockType, sliderBlockType, blogBlockType, nestedRowBlockType, ctaBlockType, bannerBlockType].forEach((def) => {
+        [titleBlockType, textBlockType, btnBlockType, spacerBlockType, dividerBlockType, imageBlockType, sliderBlockType, blogBlockType, nestedRowBlockType, ctaBlockType, bannerBlockType, iframeBlockType].forEach((def) => {
             this.types[def.type] = def;
         });
 

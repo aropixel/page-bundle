@@ -190,10 +190,7 @@ export const titleBlockType = {
                     ></textarea>
                 </div>
 
-                ${(() => {
-                    const titleStyles = ctx.pageBuilderConfig?.title_styles || [];
-                    if (titleStyles.length === 0) return '';
-                    return `<div class="mb-2">
+                <div class="mb-2">
                     <label class="form-label form-label-sm" for="title-style">Style du titre</label>
                     <select
                         class="form-select form-select-sm"
@@ -201,10 +198,14 @@ export const titleBlockType = {
                         data-page-builder-target="blockStyleInput"
                         data-action="change->page-builder#updateBlockContent"
                     >
-                        ${titleStyles.map(s => `<option value="${s.value}" ${block.size === s.value ? 'selected' : ''}>${s.label}</option>`).join('')}
+                        <option value="h2" ${block.size === 'h2' ? 'selected' : ''}>Style</option>
+                        <option value="h2-heading_32" ${block.size === 'h2-heading' ? 'selected' : ''}>Titre souligné</option>
+                        <option value="h2-heading_36" ${block.size === 'h2-heading_36' ? 'selected' : ''}>Titre en-tête souligné</option>
+                        <option value="h2-secondary_32" ${block.size === 'h2-secondary_32' ? 'selected' : ''}>Titre jaune</option>
+                        <option value="div-title_24" ${block.size === 'div-title_24' ? 'selected' : ''}>Petit titre rose</option>
+                        <option value="div-name_big_44" ${block.size === 'div-name_big_44' ? 'selected' : ''}>Gros titre rose</option>
                     </select>
-                </div>`;
-                })()}
+                </div>
             `;
         }
 

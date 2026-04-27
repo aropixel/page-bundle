@@ -17,8 +17,16 @@
       "Aropixel\\PageBundle\\" : "src/"
     }
   },
+  "autoload-dev" : {
+    "psr-4" : {
+      "Aropixel\\PageBundle\\Tests\\" : "tests/"
+    }
+  },
   "require" : {
-    "aropixel/admin-bundle": "dev-feature/phpstan|dev-release/finalversion|dev-main"
+    "aropixel/admin-bundle": "dev-main"
+  },
+  "require-dev" : {
+    "doctrine/doctrine-fixtures-bundle": "^4.0"
   },
   "scripts": {
     "auto-scripts": {

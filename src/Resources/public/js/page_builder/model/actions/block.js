@@ -16,27 +16,18 @@ export class BlockActions {
         }
 
         const block = this.manager.blockTypes.createBlock(type);
-        const selectedBlock = this.manager.selectedBlock;
-
-        let insertIndex = col.blocks.length;
-        if (selectedBlock && col.findBlock(selectedBlock.id)) {
-            const index = col.blocks.findIndex(b => b.id === selectedBlock.id);
-            if (index !== -1) {
-                insertIndex = index + 1;
-            }
-        }
 
         // si le block est de type cta/icon-box
         if (Array.isArray(block)) {
-            col.blocks.splice(insertIndex, 0, ...block);
+            block.forEach(childBlock => col.addBlock(childBlock));
         } else {
-            col.blocks.splice(insertIndex, 0, block);
+            col.addBlock(block);
         }
 
         this.manager.selectedSectionId = sectionId;
         this.manager.selectedRowId = rowId;
         this.manager.selectedColumnId = columnId;
-        this.manager.selectedBlockId = Array.isArray(block) ? block[0].id : block.id;
+        this.manager.selectedBlockId = block.id;
 
         return block;
     }

@@ -1,6 +1,8 @@
+import { t } from '../i18n.js';
+
 export const blogBlockType = {
     type: 'blog',
-    label: 'Les dernières actualités',
+    label: t('page.builder.block.blog.default_label'),
 
     create(generateId) {
         return {
@@ -39,7 +41,7 @@ export const blogBlockType = {
 
         content.innerHTML = `
             <div class="alert alert-info mb-0 text-center">
-               Les dernières actualités
+               ${t('page.builder.block.blog.default_label')}
             </div>`;
 
         container.appendChild(content);
@@ -48,6 +50,6 @@ export const blogBlockType = {
     },
 
     renderInspector(block, ctx) {
-        ctx.blockTitleTarget.textContent = 'Bloc dernières actualités';
+        ctx.blockTitleTarget.textContent = t('page.builder.block_title.blog');
     }
 };

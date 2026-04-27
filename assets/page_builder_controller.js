@@ -79,16 +79,16 @@ export default class extends Controller {
 
     connect() {
         const configEl = document.getElementById('page-builder-config');
-        if (configEl) {
-            const config = JSON.parse(configEl.textContent);
-            window.__pbTranslations = config.translations || {};
-        }
+        this.pageBuilderConfig = configEl ? JSON.parse(configEl.textContent) : {};
+        window.__pbTranslations = this.pageBuilderConfig.translations || {};
 
         this.columnPresets = ['1-1', '1-2', '1-3', '1-4', '1-5', '1-6'];
 
         // Gestion Multilingue : Initialisation
         this.managers = {};
-        this.currentLocale = 'fr';
+        this.locales = this.pageBuilderConfig?.locales || [];
+        this.primaryLocale = this.locales[0] || 'fr';
+        this.currentLocale = this.primaryLocale;
 
         // On initialise le manager pour la langue courante
         this.sectionsManager = new SectionsManager(this.columnPresets);
@@ -256,32 +256,41 @@ export default class extends Controller {
     // --- Utilitaires de synchro ---
 
     /**
-     * Vérifie si on doit synchroniser l'action vers l'anglais
+     * Vérifie si on doit synchroniser vers les autres langues.
+     * Condition : être sur la langue primaire, avoir plusieurs langues configurées,
+     * et la case "Synchroniser" doit être cochée.
      */
-    shouldSyncToEn() {
-        // On ne synchronise que si on est en train d'éditer le FR
-        // et que la case est cochée
-        const isFr = this.currentLocale === 'fr';
-        const isSyncChecked = this.syncLocaleInputTarget && this.syncLocaleInputTarget.checked;
-        return isFr && isSyncChecked;
+    shouldSyncToOthers() {
+        const isPrimary = this.currentLocale === this.primaryLocale;
+        const hasMultipleLocales = this.locales.length > 1;
+        const isSyncChecked = this.hasSyncLocaleInputTarget && this.syncLocaleInputTarget.checked;
+        return isPrimary && hasMultipleLocales && isSyncChecked;
+    }
+
+    /** Action Stimulus branchée sur la checkbox de sync (data-action="change->page-builder#toggleSync") */
+    toggleSync() {
+        // Pas d'action directe — la checkbox est lue par shouldSyncToOthers() à chaque opération.
     }
 
     /**
-     * Récupère ou initialise le manager EN pour la synchro
+     * Retourne les locales secondaires (toutes sauf la primaire).
      */
-    getEnManagerForSync() {
-        // Si le manager EN n'existe pas encore, on le crée comme une copie du FR actuel
-        if (!this.managers['en']) {
+    getSecondaryLocales() {
+        return this.locales.slice(1);
+    }
+
+    /**
+     * Récupère ou initialise le manager pour une locale donnée (pour la synchro).
+     * Si le manager n'existe pas encore, il est créé comme une copie profonde de la locale primaire.
+     */
+    getOrCreateManagerForSync(locale) {
+        if (!this.managers[locale]) {
             const newManager = new SectionsManager(this.columnPresets);
             if (this.sectionsManager.sections) {
-                // On clone les données brutes
                 const rawSections = JSON.parse(JSON.stringify(this.sectionsManager.sections));
-
-                // On réhydrate les instances de Row et Column
                 newManager.sections = rawSections.map(section => {
                     if (section.rows) {
                         section.rows = section.rows.map(rowData => {
-                            // ← RÉHYDRATER la Row
                             const row = new Row();
                             row.id = rowData.id;
                             row.align = rowData.align || 'center';
@@ -305,9 +314,9 @@ export default class extends Controller {
                     return section;
                 });
             }
-            this.managers['en'] = newManager;
+            this.managers[locale] = newManager;
         }
-        return this.managers['en'];
+        return this.managers[locale];
     }
 
     // --- Multilingue ---
@@ -378,7 +387,8 @@ export default class extends Controller {
         this.inspector = new InspectorView(this, this.sectionsManager);
 
         // 4. Rafraîchissement de l'interface
-        document.getElementById('btnCurrentLocale').textContent = newLocale.toUpperCase();
+        const localeBtn = document.getElementById('btnCurrentLocale');
+        if (localeBtn) localeBtn.textContent = newLocale.toUpperCase();
         this.showInspectorDefault(); // Retour à l'inspecteur par défaut pour éviter les conflits d'ID de blocs
         this.renderCanvas();
     }
@@ -445,16 +455,13 @@ export default class extends Controller {
         this.showSectionInspector();
 
         // SYNCHRO
-        if (this.shouldSyncToEn()) {
-            const enManagerExisted = !!this.managers['en'];
-            const enManager = this.getEnManagerForSync();
-
-            if (enManagerExisted) {
-                const lastSectionFr = this.sectionsManager.sections[this.sectionsManager.sections.length - 1];
-                if (lastSectionFr) {
+        if (this.shouldSyncToOthers()) {
+            const lastSectionFr = this.sectionsManager.sections[this.sectionsManager.sections.length - 1];
+            this.getSecondaryLocales().forEach(locale => {
+                const existed = !!this.managers[locale];
+                const manager = this.getOrCreateManagerForSync(locale);
+                if (existed && lastSectionFr) {
                     const sectionCopy = JSON.parse(JSON.stringify(lastSectionFr));
-
-                    // Réhydrater les rows et colonnes
                     if (sectionCopy.rows) {
                         sectionCopy.rows = sectionCopy.rows.map(rowData => {
                             const row = new Row();
@@ -462,7 +469,6 @@ export default class extends Controller {
                             row.align = rowData.align || 'center';
                             row.justify = rowData.justify || 'center';
                             row.reverseMobile = rowData.reverseMobile || false;
-
                             if (rowData.columns) {
                                 row.columns = rowData.columns.map(colData => {
                                     const col = new Column(colData.width);
@@ -473,14 +479,12 @@ export default class extends Controller {
                                     return col;
                                 });
                             }
-
                             return row;
                         });
                     }
-
-                    enManager.sections.push(sectionCopy);
+                    manager.sections.push(sectionCopy);
                 }
-            }
+            });
         }
     }
 
@@ -496,16 +500,13 @@ export default class extends Controller {
             this.sectionsManager.addSectionFromTemplate(templateType);
 
             // SYNCHRO TEMPLATE
-            if (this.shouldSyncToEn()) {
-                const enManagerExisted = !!this.managers['en'];
-                const enManager = this.getEnManagerForSync();
-
-                if (enManagerExisted) {
-                    const lastSectionFr = this.sectionsManager.sections[this.sectionsManager.sections.length - 1];
-                    if (lastSectionFr) {
+            if (this.shouldSyncToOthers()) {
+                const lastSectionFr = this.sectionsManager.sections[this.sectionsManager.sections.length - 1];
+                this.getSecondaryLocales().forEach(locale => {
+                    const existed = !!this.managers[locale];
+                    const manager = this.getOrCreateManagerForSync(locale);
+                    if (existed && lastSectionFr) {
                         const sectionCopy = JSON.parse(JSON.stringify(lastSectionFr));
-
-                        // Réhydrater les rows et colonnes
                         if (sectionCopy.rows) {
                             sectionCopy.rows = sectionCopy.rows.map(rowData => {
                                 const row = new Row();
@@ -513,7 +514,6 @@ export default class extends Controller {
                                 row.align = rowData.align || 'center';
                                 row.justify = rowData.justify || 'center';
                                 row.reverseMobile = rowData.reverseMobile || false;
-
                                 if (rowData.columns) {
                                     row.columns = rowData.columns.map(colData => {
                                         const col = new Column(colData.width);
@@ -524,14 +524,12 @@ export default class extends Controller {
                                         return col;
                                     });
                                 }
-
                                 return row;
                             });
                         }
-
-                        enManager.sections.push(sectionCopy);
+                        manager.sections.push(sectionCopy);
                     }
-                }
+                });
             }
 
             this.renderCanvas();
@@ -607,18 +605,19 @@ export default class extends Controller {
         this.sectionsManager.addBlock(sectionId, rowId, columnId, type);
 
         // SYNCHRO BLOC
-        if (this.shouldSyncToEn()) {
-            const enManagerExisted = !!this.managers['en'];
-            const enManager = this.getEnManagerForSync();
-
-            // Correction doublon : on n'ajoute le bloc que si le manager existait déjà.
-            // Sinon, le clone contient déjà le nouveau bloc.
-            if (enManagerExisted) {
-                const targetSection = enManager.sections.find(s => s.id === sectionId);
-                if (targetSection) {
-                    enManager.addBlock(sectionId, rowId, columnId, type);
+        if (this.shouldSyncToOthers()) {
+            this.getSecondaryLocales().forEach(locale => {
+                const existed = !!this.managers[locale];
+                const manager = this.getOrCreateManagerForSync(locale);
+                // On n'ajoute le bloc que si le manager existait déjà.
+                // Sinon, le clone contient déjà le nouveau bloc.
+                if (existed) {
+                    const targetSection = manager.sections.find(s => s.id === sectionId);
+                    if (targetSection) {
+                        manager.addBlock(sectionId, rowId, columnId, type);
+                    }
                 }
-            }
+            });
         }
 
         this.renderCanvas();

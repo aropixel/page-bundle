@@ -1,5 +1,6 @@
 import { initImageManager } from '/bundles/aropixeladmin/js/module/image-manager/launcher.js';
 import { IM_Library } from '/bundles/aropixeladmin/js/module/image-manager/library.js';
+import { t } from '../i18n.js';
 
 export const sliderBlockType = {
     type: 'slider',
@@ -24,7 +25,7 @@ export const sliderBlockType = {
                 imgWrapper.className = 'pb-slider-item-preview position-relative';
                 imgWrapper.style.width = '100px';
                 imgWrapper.style.height = '100px';
-                if (block.selectedIndex === index && block.id === ctx.sectionsManager.selectedBlockId) {
+                if (block.selectedIndex === index) {
                     imgWrapper.style.border = '2px solid #0CABA8';
                     imgWrapper.style.boxShadow = '0 0 5px rgba(0,123,255,0.5)';
                 } else {
@@ -91,7 +92,7 @@ export const sliderBlockType = {
                 delBtn.style.zIndex = '10';
                 delBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    if (confirm('Supprimer cette image ?')) {
+                    if (confirm(t('page.builder.block.slider.delete_confirm'))) {
                         block.items.splice(index, 1);
                         block.selectedIndex = null;
                         ctx.renderCanvas();
@@ -101,36 +102,14 @@ export const sliderBlockType = {
 
                 // Clic pour sélectionner dans l'inspecteur
                 imgWrapper.addEventListener('click', () => {
-                    // Désélectionner les items de TOUS les blocs slider
-                    ctx.sectionsManager.sections.forEach(section => {
-                        section.rows.forEach(row => {
-                            row.columns.forEach(col => {
-                                col.blocks.forEach(b => {
-                                    if (b.type === 'slider') {
-                                        b.selectedIndex = null;
-                                    }
-                                });
-                            });
-                        });
-                    });
-
                     block.selectedIndex = index;
-
-                    // Désélectionner visuellement les autres imgWrapper de TOUS les blocs
-                    document.querySelectorAll('.pb-slider-item-preview').forEach(el => {
-                        el.style.border = '1px solid #ddd';
-                        el.style.boxShadow = 'none';
-                    });
-
-                    imgWrapper.style.border = '2px solid #0CABA8';
-                    imgWrapper.style.boxShadow = '0 0 5px rgba(0,123,255,0.5)';
                     ctx.onBlockClick(ctx.sectionsManager.selectedSectionId, ctx.sectionsManager.selectedRowId, ctx.sectionsManager.selectedColumnId, block.id);
                 });
 
                 content.appendChild(imgWrapper);
             });
         } else {
-            content.innerHTML = '<div class="p-3 text-muted small w-100 text-center">Aucune image. Cliquez sur le bloc pour en ajouter.</div>';
+            content.innerHTML = `<div class="p-3 text-muted small w-100 text-center">${t('page.builder.block.slider.empty')}</div>`;
         }
 
         const addBtn = document.createElement('button');
@@ -138,19 +117,24 @@ export const sliderBlockType = {
         addBtn.style.height = '100px';
         addBtn.style.border = '1px solid #ddd';
         addBtn.style.cursor = 'pointer';
-        // addBtn.dataset.action = 'click->page-builder#updateBlockContent'; // Retiré car on gère manuellement le clic
-        addBtn.dataset.op = 'add-item';
-        addBtn.innerHTML = '<i class="fas fa-plus"></i>';
+        addBtn.innerHTML = '<i class="fas fa-plus me-2"></i>';
         addBtn.addEventListener('click', (e) => {
-            // 1. Sélectionner le bloc
-            ctx.onBlockClick(ctx.sectionsManager.selectedSectionId, ctx.sectionsManager.selectedRowId, ctx.sectionsManager.selectedColumnId, block.id);
-            // 2. Exécuter l'action d'ajout sur CE bloc spécifiquement
-            ctx.sectionsManager.blockTypes.handleInspectorInput(block, e);
-            // 3. Rafraîchir le canvas ET l'inspecteur
-            ctx.renderCanvas();
-            ctx.showInspectorDefault();
+            e.stopPropagation();
+            block.items.push({ id: Date.now(), src: '', imageId: null, alt: '' });
+            block.selectedIndex = block.items.length - 1;
 
-            e.preventDefault();
+            const blockEl = addBtn.closest('[data-block-id]');
+            if (blockEl) {
+                ctx.sectionsManager.selectBlock(
+                    blockEl.dataset.sectionId,
+                    blockEl.dataset.rowId,
+                    blockEl.dataset.columnId,
+                    blockEl.dataset.blockId
+                );
+                ctx.tabs.activate('inspector');
+                ctx.showBlockInspector();
+            }
+            ctx.renderCanvas();
         });
         content.appendChild(addBtn);
 
@@ -195,7 +179,7 @@ export const sliderBlockType = {
                     preview.appendChild(input);
                     preview.removeAttribute('data-new');
                 }
-                initializeItemManager(block, ctx, editCard);
+                initializeItemManager(block, ctx, editCard, block.selectedIndex);
             }
         }
 
@@ -207,18 +191,17 @@ export const sliderBlockType = {
         const index = parseInt(event.target.dataset.index, 10);
 
         if (op === 'add-item') {
-            if (!block) return;
             block.items.push({ id: Date.now(), src: '', imageId: null, alt: '' });
             block.selectedIndex = block.items.length - 1;
         } else if (op === 'select-item') {
-            if (block) block.selectedIndex = index;
+            block.selectedIndex = index;
         } else if (op === 'update-alt') {
-            if (block && block.items[index]) block.items[index].alt = event.target.value;
+            block.items[index].alt = event.target.value;
         }
     },
 };
 
-function initializeItemManager(block, ctx, container) {
+function initializeItemManager(block, ctx, container, index) {
     const managerEl = container.querySelector('.im-manager');
     if (!managerEl) return;
 
@@ -232,12 +215,11 @@ function initializeItemManager(block, ctx, container) {
     const targetNode = managerEl.querySelector('.preview');
     const observer = new MutationObserver(() => {
         const img = targetNode.querySelector('img');
-        const currentBlock = ctx.sectionsManager.selectedBlock;
-        if (img && currentBlock && currentBlock.type === 'slider' && currentBlock.selectedIndex !== null) {
-            const src = img.getAttribute('src').replace('/media/cache/admin_thumbnail/', '/media/cache/admin_preview/');
-            currentBlock.items[currentBlock.selectedIndex].src = src;
+        if (img) {
+            const src = img.getAttribute('src').replace('/media/cache/admin_thumbnail/', '/media/cache/resolve/admin_preview/');
+            block.items[block.selectedIndex].src = src;
             const input = managerEl.querySelector('input[type="hidden"]');
-            if (input) currentBlock.items[currentBlock.selectedIndex].imageId = input.value;
+            if (input) block.items[block.selectedIndex].imageId = input.value;
             ctx.renderCanvas();
         }
     });
