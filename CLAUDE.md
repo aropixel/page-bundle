@@ -88,3 +88,17 @@ Two invariants:
 - **A URL that cannot be generated returns `null`, never throws.** `RoutePageUrlGenerator` catches
   routing exceptions and logs a warning. Saving a page must not fail because one link is
   misconfigured — callers fall back to the block's raw `url`.
+
+### The bundle ships no style of its own
+
+`title_styles` and `button_colors` are **empty by default**, and each block reads its own list from
+`page_builder_config` at inspector render time (`assets/page_builder/style_options.js`). A style is a
+CSS class only the host application's stylesheet can define, so a list hardcoded in the bundle would
+offer authors options that render as nothing.
+
+Three invariants:
+
+- **Never hardcode a style, colour or class list in a block type.** Read the configured list.
+- **An empty list hides its selector**, it does not fall back to defaults.
+- **A saved value absent from the configuration is kept and flagged**, never silently replaced —
+  rendering the inspector must not mutate a page's content.

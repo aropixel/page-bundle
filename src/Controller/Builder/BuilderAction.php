@@ -68,6 +68,8 @@ class BuilderAction extends AbstractController
             'page.builder.block.button.link_page',
             'page.builder.block.button.link_page_label',
             'page.builder.block.button.color',
+            'page.builder.block.title.style',
+            'page.builder.style.orphan',
             'page.builder.block.button.default_label',
             'page.builder.block.banner.default_label',
             'page.builder.block.blog.default_label',

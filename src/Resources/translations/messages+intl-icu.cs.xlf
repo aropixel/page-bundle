@@ -561,6 +561,14 @@
         <source>page.builder.block.button.color</source>
         <target>Barva tlačítka</target>
       </trans-unit>
+      <trans-unit id="pb_style_orphan" resname="page.builder.style.orphan">
+        <source>page.builder.style.orphan</source>
+        <target>{style} (nedeklarovaný styl)</target>
+      </trans-unit>
+      <trans-unit id="pb_title_style" resname="page.builder.block.title.style">
+        <source>page.builder.block.title.style</source>
+        <target>Styl nadpisu</target>
+      </trans-unit>
       <trans-unit id="pb_btn_default_label" resname="page.builder.block.button.default_label">
         <source>page.builder.block.button.default_label</source>
         <target>Více informací</target>

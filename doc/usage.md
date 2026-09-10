@@ -155,7 +155,13 @@ When using the **Custom JSON Page** type with the built-in page builder, you can
 
 ### Title block styles
 
-The title block can offer a dropdown of predefined CSS styles. Each style maps a `value` (used as a CSS class in your front-end) to a human-readable `label` displayed in the admin interface.
+The title block can offer a dropdown of predefined CSS styles. Each style maps a `value` to a
+human-readable `label` displayed in the admin interface.
+
+The `value` is written to the block's `size` and drives the rendered markup: it reads as
+`tag-class_class_size`, where the leading segment is the HTML tag and a trailing number is a pixel
+font size. So `h2-highlight_32` renders `<h2 class="highlight" style="font-size:32px">`, and a bare
+`h2` renders `<h2>` with no class.
 
 ### Button block colors
 
@@ -177,6 +183,14 @@ aropixel_page:
             - { value: 'btn-secondary', label: 'Secondary' }
             - { value: 'btn-outline-primary', label: 'Outline' }
 ```
+
+Both lists are **empty by default**, and an empty list hides its selector entirely — the bundle
+defines no CSS of its own, so it ships no style: offering authors a choice that renders as nothing
+would be worse than offering none. Declare only what your stylesheet actually provides.
+
+If a page was saved with a style you later removed from the configuration, the value is **kept and
+flagged** in the dropdown rather than silently replaced: opening the inspector never rewrites
+existing content.
 
 ### Linking to another page
 

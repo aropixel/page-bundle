@@ -1,3 +1,6 @@
+import { t } from '../i18n.js';
+import { getStyleOptions, renderStyleSelect } from '../style_options.js';
+
 export const titleBlockType = {
     type: 'title',
 
@@ -189,23 +192,13 @@ export const titleBlockType = {
                         data-action="input->page-builder#updateBlockContent"
                     ></textarea>
                 </div>
-
-                <div class="mb-2">
-                    <label class="form-label pb-label" for="title-style">Style du titre</label>
-                    <select
-                        class="form-select form-select-sm"
-                        id="title-style" name="title-style"
-                        data-page-builder-target="blockStyleInput"
-                        data-action="change->page-builder#updateBlockContent"
-                    >
-                        <option value="h2" ${block.size === 'h2' ? 'selected' : ''}>Style</option>
-                        <option value="h2-heading_32" ${block.size === 'h2-heading' ? 'selected' : ''}>Titre souligné</option>
-                        <option value="h2-heading_36" ${block.size === 'h2-heading_36' ? 'selected' : ''}>Titre en-tête souligné</option>
-                        <option value="h2-secondary_32" ${block.size === 'h2-secondary_32' ? 'selected' : ''}>Titre jaune</option>
-                        <option value="div-title_24" ${block.size === 'div-title_24' ? 'selected' : ''}>Petit titre rose</option>
-                        <option value="div-name_big_44" ${block.size === 'div-name_big_44' ? 'selected' : ''}>Gros titre rose</option>
-                    </select>
-                </div>
+${renderStyleSelect({
+                    options: getStyleOptions(ctx, 'title_styles'),
+                    selected: block.size || '',
+                    id: 'title-style',
+                    label: t('page.builder.block.title.style'),
+                    target: 'blockStyleInput',
+                })}
             `;
         }
 
