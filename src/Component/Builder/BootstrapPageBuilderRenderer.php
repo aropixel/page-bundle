@@ -4,7 +4,6 @@ namespace Aropixel\PageBundle\Component\Builder;
 
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 
 /**
@@ -13,7 +12,7 @@ use Twig\Environment;
 class BootstrapPageBuilderRenderer implements PageBuilderRendererInterface
 {
     public function __construct(
-        private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly PageUrlGeneratorInterface $pageUrlGenerator,
         private readonly RequestStack $requestStack,
         private readonly Environment $twig,
         private readonly CacheManager $cacheManager,
@@ -395,15 +394,7 @@ class BootstrapPageBuilderRenderer implements PageBuilderRendererInterface
 
     public function getUrlFromPage(array $data): ?string
     {
-        $pagePath = $data['pagePath'] ?? null;
-        $parentSlug = $data['parentSlug'] ?? null;
-
-        if ($pagePath) {
-            $fullPath = $parentSlug ? $parentSlug . '/' . $pagePath : $pagePath;
-            return $this->urlGenerator->generate('front_page_show', ['fullPath' => $fullPath], UrlGeneratorInterface::RELATIVE_PATH);
-        }
-
-        return null;
+        return $this->pageUrlGenerator->generate($data);
     }
 
     private function renderButtonBlock(array $block): string

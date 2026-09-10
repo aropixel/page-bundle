@@ -72,6 +72,11 @@ class AropixelPageExtension extends Extension implements PrependExtensionInterfa
             : [];
         $container->setParameter('aropixel_page.page_builder', array_merge($config['page_builder'], ['locales' => $locales]));
         $container->setParameter('aropixel_page.page_builder.enabled', $config['page_builder']['enabled']);
+        $frontRoute = $config['page_builder']['front_route'];
+        $container->setParameter('aropixel_page.page_builder.front_route', $frontRoute);
+        $container->setParameter('aropixel_page.page_builder.front_route.name', $frontRoute['name']);
+        $container->setParameter('aropixel_page.page_builder.front_route.parameter', $frontRoute['parameter']);
+        $container->setParameter('aropixel_page.page_builder.front_route.include_parent', $frontRoute['include_parent']);
     }
 
     public function prepend(ContainerBuilder $container): void

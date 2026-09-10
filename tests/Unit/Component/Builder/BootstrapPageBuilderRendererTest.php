@@ -3,10 +3,10 @@
 namespace Aropixel\PageBundle\Tests\Unit\Component\Builder;
 
 use Aropixel\PageBundle\Component\Builder\BootstrapPageBuilderRenderer;
+use Aropixel\PageBundle\Component\Builder\PageUrlGeneratorInterface;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 
 class TestableBootstrapPageBuilderRenderer extends BootstrapPageBuilderRenderer
@@ -43,13 +43,13 @@ class BootstrapPageBuilderRendererTest extends TestCase
 
     protected function setUp(): void
     {
-        $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
+        $pageUrlGenerator = $this->createMock(PageUrlGeneratorInterface::class);
         $requestStack = $this->createMock(RequestStack::class);
         $twig = $this->createMock(Environment::class);
         $cacheManager = $this->createMock(CacheManager::class);
 
         $this->renderer = new TestableBootstrapPageBuilderRenderer(
-            $urlGenerator,
+            $pageUrlGenerator,
             $requestStack,
             $twig,
             $cacheManager,
@@ -142,7 +142,7 @@ class BootstrapPageBuilderRendererTest extends TestCase
         $requestStack->method('getCurrentRequest')->willReturn(null);
 
         $renderer = new TestableBootstrapPageBuilderRenderer(
-            $this->createMock(UrlGeneratorInterface::class),
+            $this->createMock(PageUrlGeneratorInterface::class),
             $requestStack,
             $this->createMock(Environment::class),
             $this->createMock(CacheManager::class),

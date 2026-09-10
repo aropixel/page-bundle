@@ -178,6 +178,61 @@ aropixel_page:
             - { value: 'btn-outline-primary', label: 'Outline' }
 ```
 
+### Linking to another page
+
+A button block, or a clickable column, can target another page of the site rather than a raw URL. The
+builder stores the target's slug (`pagePath`, plus `parentSlug` when the target has a parent) and the
+renderer turns it into a URL at save time — which means the bundle needs to know **how your
+application routes its pages**.
+
+By default it generates the route `front_page_show` with a `fullPath` parameter, the parent slug
+prefixing the page slug. Point it at your own route:
+
+```yaml
+aropixel_page:
+    page_builder:
+        front_route:
+            name: 'app_page_show'   # your route name
+            parameter: 'slug'       # the parameter receiving the page path
+            include_parent: false   # flat URLs (/page/{slug}); true for hierarchical ones (/{fullPath})
+```
+
+`include_parent` is the difference between the two usual conventions:
+
+| Convention | Route | `include_parent` | Generated |
+|---|---|---|---|
+| Hierarchical | `/{fullPath}` | `true` (default) | `about/team` |
+| Flat | `/page/{slug}` | `false` | `/page/team` |
+
+A route that cannot be generated — wrong name, missing parameter — produces **no URL and a warning
+in the logs**, never an exception: a misconfigured link must not stop an author from saving a page.
+The block then falls back to whatever raw `url` it carries.
+
+If neither convention fits — per-host URLs in a multi-tenant application, a locale in the path,
+anything that needs more than a route name — implement `PageUrlGeneratorInterface` and replace the
+service:
+
+```php
+namespace App\Page;
+
+use Aropixel\PageBundle\Component\Builder\PageUrlGeneratorInterface;
+
+class TenantPageUrlGenerator implements PageUrlGeneratorInterface
+{
+    public function generate(array $data): ?string
+    {
+        // $data['pagePath'], $data['parentSlug'] - return null when you cannot build a URL
+    }
+}
+```
+
+```yaml
+# config/services.yaml
+services:
+    Aropixel\PageBundle\Component\Builder\PageUrlGeneratorInterface:
+        alias: App\Page\TenantPageUrlGenerator
+```
+
 ### Multilingual support
 
 The page builder locale switcher is driven by the `aropixel_admin.translations.locales` setting in `AdminBundle` — there is no separate locale config in `PageBundle`. See the [AdminBundle i18n documentation](../../admin-bundle/doc/i18n.md) for details.

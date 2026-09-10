@@ -26,6 +26,15 @@ services:
     resource: '../../Controller'
     tags: [ 'controller.service_arguments' ]
 
+  Aropixel\PageBundle\Component\Builder\RoutePageUrlGenerator:
+    arguments:
+      $routeName: '%aropixel_page.page_builder.front_route.name%'
+      $routeParameter: '%aropixel_page.page_builder.front_route.parameter%'
+      $includeParent: '%aropixel_page.page_builder.front_route.include_parent%'
+
+  Aropixel\PageBundle\Component\Builder\PageUrlGeneratorInterface:
+    alias: Aropixel\PageBundle\Component\Builder\RoutePageUrlGenerator
+
   Aropixel\PageBundle\Controller\Builder\BuilderAction:
     arguments:
       $pageBuilderConfig: '%aropixel_page.page_builder%'

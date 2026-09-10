@@ -73,3 +73,18 @@ For a custom page type to be editable in the admin:
 2. Create the override template at `templates/bundles/AropixelPageBundle/{type}/form.html.twig`.
 
 The value returned by `getType()` must match exactly the `type` set on the `Page` entity.
+
+### Front page URLs are an application concern
+
+The renderers never name a front-office route. A button block or a clickable column carrying
+`linkType: 'page'` is resolved through `PageUrlGeneratorInterface`, whose default implementation
+(`RoutePageUrlGenerator`) generates the route configured under `page_builder.front_route`
+(`name` / `parameter` / `include_parent`, defaulting to `front_page_show` + `fullPath` + hierarchical).
+
+Two invariants:
+
+- **Never hardcode a route name in a renderer.** The bundle has no way to know how a host
+  application routes its pages; doing so makes the bundle unusable anywhere the name differs.
+- **A URL that cannot be generated returns `null`, never throws.** `RoutePageUrlGenerator` catches
+  routing exceptions and logs a warning. Saving a page must not fail because one link is
+  misconfigured — callers fall back to the block's raw `url`.
