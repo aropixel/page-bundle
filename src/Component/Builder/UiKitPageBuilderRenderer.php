@@ -53,7 +53,7 @@ class UiKitPageBuilderRenderer implements PageBuilderRendererInterface
             $sectionClasses = ['uk-section'];
             $sectionStyle = '';
 
-            $background = $section['background'];
+            $background = $section['background'] ?? null;
             if ($background) {
                 $backgroundType = $background['type'] ?? null;
 
@@ -92,7 +92,7 @@ class UiKitPageBuilderRenderer implements PageBuilderRendererInterface
             $rows = $section['rows'] ?? [];
             foreach ($rows as $row) {
 
-                $slider = $row['slider'];
+                $slider = $row['slider'] ?? null;
 
                 $rowAlign = $row['align'] ?? null;
                 $gridClasses = ['uk-grid'];
@@ -105,7 +105,7 @@ class UiKitPageBuilderRenderer implements PageBuilderRendererInterface
                     $gridClasses[] = $this->mapJustifyContent($rowJustifyContent);
                 }
 
-                if ($row['type'] === 'collapse') {
+                if (($row['type'] ?? null) === 'collapse') {
                     $gridClasses[] = 'uk-grid-collapse';
                     $sectionClasses[] = 'uk-padding-remove';
                 }
@@ -123,7 +123,7 @@ class UiKitPageBuilderRenderer implements PageBuilderRendererInterface
 
                     $colClasses = [$this->mapWidthToUIKit($widths)];
 
-                    if ($row['reverseMobile'] && 0 == $key) {
+                    if (($row['reverseMobile'] ?? false) && 0 == $key) {
                         $colClasses[] = 'uk-flex-last uk-flex-first@m';
                     }
 
@@ -152,8 +152,9 @@ class UiKitPageBuilderRenderer implements PageBuilderRendererInterface
                     }
 
                     /** Si une hauteur est définie, on fait en sorte que le contenu soit centré verticalement */
-                    if ($col['height'] && 'auto' !== $col['height']) {
-                        $colClasses[] = 'uk-height-' . $col['height'];
+                    $colHeight = $col['height'] ?? null;
+                    if ($colHeight && 'auto' !== $colHeight) {
+                        $colClasses[] = 'uk-height-' . $colHeight;
                         $colClasses[] = 'uk-flex uk-flex-column uk-flex-center';
                     }
 
@@ -196,7 +197,7 @@ class UiKitPageBuilderRenderer implements PageBuilderRendererInterface
                         } else {
                             $blocksHtml .= $blockContent;
                         }
-                        if ('banner' === $block['type']) {
+                        if ('banner' === ($block['type'] ?? null)) {
                             $sectionClasses[] = 'uk-section-small';
                             $sectionClasses[] = 'bkg-img-primary';
                             $sectionClasses[] = 'scrolling-text';
@@ -373,7 +374,7 @@ class UiKitPageBuilderRenderer implements PageBuilderRendererInterface
         }
 
         $alignment = '';
-        if ($block['horizontalAlignment']) {
+        if ($block['horizontalAlignment'] ?? null) {
             $alignment = ' class="uk-text-' . $block['horizontalAlignment'] . '"';
         }
 
@@ -427,7 +428,7 @@ class UiKitPageBuilderRenderer implements PageBuilderRendererInterface
         }
 
         $url = $this->escapeText($url);
-        $class = $block['horizontalAlignment'] ? 'uk-text-' . $block[ 'horizontalAlignment'] : '';
+        $class = ($block['horizontalAlignment'] ?? null) ? 'uk-text-' . $block['horizontalAlignment'] : '';
         $colorClass = $block['class'] ?? null;
 
         // pour l'instant, on récupère le style directement dans le css selon le fond
@@ -522,7 +523,7 @@ class UiKitPageBuilderRenderer implements PageBuilderRendererInterface
 
         $alignment = '';
         if (isset($block['horizontalAlignment']) && $block['horizontalAlignment']) {
-            $alignment = ' uk-text-' . $block['horizontalAlignment'];
+            $alignment = ' uk-text-' . ($block['horizontalAlignment'] ?? '');
         }
 
         return sprintf('<div class="uk-inline%s"><img src="%s" alt="%s"%s/></div>', $alignment, $this->escapeText($src), $alt, $style);
@@ -570,13 +571,13 @@ class UiKitPageBuilderRenderer implements PageBuilderRendererInterface
 
     private function renderGrid(array $block): string
     {
-        $row = $block['row'];
+        $row = $block['row'] ?? null;
         if (empty($row)) {
             return '';
         }
 
         $html = '<div class="uk-grid-match uk-child-width-auto uk-text-center uk-flex-center uk-scrollspy-inview" uk-grid>';
-        foreach ($row['columns'] as $col) {
+        foreach ($row['columns'] ?? [] as $col) {
 
             $style = '';
             $colClasses = [];

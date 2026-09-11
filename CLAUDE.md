@@ -140,3 +140,13 @@ application with pages that do not all belong to the same audience replaces the 
 - **Denial is `NotFoundHttpException`, never `AccessDeniedException`** — a 403 confirms that the page
   exists.
 - Page *creation* is out of scope: there is no entity to check yet.
+
+### Renderers read content, not a contract
+
+A payload is content: it may have been written by hand, or saved by an older builder that did not
+yet set a key the JS models set today. **Every read of a payload key goes through `??`** (or a prior
+`isset`/`empty` guard) in both renderers — a missing key is normal, not exceptional, and rendering
+must never depend on which version of the editor wrote the page.
+
+`RendererTolerantPayloadTest` renders the bare minimum through both renderers with an error handler
+installed, and fails on any warning.

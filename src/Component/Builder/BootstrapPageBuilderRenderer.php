@@ -51,7 +51,7 @@ class BootstrapPageBuilderRenderer implements PageBuilderRendererInterface
             $sectionClasses = ['py-5'];
             $sectionStyle = '';
 
-            $background = $section['background'];
+            $background = $section['background'] ?? null;
             if ($background) {
                 $backgroundType = $background['type'] ?? null;
 
@@ -84,7 +84,7 @@ class BootstrapPageBuilderRenderer implements PageBuilderRendererInterface
 
             $rows = $section['rows'] ?? [];
             foreach ($rows as $row) {
-                $slider = $row['slider'];
+                $slider = $row['slider'] ?? null;
 
                 $rowAlign = $row['align'] ?? null;
                 $rowJustify = $row['justify'] ?? null;
@@ -98,7 +98,7 @@ class BootstrapPageBuilderRenderer implements PageBuilderRendererInterface
                     $gridClasses[] = $this->mapJustifyContent($rowJustify);
                 }
 
-                if ($row['type'] === 'collapse') {
+                if (($row['type'] ?? null) === 'collapse') {
                     $gridClasses[] = 'g-0';
                     $sectionClasses[] = 'p-0';
                 }
@@ -116,7 +116,7 @@ class BootstrapPageBuilderRenderer implements PageBuilderRendererInterface
 
                     $colClasses = [$this->mapWidthToBootstrap($widths)];
 
-                    if ($row['reverseMobile'] && 0 == $key) {
+                    if (($row['reverseMobile'] ?? false) && 0 == $key) {
                         $colClasses[] = 'order-last order-md-first';
                     }
 
@@ -142,8 +142,9 @@ class BootstrapPageBuilderRenderer implements PageBuilderRendererInterface
                         }
                     }
 
-                    if ($col['height'] && 'auto' !== $col['height']) {
-                        $style .= 'min-height:' . htmlspecialchars((string)$col['height']) . ';';
+                    $colHeight = $col['height'] ?? null;
+                    if ($colHeight && 'auto' !== $colHeight) {
+                        $style .= 'min-height:' . htmlspecialchars((string)$colHeight) . ';';
                         $colClasses[] = 'd-flex flex-column justify-content-center';
                     }
 
@@ -360,7 +361,7 @@ class BootstrapPageBuilderRenderer implements PageBuilderRendererInterface
         }
 
         $alignment = '';
-        if ($block['horizontalAlignment']) {
+        if ($block['horizontalAlignment'] ?? null) {
             $alignment = ' class="' . $this->mapHorizontalAlign($block['horizontalAlignment']) . '"';
         }
 
@@ -411,7 +412,7 @@ class BootstrapPageBuilderRenderer implements PageBuilderRendererInterface
         }
 
         $url = $this->escapeText($url);
-        $class = $block['horizontalAlignment'] ? $this->mapHorizontalAlign($block['horizontalAlignment']) : '';
+        $class = ($block['horizontalAlignment'] ?? null) ? $this->mapHorizontalAlign($block['horizontalAlignment']) : '';
         $colorClass = $block['class'] ?? 'btn-primary';
 
         $targetAttribute = '';
@@ -492,7 +493,7 @@ class BootstrapPageBuilderRenderer implements PageBuilderRendererInterface
 
         $alignment = '';
         if (isset($block['horizontalAlignment']) && $block['horizontalAlignment']) {
-            $alignment = ' ' . $this->mapHorizontalAlign($block['horizontalAlignment']);
+            $alignment = ' ' . $this->mapHorizontalAlign($block['horizontalAlignment'] ?? null);
         }
 
         return sprintf('<div class="%s"><img src="%s" alt="%s"%s/></div>', trim($alignment), $this->escapeText($src), $alt, $style);
@@ -528,13 +529,13 @@ class BootstrapPageBuilderRenderer implements PageBuilderRendererInterface
 
     private function renderGrid(array $block): string
     {
-        $row = $block['row'];
+        $row = $block['row'] ?? null;
         if (empty($row)) {
             return '';
         }
 
         $html = '<div class="row row-cols-auto justify-content-center text-center">';
-        foreach ($row['columns'] as $col) {
+        foreach ($row['columns'] ?? [] as $col) {
 
             $style = '';
             $colClasses = ['col'];
