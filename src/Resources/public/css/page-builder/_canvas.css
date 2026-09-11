@@ -213,12 +213,14 @@
     margin-left: auto;
 }
 
+/* Pas de `color` ici : la colonne héritait d'un gris fixe, qui coupait la couleur de texte posée sur
+ * la section — tout ce qui ne lisait pas `--pb-text-color` restait gris. Le texte propre au canvas
+ * (colonne vide, étiquettes) porte sa couleur lui-même. */
 .pb-page-column, .pb-nested-column {
     border: 1px dashed #d1d5db;
     padding: 0.5rem;
     min-height: 60px;
     font-size: 0.8rem;
-    color: #4b5563;
     display: flex;
     flex-direction: column;
     cursor: pointer;

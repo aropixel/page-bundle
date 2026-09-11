@@ -11,17 +11,30 @@
     {% endif %}
 {% endblock %}
 
+{# `parent()` d'abord : ce bloc porte tout le temps d'exécution de l'administration — app.js, les
+   traductions DataTables, le gestionnaire d'images. Le redéfinir sans lui, ce que faisait ce
+   gabarit, laissait le builder dans une administration amputée : bibliothèque d'images en anglais
+   et sans mise en forme, et `initImageManager` absent de `window`. #}
 {% block theme_javascripts %}
+    {{ parent() }}
+
     <script type="application/json" id="page-json-list-url">
         {{ (json_list_url|default(url('aropixel_builder_page_json_list')))|json_encode(constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_HEX_TAG'))|raw }}
     </script>
     <script type="application/json" id="page-builder-config">
         {{ page_builder_config|json_encode(constant('JSON_HEX_TAG') b-or constant('JSON_UNESCAPED_UNICODE'))|raw }}
     </script>
-    {% if not aropixel_asset_mapper_enabled %}
-        <script src="{{ asset('bundles/aropixelpage/js/page_builder_controller.js') }}" type="module"></script>
-        <script src="{{ asset('bundles/aropixelpage/js/page_builder_saver_controller.js') }}" type="module"></script>
-    {% endif %}
+
+    {# Bloc à part pour que les applications qui empaquettent leurs assets le vident : servis en
+       modules bruts, ces contrôleurs demandent au navigateur de résoudre `@hotwired/stimulus`, ce
+       qu'il ne sait pas faire sans importmap. Elles fournissent alors les mêmes contrôleurs par leur
+       propre entrée, sans perdre le reste du bloc. #}
+    {% block builder_javascripts %}
+        {% if not aropixel_asset_mapper_enabled %}
+            <script src="{{ asset('bundles/aropixelpage/js/page_builder_controller.js') }}" type="module"></script>
+            <script src="{{ asset('bundles/aropixelpage/js/page_builder_saver_controller.js') }}" type="module"></script>
+        {% endif %}
+    {% endblock %}
 {% endblock %}
 
 {% block body_content %}
