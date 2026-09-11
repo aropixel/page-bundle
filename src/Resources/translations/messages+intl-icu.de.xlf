@@ -377,6 +377,18 @@
         <source>page.builder.inspector.column.border_radius</source>
         <target>Eckenradius (px)</target>
       </trans-unit>
+      <trans-unit id="pb_insp_text_color" resname="page.builder.inspector.text_color">
+        <source>page.builder.inspector.text_color</source>
+        <target>Textfarbe</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_link_color" resname="page.builder.inspector.link_color">
+        <source>page.builder.inspector.link_color</source>
+        <target>Linkfarbe</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_color_reset" resname="page.builder.inspector.color_reset">
+        <source>page.builder.inspector.color_reset</source>
+        <target>Standard</target>
+      </trans-unit>
       <trans-unit id="pb_insp_bg_type" resname="page.builder.inspector.background_type">
         <source>page.builder.inspector.background_type</source>
         <target>Hintergrundtyp</target>

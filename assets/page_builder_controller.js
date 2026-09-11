@@ -37,6 +37,8 @@ export default class extends Controller {
         'sectionBackgroundImageValue',
         'sectionBackgroundImageName',
         'sectionBackgroundClassInput',
+        'sectionTextColorPicker',
+        'sectionLinkColorPicker',
         'blockTitle',
         'blockContentInput',
         'blockUrlInput',
@@ -1163,6 +1165,27 @@ export default class extends Controller {
             this.sectionsManager.updateSectionBackground(null, null);
             this.renderCanvas();
         }
+    }
+
+    updateSectionTextColor(event) {
+        this.sectionsManager.updateSectionTextColor(event.target.value);
+        this.renderCanvas();
+    }
+
+    updateSectionLinkColor(event) {
+        this.sectionsManager.updateSectionLinkColor(event.target.value);
+        this.renderCanvas();
+    }
+
+    /** Revenir aux couleurs du thème : un champ `color` ne sait pas rendre « aucune valeur ». */
+    resetSectionTextColor() {
+        this.sectionsManager.updateSectionTextColor(null);
+        this.renderCanvas();
+    }
+
+    resetSectionLinkColor() {
+        this.sectionsManager.updateSectionLinkColor(null);
+        this.renderCanvas();
     }
 
     updateSectionBackgroundValue(event) {

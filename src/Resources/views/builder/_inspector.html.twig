@@ -154,14 +154,6 @@
                     {# Input couleur #}
                     <div class="mb-2 d-none" data-page-builder-target="columnBackgroundColorInput">
                         <label class="form-label pb-label d-block mb-1" for="column-bg-color">{% trans %}page.builder.inspector.background.color_label{% endtrans %}</label>
-                        <div class="d-flex flex-wrap gap-1 mb-2">
-                            <button type="button" class="pb-color-preset" style="background-color: #ff007d;" data-color="#ff007d" data-action="click->page-builder#applyColumnColorPreset" title="Rose"></button>
-                            <button type="button" class="pb-color-preset" style="background-color: #d6ff00;" data-color="#d6ff00" data-action="click->page-builder#applyColumnColorPreset" title="Jaune"></button>
-                            <button type="button" class="pb-color-preset" style="background-color: #00ffae;" data-color="#00ffae" data-action="click->page-builder#applyColumnColorPreset" title="Vert"></button>
-                            <button type="button" class="pb-color-preset" style="background-color: #3c001e;" data-color="#3c001e" data-action="click->page-builder#applyColumnColorPreset" title="Rose Sombre"></button>
-                            <button type="button" class="pb-color-preset" style="background-color: #000000;" data-color="#000000" data-action="click->page-builder#applyColumnColorPreset" title="Noir"></button>
-                            <button type="button" class="pb-color-preset" style="background-color: #ffffff; border: 1px solid #ddd;" data-color="#ffffff" data-action="click->page-builder#applyColumnColorPreset" title="Blanc"></button>
-                        </div>
                         <input type="color"
                                class="form-control form-control-lg form-control-color"
                                id="column-bg-color"
@@ -388,14 +380,6 @@
                     {# Input couleur #}
                     <div class="mb-2 d-none" data-page-builder-target="sectionBackgroundColorInput">
                         <label class="form-label pb-label d-block mb-1" for="section-bg-color">{% trans %}page.builder.inspector.background.color_label{% endtrans %}</label>
-                        <div class="d-flex flex-wrap gap-1 mb-2">
-                            <button type="button" class="pb-color-preset" style="background-color: #ff007d;" data-color="#ff007d" data-action="click->page-builder#applySectionColorPreset" title="Rose"></button>
-                            <button type="button" class="pb-color-preset" style="background-color: #d6ff00;" data-color="#d6ff00" data-action="click->page-builder#applySectionColorPreset" title="Jaune"></button>
-                            <button type="button" class="pb-color-preset" style="background-color: #00ffae;" data-color="#00ffae" data-action="click->page-builder#applySectionColorPreset" title="Vert"></button>
-                            <button type="button" class="pb-color-preset" style="background-color: #3c001e;" data-color="#3c001e" data-action="click->page-builder#applySectionColorPreset" title="Rose Sombre"></button>
-                            <button type="button" class="pb-color-preset" style="background-color: #000000;" data-color="#000000" data-action="click->page-builder#applySectionColorPreset" title="Noir"></button>
-                            <button type="button" class="pb-color-preset" style="background-color: #ffffff; border: 1px solid #ddd;" data-color="#ffffff" data-action="click->page-builder#applySectionColorPreset" title="Blanc"></button>
-                        </div>
                         <input type="color"
                                class="form-control form-control-lg form-control-color"
                                id="section-bg-color"
@@ -406,6 +390,34 @@
                     <div class="mb-3 d-none" data-page-builder-target="sectionBackgroundImageInput">
                         <div class="pb-section-background-image-content">
                             {# Le contenu sera injecté dynamiquement #}
+                        </div>
+                    </div>
+
+                    {# Couleurs du contenu : un fond libre peut rendre le texte illisible, il faut
+                       pouvoir le suivre. Vides, ce sont celles du thème qui s'appliquent. #}
+                    <div class="mb-2">
+                        <label class="form-label pb-label d-block mb-1" for="section-text-color">{% trans %}page.builder.inspector.text_color{% endtrans %}</label>
+                        <div class="d-flex align-items-center gap-2">
+                            <input type="color"
+                                   class="form-control form-control-lg form-control-color"
+                                   id="section-text-color"
+                                   data-page-builder-target="sectionTextColorPicker"
+                                   data-action="input->page-builder#updateSectionTextColor">
+                            <button type="button" class="pb-button pb-button--ghost btn-sm"
+                                    data-action="click->page-builder#resetSectionTextColor">{% trans %}page.builder.inspector.color_reset{% endtrans %}</button>
+                        </div>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label pb-label d-block mb-1" for="section-link-color">{% trans %}page.builder.inspector.link_color{% endtrans %}</label>
+                        <div class="d-flex align-items-center gap-2">
+                            <input type="color"
+                                   class="form-control form-control-lg form-control-color"
+                                   id="section-link-color"
+                                   data-page-builder-target="sectionLinkColorPicker"
+                                   data-action="input->page-builder#updateSectionLinkColor">
+                            <button type="button" class="pb-button pb-button--ghost btn-sm"
+                                    data-action="click->page-builder#resetSectionLinkColor">{% trans %}page.builder.inspector.color_reset{% endtrans %}</button>
                         </div>
                     </div>
 

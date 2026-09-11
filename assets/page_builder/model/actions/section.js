@@ -21,7 +21,9 @@ export class SectionActions {
             rows: [defaultRow],
             visibleDesktop: true,
             visibleMobile: true,
-            background: { type: null, value: null }
+            background: { type: null, value: null },
+            textColor: null,
+            linkColor: null
         };
 
         this.manager.sections.push(section);
@@ -172,7 +174,9 @@ export class SectionActions {
             rows: [],
             visibleDesktop: true,
             visibleMobile: true,
-            background: { type: null, value: null }
+            background: { type: null, value: null },
+            textColor: null,
+            linkColor: null
         };
 
         structure.rows.forEach(rowDef => {
@@ -319,6 +323,25 @@ export class SectionActions {
     }
 
 
+    /**
+     * Couleur du texte de la section. Le fond étant libre, le texte doit pouvoir suivre : un fond
+     * sombre rend illisible une encre prévue pour du clair.
+     */
+    updateSectionTextColor(color) {
+        const section = this.manager.selectedSection;
+        if (!section) return;
+
+        section.textColor = color || null;
+    }
+
+    /** Couleur des liens de la section, pour la même raison. */
+    updateSectionLinkColor(color) {
+        const section = this.manager.selectedSection;
+        if (!section) return;
+
+        section.linkColor = color || null;
+    }
+
     updateSectionBackground(type, value, imageId = null) {
         const section = this.manager.selectedSection;
         if (!section) return;
@@ -347,7 +370,9 @@ export class SectionActions {
             rows: [defaultRow],
             visibleDesktop: true,
             visibleMobile: true,
-            background: { type: null, value: null }
+            background: { type: null, value: null },
+            textColor: null,
+            linkColor: null
         };
     }
 }

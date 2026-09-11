@@ -181,3 +181,15 @@ the URL (a tenant id, say) would otherwise post its saves to a context-free URL 
 
 **Never hardcode a `path()` for a URL the browser will call back**: an application may need to put
 something in it.
+
+
+### Section colours: text inherits, links need a rule
+
+`section.textColor` is written as `color` on the section and inherited by every block.
+`section.linkColor` cannot be — no inline style can target `a` — so it is exposed as
+`--pb-link-color` and the host stylesheet must spend one rule on it. The canvas does the same, so
+what an author sees is what the page renders.
+
+**The bundle ships no colour presets.** It used to offer six hardcoded swatches from another
+project's palette; a colour belongs to the host application, exactly like `title_styles` and
+`button_colors`.

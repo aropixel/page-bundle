@@ -252,6 +252,22 @@ The one remaining exception is the preview window (`builder/preview.html.twig`),
 Bootstrap and UIkit from a CDN. It is on the list to fix, together with letting a project declare the
 stylesheets its preview should use.
 
+### Section colours
+
+A section carries a background — colour, image or CSS class — and, since the background is free, the
+colours of what sits on it: **text** and **links**. A dark background with the site's default ink is
+unreadable, so the two are set in the same place.
+
+The renderer writes them on the section as `color` (inherited by the blocks) and two custom
+properties, since a stylesheet rule cannot be written inline. **Link colour needs one rule from your
+stylesheet**, once:
+
+```css
+.my-page a { color: var(--pb-link-color, inherit); }
+```
+
+Leave either colour empty and nothing is written: the site's own styles apply.
+
 ### Restricting the block library
 
 By default authors can use every block the bundle ships. `allowed_blocks` narrows that to a list you

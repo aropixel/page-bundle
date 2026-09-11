@@ -377,6 +377,18 @@
         <source>page.builder.inspector.column.border_radius</source>
         <target>Radio de los bordes (px)</target>
       </trans-unit>
+      <trans-unit id="pb_insp_text_color" resname="page.builder.inspector.text_color">
+        <source>page.builder.inspector.text_color</source>
+        <target>Color del texto</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_link_color" resname="page.builder.inspector.link_color">
+        <source>page.builder.inspector.link_color</source>
+        <target>Color de los enlaces</target>
+      </trans-unit>
+      <trans-unit id="pb_insp_color_reset" resname="page.builder.inspector.color_reset">
+        <source>page.builder.inspector.color_reset</source>
+        <target>Por defecto</target>
+      </trans-unit>
       <trans-unit id="pb_insp_bg_type" resname="page.builder.inspector.background_type">
         <source>page.builder.inspector.background_type</source>
         <target>Tipo de fondo</target>

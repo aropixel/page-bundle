@@ -69,6 +69,22 @@ class UiKitPageBuilderRenderer implements PageBuilderRendererInterface
                 }
             }
 
+            // Un fond choisi librement peut rendre le texte illisible : la couleur du texte et celle
+            // des liens se règlent au même endroit. Le texte est posé en `color`, dont héritent les
+            // blocs ; les liens passent par une variable, une règle CSS ne pouvant être écrite en
+            // style inline. Aux feuilles du site d'en tenir compte :
+            //
+            //     .my-footer a { color: var(--pb-link-color, inherit); }
+            $textColor = $section['textColor'] ?? null;
+            if (is_string($textColor) && $textColor !== '') {
+                $sectionStyle .= 'color:' . htmlspecialchars($textColor) . ';--pb-text-color:' . htmlspecialchars($textColor) . ';';
+            }
+
+            $linkColor = $section['linkColor'] ?? null;
+            if (is_string($linkColor) && $linkColor !== '') {
+                $sectionStyle .= '--pb-link-color:' . htmlspecialchars($linkColor) . ';';
+            }
+
             // Layout mapping: "container" (default) -> uk-container; "full" -> none
             $layout = $section['layout'] ?? 'container';
 
