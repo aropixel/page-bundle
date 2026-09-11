@@ -67,6 +67,11 @@ export const cleanHTML = (html) => {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
 
+    // Les éléments d'interface que Quill sème dans le contenu : la puce cliquable qu'il pose dans
+    // chaque <li>, et son curseur fantôme. Ce sont des accessoires de l'éditeur, jamais du contenu —
+    // sans ce nettoyage ils partent en base et se retrouvent sur la page publiée.
+    doc.querySelectorAll('.ql-ui, .ql-cursor').forEach(el => el.remove());
+
     doc.querySelectorAll('ol').forEach(ol => {
         const firstLi = ol.querySelector('li');
         if (firstLi && firstLi.getAttribute('data-list') === 'bullet') {
