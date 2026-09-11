@@ -114,6 +114,7 @@
                                             data-bs-toggle="dropdown" aria-expanded="false">
                                         <span class="visually-hidden">Actions</span>
                                     </button>
+{% block builder_actions %}
                                     <ul class="dropdown-menu dropdown-menu-end">
                                         <li>
                                             <a class="dropdown-item d-flex align-items-center" href="#" data-action="click->page-builder-saver#save">
@@ -141,6 +142,7 @@
                                             </li>
                                         {% endif %}
                                     </ul>
+{% endblock %}
                                 </div>
                             </div>
                         </div>

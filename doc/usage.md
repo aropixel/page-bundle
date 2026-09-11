@@ -471,3 +471,26 @@ class PageSavedListener
     }
 }
 ```
+
+### Replacing the builder's action menu
+
+The builder's header carries a dropdown — save, new page, back to the list, preview. An application
+that uses the builder for a single fixed page has no use for "new page" or "back to the list", so the
+menu sits in its own Twig block:
+
+```twig
+{# templates/bundles/AropixelPageBundle/builder/index.html.twig #}
+{% extends '@!AropixelPage/builder/index.html.twig' %}
+
+{% block builder_actions %}
+    <ul class="dropdown-menu dropdown-menu-end">
+        <li>
+            <a class="dropdown-item" href="#" data-action="click->page-builder-saver#save">Enregistrer</a>
+        </li>
+    </ul>
+{% endblock %}
+```
+
+Overriding it also frees the application from mounting the routes those entries point at
+(`aropixel_builder_page`, `aropixel_page_index`): a route only has to exist if a rendered template
+generates it.
