@@ -168,3 +168,13 @@ A style value reads `tag-class_class_size`: split once on `-` for the HTML tag, 
 classes and an optional trailing pixel size. **A class name containing an underscore breaks it** —
 `div-footer__text_14` yields the classes `footer`, `` (empty) and `text`. Both the JS block and the
 PHP renderers parse it the same way, so any change to the format belongs in both.
+
+### The builder's URLs must survive an admin that carries context
+
+`save_url`, `preview_url` and `json_list_url` override the routes the builder template generates,
+each defaulting to the bundle's own. They exist because an application whose admin carries context in
+the URL (a tenant id, say) would otherwise post its saves to a context-free URL — and
+`PageAccessCheckerInterface` would then judge the page against the wrong context.
+
+**Never hardcode a `path()` for a URL the browser will call back**: an application may need to put
+something in it.

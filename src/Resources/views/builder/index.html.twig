@@ -13,7 +13,7 @@
 
 {% block theme_javascripts %}
     <script type="application/json" id="page-json-list-url">
-        {{ url('aropixel_builder_page_json_list')|json_encode(constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_HEX_TAG'))|raw }}
+        {{ (json_list_url|default(url('aropixel_builder_page_json_list')))|json_encode(constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_HEX_TAG'))|raw }}
     </script>
     <script type="application/json" id="page-builder-config">
         {{ page_builder_config|json_encode(constant('JSON_HEX_TAG') b-or constant('JSON_UNESCAPED_UNICODE'))|raw }}
@@ -46,7 +46,7 @@
                     description: page.metaDescription,
                 }|json_encode|e('html_attr') : '{}' }}"
 
-                data-page-builder-saver-save-url-value="{{ path('aropixel_builder_page_save') }}"
+                data-page-builder-saver-save-url-value="{{ save_url|default(path('aropixel_builder_page_save')) }}"
                 data-page-builder-saver-page-id-value="{{ page ? page.id : '' }}"
             >
 
@@ -136,7 +136,7 @@
                                                 <hr class="dropdown-divider">
                                             </li>
                                             <li>
-                                                <a class="dropdown-item d-flex align-items-center" target="_blank" href="{{ path('aropixel_builder_page_preview', {id: page.id}) }}">
+                                                <a class="dropdown-item d-flex align-items-center" target="_blank" href="{{ preview_url|default(path('aropixel_builder_page_preview', {id: page.id})) }}">
                                                     {{ ux_icon('lucide:eye', {class: 'me-1'}) }} {% trans %}page.builder.view_page{% endtrans %}
                                                 </a>
                                             </li>

@@ -494,3 +494,24 @@ menu sits in its own Twig block:
 Overriding it also frees the application from mounting the routes those entries point at
 (`aropixel_builder_page`, `aropixel_page_index`): a route only has to exist if a rendered template
 generates it.
+
+### Overriding the builder's own URLs
+
+The builder posts its saves to `aropixel_builder_page_save` and links the preview to
+`aropixel_builder_page_preview`. An application whose admin carries context in the URL — a tenant id,
+a locale — needs those URLs to carry it too, or the save lands without the context that identifies
+the page's owner.
+
+Three template variables override them, each defaulting to the bundle's own route:
+
+```twig
+{# templates/bundles/AropixelPageBundle/builder/index.html.twig #}
+{% extends '@!AropixelPage/builder/index.html.twig' %}
+
+{% set save_url = path('aropixel_builder_page_save', {tenant: app.request.get('tenant')}) %}
+{% set preview_url = path('aropixel_builder_page_preview', {id: page.id, tenant: app.request.get('tenant')}) %}
+{% set json_list_url = url('aropixel_builder_page_json_list', {tenant: app.request.get('tenant')}) %}
+```
+
+A `{% set %}` at the root of a child template is evaluated before the parent's blocks render, so the
+variables reach them.
