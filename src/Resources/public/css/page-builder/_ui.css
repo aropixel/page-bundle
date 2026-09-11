@@ -142,3 +142,19 @@
     border-bottom: 2px solid var(--main-bg-color);
     color: var(--main-bg-color);
 }
+
+/* Les icônes posées depuis le JavaScript ({@see assets/utils/icons.js}) : du SVG en ligne, aligné
+ * sur le texte comme le ferait une police d'icônes. */
+.pb-icon {
+    display: inline-block;
+    vertical-align: -0.125em;
+    flex-shrink: 0;
+}
+
+.pb-icon--spin {
+    animation: pb-icon-spin 1s linear infinite;
+}
+
+@keyframes pb-icon-spin {
+    to { transform: rotate(360deg); }
+}

@@ -577,3 +577,14 @@
     border-color: #0caba8;
     color: #0caba8;
 }
+
+/* Le séparateur, tel qu'il sera rendu : un filet, pas un encadré. `currentColor` le fait suivre la
+ * couleur du texte de la section — il reste donc lisible sur fond clair comme sur fond sombre, sans
+ * qu'on ait à deviner le contraste. */
+.pb-block-divider {
+    border: 0;
+    border-top: 1px solid currentColor;
+    opacity: 0.25;
+    margin-left: 0;
+    margin-right: 0;
+}

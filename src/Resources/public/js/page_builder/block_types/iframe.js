@@ -1,3 +1,4 @@
+import { icon } from '../../utils/icons.js';
 export const iframeBlockType = {
     type: 'iframe',
 
@@ -45,7 +46,7 @@ export const iframeBlockType = {
         } else {
             container.innerHTML = `
                 <div class="p-3 border rounded bg-light text-center text-muted">
-                    <i class="fas fa-video mb-2"></i>
+                    ${icon('video', { size: 24, className: 'mb-2' })}
                     <div>Aucun contenu d'iframe</div>
                 </div>
             `;

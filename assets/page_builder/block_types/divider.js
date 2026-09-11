@@ -12,15 +12,16 @@ export const dividerBlockType = {
         };
     },
 
+    /**
+     * L'aperçu dessine le `<hr>` que le rendu produira, et rien d'autre : l'encadré en pointillés
+     * de 80 % qu'il posait auparavant n'existait nulle part sur la page publiée. L'habillage passe
+     * par la feuille de styles, pour qu'une application puisse l'ajuster comme le reste.
+     */
     renderPreview(block) {
-        const content = document.createElement('div');
+        const content = document.createElement('hr');
         content.classList.add('pb-block-divider');
-        content.style.marginTop = `${block.marginTop || 20}px`;
-        content.style.marginBottom = `${block.marginBottom || 20}px`;
-        content.style.border = '2px dashed #d1d5db';
-        content.style.width = '80%';
-        content.style.marginLeft = 'auto';
-        content.style.marginRight = 'auto';
+        content.style.marginTop = `${block.marginTop ?? 20}px`;
+        content.style.marginBottom = `${block.marginBottom ?? 20}px`;
 
         const container = document.createElement('div');
         container.appendChild(content);

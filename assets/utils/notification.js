@@ -1,4 +1,5 @@
 import { t } from '../page_builder/i18n.js';
+import { icon } from './icons.js';
 
 /**
  * Affiche une notification toast
@@ -12,10 +13,10 @@ export function showNotification(message, type = 'info') {
     toast.className = `notification-toast toast-${type}`;
 
     const icons = {
-        success: '<i class="fas fa-check-circle"></i>',
-        error: '<i class="fas fa-exclamation-circle"></i>',
-        warning: '<i class="fas fa-exclamation-triangle"></i>',
-        info: '<i class="fas fa-info-circle"></i>'
+        success: icon('circle-check', { size: 18 }),
+        error: icon('circle-alert', { size: 18 }),
+        warning: icon('triangle-alert', { size: 18 }),
+        info: icon('info', { size: 18 })
     };
 
     toast.innerHTML = `
@@ -26,7 +27,7 @@ export function showNotification(message, type = 'info') {
             ${escapeHtml(message)}
         </div>
         <button type="button" class="toast-close" aria-label="${t('page.builder.notification.close')}">
-            <i class="fas fa-times"></i>
+            ${icon('x', { size: 14 })}
         </button>
     `;
 

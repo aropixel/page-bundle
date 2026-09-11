@@ -1,5 +1,6 @@
 import { t } from '../i18n.js';
 import { getStyleOptions, renderStyleSelect } from '../style_options.js';
+import { icon } from '../../utils/icons.js';
 
 export const btnBlockType = {
     type: 'button',
@@ -63,7 +64,7 @@ export const btnBlockType = {
                                 data-page-builder-target="blockAlignmentButton"
                                 data-action="click->page-builder#updateBlockHorizontalAlignment"
                                 title="Aligné à gauche">
-                            <i class="fas fa-align-left"></i>
+                            ${icon('align-left')}
                         </button>
                         <button type="button"
                                 class="pb-button pb-button--ghost flex-fill"
@@ -71,7 +72,7 @@ export const btnBlockType = {
                                 data-page-builder-target="blockAlignmentButton"
                                 data-action="click->page-builder#updateBlockHorizontalAlignment"
                                 title="Centré">
-                            <i class="fas fa-align-center"></i>
+                            ${icon('align-center')}
                         </button>
                         <button type="button"
                                 class="pb-button pb-button--ghost flex-fill"
@@ -79,7 +80,7 @@ export const btnBlockType = {
                                 data-page-builder-target="blockAlignmentButton"
                                 data-action="click->page-builder#updateBlockHorizontalAlignment"
                                 title="Aligné à droite">
-                            <i class="fas fa-align-right"></i>
+                            ${icon('align-right')}
                         </button>
                     </div>
                 </div>

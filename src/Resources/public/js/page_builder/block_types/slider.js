@@ -1,6 +1,7 @@
 import { initImageManager } from '/bundles/aropixeladmin/js/module/image-manager/launcher.js';
 import { IM_Library } from '/bundles/aropixeladmin/js/module/image-manager/library.js';
 import { t } from '../i18n.js';
+import { icon } from '../../utils/icons.js';
 
 export const sliderBlockType = {
     type: 'slider',
@@ -80,7 +81,7 @@ export const sliderBlockType = {
                     img.style.objectFit = 'cover';
                     imgWrapper.appendChild(img);
                 } else {
-                    imgWrapper.innerHTML = `<div class="d-flex align-items-center justify-content-center h-100 text-muted"><i class="fas fa-image" style="font-size: 30px;"></i></div>`;
+                    imgWrapper.innerHTML = `<div class="d-flex align-items-center justify-content-center h-100 text-muted">${icon('image', { size: 30 })}</div>`;
                 }
 
                 // Bouton de suppression sur l'image dans le canvas
@@ -117,7 +118,7 @@ export const sliderBlockType = {
         addBtn.style.height = '100px';
         addBtn.style.border = '1px solid #ddd';
         addBtn.style.cursor = 'pointer';
-        addBtn.innerHTML = '<i class="fas fa-plus me-2"></i>';
+        addBtn.innerHTML = icon('plus', { className: 'me-2' });
         addBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             block.items.push({ id: Date.now(), src: '', imageId: null, alt: '' });

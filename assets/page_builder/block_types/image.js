@@ -1,6 +1,7 @@
 import { initImageManager } from '/bundles/aropixeladmin/js/module/image-manager/launcher.js';
 import { IM_Library } from '/bundles/aropixeladmin/js/module/image-manager/library.js';
 import { t } from '../i18n.js';
+import { icon } from '../../utils/icons.js';
 
 export const imageBlockType = {
     type: 'image',
@@ -59,7 +60,7 @@ export const imageBlockType = {
             img.innerHTML = '';
             img.appendChild(imgElement);
         } else {
-            img.innerHTML = '<i class="fas fa-images"></i>';
+            img.innerHTML = icon('images', { size: 24 });
             img.style.padding = '20px';
             img.style.textAlign = 'center';
             img.style.border = '2px dashed #ccc';

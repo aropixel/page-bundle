@@ -24,8 +24,8 @@ types.
 aropixel_page:
     page_builder:
         custom_blocks:
-            - { type: 'my-event', label: 'Événement', icon: 'fas fa-calendar', category: 'custom' }
-            - { type: 'my-map',   label: 'Carte',     icon: 'fas fa-map',      category: 'modules' }
+            - { type: 'my-event', label: 'Événement', icon: 'lucide:calendar', category: 'custom' }
+            - { type: 'my-map',   label: 'Carte',     icon: 'lucide:map',      category: 'modules' }
 ```
 
 ### Available options
@@ -34,7 +34,7 @@ aropixel_page:
 |---|---|---|---|
 | `type` | yes | — | Unique identifier, used as a key in the JSON content |
 | `label` | yes | — | Label shown in the block library |
-| `icon` | no | `fas fa-puzzle-piece` | Font Awesome icon class |
+| `icon` | no | `lucide:puzzle` | Any icon name `ux_icon()` accepts |
 | `category` | no | `custom` | Tab where the block appears: `blocs`, `medias`, `modules`, `custom` |
 
 Using `category: custom` adds a dedicated **"Personnalisé"** tab in the library, visible only when at least one block uses it.

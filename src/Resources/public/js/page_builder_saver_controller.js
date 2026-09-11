@@ -1,5 +1,6 @@
 import { Controller } from '@hotwired/stimulus';
 import { showNotification } from './utils/notification.js';
+import { icon } from './utils/icons.js';
 import { t } from './page_builder/i18n.js';
 
 /*
@@ -100,7 +101,7 @@ export default class extends Controller {
         try {
             const btn = event.currentTarget;
             const originalContent = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i>';
+            btn.innerHTML = icon('loader-circle', { className: 'pb-icon--spin' });
             btn.disabled = true;
 
             const response = await fetch(this.saveUrlValue, {
