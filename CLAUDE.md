@@ -114,3 +114,14 @@ Filtering the library (`_library.html.twig`) is presentation. The list is actual
 - The library captures each tab's cards into a variable (`pb_pane_*`) and skips the tab when the
   capture is empty. The capture holds the cards only, **not** the `.row` wrapper — wrapping it would
   make every tab look non-empty.
+
+### The admin loads no third-party asset from a CDN
+
+Quill comes from AdminBundle, in one version: `quill.js` and `quill.snow.css` from its layout,
+`quill.bubble.css` added by the builder's own `stylesheets` block. A back-office that depends on a
+CDN goes down with it, and a strict CSP is enough to break the editor.
+
+**Known exception, not yet fixed:** `builder/preview.html.twig` still pulls Bootstrap and UIkit from
+jsDelivr. Serving them locally is not the whole answer — the preview should render with the host
+application's own stylesheet, otherwise it shows a generic framework rather than the site being
+edited.

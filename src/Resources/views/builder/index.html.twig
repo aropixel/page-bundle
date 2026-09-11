@@ -2,8 +2,9 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.bubble.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
+    {# Le thème `bubble` du canvas ; `quill.snow.css` et `quill.js` viennent déjà du layout admin,
+       en 2.0.3 comme celui-ci. Aucun CDN : un back-office ne doit dépendre que de ses propres assets. #}
+    <link rel="stylesheet" href="{{ asset('bundles/aropixeladmin/modules/quilljs/quill.bubble.css') }}">
     <link rel="stylesheet" href="{{ asset('bundles/aropixelpage/css/page-builder.css') }}">
     {% if page_builder_config.custom_css is defined and page_builder_config.custom_css %}
         <link rel="stylesheet" href="{{ asset(page_builder_config.custom_css) }}">

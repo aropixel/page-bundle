@@ -192,6 +192,16 @@ If a page was saved with a style you later removed from the configuration, the v
 flagged** in the dropdown rather than silently replaced: opening the inspector never rewrites
 existing content.
 
+### Assets
+
+The page builder loads no third-party asset from a CDN. Quill comes from AdminBundle — `quill.js`
+and `quill.snow.css` through the admin layout, `quill.bubble.css` (the canvas's inline editor)
+through the builder's own stylesheets block — all in the same version.
+
+The one remaining exception is the preview window (`builder/preview.html.twig`), which still pulls
+Bootstrap and UIkit from a CDN. It is on the list to fix, together with letting a project declare the
+stylesheets its preview should use.
+
 ### Restricting the block library
 
 By default authors can use every block the bundle ships. `allowed_blocks` narrows that to a list you
