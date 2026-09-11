@@ -190,6 +190,13 @@
                 </div>
 
                 <div class="main-content main-content-fullscreen">
+                    {# Le builder construit sa propre coquille plutôt que d'hériter de `body` : les
+                       messages flash, rendus par la mise en page, doivent donc être appelés ici.
+                       Sans cela un `addFlash()` posé par l'application — publier, appliquer un
+                       modèle — n'était jamais consommé, et l'exploitant les recevait tous d'un coup
+                       à sa prochaine visite d'une liste. #}
+                    {{ block('flash_messages', '@AropixelAdmin/base.html.twig') }}
+
                     <div class="row g-3">
                         {# Colonne gauche : Sidebar #}
                         <aside class="position-sticky" style="width: 320px; top: 135px; align-self: start;">
