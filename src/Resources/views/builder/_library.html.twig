@@ -1,50 +1,307 @@
 {% set pb_custom_blocks = page_builder_config.custom_blocks ?? [] %}
-{% set pb_has_custom_tab = pb_custom_blocks|filter(b => b.category == 'custom')|length > 0 %}
+
+{# Liste blanche des blocs (`page_builder.allowed_blocks`). Vide = aucune restriction.
+   Chaque carte est rendue sous condition ; un onglet dont il ne reste aucune carte disparaît, et le
+   premier onglet encore peuplé devient l'onglet actif. #}
+{% set pb_allowed = page_builder_config.allowed_blocks ?? [] %}
+
+{% set pb_pane_bloc %}
+                    {% if pb_allowed is empty or 'title' in pb_allowed %}
+                    <div class="col-4">
+                        <button type="button"
+                                class="pb-block-card"
+                                data-block-type="title"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon">
+                                {{ ux_icon('lucide:heading') }}
+                            </div>
+                            <span class="pb-block-card-label">{% trans %}page.builder.block.title{% endtrans %}</span>
+                        </button>
+                    </div>
+                    {% endif %}
+                    {% if pb_allowed is empty or 'text' in pb_allowed %}
+                    <div class="col-4">
+                        <button type="button"
+                                class="pb-block-card"
+                                data-block-type="text"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon">
+                                {{ ux_icon('lucide:align-left') }}
+                            </div>
+                            <span class="pb-block-card-label">{% trans %}page.builder.block.text{% endtrans %}</span>
+                        </button>
+                    </div>
+                    {% endif %}
+                    {% if pb_allowed is empty or 'button' in pb_allowed %}
+                    <div class="col-4">
+                        <button type="button"
+                                class="pb-block-card"
+                                data-block-type="button"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon">
+                                {{ ux_icon('lucide:pointer') }}
+                            </div>
+                            <span class="pb-block-card-label">{% trans %}page.builder.block.button{% endtrans %}</span>
+                        </button>
+                    </div>
+                    {% endif %}
+                    {% if pb_allowed is empty or 'spacer' in pb_allowed %}
+                    <div class="col-4">
+                        <button type="button"
+                                class="pb-block-card"
+                                data-block-type="spacer"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon">
+                                {{ ux_icon('lucide:move-vertical') }}
+                            </div>
+                            <span class="pb-block-card-label">{% trans %}page.builder.block.spacer{% endtrans %}</span>
+                        </button>
+                    </div>
+                    {% endif %}
+                    {% if pb_allowed is empty or 'divider' in pb_allowed %}
+                    <div class="col-4">
+                        <button type="button"
+                                class="pb-block-card"
+                                data-block-type="divider"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon">
+                                {{ ux_icon('lucide:minus') }}
+                            </div>
+                            <span class="pb-block-card-label">{% trans %}page.builder.block.divider{% endtrans %}</span>
+                        </button>
+                    </div>
+                    {% endif %}
+                    {% if pb_allowed is empty or 'cta' in pb_allowed %}
+                    <div class="col-4">
+                        <button class="pb-block-card"
+                                data-action="click->page-builder#addBlockFromLibrary"
+                                data-block-type="cta">
+                            <div class="pb-block-card-icon">
+                                {{ ux_icon('lucide:megaphone') }}
+                            </div>
+                            <span class="pb-block-card-label">CTA</span>
+                        </button>
+                    </div>
+                    {% endif %}
+                    {% for pb_block in pb_custom_blocks|filter(b => b.category == 'blocs' and (pb_allowed is empty or b.type in pb_allowed)) %}
+                    <div class="col-4">
+                        <button type="button" class="pb-block-card"
+                                data-block-type="{{ pb_block.type }}"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon">{{ ux_icon(pb_block.icon) }}</div>
+                            <span class="pb-block-card-label">{{ pb_block.label }}</span>
+                        </button>
+                    </div>
+                    {% endfor %}
+{% endset %}
+
+{% set pb_pane_media %}
+                    {% if pb_allowed is empty or 'image' in pb_allowed %}
+                    <div class="col-4">
+                        <button type="button"
+                                class="pb-block-card"
+                                data-block-type="image"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon">
+                                {{ ux_icon('lucide:image') }}
+                            </div>
+                            <span class="pb-block-card-label">{% trans %}page.builder.block.image{% endtrans %}</span>
+                        </button>
+                    </div>
+                    {% endif %}
+                    {% if pb_allowed is empty or 'iframe' in pb_allowed %}
+                    <div class="col-4">
+                        <button type="button"
+                                class="pb-block-card"
+                                data-block-type="iframe"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon">
+                                {{ ux_icon('lucide:video') }}
+                            </div>
+                            <span class="pb-block-card-label">iFrame</span>
+                        </button>
+                    </div>
+                    {% endif %}
+                    {% if pb_allowed is empty or 'slider' in pb_allowed %}
+                    <div class="col-4">
+                        <button type="button"
+                                class="pb-block-card"
+                                data-block-type="slider"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon">
+                                {{ ux_icon('lucide:images') }}
+                            </div>
+                            <span class="pb-block-card-label">Slider</span>
+                        </button>
+                    </div>
+                    {% endif %}
+                    {% for pb_block in pb_custom_blocks|filter(b => b.category == 'medias' and (pb_allowed is empty or b.type in pb_allowed)) %}
+                    <div class="col-4">
+                        <button type="button" class="pb-block-card"
+                                data-block-type="{{ pb_block.type }}"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon">{{ ux_icon(pb_block.icon) }}</div>
+                            <span class="pb-block-card-label">{{ pb_block.label }}</span>
+                        </button>
+                    </div>
+                    {% endfor %}
+{% endset %}
+
+{% set pb_pane_module %}
+                    {% if pb_allowed is empty or 'accordion' in pb_allowed %}
+                    <div class="col-4">
+                        <button type="button"
+                                class="pb-block-card"
+                                data-block-type="accordion"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon">
+                                {{ ux_icon('lucide:align-justify') }}
+                            </div>
+                            <span class="pb-block-card-label">{% trans %}page.builder.block.accordion{% endtrans %}</span>
+                        </button>
+                    </div>
+                    {% endif %}
+                    {% if pb_allowed is empty or 'banner' in pb_allowed %}
+                    <div class="col-4">
+                        <button type="button"
+                                class="pb-block-card"
+                                data-block-type="banner"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon">
+                                {{ ux_icon('lucide:megaphone') }}
+                            </div>
+                            <span class="pb-block-card-label">{% trans %}page.builder.block.banner{% endtrans %}</span>
+                        </button>
+                    </div>
+                    {% endif %}
+{# <div class="col-4"> #}
+{# <button class="pb-block-card" #}
+{# data-action="click->page-builder#addBlockFromLibrary" #}
+{# data-block-type="nested-row"> #}
+{# <div class="pb-block-card-icon"> #}
+{# {{ ux_icon('lucide:layout-grid') }} #}
+{# </div> #}
+{# <span class="pb-block-card-label">Grille</span> #}
+{# </button> #}
+{# </div> #}
+                    {% if pb_allowed is empty or 'grid' in pb_allowed %}
+                    <div class="col-4">
+                        <button type="button"
+                                class="pb-block-card"
+                                data-action="click->page-builder#addBlockFromLibrary"
+                                data-block-type="grid">
+                            <div class="pb-block-card-icon">
+                                {{ ux_icon('lucide:layout-grid') }}
+                            </div>
+                            <span class="pb-block-card-label">{% trans %}page.builder.block.grid{% endtrans %}</span>
+                        </button>
+                    </div>
+                    {% endif %}
+                    {% if pb_allowed is empty or 'blog' in pb_allowed %}
+                    <div class="col-4">
+                        <button type="button"
+                                class="pb-block-card"
+                                data-block-type="blog"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon">
+                                {{ ux_icon('lucide:newspaper') }}
+                            </div>
+                            <span class="pb-block-card-label">{% trans %}page.builder.block.blog{% endtrans %}</span>
+                        </button>
+                    </div>
+                    {% endif %}
+                    {% if pb_allowed is empty or 'countdown' in pb_allowed %}
+                    <div class="col-4">
+                        <button type="button"
+                                class="pb-block-card"
+                                data-block-type="countdown"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon">
+                                {{ ux_icon('lucide:clock') }}
+                            </div>
+                            <span class="pb-block-card-label">Countdown</span>
+                        </button>
+                    </div>
+                    {% endif %}
+                    {% for pb_block in pb_custom_blocks|filter(b => b.category == 'modules' and (pb_allowed is empty or b.type in pb_allowed)) %}
+                    <div class="col-4">
+                        <button type="button" class="pb-block-card"
+                                data-block-type="{{ pb_block.type }}"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon">{{ ux_icon(pb_block.icon) }}</div>
+                            <span class="pb-block-card-label">{{ pb_block.label }}</span>
+                        </button>
+                    </div>
+                    {% endfor %}
+{% endset %}
+
+{% set pb_pane_custom %}
+                    {% for pb_block in pb_custom_blocks|filter(b => b.category == 'custom' and (pb_allowed is empty or b.type in pb_allowed)) %}
+                    <div class="col-4">
+                        <button type="button" class="pb-block-card"
+                                data-block-type="{{ pb_block.type }}"
+                                data-action="click->page-builder#addBlockFromLibrary">
+                            <div class="pb-block-card-icon">{{ ux_icon(pb_block.icon) }}</div>
+                            <span class="pb-block-card-label">{{ pb_block.label }}</span>
+                        </button>
+                    </div>
+                    {% endfor %}
+{% endset %}
+
+{% set pb_first_tab = pb_pane_bloc|trim is not empty ? 'bloc'
+    : (pb_pane_media|trim is not empty ? 'media'
+    : (pb_pane_module|trim is not empty ? 'module' : 'custom')) %}
 
 <div class="card mb-3">
 
     <div class="px-3 py-2">
         <ul class="nav nav-tabs nav-tabs-line border-0" role="tablist">
+            {% if pb_pane_bloc|trim is not empty %}
             <li class="nav-item">
-                <a class="nav-link active px-3 py-2 d-flex align-items-center"
+                <a class="nav-link px-3 py-2 d-flex align-items-center{{ pb_first_tab == 'bloc' ? ' active' : '' }}"
                    role="tab"
                    data-bs-toggle="tab"
                    aria-controls="nav-bloc"
-                   aria-selected="true"
+                   aria-selected="{{ pb_first_tab == 'bloc' ? 'true' : 'false' }}"
                    href="#nav-bloc"
                    id="nav-bloc-tab">
                     <span style="font-size: 0.875rem;">{% trans %}page.builder.library.tab.blocks{% endtrans %}</span>
                 </a>
             </li>
+            {% endif %}
+            {% if pb_pane_media|trim is not empty %}
             <li class="nav-item">
-                <a class="nav-link px-3 py-2 d-flex align-items-center"
+                <a class="nav-link px-3 py-2 d-flex align-items-center{{ pb_first_tab == 'media' ? ' active' : '' }}"
                    role="tab"
                    data-bs-toggle="tab"
                    aria-controls="nav-media"
-                   aria-selected="false"
+                   aria-selected="{{ pb_first_tab == 'media' ? 'true' : 'false' }}"
                    href="#nav-media"
                    id="nav-media-tab">
                     <span style="font-size: 0.875rem;">{% trans %}page.builder.library.tab.media{% endtrans %}</span>
                 </a>
             </li>
+            {% endif %}
+            {% if pb_pane_module|trim is not empty %}
             <li class="nav-item">
-                <a class="nav-link px-3 py-2 d-flex align-items-center"
+                <a class="nav-link px-3 py-2 d-flex align-items-center{{ pb_first_tab == 'module' ? ' active' : '' }}"
                    role="tab"
                    data-bs-toggle="tab"
                    aria-controls="nav-module"
-                   aria-selected="false"
+                   aria-selected="{{ pb_first_tab == 'module' ? 'true' : 'false' }}"
                    href="#nav-module"
                    id="nav-module-tab">
                     <span style="font-size: 0.875rem;">{% trans %}page.builder.library.tab.modules{% endtrans %}</span>
                 </a>
             </li>
-            {% if pb_has_custom_tab %}
+            {% endif %}
+            {% if pb_pane_custom|trim is not empty %}
             <li class="nav-item">
-                <a class="nav-link px-3 py-2 d-flex align-items-center"
+                <a class="nav-link px-3 py-2 d-flex align-items-center{{ pb_first_tab == 'custom' ? ' active' : '' }}"
                    role="tab"
                    data-bs-toggle="tab"
                    aria-controls="nav-custom"
-                   aria-selected="false"
+                   aria-selected="{{ pb_first_tab == 'custom' ? 'true' : 'false' }}"
                    href="#nav-custom"
                    id="nav-custom-tab">
                     <span style="font-size: 0.875rem;">{% trans %}page.builder.library.tab.custom{% endtrans %}</span>
@@ -57,231 +314,34 @@
     <div class="card-body p-3">
 
         <div class="tab-content">
-            <div class="tab-pane pt-0 pb-0 fade show active" id="nav-bloc" role="tabpanel" aria-labelledby="nav-bloc-tab">
+            {% if pb_pane_bloc|trim is not empty %}
+            <div class="tab-pane pt-0 pb-0 fade{{ pb_first_tab == 'bloc' ? ' show active' : '' }}" id="nav-bloc" role="tabpanel" aria-labelledby="nav-bloc-tab">
                 <div class="row g-2">
-                    <div class="col-4">
-                        <button type="button"
-                                class="pb-block-card"
-                                data-block-type="title"
-                                data-action="click->page-builder#addBlockFromLibrary">
-                            <div class="pb-block-card-icon">
-                                {{ ux_icon('lucide:heading') }}
-                            </div>
-                            <span class="pb-block-card-label">{% trans %}page.builder.block.title{% endtrans %}</span>
-                        </button>
-                    </div>
-                    <div class="col-4">
-                        <button type="button"
-                                class="pb-block-card"
-                                data-block-type="text"
-                                data-action="click->page-builder#addBlockFromLibrary">
-                            <div class="pb-block-card-icon">
-                                {{ ux_icon('lucide:align-left') }}
-                            </div>
-                            <span class="pb-block-card-label">{% trans %}page.builder.block.text{% endtrans %}</span>
-                        </button>
-                    </div>
-                    <div class="col-4">
-                        <button type="button"
-                                class="pb-block-card"
-                                data-block-type="button"
-                                data-action="click->page-builder#addBlockFromLibrary">
-                            <div class="pb-block-card-icon">
-                                {{ ux_icon('lucide:pointer') }}
-                            </div>
-                            <span class="pb-block-card-label">{% trans %}page.builder.block.button{% endtrans %}</span>
-                        </button>
-                    </div>
-                    <div class="col-4">
-                        <button type="button"
-                                class="pb-block-card"
-                                data-block-type="spacer"
-                                data-action="click->page-builder#addBlockFromLibrary">
-                            <div class="pb-block-card-icon">
-                                {{ ux_icon('lucide:move-vertical') }}
-                            </div>
-                            <span class="pb-block-card-label">{% trans %}page.builder.block.spacer{% endtrans %}</span>
-                        </button>
-                    </div>
-                    <div class="col-4">
-                        <button type="button"
-                                class="pb-block-card"
-                                data-block-type="divider"
-                                data-action="click->page-builder#addBlockFromLibrary">
-                            <div class="pb-block-card-icon">
-                                {{ ux_icon('lucide:minus') }}
-                            </div>
-                            <span class="pb-block-card-label">{% trans %}page.builder.block.divider{% endtrans %}</span>
-                        </button>
-                    </div>
-                    <div class="col-4">
-                        <button class="pb-block-card"
-                                data-action="click->page-builder#addBlockFromLibrary"
-                                data-block-type="cta">
-                            <div class="pb-block-card-icon">
-                                {{ ux_icon('lucide:megaphone') }}
-                            </div>
-                            <span class="pb-block-card-label">CTA</span>
-                        </button>
-                    </div>
-                    {% for pb_block in pb_custom_blocks|filter(b => b.category == 'blocs') %}
-                    <div class="col-4">
-                        <button type="button" class="pb-block-card"
-                                data-block-type="{{ pb_block.type }}"
-                                data-action="click->page-builder#addBlockFromLibrary">
-                            <div class="pb-block-card-icon">{{ ux_icon(pb_block.icon) }}</div>
-                            <span class="pb-block-card-label">{{ pb_block.label }}</span>
-                        </button>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-
-            <div class="tab-pane fade" id="nav-media" role="tabpanel" aria-labelledby="nav-media-tab">
-                <div class="row g-2">
-                    <div class="col-4">
-                        <button type="button"
-                                class="pb-block-card"
-                                data-block-type="image"
-                                data-action="click->page-builder#addBlockFromLibrary">
-                            <div class="pb-block-card-icon">
-                                {{ ux_icon('lucide:image') }}
-                            </div>
-                            <span class="pb-block-card-label">{% trans %}page.builder.block.image{% endtrans %}</span>
-                        </button>
-                    </div>
-                    <div class="col-4">
-                        <button type="button"
-                                class="pb-block-card"
-                                data-block-type="iframe"
-                                data-action="click->page-builder#addBlockFromLibrary">
-                            <div class="pb-block-card-icon">
-                                {{ ux_icon('lucide:video') }}
-                            </div>
-                            <span class="pb-block-card-label">iFrame</span>
-                        </button>
-                    </div>
-                    <div class="col-4">
-                        <button type="button"
-                                class="pb-block-card"
-                                data-block-type="slider"
-                                data-action="click->page-builder#addBlockFromLibrary">
-                            <div class="pb-block-card-icon">
-                                {{ ux_icon('lucide:images') }}
-                            </div>
-                            <span class="pb-block-card-label">Slider</span>
-                        </button>
-                    </div>
-                    {% for pb_block in pb_custom_blocks|filter(b => b.category == 'medias') %}
-                    <div class="col-4">
-                        <button type="button" class="pb-block-card"
-                                data-block-type="{{ pb_block.type }}"
-                                data-action="click->page-builder#addBlockFromLibrary">
-                            <div class="pb-block-card-icon">{{ ux_icon(pb_block.icon) }}</div>
-                            <span class="pb-block-card-label">{{ pb_block.label }}</span>
-                        </button>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-
-            <div class="tab-pane fade" id="nav-module" role="tabpanel" aria-labelledby="nav-module-tab">
-                <div class="row g-2">
-                    <div class="col-4">
-                        <button type="button"
-                                class="pb-block-card"
-                                data-block-type="accordion"
-                                data-action="click->page-builder#addBlockFromLibrary">
-                            <div class="pb-block-card-icon">
-                                {{ ux_icon('lucide:align-justify') }}
-                            </div>
-                            <span class="pb-block-card-label">{% trans %}page.builder.block.accordion{% endtrans %}</span>
-                        </button>
-                    </div>
-                    <div class="col-4">
-                        <button type="button"
-                                class="pb-block-card"
-                                data-block-type="banner"
-                                data-action="click->page-builder#addBlockFromLibrary">
-                            <div class="pb-block-card-icon">
-                                {{ ux_icon('lucide:megaphone') }}
-                            </div>
-                            <span class="pb-block-card-label">{% trans %}page.builder.block.banner{% endtrans %}</span>
-                        </button>
-                    </div>
-{# <div class="col-4"> #}
-{# <button class="pb-block-card" #}
-{# data-action="click->page-builder#addBlockFromLibrary" #}
-{# data-block-type="nested-row"> #}
-{# <div class="pb-block-card-icon"> #}
-{# {{ ux_icon('lucide:layout-grid') }} #}
-{# </div> #}
-{# <span class="pb-block-card-label">Grille</span> #}
-{# </button> #}
-{# </div> #}
-                    <div class="col-4">
-                        <button type="button"
-                                class="pb-block-card"
-                                data-action="click->page-builder#addBlockFromLibrary"
-                                data-block-type="grid">
-                            <div class="pb-block-card-icon">
-                                {{ ux_icon('lucide:layout-grid') }}
-                            </div>
-                            <span class="pb-block-card-label">{% trans %}page.builder.block.grid{% endtrans %}</span>
-                        </button>
-                    </div>
-                    <div class="col-4">
-                        <button type="button"
-                                class="pb-block-card"
-                                data-block-type="blog"
-                                data-action="click->page-builder#addBlockFromLibrary">
-                            <div class="pb-block-card-icon">
-                                {{ ux_icon('lucide:newspaper') }}
-                            </div>
-                            <span class="pb-block-card-label">{% trans %}page.builder.block.blog{% endtrans %}</span>
-                        </button>
-                    </div>
-                    <div class="col-4">
-                        <button type="button"
-                                class="pb-block-card"
-                                data-block-type="countdown"
-                                data-action="click->page-builder#addBlockFromLibrary">
-                            <div class="pb-block-card-icon">
-                                {{ ux_icon('lucide:clock') }}
-                            </div>
-                            <span class="pb-block-card-label">Countdown</span>
-                        </button>
-                    </div>
-                    {% for pb_block in pb_custom_blocks|filter(b => b.category == 'modules') %}
-                    <div class="col-4">
-                        <button type="button" class="pb-block-card"
-                                data-block-type="{{ pb_block.type }}"
-                                data-action="click->page-builder#addBlockFromLibrary">
-                            <div class="pb-block-card-icon">{{ ux_icon(pb_block.icon) }}</div>
-                            <span class="pb-block-card-label">{{ pb_block.label }}</span>
-                        </button>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-
-            {% if pb_has_custom_tab %}
-            <div class="tab-pane fade" id="nav-custom" role="tabpanel" aria-labelledby="nav-custom-tab">
-                <div class="row g-2">
-                    {% for pb_block in pb_custom_blocks|filter(b => b.category == 'custom') %}
-                    <div class="col-4">
-                        <button type="button" class="pb-block-card"
-                                data-block-type="{{ pb_block.type }}"
-                                data-action="click->page-builder#addBlockFromLibrary">
-                            <div class="pb-block-card-icon">{{ ux_icon(pb_block.icon) }}</div>
-                            <span class="pb-block-card-label">{{ pb_block.label }}</span>
-                        </button>
-                    </div>
-                    {% endfor %}
+{{ pb_pane_bloc|raw }}
                 </div>
             </div>
             {% endif %}
-
+            {% if pb_pane_media|trim is not empty %}
+            <div class="tab-pane pt-0 pb-0 fade{{ pb_first_tab == 'media' ? ' show active' : '' }}" id="nav-media" role="tabpanel" aria-labelledby="nav-media-tab">
+                <div class="row g-2">
+{{ pb_pane_media|raw }}
+                </div>
+            </div>
+            {% endif %}
+            {% if pb_pane_module|trim is not empty %}
+            <div class="tab-pane pt-0 pb-0 fade{{ pb_first_tab == 'module' ? ' show active' : '' }}" id="nav-module" role="tabpanel" aria-labelledby="nav-module-tab">
+                <div class="row g-2">
+{{ pb_pane_module|raw }}
+                </div>
+            </div>
+            {% endif %}
+            {% if pb_pane_custom|trim is not empty %}
+            <div class="tab-pane pt-0 pb-0 fade{{ pb_first_tab == 'custom' ? ' show active' : '' }}" id="nav-custom" role="tabpanel" aria-labelledby="nav-custom-tab">
+                <div class="row g-2">
+{{ pb_pane_custom|raw }}
+                </div>
+            </div>
+            {% endif %}
         </div>
 
     </div>

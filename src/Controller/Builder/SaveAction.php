@@ -3,6 +3,7 @@
 namespace Aropixel\PageBundle\Controller\Builder;
 
 use Aropixel\AdminBundle\Entity\Publishable;
+use Aropixel\PageBundle\Component\Builder\BlockPolicy;
 use Aropixel\PageBundle\Component\Builder\PageBuilderRendererInterface;
 use Aropixel\PageBundle\Entity\Page;
 use Aropixel\PageBundle\Entity\PageTranslation;
@@ -23,6 +24,7 @@ class SaveAction extends AbstractController
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly PageBuilderRendererInterface $renderer,
+        private readonly BlockPolicy $blockPolicy,
         private readonly EventDispatcherInterface $eventDispatcher,
         #[Autowire('%aropixel_page.page_builder.enabled%')]
         private readonly bool $pageBuilderEnabled = true,
@@ -40,6 +42,16 @@ class SaveAction extends AbstractController
 
             if (!$data) {
                 return new JsonResponse(['error' => 'Invalid JSON'], Response::HTTP_BAD_REQUEST);
+            }
+
+            // La bibliothèque ne propose que les blocs autorisés, mais le payload arrive en JSON :
+            // c'est ici que la liste blanche est réellement opposable.
+            $forbidden = $this->blockPolicy->findForbidden($data['content'] ?? null);
+            if ([] !== $forbidden) {
+                return new JsonResponse([
+                    'success' => false,
+                    'error' => \sprintf('Types de blocs non autorisés : %s.', implode(', ', $forbidden)),
+                ], Response::HTTP_BAD_REQUEST);
             }
 
             $id = $data['id'] ?? null;

@@ -192,6 +192,31 @@ If a page was saved with a style you later removed from the configuration, the v
 flagged** in the dropdown rather than silently replaced: opening the inspector never rewrites
 existing content.
 
+### Restricting the block library
+
+By default authors can use every block the bundle ships. `allowed_blocks` narrows that to a list you
+choose:
+
+```yaml
+aropixel_page:
+    page_builder:
+        allowed_blocks: ['text', 'image', 'divider', 'spacer', 'button']
+```
+
+An empty list — the default — allows everything. Otherwise:
+
+- the library only renders the allowed cards, and **a tab left with no card is not displayed at
+  all**; the first tab still holding a card becomes the active one;
+- a save carrying a forbidden block is **rejected with a 400** listing the offending types. The
+  library is presentation, and a payload reaches the server as JSON: `BlockPolicy` is where the list
+  is actually enforced, nested rows included.
+
+Custom blocks are subject to the same list: declaring one in `custom_blocks` does not exempt it, so
+a non-empty `allowed_blocks` must name it too.
+
+> **Scope:** the list is global to the application, not per page type. A project using the builder
+> for two purposes — a footer and editorial pages, say — cannot yet allow different blocks for each.
+
 ### Linking to another page
 
 A button block, or a clickable column, can target another page of the site rather than a raw URL. The

@@ -102,3 +102,15 @@ Three invariants:
 - **An empty list hides its selector**, it does not fall back to defaults.
 - **A saved value absent from the configuration is kept and flagged**, never silently replaced —
   rendering the inspector must not mutate a page's content.
+
+### `allowed_blocks` is enforced server-side, not just in the library
+
+Filtering the library (`_library.html.twig`) is presentation. The list is actually opposed in
+`BlockPolicy`, called by `SaveAction`, which rejects a payload carrying a forbidden type with a 400.
+
+- **Never treat the library as the guarantee.** A payload arrives as JSON; anything can be in it.
+- **`BlockPolicy::findForbidden()` must walk nested rows** (`nested-row` blocks carry their own
+  `row`), otherwise one level of nesting bypasses the whitelist.
+- The library captures each tab's cards into a variable (`pb_pane_*`) and skips the tab when the
+  capture is empty. The capture holds the cards only, **not** the `.row` wrapper — wrapping it would
+  make every tab look non-empty.
