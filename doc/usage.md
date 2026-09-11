@@ -164,8 +164,8 @@ font size. So `h2-highlight_32` renders `<h2 class="highlight" style="font-size:
 `h2` renders `<h2>` with no class.
 
 > **Class names cannot contain an underscore.** The value is split on `_` to separate classes from
-> the font size, so a BEM name like `footer__text` yields three classes, one of them empty. Use
-> hyphens: `footer-text`.
+> the font size, so a BEM name like `footer__text` yields three classes, one of them empty. Hyphens
+> are fine: `footer-text` works, in both the canvas and the rendered page.
 
 ### Button block colors
 

@@ -164,10 +164,13 @@ block renders as an empty string and disappears from the page.
 
 ### `title_styles` values are parsed, not opaque
 
-A style value reads `tag-class_class_size`: split once on `-` for the HTML tag, then on `_` for the
-classes and an optional trailing pixel size. **A class name containing an underscore breaks it** —
-`div-footer__text_14` yields the classes `footer`, `` (empty) and `text`. Both the JS block and the
-PHP renderers parse it the same way, so any change to the format belongs in both.
+A style value reads `tag-class_class_size`: split **once** on `-` for the HTML tag, then on `_` for
+the classes and an optional trailing pixel size. **A class name containing an underscore breaks it** —
+`div-footer__text_14` yields the classes `footer`, `` (empty) and `text`.
+
+Both the JS block and the PHP renderers parse it, and they must agree. They did not until 2026-09-11:
+the JS split on every hyphen and kept the second piece, so `div-footer-heading_16` applied the class
+`footer` in the canvas and `footer-heading` in the page. Any change to the format belongs in both.
 
 ### The builder's URLs must survive an admin that carries context
 

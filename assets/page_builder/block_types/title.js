@@ -17,9 +17,12 @@ export const titleBlockType = {
     },
 
     parseSize(sizeValue) {
-        const parts = sizeValue.split('-');
-        const tag = parts[0];
-        const classNamesString = parts[1] || '';
+        // Découper au PREMIER tiret seulement : le reste est la liste des classes, qui en contiennent
+        // elles-mêmes (`div-footer-heading_16` → tag `div`, classe `footer-heading`, taille 16). Le
+        // renderer PHP fait de même — `explode('-', $size, 2)` — et les deux doivent rester d'accord.
+        const separateur = sizeValue.indexOf('-');
+        const tag = separateur === -1 ? sizeValue : sizeValue.slice(0, separateur);
+        const classNamesString = separateur === -1 ? '' : sizeValue.slice(separateur + 1);
         let classNames = classNamesString ? classNamesString.split('_') : [];
         let fontSize = null;
 
