@@ -4,12 +4,17 @@ The page builder supports custom block types defined by the application. This le
 
 ## Overview
 
-Adding a custom block requires two independent steps:
+Adding a custom block requires three independent steps:
 
 | Step | Where | What |
 |---|---|---|
 | 1 | `config/packages/aropixel_page.yaml` | Declare the block (type, label, icon, library tab) |
-| 2 | Your application JS | Implement the block behaviour |
+| 2 | Your application JS | Implement the block behaviour in the admin |
+| 3 | A `CustomBlockRendererInterface` | Render the block on the front |
+
+Steps 1 and 2 make the block *editable*; step 3 makes it *appear*. Skip the third and the block is
+stored in the page and dropped from the rendered HTML — the built-in renderers only know their own
+types.
 
 ---
 
@@ -184,3 +189,42 @@ Example `public/css/page-builder-custom.css`:
 ```
 
 The path is relative to your Symfony `public/` directory and is passed through Twig's `asset()` function.
+
+
+---
+
+## Step 3 — Render the block on the front
+
+The renderers hand any type they do not know to the `CustomBlockRendererInterface` implementations.
+They are autoconfigured: no tag to declare.
+
+```php
+namespace App\Page\Block;
+
+use Aropixel\PageBundle\Component\Builder\CustomBlockRendererInterface;
+
+class EventBlockRenderer implements CustomBlockRendererInterface
+{
+    public function supports(string $type): bool
+    {
+        return 'my-event' === $type;
+    }
+
+    public function render(array $block): string
+    {
+        return sprintf(
+            '<div class="event"><strong>%s</strong><small>%s</small></div>',
+            htmlspecialchars($block['title'] ?? ''),
+            htmlspecialchars($block['date'] ?? ''),
+        );
+    }
+}
+```
+
+The first implementation claiming a type renders it; a type nobody claims renders as an empty string
+rather than failing. **Escaping is yours**: the return value goes into the page as-is.
+
+Remember that the HTML is produced **when the page is saved**, not when it is displayed. A block
+whose content depends on data that changes elsewhere — a configuration value, a list of records —
+keeps the markup computed at save time until the page is saved again. Re-render it from whatever
+changes that data.

@@ -4,6 +4,7 @@ namespace Aropixel\PageBundle\DependencyInjection;
 
 use Aropixel\PageBundle\Attribute\AsFixedPage;
 use Aropixel\PageBundle\Component\Builder\BootstrapPageBuilderRenderer;
+use Aropixel\PageBundle\Component\Builder\CustomBlockRendererInterface;
 use Aropixel\PageBundle\Component\Builder\UiKitPageBuilderRenderer;
 use Aropixel\PageBundle\Component\Builder\PageBuilderRendererInterface;
 use Aropixel\PageBundle\Entity\PageInterface;
@@ -42,6 +43,9 @@ class AropixelPageExtension extends Extension implements PrependExtensionInterfa
                 ]);
             }
         );
+
+        $container->registerForAutoconfiguration(CustomBlockRendererInterface::class)
+            ->addTag('aropixel_page.block_renderer');
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yaml');

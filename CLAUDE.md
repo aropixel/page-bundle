@@ -150,3 +150,14 @@ must never depend on which version of the editor wrote the page.
 
 `RendererTolerantPayloadTest` renders the bare minimum through both renderers with an error handler
 installed, and fails on any warning.
+
+### A custom block needs a renderer, or it vanishes
+
+`page_builder.custom_blocks` plus its JavaScript make a block editable — library card, preview,
+inspector, stored JSON. **None of that renders it.** The renderers hand unknown types to the
+autoconfigured `CustomBlockRendererInterface` implementations; with none claiming the type, the
+block renders as an empty string and disappears from the page.
+
+- **Never add a custom block without its renderer**, or authors will build something that does not
+  show up.
+- The first implementation whose `supports()` returns true wins; escaping is the implementation's.

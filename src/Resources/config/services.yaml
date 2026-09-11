@@ -26,6 +26,14 @@ services:
     resource: '../../Controller'
     tags: [ 'controller.service_arguments' ]
 
+  Aropixel\PageBundle\Component\Builder\UiKitPageBuilderRenderer:
+    arguments:
+      $customBlockRenderers: !tagged_iterator aropixel_page.block_renderer
+
+  Aropixel\PageBundle\Component\Builder\BootstrapPageBuilderRenderer:
+    arguments:
+      $customBlockRenderers: !tagged_iterator aropixel_page.block_renderer
+
   Aropixel\PageBundle\Component\Security\PageAccessCheckerInterface:
     alias: Aropixel\PageBundle\Component\Security\AllowAllPageAccessChecker
 

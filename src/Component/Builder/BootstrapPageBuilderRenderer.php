@@ -16,6 +16,8 @@ class BootstrapPageBuilderRenderer implements PageBuilderRendererInterface
         private readonly RequestStack $requestStack,
         private readonly Environment $twig,
         private readonly CacheManager $cacheManager,
+        /** @var iterable<CustomBlockRendererInterface> */
+        private readonly iterable $customBlockRenderers = [],
     ) {
     }
 
@@ -326,8 +328,26 @@ class BootstrapPageBuilderRenderer implements PageBuilderRendererInterface
             'nested-row' => $this->renderGrid($block),
             'banner' => $this->renderBanner($block),
             'iframe' => $this->renderIframeBlock($block),
-            default => ''
+            default => $this->renderCustomBlock($block),
         };
+    }
+
+    /**
+     * A type the bundle does not know: the application may still render it.
+     *
+     * @param array<string, mixed> $block
+     */
+    private function renderCustomBlock(array $block): string
+    {
+        $type = (string)($block['type'] ?? '');
+
+        foreach ($this->customBlockRenderers as $renderer) {
+            if ($renderer->supports($type)) {
+                return $renderer->render($block);
+            }
+        }
+
+        return '';
     }
 
     private function renderTitleBlock(array $block): string
