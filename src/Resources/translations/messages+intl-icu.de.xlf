@@ -305,10 +305,6 @@
         <source>page.builder.template.iconbox</source>
         <target>Icon-Raster</target>
       </trans-unit>
-      <trans-unit id="pb_tpl_ticketing" resname="page.builder.template.ticketing">
-        <source>page.builder.template.ticketing</source>
-        <target>Ticketing-Raster</target>
-      </trans-unit>
       <trans-unit id="pb_insp_placeholder" resname="page.builder.inspector.placeholder">
         <source>page.builder.inspector.placeholder</source>
         <target>Wählen Sie ein Element auf der Seite aus, um seine Einstellungen zu bearbeiten.</target>
@@ -420,10 +416,6 @@
       <trans-unit id="pb_insp_row_grid_icon" resname="page.builder.inspector.row.grid_icon">
         <source>page.builder.inspector.row.grid_icon</source>
         <target>Icon-Raster</target>
-      </trans-unit>
-      <trans-unit id="pb_insp_row_grid_ticketing" resname="page.builder.inspector.row.grid_ticketing">
-        <source>page.builder.inspector.row.grid_ticketing</source>
-        <target>Ticketing-Raster</target>
       </trans-unit>
       <trans-unit id="pb_insp_row_grid_collapse" resname="page.builder.inspector.row.grid_collapse">
         <source>page.builder.inspector.row.grid_collapse</source>

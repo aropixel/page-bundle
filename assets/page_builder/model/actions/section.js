@@ -181,12 +181,6 @@ export class SectionActions {
                 row.type = 'icon-box';
             }
 
-            if (templateType === 'ticketing') {
-                row.type = 'ticketing';
-                row.align = 'stretch';
-                row.justify = 'center';
-            }
-
             rowDef.columns.forEach((width, i) => {
                 const col = new Column(width);
                 row.columns.push(col);
@@ -211,12 +205,6 @@ export class SectionActions {
                 if (column) {
                     column.addBlock(blockData);
                     if (templateType === 'iconbox') {
-                        column.width.m = '1-2';
-                        column.width.s = '1-1';
-                    }
-
-                    if (templateType === 'ticketing') {
-                        column.width.l = '1-3';
                         column.width.m = '1-2';
                         column.width.s = '1-1';
                     }
