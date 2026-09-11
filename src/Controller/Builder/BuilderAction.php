@@ -2,6 +2,7 @@
 
 namespace Aropixel\PageBundle\Controller\Builder;
 
+use Aropixel\PageBundle\Component\Security\PageAccessCheckerInterface;
 use Aropixel\PageBundle\Entity\Page;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,6 +17,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class BuilderAction extends AbstractController
 {
     public function __construct(
+        private readonly PageAccessCheckerInterface $accessChecker,
         private readonly EntityManagerInterface $entityManager,
         private readonly TranslatorInterface $translator,
         private readonly array $pageBuilderConfig = [],
@@ -27,6 +29,10 @@ class BuilderAction extends AbstractController
     public function __invoke(Request $request, ?Page $page = null): Response
     {
         if (!$this->pageBuilderEnabled) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($page && !$this->accessChecker->isGranted(PageAccessCheckerInterface::EDIT, $page)) {
             throw $this->createNotFoundException();
         }
 

@@ -3,6 +3,7 @@
 namespace Aropixel\PageBundle\Controller\Builder;
 
 use Aropixel\PageBundle\Component\Builder\PageBuilderRendererInterface;
+use Aropixel\PageBundle\Component\Security\PageAccessCheckerInterface;
 use Aropixel\PageBundle\Entity\Page;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,6 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 class PreviewAction extends AbstractController
 {
     public function __construct(
+        private readonly PageAccessCheckerInterface $accessChecker,
         private readonly EntityManagerInterface $entityManager,
         private readonly PageBuilderRendererInterface $renderer,
         private readonly array $pageBuilderConfig = [],
@@ -33,6 +35,10 @@ class PreviewAction extends AbstractController
 
         if (!$page) {
             throw $this->createNotFoundException(sprintf('Page #%d introuvable.', $id));
+        }
+
+        if (!$this->accessChecker->isGranted(PageAccessCheckerInterface::VIEW, $page)) {
+            throw $this->createNotFoundException();
         }
 
         $renderedContent = $this->renderer->render($page->getJsonContent());

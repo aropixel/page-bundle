@@ -192,6 +192,52 @@ If a page was saved with a style you later removed from the configuration, the v
 flagged** in the dropdown rather than silently replaced: opening the inspector never rewrites
 existing content.
 
+### Restricting access to pages
+
+The bundle loads pages by id, straight from the URL or the save payload. In a single-tenant
+application that is fine: reaching the admin is the authorisation. As soon as pages belong to
+something narrower — one tenant, one brand, one site of a multi-site install — an id in a request is
+not proof that the current user may touch that page.
+
+Implement `PageAccessCheckerInterface` and replace the service:
+
+```php
+namespace App\Page;
+
+use Aropixel\PageBundle\Component\Security\PageAccessCheckerInterface;
+use Aropixel\PageBundle\Entity\PageInterface;
+
+class TenantPageAccessChecker implements PageAccessCheckerInterface
+{
+    public function isGranted(string $attribute, PageInterface $page): bool
+    {
+        return $page->getTenant() === $this->tenantContext->current();
+    }
+}
+```
+
+```yaml
+# config/services.yaml
+services:
+    Aropixel\PageBundle\Component\Security\PageAccessCheckerInterface:
+        alias: App\Page\TenantPageAccessChecker
+```
+
+Three attributes are checked, and every page the bundle touches goes through one of them:
+
+| Attribute | Where |
+|---|---|
+| `VIEW` | builder preview, page listings (entries you may not see are filtered out) |
+| `EDIT` | builder canvas, builder save, page edit form, status change |
+| `DELETE` | page deletion |
+
+A refusal is reported as **404, not 403**: whether a page exists is itself information. The default
+implementation grants everything, so an application that does not replace the service behaves exactly
+as before.
+
+> **Not covered:** creating a page. There is no entity to check yet, so a project that must restrict
+> creation does it in its own controller.
+
 ### Assets
 
 The page builder loads no third-party asset from a CDN. Quill comes from AdminBundle — `quill.js`

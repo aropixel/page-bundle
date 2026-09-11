@@ -125,3 +125,18 @@ CDN goes down with it, and a strict CSP is enough to break the editor.
 jsDelivr. Serving them locally is not the whole answer — the preview should render with the host
 application's own stylesheet, otherwise it shows a generic framework rather than the site being
 edited.
+
+### Page access is the application's call, and denial is a 404
+
+Every page the bundle loads by id goes through `PageAccessCheckerInterface` — `VIEW` for reads,
+`EDIT` for writes, `DELETE` for removal. The default implementation grants everything; an
+application with pages that do not all belong to the same audience replaces the service.
+
+- **Never load a page by id and act on it without asking the checker.** An id in a request proves
+  nothing. This covers `SaveAction`, `BuilderAction`, `PreviewAction`, `Default\EditAction`,
+  `StatusAction` and `DeleteAction`.
+- **Listings filter, they do not fail.** `ListAction` and `Builder\JsonListAction` drop the entries
+  the checker refuses, so a listing never reveals a page its reader may not open.
+- **Denial is `NotFoundHttpException`, never `AccessDeniedException`** — a 403 confirms that the page
+  exists.
+- Page *creation* is out of scope: there is no entity to check yet.

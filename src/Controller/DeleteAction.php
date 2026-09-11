@@ -2,6 +2,7 @@
 
 namespace Aropixel\PageBundle\Controller;
 
+use Aropixel\PageBundle\Component\Security\PageAccessCheckerInterface;
 use Aropixel\PageBundle\Entity\Page;
 use Aropixel\PageBundle\Repository\PageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -11,12 +12,17 @@ use Symfony\Component\HttpFoundation\Response;
 class DeleteAction extends AbstractController
 {
     public function __construct(
+        private readonly PageAccessCheckerInterface $accessChecker,
         private readonly PageRepository $pageRepository,
     ) {
     }
 
     public function __invoke(Request $request, Page $page): Response
     {
+        if (!$this->accessChecker->isGranted(PageAccessCheckerInterface::DELETE, $page)) {
+            throw $this->createNotFoundException();
+        }
+
         $type = $page->getType();
         $title = $page->getTitle();
 

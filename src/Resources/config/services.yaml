@@ -26,6 +26,9 @@ services:
     resource: '../../Controller'
     tags: [ 'controller.service_arguments' ]
 
+  Aropixel\PageBundle\Component\Security\PageAccessCheckerInterface:
+    alias: Aropixel\PageBundle\Component\Security\AllowAllPageAccessChecker
+
   Aropixel\PageBundle\Component\Builder\BlockPolicy:
     arguments:
       $allowedBlocks: '%aropixel_page.page_builder.allowed_blocks%'

@@ -3,6 +3,7 @@
 namespace Aropixel\PageBundle\Controller\Default;
 
 use Aropixel\AdminBundle\Component\Translation\TranslationResolverInterface;
+use Aropixel\PageBundle\Component\Security\PageAccessCheckerInterface;
 use Aropixel\PageBundle\Form\Type\DefaultPageType;
 use Aropixel\PageBundle\Form\Type\DefaultTranslatablePageType;
 use Aropixel\PageBundle\Form\Type\PageFormTypeInterface;
@@ -17,6 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 class EditAction extends AbstractController
 {
     public function __construct(
+        private readonly PageAccessCheckerInterface $accessChecker,
         private readonly PageRepository $pageRepository,
         private readonly RequestStack $request,
         private readonly TranslationResolverInterface $translationResolver,
@@ -30,6 +32,10 @@ class EditAction extends AbstractController
     {
         $page = $this->pageRepository->find($id);
         if (!$page) {
+            throw $this->createNotFoundException();
+        }
+
+        if (!$this->accessChecker->isGranted(PageAccessCheckerInterface::EDIT, $page)) {
             throw $this->createNotFoundException();
         }
 

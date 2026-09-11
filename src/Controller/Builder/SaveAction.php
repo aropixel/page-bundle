@@ -5,6 +5,7 @@ namespace Aropixel\PageBundle\Controller\Builder;
 use Aropixel\AdminBundle\Entity\Publishable;
 use Aropixel\PageBundle\Component\Builder\BlockPolicy;
 use Aropixel\PageBundle\Component\Builder\PageBuilderRendererInterface;
+use Aropixel\PageBundle\Component\Security\PageAccessCheckerInterface;
 use Aropixel\PageBundle\Entity\Page;
 use Aropixel\PageBundle\Entity\PageTranslation;
 use Aropixel\PageBundle\Event\PageSavedEvent;
@@ -22,6 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
 class SaveAction extends AbstractController
 {
     public function __construct(
+        private readonly PageAccessCheckerInterface $accessChecker,
         private readonly EntityManagerInterface $entityManager,
         private readonly PageBuilderRendererInterface $renderer,
         private readonly BlockPolicy $blockPolicy,
@@ -61,6 +63,11 @@ class SaveAction extends AbstractController
             if ($id) {
                 $page = $this->entityManager->getRepository(Page::class)->find($id);
                 if (!$page) {
+                    return new JsonResponse(['error' => 'Page not found'], Response::HTTP_NOT_FOUND);
+                }
+
+                // Charger une page par son identifiant brut ne dit rien du droit de l'écrire.
+                if (!$this->accessChecker->isGranted(PageAccessCheckerInterface::EDIT, $page)) {
                     return new JsonResponse(['error' => 'Page not found'], Response::HTTP_NOT_FOUND);
                 }
             } else {

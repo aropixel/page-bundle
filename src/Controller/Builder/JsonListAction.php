@@ -2,6 +2,7 @@
 
 namespace Aropixel\PageBundle\Controller\Builder;
 
+use Aropixel\PageBundle\Component\Security\PageAccessCheckerInterface;
 use Aropixel\PageBundle\Entity\Page;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,6 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class JsonListAction extends AbstractController
 {
     public function __construct(
+        private readonly PageAccessCheckerInterface $accessChecker,
         private readonly EntityManagerInterface $entityManager,
         #[Autowire('%aropixel_page.page_builder.enabled%')]
         private readonly bool $pageBuilderEnabled = true,
@@ -27,6 +29,7 @@ class JsonListAction extends AbstractController
         }
 
         $pages = $this->entityManager->getRepository(Page::class)->findBuilderPages();
+        $pages = array_filter($pages, fn (Page $page) => $this->accessChecker->isGranted(PageAccessCheckerInterface::VIEW, $page));
 
         $data = array_map(fn (Page $page) => [
             'slug' => $page->getSlug(),
