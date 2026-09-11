@@ -60,6 +60,7 @@
                                 Page Builder
                             {% endif %}
                             {% if page %}<small class="text-muted fw-normal ms-2">#{{ page.id }}</small>{% endif %}
+{% block builder_page_name %}
                             <span class="ms-2 page-name-editable"
                               style="font-size: 18px; font-weight: 500; color: #9f9f9f; cursor: text; position: relative;"
                               data-page-builder-target="nameDisplay"
@@ -74,6 +75,7 @@
                                data-page-builder-target="nameInput"
                                data-action="blur->page-builder#saveNameEdit keydown->page-builder#handleNameKeydown"
                                style="display: inline-block; width: auto; min-width: 300px;" />
+{% endblock %}
                         </h5>
                         <div class="ms-auto d-none d-md-flex align-items-center gap-2 form-action-btns">
 
@@ -148,6 +150,7 @@
                         </div>
                     </div>
                     <div class="main-content main-content-fullscreen d-flex justify-content-between align-items-center">
+{% block builder_tabs %}
                         <ul class="nav nav-tabs tab-underlined" id="myTab" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link" role="tab" data-bs-toggle="tab" href="#nav-param" id="nav-param-tab">{% trans %}page.builder.tab.settings{% endtrans %}</a>
@@ -159,6 +162,7 @@
                                 <a class="nav-link active" role="tab" data-bs-toggle="tab" href="#nav-library" id="nav-library-tab">{% trans %}page.builder.tab.content{% endtrans %}</a>
                             </li>
                         </ul>
+{% endblock %}
                         {% if pb_locales|length > 1 %}
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="syncLocales" checked

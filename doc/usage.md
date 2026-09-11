@@ -515,3 +515,30 @@ Three template variables override them, each defaulting to the bundle's own rout
 
 A `{% set %}` at the root of a child template is evaluated before the parent's blocks render, so the
 variables reach them.
+
+### Trimming the builder for a single fixed page
+
+Besides `builder_actions` (above), two more blocks let an application drop what a fixed page does not
+need:
+
+| Block | What it holds |
+|---|---|
+| `builder_page_name` | The editable page name in the header — meaningless when the page is a fixed one |
+| `builder_tabs` | The tab bar: page settings, inspector, content |
+
+A footer, for instance, has no slug and no SEO metadata to set, and its name is not the author's to
+choose:
+
+```twig
+{% block builder_page_name %}{% endblock %}
+
+{% block builder_tabs %}
+    <ul class="nav nav-tabs tab-underlined" id="myTab" role="tablist">
+        <li class="nav-item"><a class="nav-link" href="#nav-structure" data-bs-toggle="tab" role="tab" id="nav-structure-tab">Inspecteur</a></li>
+        <li class="nav-item"><a class="nav-link active" href="#nav-library" data-bs-toggle="tab" role="tab" id="nav-library-tab">Contenu</a></li>
+    </ul>
+{% endblock %}
+```
+
+Dropping a tab from the bar leaves its pane in the document, simply unreachable — harmless, and it
+keeps the override to the bar itself.
