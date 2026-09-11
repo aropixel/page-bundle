@@ -40,6 +40,7 @@ services:
   Aropixel\PageBundle\Component\Builder\BlockPolicy:
     arguments:
       $allowedBlocks: '%aropixel_page.page_builder.allowed_blocks%'
+      $requiredBlocks: '%aropixel_page.page_builder.required_blocks%'
 
   Aropixel\PageBundle\Component\Builder\RoutePageUrlGenerator:
     arguments:

@@ -293,6 +293,23 @@ a non-empty `allowed_blocks` must name it too.
 > **Scope:** the list is global to the application, not per page type. A project using the builder
 > for two purposes — a footer and editorial pages, say — cannot yet allow different blocks for each.
 
+### Requiring a block
+
+Some blocks are not a matter of taste. `required_blocks` names the types a page must carry to be
+saved at all:
+
+```yaml
+aropixel_page:
+    page_builder:
+        required_blocks: ['legal-links']
+```
+
+A save whose payload does not carry one is **rejected with a 400**, naming the block by its library
+label rather than its type — the author who has just deleted it without thinking needs to recognise
+it. The block counts wherever it sits, nested rows included.
+
+An empty list — the default — requires nothing. The same scope note as `allowed_blocks` applies.
+
 ### Linking to another page
 
 A button block, or a clickable column, can target another page of the site rather than a raw URL. The

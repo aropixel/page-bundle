@@ -67,6 +67,44 @@ class BlockPolicyTest extends TestCase
         self::assertSame(['iframe'], $policy->findForbidden($payload));
     }
 
+    public function testNothingIsRequiredByDefault(): void
+    {
+        self::assertSame([], (new BlockPolicy())->findMissing(self::payload(['text'])));
+    }
+
+    public function testItReportsARequiredBlockThePayloadDoesNotCarry(): void
+    {
+        $policy = new BlockPolicy([], ['legal-links']);
+
+        self::assertSame(['legal-links'], $policy->findMissing(self::payload(['text', 'image'])));
+        self::assertSame([], $policy->findMissing(self::payload(['text', 'legal-links'])));
+    }
+
+    /**
+     * Un bloc obligatoire enfoui dans une ligne imbriquée est présent : le refuser demanderait à
+     * l'auteur de le remonter sans raison.
+     */
+    public function testARequiredBlockCountsWhereverItSits(): void
+    {
+        $payload = ['sections' => [[
+            'rows' => [[
+                'columns' => [[
+                    'blocks' => [[
+                        'type' => 'nested-row',
+                        'row' => ['columns' => [['blocks' => [['type' => 'legal-links']]]]],
+                    ]],
+                ]],
+            ]],
+        ]]];
+
+        self::assertSame([], (new BlockPolicy([], ['legal-links']))->findMissing($payload));
+    }
+
+    public function testAnEmptyPayloadMissesEveryRequiredBlock(): void
+    {
+        self::assertSame(['legal-links'], (new BlockPolicy([], ['legal-links']))->findMissing(null));
+    }
+
     /**
      * @param list<mixed>|string|null $content
      */

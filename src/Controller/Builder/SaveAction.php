@@ -30,7 +30,24 @@ class SaveAction extends AbstractController
         private readonly EventDispatcherInterface $eventDispatcher,
         #[Autowire('%aropixel_page.page_builder.enabled%')]
         private readonly bool $pageBuilderEnabled = true,
+        /** @var list<array{type: string, label: string}> */
+        #[Autowire('%aropixel_page.page_builder.custom_blocks%')]
+        private readonly array $customBlocks = [],
     ) {
+    }
+
+    /**
+     * Le libellé qu'un bloc porte dans la bibliothèque, à défaut son type.
+     */
+    private function blockLabel(string $type): string
+    {
+        foreach ($this->customBlocks as $block) {
+            if (($block['type'] ?? null) === $type) {
+                return (string) ($block['label'] ?? $type);
+            }
+        }
+
+        return $type;
     }
 
     public function __invoke(Request $request): JsonResponse
@@ -53,6 +70,22 @@ class SaveAction extends AbstractController
                 return new JsonResponse([
                     'success' => false,
                     'error' => \sprintf('Types de blocs non autorisés : %s.', implode(', ', $forbidden)),
+                ], Response::HTTP_BAD_REQUEST);
+            }
+
+            // Symétrique de la liste blanche : certains blocs ne sont pas une question de goût. Le
+            // refus est nommé avec le libellé de la bibliothèque, le type seul ne disant rien à
+            // l'exploitant qui vient de supprimer le bloc sans y penser.
+            $missing = $this->blockPolicy->findMissing($data['content'] ?? null);
+            if ([] !== $missing) {
+                return new JsonResponse([
+                    'success' => false,
+                    'error' => \sprintf(
+                        1 === \count($missing)
+                            ? 'Le bloc « %s » est obligatoire : il doit rester dans la page.'
+                            : 'Ces blocs sont obligatoires et doivent rester dans la page : %s.',
+                        implode(', ', array_map($this->blockLabel(...), $missing)),
+                    ),
                 ], Response::HTTP_BAD_REQUEST);
             }
 
@@ -171,7 +204,6 @@ class SaveAction extends AbstractController
                 'id'      => $page->getId(),
                 'slug'    => $page->getSlug(),
                 'status'  => $page->getStatus(),
-                'message' => 'Page enregistrée avec succès.',
             ]);
         } catch (\Exception $e) {
             return new JsonResponse([
