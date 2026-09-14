@@ -26,6 +26,10 @@ services:
     resource: '../../Controller'
     tags: [ 'controller.service_arguments' ]
 
+  Aropixel\PageBundle\Component\Builder\SectionColors:
+    arguments:
+      $colors: '%aropixel_page.page_builder.section_colors%'
+
   Aropixel\PageBundle\Component\Builder\UiKitPageBuilderRenderer:
     arguments:
       $customBlockRenderers: !tagged_iterator aropixel_page.block_renderer

@@ -18,6 +18,7 @@ class UiKitPageBuilderRenderer implements PageBuilderRendererInterface
         private readonly CacheManager $cacheManager,
         /** @var iterable<CustomBlockRendererInterface> */
         private readonly iterable $customBlockRenderers = [],
+        private readonly SectionColors $sectionColors = new SectionColors(),
     ) {
     }
     /**
@@ -69,29 +70,10 @@ class UiKitPageBuilderRenderer implements PageBuilderRendererInterface
                 }
             }
 
-            // Un fond choisi librement peut rendre le texte illisible : les couleurs du contenu se
-            // règlent au même endroit. Le texte est posé en `color`, dont héritent les blocs ; les
-            // titres et les liens passent par une variable, un style inline ne pouvant viser un
-            // descendant. Aux feuilles du site d'en tenir compte :
-            //
-            //     .my-footer :is(h1, h2, h3, h4, h5, h6) { color: var(--pb-title-color, inherit); }
-            //     .my-footer a { color: var(--pb-link-color, inherit); }
-            //
-            // Laissées vides, elles n'écrivent rien : ce sont les styles du site qui s'appliquent.
-            $textColor = $section['textColor'] ?? null;
-            if (is_string($textColor) && $textColor !== '') {
-                $sectionStyle .= 'color:' . htmlspecialchars($textColor) . ';--pb-text-color:' . htmlspecialchars($textColor) . ';';
-            }
-
-            $titleColor = $section['titleColor'] ?? null;
-            if (is_string($titleColor) && $titleColor !== '') {
-                $sectionStyle .= '--pb-title-color:' . htmlspecialchars($titleColor) . ';';
-            }
-
-            $linkColor = $section['linkColor'] ?? null;
-            if (is_string($linkColor) && $linkColor !== '') {
-                $sectionStyle .= '--pb-link-color:' . htmlspecialchars($linkColor) . ';';
-            }
+            // Un fond choisi librement peut rendre le contenu illisible : les couleurs de la section
+            // se règlent au même endroit, et c'est l'application qui dit lesquelles elle offre.
+            // {@see SectionColors}
+            $sectionStyle .= $this->sectionColors->styleFor($section);
 
             // Layout mapping: "container" (default) -> uk-container; "full" -> none
             $layout = $section['layout'] ?? 'container';

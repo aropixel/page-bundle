@@ -59,6 +59,22 @@ class Configuration implements ConfigurationInterface
                                 ->end()
                             ->end()
                         ->end()
+                        ->arrayNode('section_colors')
+                            ->info('Colours a section may set on its content. Each writes a custom property the site\'s stylesheet consumes.')
+                            ->defaultValue([
+                                ['key' => 'text', 'label' => 'page.builder.inspector.text_color', 'variable' => '--pb-text-color', 'inherited' => true],
+                                ['key' => 'title', 'label' => 'page.builder.inspector.title_color', 'variable' => '--pb-title-color', 'inherited' => false],
+                                ['key' => 'link', 'label' => 'page.builder.inspector.link_color', 'variable' => '--pb-link-color', 'inherited' => false],
+                            ])
+                            ->arrayPrototype()
+                                ->children()
+                                    ->scalarNode('key')->isRequired()->info('Stored as `<key>Color` in the payload, and used to build the field id.')->end()
+                                    ->scalarNode('label')->isRequired()->info('Translation key shown in the inspector.')->end()
+                                    ->scalarNode('variable')->isRequired()->info('CSS custom property written on the section, e.g. --pb-link-color.')->end()
+                                    ->booleanNode('inherited')->defaultFalse()->info('Also write it as `color`, so the blocks inherit it. One colour at most should do this.')->end()
+                                ->end()
+                            ->end()
+                        ->end()
                         ->arrayNode('allowed_blocks')
                             ->info('Block types authors may use. Empty (the default) allows them all.')
                             ->scalarPrototype()->end()

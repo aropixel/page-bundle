@@ -21,10 +21,7 @@ export class SectionActions {
             rows: [defaultRow],
             visibleDesktop: true,
             visibleMobile: true,
-            background: { type: null, value: null },
-            textColor: null,
-            titleColor: null,
-            linkColor: null
+            background: { type: null, value: null }
         };
 
         this.manager.sections.push(section);
@@ -175,10 +172,7 @@ export class SectionActions {
             rows: [],
             visibleDesktop: true,
             visibleMobile: true,
-            background: { type: null, value: null },
-            textColor: null,
-            titleColor: null,
-            linkColor: null
+            background: { type: null, value: null }
         };
 
         structure.rows.forEach(rowDef => {
@@ -329,30 +323,18 @@ export class SectionActions {
      * Couleur du texte de la section. Le fond étant libre, le texte doit pouvoir suivre : un fond
      * sombre rend illisible une encre prévue pour du clair.
      */
-    updateSectionTextColor(color) {
-        const section = this.manager.selectedSection;
-        if (!section) return;
-
-        section.textColor = color || null;
-    }
-
     /**
-     * Couleur des titres. Ils héritent de la couleur du texte tant qu'on ne leur en donne pas une :
-     * c'est une surcharge, pas un second réglage obligatoire.
+     * Une des couleurs offertes par `section_colors`, rangée en `<clé>Color` à côté des autres
+     * propriétés de la section — et non dans un objet à part, pour qu'une page enregistrée avant que
+     * cette liste existe se relise sans migration.
+     *
+     * `null` plutôt qu'une chaîne vide : c'est ce que le rendu lit pour ne rien écrire du tout.
      */
-    updateSectionTitleColor(color) {
+    updateSectionColor(key, color) {
         const section = this.manager.selectedSection;
-        if (!section) return;
+        if (!section || !key) return;
 
-        section.titleColor = color || null;
-    }
-
-    /** Couleur des liens de la section, pour la même raison. */
-    updateSectionLinkColor(color) {
-        const section = this.manager.selectedSection;
-        if (!section) return;
-
-        section.linkColor = color || null;
+        section[`${key}Color`] = color || null;
     }
 
     updateSectionBackground(type, value, imageId = null) {
@@ -383,10 +365,7 @@ export class SectionActions {
             rows: [defaultRow],
             visibleDesktop: true,
             visibleMobile: true,
-            background: { type: null, value: null },
-            textColor: null,
-            titleColor: null,
-            linkColor: null
+            background: { type: null, value: null }
         };
     }
 }

@@ -255,12 +255,28 @@ stylesheets its preview should use.
 ### Section colours
 
 A section carries a background — colour, image or CSS class — and, since the background is free, the
-colours of what sits on it: **text**, **titles** and **links**. A dark background with the site's
-default ink is unreadable, so they are set in the same place.
+colours of what sits on it. A dark background with the site's default ink is unreadable, so the two
+are set in the same place.
 
-Text is written on the section as `color`, which the blocks inherit. Titles and links cannot be
-reached that way — an inline style cannot target a descendant — so they travel as custom properties,
-and **each needs one rule from your stylesheet**, once:
+**Which colours a section offers is yours to decide.** The default is text, titles and links, which
+is what most pages need:
+
+```yaml
+aropixel_page:
+    page_builder:
+        section_colors:
+            - { key: 'text',  label: 'page.builder.inspector.text_color',  variable: '--pb-text-color', inherited: true }
+            - { key: 'title', label: 'page.builder.inspector.title_color', variable: '--pb-title-color' }
+            - { key: 'link',  label: 'page.builder.inspector.link_color',  variable: '--pb-link-color' }
+```
+
+Each entry adds a picker to the section inspector and writes one custom property on the section.
+`label` is a translation key; `key` is how the value is stored in the payload, as `<key>Color`.
+
+`inherited: true` also writes the colour as `color` on the section, so every block picks it up
+without a rule — that is the text colour, and a second one would simply overwrite the first. The
+others cannot be reached that way, since an inline style cannot target a descendant, so **each needs
+one rule from your stylesheet**, once:
 
 ```css
 .my-page :is(h1, h2, h3, h4, h5, h6) { color: var(--pb-title-color, inherit); }
@@ -272,6 +288,9 @@ one of their own. Leave a colour empty and nothing is written at all: the site's
 
 > Your rule decides what counts as a title. A theme whose headings are `<div class="heading">` — the
 > block's named styles allow it — names that class here instead of, or alongside, `h1`–`h6`.
+>
+> Adding a fourth colour — buttons, icons, borders — is a line of configuration and a line of CSS;
+> the bundle needs no change.
 
 ### Restricting the block library
 

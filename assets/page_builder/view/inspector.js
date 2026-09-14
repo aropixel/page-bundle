@@ -227,15 +227,10 @@ export class InspectorView {
 
         // Couleurs du contenu. Un champ `color` exige une valeur : sans couleur choisie, on affiche
         // celle que le navigateur calcule pour la section, faute de pouvoir montrer « rien ».
-        if (this.ctx.hasSectionTextColorPickerTarget) {
-            this.ctx.sectionTextColorPickerTarget.value = toHexColor(section.textColor) || '#000000';
-        }
-        if (this.ctx.hasSectionTitleColorPickerTarget) {
-            this.ctx.sectionTitleColorPickerTarget.value = toHexColor(section.titleColor) || '#000000';
-        }
-        if (this.ctx.hasSectionLinkColorPickerTarget) {
-            this.ctx.sectionLinkColorPickerTarget.value = toHexColor(section.linkColor) || '#000000';
-        }
+        this.ctx.sectionColorPickerTargets.forEach((picker) => {
+            const key = picker.dataset.pbColorKey;
+            picker.value = toHexColor(section[`${key}Color`]) || '#000000';
+        });
 
         // Masquer tous les champs de background d'abord
         if (this.ctx.hasSectionBackgroundClassInputTarget) {

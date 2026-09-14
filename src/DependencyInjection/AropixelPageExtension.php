@@ -78,6 +78,7 @@ class AropixelPageExtension extends Extension implements PrependExtensionInterfa
         $container->setParameter('aropixel_page.page_builder.enabled', $config['page_builder']['enabled']);
         $container->setParameter('aropixel_page.page_builder.allowed_blocks', $config['page_builder']['allowed_blocks']);
         $container->setParameter('aropixel_page.page_builder.required_blocks', $config['page_builder']['required_blocks']);
+        $container->setParameter('aropixel_page.page_builder.section_colors', $config['page_builder']['section_colors']);
         $container->setParameter('aropixel_page.page_builder.custom_blocks', $config['page_builder']['custom_blocks']);
         $frontRoute = $config['page_builder']['front_route'];
         $container->setParameter('aropixel_page.page_builder.front_route', $frontRoute);
