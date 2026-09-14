@@ -20,7 +20,14 @@
     color: #111827;
 }
 .pb-accordion-inspector .accordion-button:focus { outline: none; }
-.pb-accordion-inspector .accordion-body { padding: 1rem 0 0 0; }
+/* L'inspecteur est une colonne de 320 px : ses panneaux se collent au bord, l'espace y est compté.
+ *
+ * `.pb-root` n'est pas décoratif. Une administration hôte qui cadre ses propres accordéons —
+ * `.accordion .accordion-body { padding: 10px 35px }` — écrit une règle de même spécificité que
+ * celle-ci, et sa feuille étant chargée après, c'est elle qui gagnait : trente-cinq pixels de
+ * remplissage de chaque côté dans une colonne qui n'en a pas les moyens. Le troisième sélecteur met
+ * le chrome de l'éditeur hors d'atteinte d'un cadrage pensé pour du contenu, sans `!important`. */
+.pb-root .pb-accordion-inspector .accordion-body { padding: 1rem 0 0 0; }
 
 /*
  * Field labels of the inspector. Page-builder specific: base size (14px) with a semibold
