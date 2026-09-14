@@ -230,6 +230,9 @@ export class InspectorView {
         if (this.ctx.hasSectionTextColorPickerTarget) {
             this.ctx.sectionTextColorPickerTarget.value = toHexColor(section.textColor) || '#000000';
         }
+        if (this.ctx.hasSectionTitleColorPickerTarget) {
+            this.ctx.sectionTitleColorPickerTarget.value = toHexColor(section.titleColor) || '#000000';
+        }
         if (this.ctx.hasSectionLinkColorPickerTarget) {
             this.ctx.sectionLinkColorPickerTarget.value = toHexColor(section.linkColor) || '#000000';
         }

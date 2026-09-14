@@ -255,18 +255,23 @@ stylesheets its preview should use.
 ### Section colours
 
 A section carries a background — colour, image or CSS class — and, since the background is free, the
-colours of what sits on it: **text** and **links**. A dark background with the site's default ink is
-unreadable, so the two are set in the same place.
+colours of what sits on it: **text**, **titles** and **links**. A dark background with the site's
+default ink is unreadable, so they are set in the same place.
 
-The renderer writes them on the section as `color` (inherited by the blocks) and two custom
-properties, since a stylesheet rule cannot be written inline. **Link colour needs one rule from your
-stylesheet**, once:
+Text is written on the section as `color`, which the blocks inherit. Titles and links cannot be
+reached that way — an inline style cannot target a descendant — so they travel as custom properties,
+and **each needs one rule from your stylesheet**, once:
 
 ```css
+.my-page :is(h1, h2, h3, h4, h5, h6) { color: var(--pb-title-color, inherit); }
 .my-page a { color: var(--pb-link-color, inherit); }
 ```
 
-Leave either colour empty and nothing is written: the site's own styles apply.
+The `inherit` fallback is what makes titles and links follow the text colour until someone gives them
+one of their own. Leave a colour empty and nothing is written at all: the site's own styles apply.
+
+> Your rule decides what counts as a title. A theme whose headings are `<div class="heading">` — the
+> block's named styles allow it — names that class here instead of, or alongside, `h1`–`h6`.
 
 ### Restricting the block library
 

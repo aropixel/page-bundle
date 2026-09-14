@@ -23,6 +23,7 @@ export class SectionActions {
             visibleMobile: true,
             background: { type: null, value: null },
             textColor: null,
+            titleColor: null,
             linkColor: null
         };
 
@@ -176,6 +177,7 @@ export class SectionActions {
             visibleMobile: true,
             background: { type: null, value: null },
             textColor: null,
+            titleColor: null,
             linkColor: null
         };
 
@@ -334,6 +336,17 @@ export class SectionActions {
         section.textColor = color || null;
     }
 
+    /**
+     * Couleur des titres. Ils héritent de la couleur du texte tant qu'on ne leur en donne pas une :
+     * c'est une surcharge, pas un second réglage obligatoire.
+     */
+    updateSectionTitleColor(color) {
+        const section = this.manager.selectedSection;
+        if (!section) return;
+
+        section.titleColor = color || null;
+    }
+
     /** Couleur des liens de la section, pour la même raison. */
     updateSectionLinkColor(color) {
         const section = this.manager.selectedSection;
@@ -372,6 +385,7 @@ export class SectionActions {
             visibleMobile: true,
             background: { type: null, value: null },
             textColor: null,
+            titleColor: null,
             linkColor: null
         };
     }

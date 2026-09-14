@@ -409,6 +409,19 @@
                     </div>
 
                     <div class="mb-2">
+                        <label class="form-label pb-label d-block mb-1" for="section-title-color">{% trans %}page.builder.inspector.title_color{% endtrans %}</label>
+                        <div class="d-flex align-items-center gap-2">
+                            <input type="color"
+                                   class="form-control form-control-lg form-control-color"
+                                   id="section-title-color"
+                                   data-page-builder-target="sectionTitleColorPicker"
+                                   data-action="input->page-builder#updateSectionTitleColor">
+                            <button type="button" class="pb-button pb-button--ghost btn-sm"
+                                    data-action="click->page-builder#resetSectionTitleColor">{% trans %}page.builder.inspector.color_reset{% endtrans %}</button>
+                        </div>
+                    </div>
+
+                    <div class="mb-2">
                         <label class="form-label pb-label d-block mb-1" for="section-link-color">{% trans %}page.builder.inspector.link_color{% endtrans %}</label>
                         <div class="d-flex align-items-center gap-2">
                             <input type="color"

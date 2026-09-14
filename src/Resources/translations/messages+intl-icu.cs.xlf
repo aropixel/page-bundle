@@ -381,6 +381,10 @@
         <source>page.builder.inspector.text_color</source>
         <target>Barva textu</target>
       </trans-unit>
+      <trans-unit id="pb_insp_title_color" resname="page.builder.inspector.title_color">
+        <source>page.builder.inspector.title_color</source>
+        <target>Barva nadpisů</target>
+      </trans-unit>
       <trans-unit id="pb_insp_link_color" resname="page.builder.inspector.link_color">
         <source>page.builder.inspector.link_color</source>
         <target>Barva odkazů</target>

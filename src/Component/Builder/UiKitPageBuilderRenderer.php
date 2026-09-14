@@ -69,15 +69,23 @@ class UiKitPageBuilderRenderer implements PageBuilderRendererInterface
                 }
             }
 
-            // Un fond choisi librement peut rendre le texte illisible : la couleur du texte et celle
-            // des liens se règlent au même endroit. Le texte est posé en `color`, dont héritent les
-            // blocs ; les liens passent par une variable, une règle CSS ne pouvant être écrite en
-            // style inline. Aux feuilles du site d'en tenir compte :
+            // Un fond choisi librement peut rendre le texte illisible : les couleurs du contenu se
+            // règlent au même endroit. Le texte est posé en `color`, dont héritent les blocs ; les
+            // titres et les liens passent par une variable, un style inline ne pouvant viser un
+            // descendant. Aux feuilles du site d'en tenir compte :
             //
+            //     .my-footer :is(h1, h2, h3, h4, h5, h6) { color: var(--pb-title-color, inherit); }
             //     .my-footer a { color: var(--pb-link-color, inherit); }
+            //
+            // Laissées vides, elles n'écrivent rien : ce sont les styles du site qui s'appliquent.
             $textColor = $section['textColor'] ?? null;
             if (is_string($textColor) && $textColor !== '') {
                 $sectionStyle .= 'color:' . htmlspecialchars($textColor) . ';--pb-text-color:' . htmlspecialchars($textColor) . ';';
+            }
+
+            $titleColor = $section['titleColor'] ?? null;
+            if (is_string($titleColor) && $titleColor !== '') {
+                $sectionStyle .= '--pb-title-color:' . htmlspecialchars($titleColor) . ';';
             }
 
             $linkColor = $section['linkColor'] ?? null;

@@ -160,6 +160,7 @@ export class CanvasRenderer {
         // Même contrat qu'au rendu — `color` hérité par les blocs, les liens par une variable.
         wrapper.style.color = section.textColor || '';
         wrapper.style.setProperty('--pb-text-color', section.textColor || '');
+        wrapper.style.setProperty('--pb-title-color', section.titleColor || '');
         wrapper.style.setProperty('--pb-link-color', section.linkColor || '');
 
         const inner = document.createElement('div');
