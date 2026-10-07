@@ -23,7 +23,7 @@
     }
   },
   "require" : {
-    "aropixel/admin-bundle": "dev-main"
+    "aropixel/admin-bundle": "^3.0"
   },
   "require-dev" : {
     "doctrine/doctrine-fixtures-bundle": "^4.0"
@@ -38,5 +38,10 @@
     "post-update-cmd": [
       "@auto-scripts"
     ]
+  },
+  "extra" : {
+    "branch-alias" : {
+      "dev-main" : "3.x-dev"
+    }
   }
 }
